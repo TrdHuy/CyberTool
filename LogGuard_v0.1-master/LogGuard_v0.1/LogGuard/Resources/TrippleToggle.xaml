@@ -1,0 +1,47 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control">
+
+	<Style TargetType="{x:Type ctrl:TrippleToggle}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type ctrl:TrippleToggle}">
+					<Viewbox>
+						<Grid>
+							<Rectangle x:Name="Back"
+									   Fill="#FF31353B"
+									   HorizontalAlignment="Left"
+									   Height="12"
+									   VerticalAlignment="Top"
+									   Width="36"
+									   RadiusY="6"
+									   RadiusX="6" />
+							<Ellipse x:Name="DotOff"
+									 Fill="{StaticResource ButtonBackground_Level2}"
+									 Margin="0,0,24,0"
+									 HorizontalAlignment="Center"
+									 Height="12"
+									 Width="12"
+									 VerticalAlignment="Center" />
+							<Ellipse x:Name="DotNormal"
+									 Fill="White"
+									 HorizontalAlignment="Center"
+									 Height="12"
+									 Width="12"
+									 VerticalAlignment="Center">
+							</Ellipse>
+							<Ellipse x:Name="DotOn"
+									 Fill="{StaticResource ButtonBackground_Level1}"
+									 Margin="0,0,-24,0"
+									 HorizontalAlignment="Center"
+									 Height="12"
+									 Width="12"
+									 VerticalAlignment="Center">
+							</Ellipse>
+						</Grid>
+					</Viewbox>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+</ResourceDictionary>

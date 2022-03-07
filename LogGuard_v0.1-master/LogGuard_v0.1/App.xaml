@@ -2,13 +2,17 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:LogGuard_v0._1"
-             StartupUri="MainWindow.xaml">
+             StartupUri="MVVM/View/Windows/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="LogGuard/Resources/LogMappingBorder.xaml" />
+				<ResourceDictionary Source="AppResources/Themes.xaml" />
+
+				<ResourceDictionary Source="LogGuard/Resources/LogMappingBorder.xaml" />
                 <ResourceDictionary Source="LogGuard/Resources/ScrollViewWatcher.xaml" />
-                <ResourceDictionary Source="LogGuard/Resources/LogWatcher.xaml" />
+				<ResourceDictionary Source="LogGuard/Resources/LogWatcher.xaml" />
+				<ResourceDictionary Source="LogGuard/Resources/RadialProgressBar.xaml" />
+				<ResourceDictionary Source="LogGuard/Resources/TrippleToggle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
