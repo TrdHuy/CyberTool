@@ -7,7 +7,7 @@
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type ctrl:TrippleToggle}">
 					<Viewbox>
-						<Grid>
+						<Grid x:Name="MainGrid">
 							<Rectangle x:Name="Back"
 									   Fill="#FF31353B"
 									   HorizontalAlignment="Left"
@@ -17,26 +17,37 @@
 									   RadiusY="6"
 									   RadiusX="6" />
 							<Ellipse x:Name="DotOff"
-									 Fill="{StaticResource ButtonBackground_Level2}"
+									 Fill="Transparent"
 									 Margin="0,0,24,0"
 									 HorizontalAlignment="Center"
 									 Height="12"
 									 Width="12"
 									 VerticalAlignment="Center" />
 							<Ellipse x:Name="DotNormal"
-									 Fill="White"
+									 Fill="Transparent"
 									 HorizontalAlignment="Center"
 									 Height="12"
 									 Width="12"
-									 VerticalAlignment="Center">
-							</Ellipse>
+									 VerticalAlignment="Center" />
+
 							<Ellipse x:Name="DotOn"
-									 Fill="{StaticResource ButtonBackground_Level1}"
+									 Fill="Transparent"
 									 Margin="0,0,-24,0"
 									 HorizontalAlignment="Center"
 									 Height="12"
 									 Width="12"
+									 VerticalAlignment="Center" />
+
+							<Ellipse x:Name="FeedBackDot"
+									 IsHitTestVisible="False"
+									 HorizontalAlignment="Center"
+									 Height="12"
+									 Width="12"
 									 VerticalAlignment="Center">
+								<Ellipse.Fill>
+									<SolidColorBrush Color="White"
+													 x:Name="FeedbackDotColor" />
+								</Ellipse.Fill>
 							</Ellipse>
 						</Grid>
 					</Viewbox>

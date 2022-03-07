@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
 namespace LogGuard_v0._1.LogGuard.Control
@@ -20,11 +21,15 @@ namespace LogGuard_v0._1.LogGuard.Control
     [TemplatePart(Name = TrippleToggle.NormalDotName, Type = typeof(Ellipse))]
     [TemplatePart(Name = TrippleToggle.OffDotName, Type = typeof(Ellipse))]
     [TemplatePart(Name = TrippleToggle.OnDotName, Type = typeof(Ellipse))]
+    [TemplatePart(Name = TrippleToggle.FeedbackDotName, Type = typeof(Ellipse))]
+    [TemplatePart(Name = TrippleToggle.FeedbackDotColorName, Type = typeof(Brush))]
     public class TrippleToggle : System.Windows.Controls.Control
     {
         private const string NormalDotName = "DotNormal";
         private const string OffDotName = "DotOff";
         private const string OnDotName = "DotOn";
+        private const string FeedbackDotName = "FeedBackDot";
+        private const string FeedbackDotColorName = "FeedbackDotColor";
 
 
         public TrippleToggle()
@@ -97,12 +102,12 @@ namespace LogGuard_v0._1.LogGuard.Control
             DependencyProperty.Register("Status",
                 typeof(DotStatus),
                 typeof(TrippleToggle),
-                new PropertyMetadata(default(DotStatus), new PropertyChangedCallback(DotStatusChagnedCallback)));
+                new PropertyMetadata(DotStatus.DotNormal, new PropertyChangedCallback(DotStatusChagnedCallback)));
 
         private static void DotStatusChagnedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             TrippleToggle tt = d as TrippleToggle;
-            tt.OnApplyNewStatus((DotStatus)e.NewValue);
+            tt.OnApplyNewStatus();
         }
 
         public DotStatus Status
@@ -118,23 +123,69 @@ namespace LogGuard_v0._1.LogGuard.Control
         }
         #endregion
 
+        #region DotOnFill
+        public static readonly DependencyProperty DotOnFillProperty =
+            DependencyProperty.Register(
+                "DotOnFill",
+                typeof(Color),
+                typeof(TrippleToggle),
+                new UIPropertyMetadata(Colors.Green));
+
+        public Color DotOnFill
+        {
+            get { return (Color)GetValue(DotOnFillProperty); }
+            set { SetValue(DotOnFillProperty, value); }
+        }
+        #endregion
+
+        #region DotOffFill
+        public static readonly DependencyProperty DotOffFillProperty =
+            DependencyProperty.Register(
+                "DotOffFill",
+                typeof(Color),
+                typeof(TrippleToggle),
+                new UIPropertyMetadata(Colors.Red));
+
+        public Color DotOffFill
+        {
+            get { return (Color)GetValue(DotOffFillProperty); }
+            set { SetValue(DotOffFillProperty, value); }
+        }
+        #endregion
+
+        #region DotNormalFill
+        public static readonly DependencyProperty DotNormalFillProperty =
+            DependencyProperty.Register(
+                "DotNormalFill",
+                typeof(Color),
+                typeof(TrippleToggle),
+                new UIPropertyMetadata(Colors.White));
+
+        public Color DotNormalFill
+        {
+            get { return (Color)GetValue(DotNormalFillProperty); }
+            set { SetValue(DotNormalFillProperty, value); }
+        }
+        #endregion
+
         private Ellipse NormalDot;
         private Ellipse OffDot;
         private Ellipse OnDot;
-        private Brush NormalDotCacheBrush;
-        private Brush OnDotCacheBrush;
-        private Brush OffDotCacheBrush;
+        private Ellipse FeedbackDot;
+        private SolidColorBrush FeedbackDotBrush;
 
+        private Grid MainGrid;
+        private Thickness CurrentFeedbackMargin;
+        private Color CurrentFeedbackColor;
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
+            MainGrid = GetTemplateChild("MainGrid") as Grid;
             NormalDot = GetTemplateChild(NormalDotName) as Ellipse;
             OffDot = GetTemplateChild(OffDotName) as Ellipse;
             OnDot = GetTemplateChild(OnDotName) as Ellipse;
-
-            NormalDotCacheBrush = NormalDot.Fill;
-            OnDotCacheBrush = OnDot.Fill;
-            OffDotCacheBrush = OffDot.Fill;
+            FeedbackDot = GetTemplateChild(FeedbackDotName) as Ellipse;
+            FeedbackDotBrush = GetTemplateChild(FeedbackDotColorName) as SolidColorBrush;
 
             MouseBinding NormalDotCmdMouseBinding = new MouseBinding();
             NormalDotCmdMouseBinding.MouseAction = MouseAction.LeftClick;
@@ -153,7 +204,17 @@ namespace LogGuard_v0._1.LogGuard.Control
             OffDot.InputBindings.Add(OffDotCmdMouseBinding);
             OnDot.InputBindings.Add(OnDotCmdMouseBinding);
 
-            OnApplyNewStatus(DotStatus.DotNormal);
+
+            CurrentFeedbackColor = 
+                Status == DotStatus.DotOn ? DotOnFill 
+                : Status == DotStatus.DotOff ? DotOffFill 
+                : DotNormalFill;
+
+            CurrentFeedbackMargin = new Thickness(0d, 0d
+                , Status == DotStatus.DotOn ? -24d : Status == DotStatus.DotOff ? 24d : 0d
+                , 0d);
+            FeedbackDot.Margin = CurrentFeedbackMargin;
+            FeedbackDotBrush.Color = CurrentFeedbackColor;
         }
 
         private void OnDotNormalClick(object paramater)
@@ -174,30 +235,47 @@ namespace LogGuard_v0._1.LogGuard.Control
             OffDotCommand?.Execute(paramater);
         }
 
-
-        private void OnApplyNewStatus(DotStatus newValue)
+        private void OnApplyNewStatus()
         {
-            if (!IsInitialized) return;
-            Brush invisibleBrush = new SolidColorBrush(Colors.Transparent);
-            NormalDot.Fill = invisibleBrush;
-            OnDot.Fill = invisibleBrush;
-            OffDot.Fill = invisibleBrush;
-
-            switch (newValue)
+            if (!IsInitialized)
             {
-                case DotStatus.DotNormal:
-                    NormalDot.Fill = NormalDotCacheBrush;
-                    break;
-                case DotStatus.DotOff:
-                    OffDot.Fill = OffDotCacheBrush;
-                    break;
-                case DotStatus.DotOn:
-                    OnDot.Fill = OnDotCacheBrush;
-                    break;
-                default:
-                    NormalDot.Fill = NormalDotCacheBrush;
-                    break;
+                return;
             }
+            var anm = CreateFeedbackAnimation();
+            anm.Begin(MainGrid);
+        }
+
+
+        private Storyboard CreateFeedbackAnimation()
+        {
+            Storyboard feedbackSB = new Storyboard();
+            long anmDuration = 90;
+
+            ThicknessAnimation thicknessAnimation = new ThicknessAnimation();
+            thicknessAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(anmDuration));
+            thicknessAnimation.From = CurrentFeedbackMargin;
+            thicknessAnimation.To = new Thickness(0d, 0d
+                , Status == DotStatus.DotOn ? -24d : Status == DotStatus.DotOff ? 24d : 0d
+                , 0d);
+            Storyboard.SetTargetName(thicknessAnimation, FeedbackDot.Name);
+            Storyboard.SetTargetProperty(thicknessAnimation, new PropertyPath(Ellipse.MarginProperty));
+
+            ColorAnimation colorAnimation = new ColorAnimation();
+            colorAnimation.From = CurrentFeedbackColor;
+            colorAnimation.To = Status == DotStatus.DotOn ? DotOnFill : Status == DotStatus.DotOff ? DotOffFill : DotNormalFill;
+            colorAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(anmDuration));
+            Storyboard.SetTargetName(colorAnimation, FeedbackDotColorName);
+            Storyboard.SetTargetProperty(colorAnimation,
+                new PropertyPath(SolidColorBrush.ColorProperty));
+
+
+            CurrentFeedbackMargin = (Thickness)thicknessAnimation.To;
+            CurrentFeedbackColor = (Color)colorAnimation.To;
+
+            feedbackSB.Children.Add(thicknessAnimation);
+            feedbackSB.Children.Add(colorAnimation);
+
+            return feedbackSB;
         }
 
     }
