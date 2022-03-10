@@ -1,0 +1,124 @@
+﻿<UserControl x:Class="LogGuard_v0._1.MVVM.View.UserControls.UC_LogManager"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="clr-namespace:LogGuard_v0._1.MVVM.View.UserControls"
+			 xmlns:ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control"
+			 mc:Ignorable="d"
+			 d:DesignHeight="345"
+			 d:DesignWidth="247"
+			 FontFamily="Calibri">
+	<Border Background="{StaticResource Background_Level2}"
+			CornerRadius="{StaticResource DefaultPanelCornerRadius}">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="10" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="20" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="15" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="10" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="10" />
+			</Grid.ColumnDefinitions>
+			<Grid Grid.Column="1"
+				  Grid.Row="1">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="0.25*" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+
+
+				<Label Content="Tag manager"
+					   FontSize="9"
+					   Grid.Row="0"
+					   Foreground="{StaticResource Foreground_Level1}" />
+				<ListView Grid.Row="1"
+						  Template="{StaticResource ListViewLV1Tmpl}">
+					<ListView.ItemContainerStyle>
+						<Style TargetType="{x:Type ListViewItem}">
+							<Setter Property="Height"
+									Value="30" />
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate>
+										<Grid Grid.Row="1"
+											  Background="{StaticResource Background_Level4}">
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="10" />
+												<ColumnDefinition Width="35" />
+												<ColumnDefinition Width="10" />
+												<ColumnDefinition Width="*" />
+											</Grid.ColumnDefinitions>
+											<Rectangle	Grid.ColumnSpan="4"
+														StrokeThickness="2"
+														Fill="#19B8E7F9"
+														Stroke="#FFB8EAF9"
+														x:Name="FeedBackRec"
+														IsHitTestVisible="False"
+														Visibility="Hidden" />
+											<Label Content="{TemplateBinding Tag}"
+												   Grid.Column="3"
+												   VerticalAlignment="Center"
+												   Foreground="{StaticResource Foreground_Level3}" />
+											<ctrl:TrippleToggle DotNormalFill="White"
+																Grid.Column="1"
+																DotOnFill="{StaticResource ButtonColor_Level1}"
+																DotOffFill="{StaticResource ButtonColor_Level2}" />
+										</Grid>
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsMouseOver"
+													 Value="True">
+												<Setter Property="Visibility"
+														TargetName="FeedBackRec"
+														Value="Visible" />
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</ListView.ItemContainerStyle>
+					<ListViewItem Tag="HoneyBoard" />
+					<ListViewItem Tag="HoneyBoard" />
+					<ListViewItem Tag="HoneyBoard" />
+					<ListViewItem Tag="HoneyBoard" />
+					<ListViewItem Tag="HoneyBoard" />
+					<ListViewItem Tag="HoneyBoard" />
+				</ListView>
+				
+			</Grid>
+
+			<Grid Grid.Column="1"
+				  Grid.Row="3">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="0.25*" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+
+
+				<Label Content="Logs by team"
+					   FontSize="9"
+					   Grid.Row="0"
+					   Foreground="{StaticResource Foreground_Level1}" />
+				<ctrl:HanzaTreeViewer Grid.Row="1"
+									  VirtualizingPanel.CacheLengthUnit="Pixel"
+									  VirtualizingPanel.IsContainerVirtualizable="True"
+									  VirtualizingPanel.IsVirtualizing="True"
+									  VirtualizingPanel.VirtualizationMode="Recycling"
+									  VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+									  x:Name="TeamTreeView">
+
+				</ctrl:HanzaTreeViewer>
+
+			</Grid>
+
+
+		</Grid>
+
+
+	</Border>
+</UserControl>

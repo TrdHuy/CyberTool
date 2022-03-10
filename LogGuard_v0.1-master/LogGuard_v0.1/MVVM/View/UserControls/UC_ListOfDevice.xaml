@@ -1,0 +1,161 @@
+﻿<UserControl x:Class="LogGuard_v0._1.MVVM.View.UserControls.UC_ListOfDevice"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="clr-namespace:LogGuard_v0._1.MVVM.View.UserControls"
+			 xmlns:logwatcher_ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control"
+			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+			 mc:Ignorable="d"
+			 d:DesignHeight="125"
+			 d:DesignWidth="110"
+			 FontFamily="Calibri">
+	<Border Background="{StaticResource Background_Level2}"
+			CornerRadius="{StaticResource DefaultPanelCornerRadius}"
+			x:Name="MainBorder">
+		<Grid>
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height=" 0.32*" />
+				<RowDefinition Height=" 0.63*" />
+				<RowDefinition Height=" 0.3*" />
+			</Grid.RowDefinitions>
+
+			<Label Content="List of devices"
+				   FontSize="9"
+				   FontWeight="Bold"
+				   Margin="4,10,10,0"
+				   Foreground="{StaticResource Foreground_Level1}" />
+			<Button Grid.Row="2"
+					Content="Refresh"
+					HorizontalAlignment="Center"
+					Foreground="{StaticResource Foreground_Level3}"
+					MinHeight="30"
+					Background="{StaticResource ButtonBackground_Level1}"
+					Padding="10,0,10,10"
+					Margin="0,0,0,10"
+					Template="{StaticResource RecBtnTmpl}">
+
+			</Button>
+
+			<ListView Grid.Row="1"
+					  Background="Transparent"
+					  BorderThickness="0"
+					  Foreground="{StaticResource Foreground_Level3}"
+					  Margin="0,0,0,5">
+				<ListView.ItemContainerStyle>
+					<Style TargetType="ListViewItem">
+						<Setter Property="Height"
+								Value="25" />
+						<Setter Property="FontSize"
+								Value="11" />
+						<Setter Property="BorderThickness"
+								Value="0" />
+						<Setter Property="Margin"
+								Value="0" />
+						<Setter Property="Padding"
+								Value="0" />
+
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="ListBoxItem">
+									<Border x:Name="Border"
+											SnapsToDevicePixels="true"
+											BorderThickness="0"
+											Background="{TemplateBinding Background}">
+										<Grid>
+
+											<Grid x:Name="FeedbackGrid"
+												  Visibility="Visible">
+												<Border Background="{StaticResource SelectedRowIndicatorPanelBackground}"
+														Width="10"
+														HorizontalAlignment="Left">
+													<Path x:Name="IndicateSelectedArrow"
+														  Data="m 430.70734,408.44156 -345.981495,199.75251 0,-399.50502 z"
+														  Fill="#FFF0F0F0"
+														  Margin="1,0,2,0"
+														  Stretch="Uniform"
+														  Visibility="Hidden" />
+												</Border>
+												<Border x:Name="FeedbackBorder"
+														BorderThickness="1"
+														Margin="10,0,0,0"
+														Background="#19B8E7F9"
+														BorderBrush="#FFB8EAF9"
+														Visibility="Hidden"
+														HorizontalAlignment="Stretch" />
+											</Grid>
+											<ContentPresenter Margin="10,0,0,0"
+															  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+															  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+
+
+										</Grid>
+									</Border>
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsMouseOver"
+												 Value="True">
+											<Setter Property="Visibility"
+													TargetName="FeedbackBorder"
+													Value="Visible" />
+										</Trigger>
+
+										<Trigger Property="IsSelected"
+												 Value="True">
+											<Setter Property="Visibility"
+													TargetName="FeedbackBorder"
+													Value="Visible" />
+											<Setter Property="Visibility"
+													TargetName="IndicateSelectedArrow"
+													Value="Visible" />
+											<Setter Property="Background"
+													TargetName="FeedbackBorder"
+													Value="{StaticResource SelectedItemBackground}" />
+											<Setter Property="BorderThickness"
+													TargetName="FeedbackBorder"
+													Value="0" />
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Style.Triggers>
+							<Trigger Property="ListView.AlternationIndex"
+									 Value="0">
+							</Trigger>
+							<Trigger Property="ListView.AlternationIndex"
+									 Value="1">
+							</Trigger>
+
+						</Style.Triggers>
+					</Style>
+
+				</ListView.ItemContainerStyle>
+				<ListView.Template>
+					<ControlTemplate TargetType="ListView">
+						<ControlTemplate.Resources>
+							<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
+							<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">0</sys:Double>
+
+						</ControlTemplate.Resources>
+						<Border Name="Border"
+								BorderThickness="1">
+
+							<logwatcher_ctrl:ScrollViewWatcher Background="Transparent"
+															   ScrollHeaderHeight="0"
+															   ThumbBackground="{StaticResource ButtonBackground_Level1}"
+															   ScrollBarBackground="Transparent">
+								<ItemsPresenter />
+							</logwatcher_ctrl:ScrollViewWatcher>
+						</Border>
+
+					</ControlTemplate>
+				</ListView.Template>
+				<ListViewItem Content="G967BXXUGFA1" />
+				<ListViewItem Content="G967BXXUGFA2" />
+				<ListViewItem Content="G967BXXUGFA3" />
+				<ListViewItem Content="G967BXXUGFA4" />
+			</ListView>
+		</Grid>
+	</Border>
+</UserControl>

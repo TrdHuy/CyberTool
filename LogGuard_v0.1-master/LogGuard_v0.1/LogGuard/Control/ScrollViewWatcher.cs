@@ -12,6 +12,19 @@ namespace LogGuard_v0._1.LogGuard.Control
     public class ScrollViewWatcher: ScrollViewer
     {
 
+        public static readonly DependencyProperty ScrollHeaderHeightProperty =
+            DependencyProperty.Register(
+                "ScrollHeaderHeight",
+                typeof(double),
+                typeof(ScrollViewWatcher),
+                new PropertyMetadata(default(double)));
+
+        public double ScrollHeaderHeight
+        {
+            get { return (double)GetValue(ScrollHeaderHeightProperty); }
+            set { SetValue(ScrollHeaderHeightProperty, value); }
+        }
+
         public static readonly DependencyProperty ScrollBarBackgroundProperty =
             DependencyProperty.Register(
                 "ScrollBarBackground",
@@ -36,6 +49,19 @@ namespace LogGuard_v0._1.LogGuard.Control
         {
             get { return (Brush)GetValue(ThumbBackgroundProperty); }
             set { SetValue(ThumbBackgroundProperty, value); }
+        }
+
+        public static readonly DependencyProperty HeaderBackgroundProperty =
+            DependencyProperty.Register(
+                "HeaderBackground",
+                typeof(Brush),
+                typeof(ScrollViewWatcher),
+                new UIPropertyMetadata(default(Brush)));
+
+        public Brush HeaderBackground
+        {
+            get { return (Brush)GetValue(HeaderBackgroundProperty); }
+            set { SetValue(HeaderBackgroundProperty, value); }
         }
 
         public ScrollViewWatcher()
