@@ -1,0 +1,204 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control">
+
+	<Style TargetType="{x:Type ctrl:HanzaTreeViewItem}">
+		<Setter Property="Background"
+				Value="#FF262930" />
+		<Setter Property="BorderThickness"
+				Value="0" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type ctrl:HanzaTreeViewItem}">
+					<Border x:Name="PART_MainBorder"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							Background="{TemplateBinding Background}"
+							DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctrl:HanzaTreeViewItem},Mode=FindAncestor}}">
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="37.5" />
+								<RowDefinition Height="auto" />
+							</Grid.RowDefinitions>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="30" />
+								<ColumnDefinition Width="*"
+												  MinWidth="130" />
+								<ColumnDefinition Width="30" />
+								<ColumnDefinition Width="30" />
+							</Grid.ColumnDefinitions>
+
+							<ctrl:CCControl x:Name="PART_MainContent"
+											Grid.Column="1"
+											Margin="0,7,0,0"
+											Content="{Binding Content}">
+								<ctrl:CCControl.Template>
+									<ControlTemplate TargetType="ctrl:CCControl">
+										<Grid>
+											<Label Tag="{TemplateBinding Content}"
+												   x:Name="mainLabel">
+												<TextBlock x:Name="mainContent"
+														   Foreground="White"
+														   TextDecorations="None"
+														   Text="{Binding Path=Tag, 
+															RelativeSource={RelativeSource Mode=FindAncestor,
+                                                            AncestorType={x:Type Label}}}" />
+											</Label>
+
+										</Grid>
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsMouseOver"
+													 Value="True">
+												<Setter Property="TextDecorations"
+														TargetName="mainContent"
+														Value="Underline" />
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</ctrl:CCControl.Template>
+							</ctrl:CCControl>
+
+							<Rectangle x:Name="FeedbackRec"
+									   Fill="#19B8E7F9"
+									   Stroke="#FFB8EAF9"
+									   IsHitTestVisible="False"
+									   StrokeThickness="1"
+									   Grid.ColumnSpan="4"
+									   Visibility="Hidden" />
+
+							<Button x:Name="PART_expandBtn"
+									Height="30"
+									Width="30"
+									RenderTransformOrigin="0.5,0.5">
+								<Button.Template>
+									<ControlTemplate TargetType="Button">
+										<Grid>
+											<Rectangle x:Name="PART_expandRecArea"
+													   Fill="Transparent" />
+											<Path x:Name="PART_expandPath"
+												  Fill="#FFC6C5C5"
+												  Stretch="Uniform"
+												  Height="8"
+												  Width="8"
+												  Data="M 69.552844,9.2780434 136.88068,90.248943 149.91937,105.92972 136.88035,121.61092 69.552504,202.58184 56.513813,186.90104 123.84166,105.93012 56.513823,24.959233 Z">
+											</Path>
+										</Grid>
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsMouseOver"
+													 Value="True">
+												<Setter TargetName="PART_expandPath"
+														Property="Fill"
+														Value="Aqua" />
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Button.Template>
+
+								<Button.RenderTransform>
+									<RotateTransform x:Name="PART_expandBtnRotateTransform" />
+								</Button.RenderTransform>
+							</Button>
+
+							<Button x:Name="PART_addBtn"
+									Width="30"
+									Height="30"
+									Grid.Column="2">
+								<Button.Template>
+									<ControlTemplate TargetType="Button">
+										<Grid Background="Transparent">
+											<Path Fill="#FFC6C5C5"
+												  Width="12"
+												  x:Name="pathContent"
+												  Stretch="Uniform">
+												<Path.Data>
+													M 293.82812 107.66797 A 243.81459 243.81459 0 0 0 50.013672 351.48242 A 243.81459 243.81459 0 0 0 293.82812 595.29688 A 243.81459 243.81459 0 0 0 537.64258 351.48242 A 243.81459 243.81459 0 0 0 293.82812 107.66797 z M 293.82812 146.56641 A 204.91541 204.91541 0 0 1 498.74414 351.48242 A 204.91541 204.91541 0 0 1 293.82812 556.39648 A 204.91541 204.91541 0 0 1 88.912109 351.48242 A 204.91541 204.91541 0 0 1 293.82812 146.56641 z M 266.73633 194.91016 L 266.73633 324.39062 L 137.25781 324.39062 L 137.25781 378.57227 L 266.73633 378.57227 L 266.73633 508.05273 L 320.91992 508.05273 L 320.91992 378.57227 L 450.39844 378.57227 L 450.39844 324.39062 L 320.91992 324.39062 L 320.91992 194.91016 L 266.73633 194.91016 z
+												</Path.Data>
+											</Path>
+										</Grid>
+
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsMouseOver"
+													 Value="True">
+												<Setter TargetName="pathContent"
+														Property="Fill"
+														Value="Aqua" />
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Button.Template>
+							</Button>
+
+							<Button x:Name="PART_subBtn"
+									Grid.Column="3"
+									Height="30"
+									Width="30">
+								<Button.Template>
+									<ControlTemplate TargetType="Button">
+										<Grid Background="Transparent">
+											<Path Fill="#FFC6C5C5"
+												  Width="12"
+												  x:Name="pathContent"
+												  Stretch="Uniform">
+												<Path.Data>
+													M 293.82812 107.66797 A 243.81459 243.81459 0 0 0 50.013672 351.48242 A 243.81459 243.81459 0 0 0 293.82812 595.29688 A 243.81459 243.81459 0 0 0 537.64258 351.48242 A 243.81459 243.81459 0 0 0 293.82812 107.66797 z M 293.82812 146.56641 A 204.91541 204.91541 0 0 1 498.74414 351.48242 A 204.91541 204.91541 0 0 1 293.82812 556.39648 A 204.91541 204.91541 0 0 1 88.912109 351.48242 A 204.91541 204.91541 0 0 1 293.82812 146.56641 z M 137.25781 324.39062 L 137.25781 378.57422 L 450.39844 378.57422 L 450.39844 324.39062 L 137.25781 324.39062 z
+												</Path.Data>
+											</Path>
+										</Grid>
+
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsMouseOver"
+													 Value="True">
+												<Setter TargetName="pathContent"
+														Property="Fill"
+														Value="Aqua" />
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Button.Template>
+							</Button>
+
+							<ctrl:HanzaTreeViewer x:Name="PART_ContentLst"
+												  VirtualizingPanel.CacheLengthUnit="Pixel"
+												  VirtualizingPanel.IsContainerVirtualizable="True"
+												  VirtualizingPanel.IsVirtualizing="True"
+												  VirtualizingPanel.VirtualizationMode="Recycling"
+												  VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+												  Grid.Row="1"
+												  VerticalAlignment="Top"
+												  Grid.ColumnSpan="4"
+												  Grid.Column="1"
+												  ItemsSource="{Binding Source}">
+								<ctrl:HanzaTreeViewer.Template>
+									<ControlTemplate TargetType="ctrl:HanzaTreeViewer">
+
+										<Border x:Name="Border"
+												BorderBrush="{TemplateBinding BorderBrush}"
+												BorderThickness="{TemplateBinding BorderThickness}"
+												Background="{TemplateBinding Background}"
+												SnapsToDevicePixels="True">
+											<Grid>
+
+												<Grid.RowDefinitions>
+													<RowDefinition Height="Auto" />
+												</Grid.RowDefinitions>
+												<ItemsPresenter x:Name="PART_ItemPresenter" />
+											</Grid>
+										</Border>
+									</ControlTemplate>
+								</ctrl:HanzaTreeViewer.Template>
+							</ctrl:HanzaTreeViewer>
+						</Grid>
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver"
+								 Value="True">
+							<Setter TargetName="FeedbackRec"
+									Property="Visibility"
+									Value="Visible" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+</ResourceDictionary>
