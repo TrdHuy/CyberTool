@@ -75,6 +75,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Base\Command\BaseCommandImpl.cs" />
     <Compile Include="Base\Observable\BaseObservable.cs" />
     <Compile Include="Base\Observable\IObservable.cs" />
     <Compile Include="Base\Observable\IObserver.cs" />

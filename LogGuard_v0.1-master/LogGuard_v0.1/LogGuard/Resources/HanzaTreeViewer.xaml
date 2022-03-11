@@ -3,44 +3,32 @@
 					xmlns:ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control"
 					xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-	<Style TargetType="{x:Type ctrl:HanzaTreeViewer}">
+	<Style x:Key="{x:Type ctrl:HanzaTreeViewer}"
+		   TargetType="TreeView">
+
 		<Setter Property="SnapsToDevicePixels"
-				Value="true" />
+				Value="True" />
 		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
 				Value="Auto" />
 		<Setter Property="ScrollViewer.VerticalScrollBarVisibility"
 				Value="Auto" />
-		<Setter Property="ScrollViewer.CanContentScroll"
-				Value="true" />
-		<Setter Property="VerticalContentAlignment"
-				Value="Center" />
 		<Setter Property="Template">
 			<Setter.Value>
-				<ControlTemplate TargetType="ctrl:HanzaTreeViewer">
-					<ControlTemplate.Resources>
-						<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
-						<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
-					</ControlTemplate.Resources>
-					
-					<Border x:Name="Border"
-							BorderBrush="{TemplateBinding BorderBrush}"
-							BorderThickness="{TemplateBinding BorderThickness}"
-							Background="{TemplateBinding Background}"
-							SnapsToDevicePixels="True">
-
-						<ctrl:ScrollViewWatcher Background="Transparent"
+				<ControlTemplate TargetType="{x:Type ctrl:HanzaTreeViewer}">
+					<Border Name="Border"
+							CornerRadius="1"
+							BorderThickness="0">
+						<Border.Background>
+							<SolidColorBrush Color="#FF262930" />
+						</Border.Background>
+						<ctrl:ScrollViewWatcher Focusable="False"
+												CanContentScroll="False"
+												Background="Transparent"
 												ScrollHeaderHeight="0"
-												Style="{StaticResource HideTrackBtn_ScrollViewWatcherStyle}"
-												ThumbBackground="{StaticResource ButtonBackground_Level1}"
+												ThumbBackground="#009a76"
 												ScrollBarBackground="Transparent">
-							<Grid>
-								<Grid.RowDefinitions>
-									<RowDefinition Height="Auto" />
-								</Grid.RowDefinitions>
-								<ItemsPresenter x:Name="PART_ItemPresenter" />
-							</Grid>
+							<ItemsPresenter />
 						</ctrl:ScrollViewWatcher>
-
 					</Border>
 				</ControlTemplate>
 			</Setter.Value>

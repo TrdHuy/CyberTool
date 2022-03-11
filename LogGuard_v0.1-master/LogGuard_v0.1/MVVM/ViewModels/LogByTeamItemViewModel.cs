@@ -7,72 +7,72 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+using LogGuard_v0._1.Base.Command;
 
 namespace LogGuard_v0._1.MVVM.ViewModels
 {
     public class LogByTeamItemViewModel : BaseViewModel, IHanzaTreeViewItem
     {
-        private ObservableCollection<LogByTeamItemViewModel> _childs = new ObservableCollection<LogByTeamItemViewModel>();
-        private string _title;
-
-        [Bindable(true)]
-        public String Title
+        private BaseCommandImpl addCmd;
+        private BaseCommandImpl rmCmd;
+        private object parent;
+        public LogByTeamItemViewModel(LogByTeamItemViewModel par, string title)
         {
-            get
+            this.Items = new ObservableCollection<LogByTeamItemViewModel>();
+            this.parent = par;
+            this.Title = title;
+            InitCmd();
+        }
+
+        public LogByTeamItemViewModel(ObservableCollection<LogByTeamItemViewModel> par, string title)
+        {
+            this.Items = new ObservableCollection<LogByTeamItemViewModel>();
+            this.parent = par;
+            this.Title = title;
+            InitCmd();
+        }
+
+        private void InitCmd()
+        {
+            addCmd = new BaseCommandImpl((s, e) =>
             {
-                return _title;
-            }
-            set
+                int a = 1;
+            });
+
+            rmCmd = new BaseCommandImpl((s, e) =>
             {
-                _title = value; 
-                InvalidateOwn();
-            }
+                int a = 1;
+                var hzItem = s as HanzaTreeViewItem;
+                if (parent != null && hzItem != null)
+                {
+                    if (parent is LogByTeamItemViewModel)
+                    {
+                        var cast = parent as LogByTeamItemViewModel;
+                        cast?.Items.Remove(hzItem.DataContext as LogByTeamItemViewModel);
+                    }
+                    else if (parent is ObservableCollection<LogByTeamItemViewModel>)
+                    {
+                        var cast = parent as ObservableCollection<LogByTeamItemViewModel>;
+                        cast?.Remove(hzItem.DataContext as LogByTeamItemViewModel);
+                    }
+                }
+            });
         }
 
-        [Bindable(true)]
-        public IEnumerable Childs
+        public string Title { get; set; }
+        public ObservableCollection<LogByTeamItemViewModel> Items { get; set; }
+        public ICommand AddBtnCommand { get => addCmd; }
+        public ICommand RemoveBtnCommand { get => rmCmd; }
+        
+        public void AddItem(LogByTeamItemViewModel item)
         {
-            get
-            {
-                return _childs;
-            }
-            set
-            {
-                _childs = new ObservableCollection<LogByTeamItemViewModel>(value.OfType<LogByTeamItemViewModel>());
-                InvalidateOwn();
-            }
+            Items.Add(item);
         }
 
-
-        public LogByTeamItemViewModel(string tittle = "Default title", HanzaTreeViewItem parent = null)
+        public void RemoveItem(LogByTeamItemViewModel item)
         {
-            Title = tittle;
-        }
-
-        public LogByTeamItemViewModel AddItem(LogByTeamItemViewModel vm)
-        {
-            _childs.Add(vm);
-            return this;
-        }
-
-        public void Remove(LogByTeamItemViewModel vm)
-        {
-            _childs.Remove(vm);
-        }
-
-        public void Remove(int idx)
-        {
-            _childs.RemoveAt(idx);
-        }
-
-        public void Clear()
-        {
-            _childs.Clear();
-        }
-
-        public override string ToString()
-        {
-            return Title;
+            Items.Remove(item);
         }
     }
 }
