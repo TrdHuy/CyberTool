@@ -60,7 +60,7 @@
 
 								<ScrollContentPresenter Name="PART_ScrollContentPresenter"
 														KeyboardNavigation.DirectionalNavigation="Local"
-														CanContentScroll="False"
+														CanContentScroll="True"
 														CanHorizontallyScroll="False"
 														CanVerticallyScroll="False" />
 
@@ -548,7 +548,7 @@
 
 								<ScrollContentPresenter Name="PART_ScrollContentPresenter"
 														KeyboardNavigation.DirectionalNavigation="Local"
-														CanContentScroll="False"
+														CanContentScroll="True"
 														CanHorizontallyScroll="False"
 														CanVerticallyScroll="False" />
 
@@ -768,6 +768,7 @@
 													Property="Background"
 													Value="Transparent" />
 										</Trigger>
+
 									</ControlTemplate.Triggers>
 								</ControlTemplate>
 							</ScrollBar.Template>
@@ -779,5 +780,4 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
-
 </ResourceDictionary>

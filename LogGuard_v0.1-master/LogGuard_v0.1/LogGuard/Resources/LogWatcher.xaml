@@ -77,38 +77,6 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
-
-		<!--<Style.Triggers>
-            <Trigger Property="Role"
-                     Value="Floating">
-                <Setter Property="Opacity"
-                        Value="0.7" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="GridViewColumnHeader">
-                            <Canvas Name="PART_FloatingHeaderCanvas">
-                                <Rectangle Fill="Aqua"
-                                           Width="{TemplateBinding ActualWidth}"
-                                           Height="{TemplateBinding ActualHeight}" />
-                            </Canvas>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
-            <Trigger Property="Role"
-                     Value="Padding">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="GridViewColumnHeader">
-                            <Border Name="HeaderBorder"
-                                    BorderBrush="{Binding BorderBursh}"
-                                    Background="{Binding Background}">
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
-        </Style.Triggers>-->
 	</Style>
 
 	<Style TargetType="{x:Type ctrl:LogWatcher}">

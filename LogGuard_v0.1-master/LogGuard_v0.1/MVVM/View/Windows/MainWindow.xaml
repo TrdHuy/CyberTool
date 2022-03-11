@@ -174,14 +174,14 @@
 			</Button.Template>
 		</Button>-->
 
-		<logguard:LogWatcher VirtualizingPanel.CacheLength="1"
-							 UseAutoScroll="True"
+		<logguard:LogWatcher UseAutoScroll="True"
 							 Grid.Row="4"
 							 Grid.Column="1"
 							 Grid.RowSpan="2"
 							 Grid.ColumnSpan="7"
 							 ScrollViewer.HorizontalScrollBarVisibility="Visible"
 							 ScrollViewer.VerticalScrollBarVisibility="Visible"
+							 VirtualizingPanel.CacheLength="1"
 							 VirtualizingPanel.CacheLengthUnit="Pixel"
 							 VirtualizingPanel.IsContainerVirtualizable="True"
 							 VirtualizingPanel.IsVirtualizing="True"
