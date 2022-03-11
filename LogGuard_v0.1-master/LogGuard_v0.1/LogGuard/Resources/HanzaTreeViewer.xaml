@@ -15,14 +15,19 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type ctrl:HanzaTreeViewer}">
-					<Border Name="Border"
-							CornerRadius="1"
-							BorderThickness="0">
-						<Border.Background>
-							<SolidColorBrush Color="#FF262930" />
-						</Border.Background>
+					<ControlTemplate.Resources>
+						<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
+						<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
+					</ControlTemplate.Resources>
+
+					<Border x:Name="Border"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							Background="{TemplateBinding Background}"
+							SnapsToDevicePixels="True">
 						<ctrl:ScrollViewWatcher Focusable="False"
 												CanContentScroll="False"
+												Style="{StaticResource HideTrackBtn_ScrollViewWatcherStyle}"
 												Background="Transparent"
 												ScrollHeaderHeight="0"
 												ThumbBackground="#009a76"

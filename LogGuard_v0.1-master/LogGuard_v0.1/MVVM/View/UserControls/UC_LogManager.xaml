@@ -5,6 +5,7 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="clr-namespace:LogGuard_v0._1.MVVM.View.UserControls"
 			 xmlns:ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control"
+			 xmlns:vm="clr-namespace:LogGuard_v0._1.MVVM.ViewModels"
 			 mc:Ignorable="d"
 			 d:DesignHeight="345"
 			 d:DesignWidth="247"
@@ -37,6 +38,7 @@
 					   Grid.Row="0"
 					   Foreground="{StaticResource Foreground_Level1}" />
 				<ListView Grid.Row="1"
+						  Background="{StaticResource Background_Level4}"
 						  Template="{StaticResource ListViewLV1Tmpl}">
 					<ListView.ItemContainerStyle>
 						<Style TargetType="{x:Type ListViewItem}">
@@ -105,13 +107,32 @@
 					   Grid.Row="0"
 					   Foreground="{StaticResource Foreground_Level1}" />
 				<ctrl:HanzaTreeViewer Grid.Row="1"
+									  BorderThickness="0"
+									  Background="{StaticResource Background_Level4}"
+									  VirtualizingPanel.CacheLength="1"
 									  VirtualizingPanel.CacheLengthUnit="Pixel"
 									  VirtualizingPanel.IsContainerVirtualizable="True"
 									  VirtualizingPanel.IsVirtualizing="True"
 									  VirtualizingPanel.VirtualizationMode="Recycling"
 									  VirtualizingPanel.IsVirtualizingWhenGrouping="True"
 									  x:Name="TeamTreeView">
-
+					<ctrl:HanzaTreeViewer.ItemTemplate>
+						<HierarchicalDataTemplate DataType="{x:Type vm:LogByTeamItemViewModel}"
+												  ItemsSource="{Binding Items}">
+							<TextBlock Text="{Binding Title}"
+									   x:Name="mainContent"
+									   Foreground="White"
+									   VerticalAlignment="Center" />
+							<HierarchicalDataTemplate.Triggers>
+								<Trigger Property="IsMouseOver"
+										 Value="True">
+									<Setter Property="TextDecorations"
+											TargetName="mainContent"
+											Value="Underline" />
+								</Trigger>
+							</HierarchicalDataTemplate.Triggers>
+						</HierarchicalDataTemplate>
+					</ctrl:HanzaTreeViewer.ItemTemplate>
 				</ctrl:HanzaTreeViewer>
 
 			</Grid>

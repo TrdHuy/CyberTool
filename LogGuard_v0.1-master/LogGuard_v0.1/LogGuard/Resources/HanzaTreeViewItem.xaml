@@ -12,7 +12,7 @@
 					<Grid Width="15"
 						  Height="13"
 						  Background="Transparent">
-						<VisualStateManager.VisualStateGroups>
+						<!--<VisualStateManager.VisualStateGroups>
 							<VisualStateGroup x:Name="CheckStates">
 								<VisualState x:Name="Checked">
 									<Storyboard>
@@ -34,17 +34,13 @@
 								</VisualState>
 								<VisualState x:Name="Indeterminate" />
 							</VisualStateGroup>
-						</VisualStateManager.VisualStateGroups>
+						</VisualStateManager.VisualStateGroups>-->
 						<Path x:Name="PART_expandPath"
 							  Fill="#FFC6C5C5"
 							  Stretch="Uniform"
 							  Height="8"
-							  RenderTransformOrigin="0.5,0.5"
 							  Width="8"
 							  Data="M 69.552844,9.2780434 136.88068,90.248943 149.91937,105.92972 136.88035,121.61092 69.552504,202.58184 56.513813,186.90104 123.84166,105.93012 56.513823,24.959233 Z">
-							<Path.RenderTransform>
-								<RotateTransform x:Name="PART_expandBtnRotateTransform" />
-							</Path.RenderTransform>
 						</Path>
 					</Grid>
 					<ControlTemplate.Triggers>
@@ -77,7 +73,7 @@
 	<Style x:Key="{x:Type ctrl:HanzaTreeViewItem}"
 		   TargetType="TreeViewItem">
 		<Setter Property="Background"
-				Value="Transparent" />
+				Value="{StaticResource Background_Level4}" />
 		<Setter Property="HorizontalContentAlignment"
 				Value="{Binding Path=HorizontalContentAlignment,
     RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
@@ -93,12 +89,13 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type ctrl:HanzaTreeViewItem}">
-					<Grid>
+					<Grid Background="{TemplateBinding Background}"
+						  x:Name="MainGrid">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition MinWidth="19"
 											  Width="Auto" />
 							<ColumnDefinition Width="Auto"
-											  MinWidth="150" />
+											  MinWidth="140" />
 							<ColumnDefinition Width="30" />
 							<ColumnDefinition Width="30" />
 							<ColumnDefinition Width="10" />
@@ -108,7 +105,7 @@
 							<RowDefinition Height="Auto" />
 							<RowDefinition />
 						</Grid.RowDefinitions>
-						<VisualStateManager.VisualStateGroups>
+						<!--<VisualStateManager.VisualStateGroups>
 							<VisualStateGroup x:Name="ExpansionStates">
 								<VisualState x:Name="Expanded">
 									<Storyboard>
@@ -139,15 +136,19 @@
 									</Storyboard>
 								</VisualState>
 							</VisualStateGroup>
-						</VisualStateManager.VisualStateGroups>
+						</VisualStateManager.VisualStateGroups>-->
 						<ToggleButton x:Name="Expander"
+									  RenderTransformOrigin="0.5,0.5"
 									  Style="{StaticResource ExpandCollapseToggleStyle}"
 									  ClickMode="Press"
 									  IsChecked="{Binding IsExpanded, 
-            RelativeSource={RelativeSource TemplatedParent}}" />
+            RelativeSource={RelativeSource TemplatedParent}}">
+							<ToggleButton.RenderTransform>
+								<RotateTransform x:Name="PART_ToggleButtonRotateTransform" />
+							</ToggleButton.RenderTransform>
+						</ToggleButton>
 						<Border x:Name="Bd"
 								Grid.Column="1"
-								Background="{TemplateBinding Background}"
 								BorderBrush="{TemplateBinding BorderBrush}"
 								BorderThickness="{TemplateBinding BorderThickness}"
 								Padding="{TemplateBinding Padding}">
@@ -278,7 +279,8 @@
 										Grid.ColumnSpan="5"
 										Visibility="Collapsed">
 							<ItemsPresenter.LayoutTransform>
-								<ScaleTransform ScaleY="1" />
+								<ScaleTransform x:Name="PART_ItemHostScaleTransform"
+												ScaleY="1" />
 							</ItemsPresenter.LayoutTransform>
 						</ItemsPresenter>
 					</Grid>

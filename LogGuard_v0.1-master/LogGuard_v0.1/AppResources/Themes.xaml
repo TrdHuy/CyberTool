@@ -350,7 +350,7 @@
 
 		</ControlTemplate.Resources>
 		<Border Name="Border"
-				BorderThickness="1">
+				Background="{TemplateBinding Background}">
 
 			<logwatcher_ctrl:ScrollViewWatcher Background="Transparent"
 											   ScrollHeaderHeight="0"
