@@ -49,70 +49,13 @@ namespace LogGuard_v0._1.MVVM.View.UserControls
             source.Add(item1);
             source.Add(perForItem);
             TeamTreeView.ItemsSource = source;
+            lbtHeader.MouseDoubleClickCommand = new BaseCommandImpl((param, e) =>
+            {
+                App.Current.ShowPopupCControl(lbtCC, lbtHeader, OwnerWindow.MainScreen, 600, 440);
+            });
 
-            //MenuItem root = new MenuItem(Items) { Title = "Menu" };
-            //MenuItem childItem1 = new MenuItem(root) { Title = "Child item #1" };
-            //root.Items.Add(childItem1);
-            //root.Items.Add(new MenuItem(root) { Title = "Child item #2" });
-
-            //Items.Add(root);
-            //TeamTreeView.ItemsSource = Items;
-
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    MenuItem root2 = new MenuItem(Items) { Title = i + "" };
-            //    Items.Add(root2);
-
-            //}
-
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    MenuItem root2 = new MenuItem(childItem1) { Title = i + "" };
-            //    childItem1.Items.Add(root2);
-
-            //}
         }
 
 
-    }
-
-    public class MenuItem : IHanzaTreeViewItem
-    {
-        private BaseCommandImpl addCmd;
-        private BaseCommandImpl rmCmd;
-        private object parent;
-        public MenuItem(object par)
-        {
-            this.Items = new ObservableCollection<MenuItem>();
-            this.parent = par;
-            addCmd = new BaseCommandImpl((s, e) =>
-            {
-                int a = 1;
-
-            });
-
-            rmCmd = new BaseCommandImpl((s, e) =>
-            {
-                int a = 1;
-                var hzItem = s as HanzaTreeViewItem;
-                if (parent != null && hzItem != null)
-                {
-                    if (parent is MenuItem)
-                    {
-                        var cast = parent as MenuItem;
-                        cast?.Items.Remove(hzItem.DataContext as MenuItem);
-                    }
-                    else if (parent is ObservableCollection<MenuItem>)
-                    {
-                        var cast = parent as ObservableCollection<MenuItem>;
-                        cast?.Remove(hzItem.DataContext as MenuItem);
-                    }
-                }
-            });
-        }
-        public string Title { get; set; }
-        public ObservableCollection<MenuItem> Items { get; set; }
-        public ICommand AddBtnCommand { get => addCmd; }
-        public ICommand RemoveBtnCommand { get => rmCmd; }
     }
 }

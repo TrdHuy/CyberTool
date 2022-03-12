@@ -83,6 +83,7 @@
     <Compile Include="LogGuard\Control\CCContentControl.cs" />
     <Compile Include="LogGuard\Control\HanzaTreeViewer.cs" />
     <Compile Include="LogGuard\Control\HanzaTreeViewItem.cs" />
+    <Compile Include="LogGuard\Control\HeaderLabel.cs" />
     <Compile Include="LogGuard\Control\RadialProgressBar.cs" />
     <Compile Include="LogGuard\Control\TrippleToggle.cs" />
     <Compile Include="MVVM\ViewModels\LogByTeamItemViewModel.cs" />
@@ -98,7 +99,11 @@
     <Compile Include="MVVM\View\UserControls\UC_LogManager.xaml.cs">
       <DependentUpon>UC_LogManager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MVVM\View\Windows\FloatingWindow.xaml.cs">
+      <DependentUpon>FloatingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\CustomAttachedProperties.cs" />
+    <Compile Include="WindowDirector.cs" />
     <Page Include="LogGuard\Resources\HanzaTreeViewer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -106,6 +111,10 @@
     <Page Include="LogGuard\Resources\HanzaTreeViewItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="LogGuard\Resources\HeaderLabel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="LogGuard\Resources\LogMappingBorder.xaml">
       <SubType>Designer</SubType>
@@ -140,6 +149,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MVVM\View\UserControls\UC_LogManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\Windows\FloatingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

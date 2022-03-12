@@ -91,7 +91,7 @@
 					<ListViewItem Tag="HoneyBoard" />
 					<ListViewItem Tag="HoneyBoard" />
 				</ListView>
-				
+
 			</Grid>
 
 			<Grid Grid.Column="1"
@@ -102,39 +102,50 @@
 				</Grid.RowDefinitions>
 
 
-				<Label Content="Logs by team"
-					   FontSize="9"
-					   Grid.Row="0"
-					   Foreground="{StaticResource Foreground_Level1}" />
-				<ctrl:HanzaTreeViewer Grid.Row="1"
-									  BorderThickness="0"
-									  Background="{StaticResource Background_Level4}"
-									  VirtualizingPanel.CacheLength="1"
-									  VirtualizingPanel.CacheLengthUnit="Pixel"
-									  VirtualizingPanel.IsContainerVirtualizable="True"
-									  VirtualizingPanel.IsVirtualizing="True"
-									  VirtualizingPanel.VirtualizationMode="Recycling"
-									  VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-									  x:Name="TeamTreeView">
-					<ctrl:HanzaTreeViewer.ItemTemplate>
-						<HierarchicalDataTemplate DataType="{x:Type vm:LogByTeamItemViewModel}"
-												  ItemsSource="{Binding Items}">
-							<TextBlock Text="{Binding Title}"
-									   x:Name="mainContent"
-									   Foreground="White"
-									   VerticalAlignment="Center" />
-							<HierarchicalDataTemplate.Triggers>
-								<Trigger Property="IsMouseOver"
-										 Value="True">
-									<Setter Property="TextDecorations"
-											TargetName="mainContent"
-											Value="Underline" />
-								</Trigger>
-							</HierarchicalDataTemplate.Triggers>
-						</HierarchicalDataTemplate>
-					</ctrl:HanzaTreeViewer.ItemTemplate>
-				</ctrl:HanzaTreeViewer>
+				<ctrl:HeaderLabel Content="Logs by team"
+								  FontSize="9"
+								  Grid.Row="0"
+								  x:Name="lbtHeader"
+								  Foreground="{StaticResource Foreground_Level1}">
 
+				</ctrl:HeaderLabel>
+				<ContentControl Grid.Row="1"
+								x:Name="lbtCC">
+					<ContentControl.LayoutTransform>
+						<ScaleTransform x:Name="CC_ScaleTransform" 
+										ScaleX="1"
+										ScaleY="1"/>
+					</ContentControl.LayoutTransform>
+					<ctrl:HanzaTreeViewer BorderThickness="0"
+										  Background="{StaticResource Background_Level4}"
+										  VirtualizingPanel.CacheLength="1"
+										  VirtualizingPanel.CacheLengthUnit="Pixel"
+										  VirtualizingPanel.IsContainerVirtualizable="True"
+										  VirtualizingPanel.IsVirtualizing="True"
+										  VirtualizingPanel.VirtualizationMode="Recycling"
+										  VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+										  x:Name="TeamTreeView">
+						<ctrl:HanzaTreeViewer.ItemTemplate>
+							<HierarchicalDataTemplate DataType="{x:Type vm:LogByTeamItemViewModel}"
+													  ItemsSource="{Binding Items}">
+								<TextBlock Text="{Binding Title}"
+										   x:Name="mainContent"
+										   Foreground="White"
+										   VerticalAlignment="Center" />
+								<HierarchicalDataTemplate.Triggers>
+									<Trigger Property="IsMouseOver"
+											 Value="True">
+										<Setter Property="TextDecorations"
+												TargetName="mainContent"
+												Value="Underline" />
+									</Trigger>
+								</HierarchicalDataTemplate.Triggers>
+							</HierarchicalDataTemplate>
+						</ctrl:HanzaTreeViewer.ItemTemplate>
+					</ctrl:HanzaTreeViewer>
+
+				</ContentControl>
+				
 			</Grid>
 
 

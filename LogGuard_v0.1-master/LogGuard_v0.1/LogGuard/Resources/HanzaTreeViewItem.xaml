@@ -94,12 +94,11 @@
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition MinWidth="19"
 											  Width="Auto" />
-							<ColumnDefinition Width="Auto"
+							<ColumnDefinition Width="*"
 											  MinWidth="140" />
 							<ColumnDefinition Width="30" />
 							<ColumnDefinition Width="30" />
 							<ColumnDefinition Width="10" />
-							<ColumnDefinition Width="*" />
 						</Grid.ColumnDefinitions>
 						<Grid.RowDefinitions>
 							<RowDefinition Height="Auto" />
