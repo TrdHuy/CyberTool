@@ -13,14 +13,14 @@ namespace LogGuard_v0._1.Base.ViewModel
     public class BaseViewModel : BaseObservable, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public BaseViewModel ParentMode { get; private set; }
+        public BaseViewModel ParentsModel { get; private set; }
         public BaseViewModel()
         {
         }
 
         public BaseViewModel(BaseViewModel parent)
         {
-            ParentMode = parent;
+            ParentsModel = parent;
         }
 
         public void OnChanged(object viewModel, string propertyName)

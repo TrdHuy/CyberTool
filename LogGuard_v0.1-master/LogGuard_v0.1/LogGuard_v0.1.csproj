@@ -54,21 +54,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Xceed.Wpf.AvalonDock, Version=4.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.4.2.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=4.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.4.2.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=4.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.4.2.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=4.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.4.2.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.Toolkit, Version=4.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.4.2.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -79,7 +64,35 @@
     <Compile Include="Base\Observable\BaseObservable.cs" />
     <Compile Include="Base\Observable\IObservable.cs" />
     <Compile Include="Base\Observable\IObserver.cs" />
+    <Compile Include="Base\UIEventHandler\Action\Builder\AbstractActionBuilder.cs" />
+    <Compile Include="Base\UIEventHandler\Action\Builder\AbstractCommandExecuterBuilder.cs" />
+    <Compile Include="Base\UIEventHandler\Action\Builder\IActionBuilder.cs" />
+    <Compile Include="Base\UIEventHandler\Action\Builder\ICommandExecuterBuilder.cs" />
+    <Compile Include="Base\UIEventHandler\Action\Executer\AbstractCommandExecuter.cs" />
+    <Compile Include="Base\UIEventHandler\Action\Executer\AbstractViewModelCommandExecuter.cs" />
+    <Compile Include="Base\UIEventHandler\Action\Executer\ICommandExecuter.cs" />
+    <Compile Include="Base\UIEventHandler\Action\Executer\IViewModelCommandExecuter.cs" />
+    <Compile Include="Base\UIEventHandler\Action\Factory\AbstractActionFactory.cs" />
+    <Compile Include="Base\UIEventHandler\Action\Factory\BaseActionFactory.cs" />
+    <Compile Include="Base\UIEventHandler\Action\Factory\BaseCommandExecuterFactory.cs" />
+    <Compile Include="Base\UIEventHandler\Action\Factory\IActionFactory.cs" />
+    <Compile Include="Base\UIEventHandler\Action\IAction.cs" />
+    <Compile Include="Base\UIEventHandler\Litstener\ActionExecuteHelper.cs" />
+    <Compile Include="Base\UIEventHandler\Litstener\IActionListener.cs" />
+    <Compile Include="Base\UIEventHandler\Litstener\BaseKeyActionListener.cs" />
+    <Compile Include="Base\Utils\ICancelable.cs" />
+    <Compile Include="Base\Utils\IDestroyable.cs" />
+    <Compile Include="Base\Utils\ILogger.cs" />
+    <Compile Include="Base\ViewModel\BaseButtonCommandViewModel.cs" />
     <Compile Include="Base\ViewModel\BaseViewModel.cs" />
+    <Compile Include="Implement\UIEventHandler\BaseViewModelCommandExecuter.cs" />
+    <Compile Include="Implement\UIEventHandler\CommandExecuterModel.cs" />
+    <Compile Include="Implement\UIEventHandler\ICanelable.cs" />
+    <Compile Include="Implement\UIEventHandler\KeyFeatureTag.cs" />
+    <Compile Include="Implement\UIEventHandler\LogGuardCommandExecuterFactory.cs" />
+    <Compile Include="Implement\UIEventHandler\LogGuardKeyActionListener.cs" />
+    <Compile Include="Implement\UIEventHandler\WindowTag.cs" />
+    <Compile Include="Implement\ViewModels\ButtonCommandViewModel.cs" />
     <Compile Include="LogGuard\Control\CCContentControl.cs" />
     <Compile Include="LogGuard\Control\HanzaTreeViewer.cs" />
     <Compile Include="LogGuard\Control\HanzaTreeViewItem.cs" />
@@ -87,6 +100,7 @@
     <Compile Include="LogGuard\Control\RadialProgressBar.cs" />
     <Compile Include="LogGuard\Control\TrippleToggle.cs" />
     <Compile Include="MVVM\ViewModels\LogByTeamItemViewModel.cs" />
+    <Compile Include="MVVM\ViewModels\Windows\MainWindowViewModel.cs" />
     <Compile Include="MVVM\View\UserControls\UC_AdvanceFilter.xaml.cs">
       <DependentUpon>UC_AdvanceFilter.xaml</DependentUpon>
     </Compile>
@@ -103,7 +117,16 @@
       <DependentUpon>FloatingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\CustomAttachedProperties.cs" />
+    <Compile Include="Utils\Logger.cs" />
     <Compile Include="WindowDirector.cs" />
+    <Compile Include="Windows\MainWindow\Action\MSW_CommandExecuterBuilder.cs" />
+    <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_PlayButtonAction.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\MSW_ButtonCommandViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\MSW_LogWatcherControlButtonCommandVM.cs" />
+    <Compile Include="Windows\MainWindow\View\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="LogGuard\Resources\HanzaTreeViewer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -156,10 +179,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MVVM\View\Windows\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -171,11 +190,11 @@
     <Compile Include="LogGuard\Control\LogMappingBorder.cs" />
     <Compile Include="LogGuard\Control\LogWatcher.cs" />
     <Compile Include="LogGuard\Control\ScrollViewWatcher.cs" />
-    <Compile Include="MVVM\View\Windows\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Page Include="AppResources\Themes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MainWindow\View\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -207,6 +226,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

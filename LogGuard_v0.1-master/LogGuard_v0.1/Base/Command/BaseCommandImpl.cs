@@ -33,6 +33,10 @@ namespace LogGuard_v0._1.Base.Command
             {
                 _act?.Invoke(param[0], param[1]);
             }
+            else
+            {
+                _act?.Invoke(param, null);
+            }
         }
     }
 }

@@ -13,10 +13,9 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LogGuard_v0._1.MVVM.View.Windows
+namespace LogGuard_v0._1.Windows.MainWindow.View
 {
     public class ViewModel : INotifyPropertyChanged, ILogWatcherElements
     {
