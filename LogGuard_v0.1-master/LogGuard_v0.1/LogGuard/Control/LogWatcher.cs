@@ -612,9 +612,13 @@ namespace LogGuard_v0._1.LogGuard.Control
             {
                 try
                 {
+                    /// Khi số lượng log thực tế lớn hơn rất nhiều so với số lượng log
+                    /// được add vào để hiển thị lên, ta cần phải tạm dừng scroll bottom 
+                    /// để cho lượng log chưa được hiển thị có thời gian add vào trong bộ
+                    /// collection Items
                     if (SourceManager.CurrentSourceCount > Items.Count)
                     {
-                        if (Items.Count % 3000 < 10)
+                        if (Items.Count % 20000 < 10)
                         {
                             ScrollToBottom();
                         }

@@ -74,14 +74,14 @@ namespace LogGuard_v0._1.Windows.MainWindow.View
         {
             InitializeComponent();
 
-            int quantity = 1000;
-            RawSource = new RangeObservableCollection<ViewModel>();
-            for (int i = 0; i < quantity; i++)
-            {
-                var x = new ViewModel() { Line = i };
-                RawSource.Add(x);
-            }
-            LogView.LogWatcherItemsSource = RawSource;
+            //int quantity = 1000;
+            //RawSource = new RangeObservableCollection<ViewModel>();
+            //for (int i = 0; i < quantity; i++)
+            //{
+            //    var x = new ViewModel() { Line = i };
+            //    RawSource.Add(x);
+            //}
+            //LogView.LogWatcherItemsSource = RawSource;
 
         }
     }

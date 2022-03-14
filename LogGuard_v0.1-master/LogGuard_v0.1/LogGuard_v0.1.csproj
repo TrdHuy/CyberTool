@@ -42,6 +42,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -60,7 +61,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Base\AndroidLog\LogParser\AbstractLogParser.cs" />
     <Compile Include="Base\Command\BaseCommandImpl.cs" />
+    <Compile Include="Base\Device\IDeviceCmdExecuter.cs" />
+    <Compile Include="Base\AndroidLog\ILogInfoManager.cs" />
+    <Compile Include="Base\LogGuardFlow\ISourceHolder.cs" />
+    <Compile Include="Base\LogGuardFlow\ISourceManager.cs" />
+    <Compile Include="Base\LogGuardFlow\IStateController.cs" />
     <Compile Include="Base\Observable\BaseObservable.cs" />
     <Compile Include="Base\Observable\IObservable.cs" />
     <Compile Include="Base\Observable\IObserver.cs" />
@@ -85,6 +92,14 @@
     <Compile Include="Base\Utils\ILogger.cs" />
     <Compile Include="Base\ViewModel\BaseButtonCommandViewModel.cs" />
     <Compile Include="Base\ViewModel\BaseViewModel.cs" />
+    <Compile Include="Implement\AndroidLog\LogInfoManagerImpl.cs" />
+    <Compile Include="Implement\AndroidLog\LogParser\AdbCmdLogParser.cs" />
+    <Compile Include="Implement\Device\DeviceCmdContact.cs" />
+    <Compile Include="Implement\Device\DeviceCmdExecuterImpl.cs" />
+    <Compile Include="Implement\LogGuardFlow\SourceManager\SourceManagerImpl.cs" />
+    <Compile Include="Implement\LogGuardFlow\StateController\HighCpu_StateController.cs" />
+    <Compile Include="Implement\LogGuardFlow\StateController\LowCpu_StateController.cs" />
+    <Compile Include="Implement\LogGuardFlow\StateController\StateControllerImpl.cs" />
     <Compile Include="Implement\UIEventHandler\BaseViewModelCommandExecuter.cs" />
     <Compile Include="Implement\UIEventHandler\CommandExecuterModel.cs" />
     <Compile Include="Implement\UIEventHandler\ICanelable.cs" />
@@ -100,7 +115,6 @@
     <Compile Include="LogGuard\Control\RadialProgressBar.cs" />
     <Compile Include="LogGuard\Control\TrippleToggle.cs" />
     <Compile Include="MVVM\ViewModels\LogByTeamItemViewModel.cs" />
-    <Compile Include="MVVM\ViewModels\Windows\MainWindowViewModel.cs" />
     <Compile Include="MVVM\View\UserControls\UC_AdvanceFilter.xaml.cs">
       <DependentUpon>UC_AdvanceFilter.xaml</DependentUpon>
     </Compile>
@@ -118,9 +132,14 @@
     </Compile>
     <Compile Include="Utils\CustomAttachedProperties.cs" />
     <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Utils\ProcessManagement.cs" />
+    <Compile Include="Utils\RangeObservableCollection.cs" />
     <Compile Include="WindowDirector.cs" />
     <Compile Include="Windows\MainWindow\Action\MSW_CommandExecuterBuilder.cs" />
     <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_PlayButtonAction.cs" />
+    <Compile Include="Windows\MainWindow\Models\Builder\LogBuilder.cs" />
+    <Compile Include="Windows\MainWindow\Models\LogInfo.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\LogWatcher\LogWatcherItemViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\MSW_ButtonCommandViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\MSW_LogWatcherControlButtonCommandVM.cs" />
@@ -225,6 +244,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MVVM\ViewModels\Windows\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

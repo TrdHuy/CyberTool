@@ -1,4 +1,5 @@
 ﻿using LogGuard_v0._1.MVVM.View.Windows;
+using LogGuard_v0._1.Utils;
 using LogGuard_v0._1.Windows.MainWindow.View;
 using System;
 using System.Windows;
@@ -42,6 +43,17 @@ namespace LogGuard_v0._1
             }
         }
 
+        public WindowDirector()
+        {
+            MainScreenWindow.Closing += MainScreenWindow_Closing;
+
+        }
+
+        private void MainScreenWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            ProcessManagement.GetInstance().KillAllProcess();
+        }
+
         public void ShowMainWindow()
         {
             MainScreenWindow.Show();
@@ -73,7 +85,6 @@ namespace LogGuard_v0._1
             StartDispandCCAnim(cc, _floatingWindow, 200);
 
         }
-
         private void StartDispandCCAnim(ContentControl cc, FloatingWindow floatWindow, int animTime)
         {
             Storyboard dispand = new Storyboard();
@@ -111,7 +122,6 @@ namespace LogGuard_v0._1
             dispand.Begin(cc);
 
         }
-
         private void StartExpandCCAnim(ContentControl cc, int animTime)
         {
             Storyboard expandSB = new Storyboard();

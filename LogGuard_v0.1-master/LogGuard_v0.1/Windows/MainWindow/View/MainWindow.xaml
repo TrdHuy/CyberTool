@@ -11,6 +11,7 @@
 		xmlns:hpss="clr-namespace:HPSolutionCCDevPackage.netFramework;assembly=HPSolutionCCDevPackage.netFramework"
 		xmlns:sys="clr-namespace:System;assembly=mscorlib"
 		xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels"
+		xmlns:flow="clr-namespace:LogGuard_v0._1.Base.LogGuardFlow"
 		Title="MainWindow"
 		Height="820"
 		Width="1066"
@@ -77,9 +78,35 @@
 				 HorizontalAlignment="Left"
 				 Template="{StaticResource CircleBtnTmpl}">
 			<Path Fill="#FFF0F0F0"
-				  Margin="5"
-				  Data="{Binding Source={StaticResource PlayBtnPathGeomerty}}"
-				  Stretch="Uniform" />
+				  Margin="7"
+				  Stretch="Uniform">
+				<Path.Style>
+					<Style TargetType="Path">
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding CurrentLogGuardState}"
+										 Value="{x:Static flow:LogGuardState.RUNNING}">
+								<Setter Property="Data"
+										Value="{Binding Source={StaticResource PauseBtnPathGeomerty}}"/>
+							</DataTrigger>
+							<DataTrigger Binding="{Binding CurrentLogGuardState}"
+										 Value="{x:Static flow:LogGuardState.NONE}">
+								<Setter Property="Data"
+										Value="{Binding Source={StaticResource PlayBtnPathGeomerty}}" />
+							</DataTrigger>
+							<DataTrigger Binding="{Binding CurrentLogGuardState}"
+										 Value="{x:Static flow:LogGuardState.STOP}">
+								<Setter Property="Data"
+										Value="{Binding Source={StaticResource PlayBtnPathGeomerty}}" />
+							</DataTrigger>
+							<DataTrigger Binding="{Binding CurrentLogGuardState}"
+										 Value="{x:Static flow:LogGuardState.PAUSING}">
+								<Setter Property="Data"
+										Value="{Binding Source={StaticResource PlayBtnPathGeomerty}}" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Path.Style>
+			</Path>
 		</Button>
 
 		<Button  Grid.Row="3"
@@ -90,7 +117,7 @@
 				 HorizontalAlignment="Left"
 				 Template="{DynamicResource CircleBtnTmpl}">
 			<Path Fill="#FFF0F0F0"
-				  Margin="5"
+				  Margin="8"
 				  Data="{Binding Source={StaticResource StopBtnPathGeomerty}}"
 				  Stretch="Uniform" />
 		</Button>
@@ -103,7 +130,7 @@
 				 HorizontalAlignment="Left"
 				 Template="{StaticResource CircleBtnTmpl}">
 			<Path Fill="#FFF0F0F0"
-				  Margin="5"
+				  Margin="6"
 				  Data="{Binding Source={StaticResource CaptureBtnPathGeomerty}}"
 				  Stretch="Uniform" />
 		</Button>
@@ -185,6 +212,7 @@
 							 Grid.Column="1"
 							 Grid.RowSpan="2"
 							 Grid.ColumnSpan="7"
+							 LogWatcherItemsSource="{Binding ItemsSource}"
 							 ScrollViewer.HorizontalScrollBarVisibility="Visible"
 							 ScrollViewer.VerticalScrollBarVisibility="Visible"
 							 VirtualizingPanel.CacheLength="1"
@@ -205,17 +233,23 @@
 					<GridViewColumn DisplayMemberBinding="{Binding Level}">
 						<GridViewColumnHeader Content="Level" />
 					</GridViewColumn>
-					<GridViewColumn DisplayMemberBinding="{Binding Content2}">
+					<GridViewColumn DisplayMemberBinding="{Binding Time}">
 						<GridViewColumnHeader Content="Time" />
 					</GridViewColumn>
-					<GridViewColumn DisplayMemberBinding="{Binding Content3}">
+					<GridViewColumn DisplayMemberBinding="{Binding Pid}">
+						<GridViewColumnHeader Content="PID" />
+					</GridViewColumn>
+					<GridViewColumn DisplayMemberBinding="{Binding Tid}">
+						<GridViewColumnHeader Content="TID" />
+					</GridViewColumn>
+					<GridViewColumn DisplayMemberBinding="{Binding Tag}">
 						<GridViewColumnHeader Content="Tag" />
 					</GridViewColumn>
 					<GridViewColumn>
 						<GridViewColumnHeader Content="Message" />
 						<GridViewColumn.CellTemplate>
 							<DataTemplate>
-								<TextBlock Text="{Binding Content1}" />
+								<TextBlock Text="{Binding Message}" />
 							</DataTemplate>
 						</GridViewColumn.CellTemplate>
 					</GridViewColumn>
