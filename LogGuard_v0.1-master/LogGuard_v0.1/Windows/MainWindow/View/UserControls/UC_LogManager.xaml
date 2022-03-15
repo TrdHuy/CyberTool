@@ -9,19 +9,20 @@
 			 d:DesignHeight="345"
 			 d:DesignWidth="247"
 			 FontFamily="Calibri">
-	<Border Background="{StaticResource Background_Level2}">
+	<Border Background="{StaticResource Background_Level2}"
+			CornerRadius="{StaticResource DefaultPanelCornerRadius}">
 		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="10" />
 				<RowDefinition Height="*" />
 				<RowDefinition Height="25" />
 				<RowDefinition Height="*" />
-				<RowDefinition Height="10" />
+				<RowDefinition Height="15" />
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="10" />
+				<ColumnDefinition Width="15" />
 				<ColumnDefinition Width="*" />
-				<ColumnDefinition Width="10" />
+				<ColumnDefinition Width="15" />
 			</Grid.ColumnDefinitions>
 			<Grid Grid.Column="1"
 				  Grid.Row="1">

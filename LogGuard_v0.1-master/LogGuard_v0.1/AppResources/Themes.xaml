@@ -134,10 +134,10 @@
 	</sys:String>
 	
 	<CornerRadius x:Key="DefaultPanelCornerRadius"
-				  TopLeft="20"
-				  TopRight="20"
-				  BottomRight="20"
-				  BottomLeft="20" />
+				  TopLeft="15"
+				  TopRight="15"
+				  BottomRight="15"
+				  BottomLeft="15" />
 
 	<ControlTemplate TargetType="{x:Type Button}"
 					 x:Key="CircleBtnTmpl">

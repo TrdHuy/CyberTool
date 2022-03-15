@@ -95,7 +95,7 @@
 							<ColumnDefinition MinWidth="19"
 											  Width="Auto" />
 							<ColumnDefinition Width="*"
-											  MinWidth="140" />
+											  MinWidth="130" />
 							<ColumnDefinition Width="30" />
 							<ColumnDefinition Width="30" />
 							<ColumnDefinition Width="10" />
