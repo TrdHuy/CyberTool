@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Base.Log
 {
-    interface ILogInfoManager
+    public interface ILogInfoManager
     {
         /**
          * Cập nhật List chứa các LogInfo, List này được dùng để
@@ -33,18 +33,5 @@ namespace LogGuard_v0._1.Base.Log
          */
         void UpdateLogParser();
 
-        /*
-         * Trả về giá trị list các loginfo đã parse được theo level
-         * tính từ lúc bắt đầu parse (sau khi click Run lần đầu và Run sau khi Stop)
-         * 
-         */
-        List<LogInfo> GetLogInfosByLevel(string level);
-
-        /*
-         * Trả về giá trị observable collection các log item đã parse được
-         * tính từ lúc bắt đầu parse (sau khi click Run lần đầu và Run sau khi Stop)
-         * 
-         */
-        List<BaseViewModel> GetLogItemVMs();
     }
 }

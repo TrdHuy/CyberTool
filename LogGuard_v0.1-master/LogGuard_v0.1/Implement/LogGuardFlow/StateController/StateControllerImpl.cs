@@ -1,4 +1,6 @@
-﻿using LogGuard_v0._1.Base.LogGuardFlow;
+﻿using LogGuard_v0._1.Base.Log;
+using LogGuard_v0._1.Base.LogGuardFlow;
+using LogGuard_v0._1.Implement.AndroidLog;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceManager;
 using System;
 using System.Collections.Generic;
@@ -24,6 +26,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
 
         public ISourceManager LGSourceManager => SourceManagerImpl.Current;
 
+
         public event StateChangedHandler StateChanged;
 
         protected Thread RunningThread;
@@ -33,7 +36,6 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
             _syncObject = new object();
             CurrentState = LogGuardState.STOP;
             PreviousState = LogGuardState.NONE;
-            RunningThread = new Thread(OnRunning);
         }
 
         public void Pause()
@@ -71,6 +73,11 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
        
         public void Start()
         {
+            if(CurrentState == LogGuardState.STOP || CurrentState == LogGuardState.NONE)
+            {
+                RunningThread = new Thread(OnRunning);
+            }
+
             OnStart();
             bool isNeedNotifyStateChange = CurrentState != LogGuardState.RUNNING;
             UpdateRunningState();

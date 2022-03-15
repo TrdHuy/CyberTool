@@ -16,9 +16,6 @@ namespace LogGuard_v0._1.Implement.AndroidLog
     {
         private static LogInfoManagerImpl _instance;
 
-        private Dictionary<string, List<LogInfo>> _logInfos = new Dictionary<string, List<LogInfo>>();
-        private List<BaseViewModel> _logItems = new List<BaseViewModel>();
-
         private AbstractLogParser _logParser;
 
         private int _logCounter = 0;
@@ -31,17 +28,7 @@ namespace LogGuard_v0._1.Implement.AndroidLog
 
         public void ResetLogInfos()
         {
-            _logInfos.Clear();
-            _logItems.Clear();
             _logCounter = 0;
-
-            _logInfos.Add(LogInfo.LEVEL_VERBOSE, new List<LogInfo>());
-            _logInfos.Add(LogInfo.LEVEL_ERROR, new List<LogInfo>());
-            _logInfos.Add(LogInfo.LEVEL_FATAL, new List<LogInfo>());
-            _logInfos.Add(LogInfo.LEVEL_INFO, new List<LogInfo>());
-            _logInfos.Add(LogInfo.LEVEL_WARNING, new List<LogInfo>());
-            _logInfos.Add(LogInfo.LEVEL_DEBUG, new List<LogInfo>());
-            _logInfos.Add(LogInfo.LEVEL_ALL, new List<LogInfo>());
         }
 
         public LogInfo ParseLogInfos(string line, bool isReadFromFile, bool isReadFromDumpstateFile)
@@ -51,14 +38,7 @@ namespace LogGuard_v0._1.Implement.AndroidLog
 
             if (_logParser.IsMatch(line))
             {
-                //_logInfos[(string)logInfo[LogInfo.KEY_LEVEL]].Add(logInfo);
-
-                //_logInfos[LogInfo.LEVEL_ALL].Add(logInfo);
-
-                //_logItems.Add(new LogWatcherItemViewModel(logInfo));
-
                 _logCounter++;
-
                 return logInfo;
             }
             else
@@ -86,16 +66,6 @@ namespace LogGuard_v0._1.Implement.AndroidLog
             //        _logParser = new AdbCmdLogParser();
             //        break;
             //}
-        }
-
-        public List<LogInfo> GetLogInfosByLevel(string level)
-        {
-            return _logInfos[level];
-        }
-
-        public List<BaseViewModel> GetLogItemVMs()
-        {
-            return _logItems;
         }
 
 

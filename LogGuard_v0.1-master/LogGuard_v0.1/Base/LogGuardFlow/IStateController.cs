@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogGuard_v0._1.Base.Log;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,8 +32,8 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
 
     public class StateChangedEventArgs
     {
-        public LogGuardState NewState {  get; private set; }
-        public LogGuardState OldState {  get; private set; }
+        public LogGuardState NewState { get; private set; }
+        public LogGuardState OldState { get; private set; }
 
         public StateChangedEventArgs(LogGuardState newState, LogGuardState oldState)
         {

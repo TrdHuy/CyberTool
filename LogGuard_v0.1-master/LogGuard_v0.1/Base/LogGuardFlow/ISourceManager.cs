@@ -1,4 +1,5 @@
-﻿using LogGuard_v0._1.Utils;
+﻿using LogGuard_v0._1.Base.Log;
+using LogGuard_v0._1.Utils;
 using LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         List<ISourceHolder> SourceHolders { get;}
         RangeObservableCollection<LogWatcherItemViewModel> RawSource { get; }
         RangeObservableCollection<LogWatcherItemViewModel> DisplaySource { get; }
+        ILogInfoManager LogInfoManager { get; }
 
         int RawItemsCount();
         int DisplayItemsCount();

@@ -42,6 +42,9 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action
                 case KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_PLAY_FEATURE:
                     viewModelCommandExecuter = new MSW_LogWatcher_PlayButtonAction(keyTag, WindowTag.WINDOW_TAG_MAIN_SCREEN, viewModel, logger);
                     break;
+                case KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_STOP_FEATURE:
+                    viewModelCommandExecuter = new MSW_LogWatcher_StopButtonAction(keyTag, WindowTag.WINDOW_TAG_MAIN_SCREEN, viewModel, logger);
+                    break;
                 default:
                     break;
             }

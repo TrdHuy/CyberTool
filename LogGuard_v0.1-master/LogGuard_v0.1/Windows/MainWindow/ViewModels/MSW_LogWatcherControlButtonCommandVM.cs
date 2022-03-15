@@ -13,12 +13,18 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels
     public class MSW_LogWatcherControlButtonCommandVM : MSW_ButtonCommandViewModel
     {
         public CommandExecuterModel PlayButtonCommand { get; set; }
+        public CommandExecuterModel StopButtonCommand { get; set; }
 
         public MSW_LogWatcherControlButtonCommandVM(BaseViewModel parentsModel) : base(parentsModel)
         {
             PlayButtonCommand = new CommandExecuterModel((paramaters) =>
             {
                 return OnKey(KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_PLAY_FEATURE
+                    , paramaters);
+            });
+            StopButtonCommand = new CommandExecuterModel((paramaters) =>
+            {
+                return OnKey(KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_STOP_FEATURE
                     , paramaters);
             });
         }

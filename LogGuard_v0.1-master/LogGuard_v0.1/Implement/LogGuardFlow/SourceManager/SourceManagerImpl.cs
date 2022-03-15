@@ -1,4 +1,6 @@
-﻿using LogGuard_v0._1.Base.LogGuardFlow;
+﻿using LogGuard_v0._1.Base.Log;
+using LogGuard_v0._1.Base.LogGuardFlow;
+using LogGuard_v0._1.Implement.AndroidLog;
 using LogGuard_v0._1.Utils;
 using LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher;
 using System;
@@ -20,6 +22,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         public List<ISourceHolder> SourceHolders { get => _sourceHolder; }
         public RangeObservableCollection<LogWatcherItemViewModel> RawSource => _rawSource;
         public RangeObservableCollection<LogWatcherItemViewModel> DisplaySource => _displaySource;
+        public ILogInfoManager LogInfoManager => LogInfoManagerImpl.Current;
 
 
         public event SourceCollectionChangedHandler SourceCollectionChanged;
@@ -31,6 +34,15 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
             _sourceHolder = new List<ISourceHolder>();
         }
 
+        public void AddItem(string line)
+        {
+            var item = LogInfoManager.ParseLogInfos(line, false, false);
+            if(item != null)
+            {
+                LogWatcherItemViewModel livm = new LogWatcherItemViewModel(item);
+                AddItem(livm);
+            }
+        }
         public void AddItem(LogWatcherItemViewModel model)
         {
             _rawSource.Add(model);
@@ -40,6 +52,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
 
         public void ClearSource()
         {
+            LogInfoManager.ResetLogInfos();
             RawSource.Clear();
             DisplaySource.Clear();
             foreach (var holder in SourceHolders)
