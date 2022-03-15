@@ -1,4 +1,5 @@
-﻿using LogGuard_v0._1.LogGuard.Base;
+﻿using LogGuard_v0._1.AppResources.Controls.LogGWindows;
+using LogGuard_v0._1.LogGuard.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -66,11 +67,11 @@ namespace LogGuard_v0._1.Windows.MainWindow.View
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : LogGuardWindow
     {
         public RangeObservableCollection<ViewModel> RawSource { get; set; }
 
-        public MainWindow()
+        public MainWindow() : base()
         {
             InitializeComponent();
 
@@ -82,7 +83,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.View
             //    RawSource.Add(x);
             //}
             //LogView.LogWatcherItemsSource = RawSource;
-
+            mainFrame.Source = new Uri("/LogGuard_v0.1;component/Windows/MainWindow/View/Pages/LogGuard.xaml", UriKind.Relative);
         }
     }
 }

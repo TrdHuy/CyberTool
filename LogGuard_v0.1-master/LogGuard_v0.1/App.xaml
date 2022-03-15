@@ -6,6 +6,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="AppResources/Themes.xaml" />
+				<ResourceDictionary Source="AppResources/Controls/LogGWindows/LogGuardWindow.xaml" />
 				<ResourceDictionary Source="LogGuard/Resources/HeaderLabel.xaml" />
 				<ResourceDictionary Source="LogGuard/Resources/LogMappingBorder.xaml" />
                 <ResourceDictionary Source="LogGuard/Resources/ScrollViewWatcher.xaml" />

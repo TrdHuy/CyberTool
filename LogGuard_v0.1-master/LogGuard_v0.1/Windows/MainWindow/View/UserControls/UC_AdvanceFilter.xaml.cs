@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LogGuard_v0._1.MVVM.View.UserControls
+namespace LogGuard_v0._1.Windows.MainWindow.View.UserControls
 {
     /// <summary>
-    /// Interaction logic for UC_LogLevelFilter.xaml
+    /// Interaction logic for UC_AdvanceFilter.xaml
     /// </summary>
-    public partial class UC_LogLevelFilter : UserControl
+    public partial class UC_AdvanceFilter : UserControl
     {
-        public UC_LogLevelFilter()
+        public UC_AdvanceFilter()
         {
             InitializeComponent();
         }

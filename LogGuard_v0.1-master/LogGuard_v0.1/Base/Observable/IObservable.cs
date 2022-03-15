@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Base.Observable
 {
-    public interface IObservable
+    public interface IObservable<T>
     {
-        void Attach(IObserver observer);
+        void Subcribe(IObserver<T> observer);
 
-        void Detach(IObserver observer);
+        void Unsubcribe(IObserver<T> observer);
 
-        void NotifyChange();
+        void NotifyChange(T result);
     }
 }

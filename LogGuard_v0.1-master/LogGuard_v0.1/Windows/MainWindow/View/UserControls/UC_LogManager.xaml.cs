@@ -17,7 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LogGuard_v0._1.MVVM.View.UserControls
+namespace LogGuard_v0._1.Windows.MainWindow.View.UserControls
 {
     /// <summary>
     /// Interaction logic for UC_LogManager.xaml

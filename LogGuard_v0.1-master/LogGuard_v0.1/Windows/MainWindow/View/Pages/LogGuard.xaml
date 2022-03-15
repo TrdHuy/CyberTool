@@ -1,0 +1,184 @@
+﻿<Page x:Class="LogGuard_v0._1.Windows.MainWindow.View.Pages.LogGuard"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	  xmlns:flow="clr-namespace:LogGuard_v0._1.Base.LogGuardFlow"
+	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	  xmlns:logguard="clr-namespace:LogGuard_v0._1.LogGuard.Control"
+	  xmlns:hpss="clr-namespace:HPSolutionCCDevPackage.netFramework;assembly=HPSolutionCCDevPackage.netFramework"
+	  xmlns:local="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.Pages"
+	  xmlns:uc="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.UserControls"
+	  xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages"
+	  mc:Ignorable="d"
+	  d:DesignHeight="820" d:DesignWidth="883.714"
+      Title="LogGuard">
+	<Page.DataContext>
+		<vm:LogGuardPageViewModel />
+	</Page.DataContext>
+    <Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="1.57*" />
+			<ColumnDefinition Width="1.65*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="2.34*" />
+			<ColumnDefinition Width="2.82*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="0.01*" />
+			<RowDefinition Height="1.41*" />
+			<RowDefinition Height="1.8*" />
+			<RowDefinition Height="0.37*" />
+			<RowDefinition Height="3.72*" />
+			<RowDefinition Height="0.1*" />
+		</Grid.RowDefinitions>
+
+		<uc:UC_ListOfDevice Grid.Column="0"
+							Grid.Row="1"
+							Margin="0,0,15,15" />
+
+		<uc:UC_LogLevelFilter Grid.Column="0"
+							  Grid.Row="2"
+							  Margin="0,0,15,15" />
+
+		<uc:UC_AdvanceFilter Grid.Column="1"
+							 Grid.Row="1"
+							 Margin="0,0,15,15"
+							 Grid.RowSpan="2"
+							 Grid.ColumnSpan="5" />
+
+		<uc:UC_LogManager Grid.Column="6"
+						  Grid.Row="1"
+						  Margin="0,0,15,15"
+						  Grid.RowSpan="3" />
+
+		<hpss:HorusBox Grid.Row="3"
+					   Grid.Column="0"
+					   Background="{StaticResource Background_Level2}"
+					   DropDownButtonBackground="{StaticResource Background_Level2}"
+					   BorderThickness="0"
+					   Grid.ColumnSpan="2"
+					   Margin="0,0,15,15" />
+
+		<Button  Grid.Row="3"
+				 x:Name="PlayButton"
+				 Grid.Column="2"
+				 Command="{Binding CommandViewModel.PlayButtonCommand}"
+				 Margin="0,0,0,15"
+				 Background="{StaticResource ButtonBackground_Level1}"
+				 HorizontalAlignment="Left"
+				 Template="{StaticResource CircleBtnTmpl}">
+			<Path Fill="#FFF0F0F0"
+				  Margin="7"
+				  Stretch="Uniform">
+				<Path.Style>
+					<Style TargetType="Path">
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding CurrentLogGuardState}"
+										 Value="{x:Static flow:LogGuardState.RUNNING}">
+								<Setter Property="Data"
+										Value="{Binding Source={StaticResource PauseBtnPathGeomerty}}" />
+							</DataTrigger>
+							<DataTrigger Binding="{Binding CurrentLogGuardState}"
+										 Value="{x:Static flow:LogGuardState.NONE}">
+								<Setter Property="Data"
+										Value="{Binding Source={StaticResource PlayBtnPathGeomerty}}" />
+							</DataTrigger>
+							<DataTrigger Binding="{Binding CurrentLogGuardState}"
+										 Value="{x:Static flow:LogGuardState.STOP}">
+								<Setter Property="Data"
+										Value="{Binding Source={StaticResource PlayBtnPathGeomerty}}" />
+							</DataTrigger>
+							<DataTrigger Binding="{Binding CurrentLogGuardState}"
+										 Value="{x:Static flow:LogGuardState.PAUSING}">
+								<Setter Property="Data"
+										Value="{Binding Source={StaticResource PlayBtnPathGeomerty}}" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Path.Style>
+			</Path>
+		</Button>
+
+		<Button  Grid.Row="3"
+				 x:Name="StopButton"
+				 Grid.Column="3"
+				 Margin="0,0,0,15"
+				 Background="#eb2838"
+				 HorizontalAlignment="Left"
+				 Template="{DynamicResource CircleBtnTmpl}">
+			<Path Fill="#FFF0F0F0"
+				  Margin="8"
+				  Data="{Binding Source={StaticResource StopBtnPathGeomerty}}"
+				  Stretch="Uniform" />
+		</Button>
+
+		<Button  Grid.Row="3"
+				 x:Name="CaptureButton"
+				 Grid.Column="4"
+				 Margin="0,0,0,15"
+				 Background="{StaticResource ButtonBackground_Level1}"
+				 HorizontalAlignment="Left"
+				 Template="{StaticResource CircleBtnTmpl}">
+			<Path Fill="#FFF0F0F0"
+				  Margin="6"
+				  Data="{Binding Source={StaticResource CaptureBtnPathGeomerty}}"
+				  Stretch="Uniform" />
+		</Button>
+
+		<logguard:LogWatcher UseAutoScroll="True"
+							 Grid.Row="4"
+							 Grid.Column="0"
+							 Grid.ColumnSpan="7"
+							 LogWatcherItemsSource="{Binding ItemsSource}"
+							 ScrollViewer.HorizontalScrollBarVisibility="Visible"
+							 ScrollViewer.VerticalScrollBarVisibility="Visible"
+							 VirtualizingPanel.CacheLength="1"
+							 VirtualizingPanel.CacheLengthUnit="Pixel"
+							 VirtualizingPanel.IsContainerVirtualizable="True"
+							 VirtualizingPanel.IsVirtualizing="True"
+							 VirtualizingPanel.VirtualizationMode="Recycling"
+							 VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+							 logguard:LogMappingBorder.MagnifierRadius="50"
+							 AlternationCount="2"
+							 x:Name="LogView"
+							 FontFamily="Calibri">
+			<logguard:LogWatcher.View>
+				<logguard:GridViewWatcher>
+					<GridViewColumn DisplayMemberBinding="{Binding Line}">
+						<GridViewColumnHeader Content="Line" />
+					</GridViewColumn>
+					<GridViewColumn DisplayMemberBinding="{Binding Level}">
+						<GridViewColumnHeader Content="Level" />
+					</GridViewColumn>
+					<GridViewColumn DisplayMemberBinding="{Binding Time}">
+						<GridViewColumnHeader Content="Time" />
+					</GridViewColumn>
+					<GridViewColumn DisplayMemberBinding="{Binding Pid}">
+						<GridViewColumnHeader Content="PID" />
+					</GridViewColumn>
+					<GridViewColumn DisplayMemberBinding="{Binding Tid}">
+						<GridViewColumnHeader Content="TID" />
+					</GridViewColumn>
+					<GridViewColumn DisplayMemberBinding="{Binding Tag}">
+						<GridViewColumnHeader Content="Tag" />
+					</GridViewColumn>
+					<GridViewColumn>
+						<GridViewColumnHeader Content="Message" />
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Message}" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+
+
+
+				</logguard:GridViewWatcher>
+			</logguard:LogWatcher.View>
+
+		</logguard:LogWatcher>
+
+	</Grid>
+</Page>

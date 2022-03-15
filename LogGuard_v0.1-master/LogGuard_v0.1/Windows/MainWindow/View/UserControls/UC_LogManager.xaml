@@ -1,24 +1,22 @@
-﻿<UserControl x:Class="LogGuard_v0._1.MVVM.View.UserControls.UC_LogManager"
+﻿<UserControl x:Class="LogGuard_v0._1.Windows.MainWindow.View.UserControls.UC_LogManager"
 			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:local="clr-namespace:LogGuard_v0._1.MVVM.View.UserControls"
 			 xmlns:ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control"
 			 xmlns:vm="clr-namespace:LogGuard_v0._1.MVVM.ViewModels"
 			 mc:Ignorable="d"
 			 d:DesignHeight="345"
 			 d:DesignWidth="247"
 			 FontFamily="Calibri">
-	<Border Background="{StaticResource Background_Level2}"
-			CornerRadius="{StaticResource DefaultPanelCornerRadius}">
+	<Border Background="{StaticResource Background_Level2}">
 		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="10" />
 				<RowDefinition Height="*" />
-				<RowDefinition Height="20" />
+				<RowDefinition Height="25" />
 				<RowDefinition Height="*" />
-				<RowDefinition Height="15" />
+				<RowDefinition Height="10" />
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="10" />

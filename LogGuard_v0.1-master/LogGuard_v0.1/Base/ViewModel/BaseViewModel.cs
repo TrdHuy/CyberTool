@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Base.ViewModel
 {
-    public class BaseViewModel : BaseObservable, INotifyPropertyChanged
+    public class BaseViewModel : BaseObservable<object>, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public BaseViewModel ParentsModel { get; private set; }

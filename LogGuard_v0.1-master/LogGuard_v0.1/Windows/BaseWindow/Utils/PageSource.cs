@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LogGuard_v0._1.Base.Observable
+namespace LogGuard_v0._1.Windows.BaseWindow.Utils
 {
-    public interface IObserver<in T>
+    public enum PageSource
     {
-        void Update(T value);
+        NONE = -1,
+        LOG_GUARD_PAGE = 1000
     }
 }

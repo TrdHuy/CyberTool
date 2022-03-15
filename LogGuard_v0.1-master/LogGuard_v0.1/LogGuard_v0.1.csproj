@@ -61,6 +61,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppResources\Controls\LogGWindows\LogGuardWindow.cs" />
     <Compile Include="Base\AndroidLog\LogParser\AbstractLogParser.cs" />
     <Compile Include="Base\Command\BaseCommandImpl.cs" />
     <Compile Include="Base\Device\IDeviceCmdExecuter.cs" />
@@ -115,37 +116,51 @@
     <Compile Include="LogGuard\Control\RadialProgressBar.cs" />
     <Compile Include="LogGuard\Control\TrippleToggle.cs" />
     <Compile Include="MVVM\ViewModels\LogByTeamItemViewModel.cs" />
-    <Compile Include="MVVM\View\UserControls\UC_AdvanceFilter.xaml.cs">
-      <DependentUpon>UC_AdvanceFilter.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MVVM\View\UserControls\UC_ListOfDevice.xaml.cs">
-      <DependentUpon>UC_ListOfDevice.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MVVM\View\UserControls\UC_LogLevelFilter.xaml.cs">
-      <DependentUpon>UC_LogLevelFilter.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MVVM\View\UserControls\UC_LogManager.xaml.cs">
-      <DependentUpon>UC_LogManager.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MVVM\View\Windows\FloatingWindow.xaml.cs">
       <DependentUpon>FloatingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\CustomAttachedProperties.cs" />
+    <Compile Include="Utils\Definitions\LogGuardDefinition.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\ProcessManagement.cs" />
     <Compile Include="Utils\RangeObservableCollection.cs" />
     <Compile Include="WindowDirector.cs" />
+    <Compile Include="Windows\BaseWindow\Models\PageVO.cs" />
+    <Compile Include="Windows\BaseWindow\Utils\BasePageController.cs" />
+    <Compile Include="Windows\BaseWindow\Utils\PageSource.cs" />
+    <Compile Include="Windows\BaseWindow\Utils\PageSourceWatcher.cs" />
     <Compile Include="Windows\MainWindow\Action\MSW_CommandExecuterBuilder.cs" />
     <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_PlayButtonAction.cs" />
     <Compile Include="Windows\MainWindow\Models\Builder\LogBuilder.cs" />
     <Compile Include="Windows\MainWindow\Models\LogInfo.cs" />
+    <Compile Include="Windows\MainWindow\Utils\MSW_PageController.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\LogWatcher\LogWatcherItemViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\MSW_ButtonCommandViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\MSW_LogWatcherControlButtonCommandVM.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPageViewModel.cs" />
     <Compile Include="Windows\MainWindow\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\MainWindow\View\Pages\LogGuard.xaml.cs">
+      <DependentUpon>LogGuard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MainWindow\View\UserControls\UC_AdvanceFilter.xaml.cs">
+      <DependentUpon>UC_AdvanceFilter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MainWindow\View\UserControls\UC_ListOfDevice.xaml.cs">
+      <DependentUpon>UC_ListOfDevice.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MainWindow\View\UserControls\UC_LogLevelFilter.xaml.cs">
+      <DependentUpon>UC_LogLevelFilter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MainWindow\View\UserControls\UC_LogManager.xaml.cs">
+      <DependentUpon>UC_LogManager.xaml</DependentUpon>
+    </Compile>
+    <Page Include="AppResources\Controls\LogGWindows\LogGuardWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LogGuard\Resources\HanzaTreeViewer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -178,22 +193,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MVVM\View\UserControls\UC_AdvanceFilter.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MVVM\View\UserControls\UC_ListOfDevice.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MVVM\View\UserControls\UC_LogLevelFilter.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MVVM\View\UserControls\UC_LogManager.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MVVM\View\Windows\FloatingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -216,6 +215,26 @@
     <Page Include="Windows\MainWindow\View\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MainWindow\View\Pages\LogGuard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MainWindow\View\UserControls\UC_AdvanceFilter.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\MainWindow\View\UserControls\UC_ListOfDevice.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\MainWindow\View\UserControls\UC_LogLevelFilter.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\MainWindow\View\UserControls\UC_LogManager.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
