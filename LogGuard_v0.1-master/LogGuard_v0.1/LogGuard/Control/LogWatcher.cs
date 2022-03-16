@@ -322,12 +322,12 @@ namespace LogGuard_v0._1.LogGuard.Control
         {
             DefaultMapperColors = new Dictionary<string, Color>();
 
-            var D = Style.Resources["DebugLevelForeground"] as System.Windows.Media.SolidColorBrush;
-            var F = Style.Resources["FatalLevelForeground"] as System.Windows.Media.SolidColorBrush;
-            var V = Style.Resources["VerboseLevelForeground"] as System.Windows.Media.SolidColorBrush;
-            var I = Style.Resources["InfoLevelForeground"] as System.Windows.Media.SolidColorBrush;
-            var W = Style.Resources["WarningLevelForeground"] as System.Windows.Media.SolidColorBrush;
-            var E = Style.Resources["ErrorLevelForeground"] as System.Windows.Media.SolidColorBrush;
+            var D = Style.Resources["DebugLevelForeground_Level2"] as System.Windows.Media.SolidColorBrush;
+            var F = Style.Resources["FatalLevelForeground_Level2"] as System.Windows.Media.SolidColorBrush;
+            var V = Style.Resources["VerboseLevelForeground_Level2"] as System.Windows.Media.SolidColorBrush;
+            var I = Style.Resources["InfoLevelForeground_Level2"] as System.Windows.Media.SolidColorBrush;
+            var W = Style.Resources["WarningLevelForeground_Level2"] as System.Windows.Media.SolidColorBrush;
+            var E = Style.Resources["ErrorLevelForeground_Level2"] as System.Windows.Media.SolidColorBrush;
 
             DefaultMapperColors.Add("F", F == null ? Color.FromArgb(252, 133, 255) :
                 Color.FromArgb(F.Color.A,
@@ -618,10 +618,10 @@ namespace LogGuard_v0._1.LogGuard.Control
                     /// collection Items
                     if (SourceManager.CurrentSourceCount > Items.Count)
                     {
-                        if (Items.Count % 20000 < 10)
-                        {
-                            ScrollToBottom();
-                        }
+                        //if (Items.Count % 20000 < 10)
+                        //{
+                        //    ScrollToBottom();
+                        //}
                     }
                     else
                     {

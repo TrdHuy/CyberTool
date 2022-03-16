@@ -21,6 +21,13 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
 
         int RawItemsCount();
         int DisplayItemsCount();
+        int ErrorItemsCount();
+        int InfoItemsCount();
+        int DebugItemsCount();
+        int WarningItemsCount();
+        int FatalItemsCount();
+        int VerboseItemsCount();
+
         void AddSourceHolder(ISourceHolder holder);
         void AddItem(LogWatcherItemViewModel model);
         void RemoveItem(LogWatcherItemViewModel model);

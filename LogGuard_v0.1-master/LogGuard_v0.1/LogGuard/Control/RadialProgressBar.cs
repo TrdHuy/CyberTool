@@ -143,6 +143,7 @@ namespace LogGuard_v0._1.LogGuard.Control
         private static void MaximumPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var rPB = d as RadialProgressBar;
+            rPB?.UpdatePercentCont();
         }
 
         public double Maximum
@@ -346,7 +347,15 @@ namespace LogGuard_v0._1.LogGuard.Control
 
         private void UpdatePercentCont()
         {
-            PercentContLabel.Content = 100 * Value / Maximum + "%";
+            if (!IsInitialized) return;
+            if (Maximum > 0)
+            {
+                PercentContLabel.Content = Math.Round(100 * Value / Maximum, 2) + "%";
+            }
+            else
+            {
+                PercentContLabel.Content = 0 + "%";
+            }
         }
         protected void OnValueChanged(double oldVal, double newVal)
         {

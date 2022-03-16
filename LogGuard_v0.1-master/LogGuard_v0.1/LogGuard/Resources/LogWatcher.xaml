@@ -98,18 +98,6 @@
 			<SolidColorBrush Color="#797979"
 							 x:Key="LabelIndicatorForeground" />
 
-			<SolidColorBrush Color="#ADFF55"
-							 x:Key="DebugLevelForeground" />
-			<SolidColorBrush Color="#FFB855"
-							 x:Key="WarningLevelForeground" />
-			<SolidColorBrush Color="#FF6255"
-							 x:Key="ErrorLevelForeground" />
-			<SolidColorBrush Color="#FFCAF1E1"
-							 x:Key="InfoLevelForeground" />
-			<SolidColorBrush Color="#FF52ABE8"
-							 x:Key="VerboseLevelForeground" />
-			<SolidColorBrush Color="#FFF0ADF1"
-							 x:Key="FatalLevelForeground" />
 			<SolidColorBrush Color="#FF303338"
 							 x:Key="ScrollBarBackground" />
 			<SolidColorBrush Color="#FF9D9E9E"
@@ -250,32 +238,32 @@
 						<DataTrigger Binding="{Binding Path=Level}"
 									 Value="D">
 							<Setter Property="Foreground"
-									Value="{DynamicResource DebugLevelForeground}" />
+									Value="{StaticResource DebugLevelForeground_Level2}" />
 						</DataTrigger>
 						<DataTrigger Binding="{Binding Path=Level}"
 									 Value="E">
 							<Setter Property="Foreground"
-									Value="{DynamicResource ErrorLevelForeground}" />
+									Value="{StaticResource ErrorLevelForeground_Level2}" />
 						</DataTrigger>
 						<DataTrigger Binding="{Binding Path=Level}"
 									 Value="W">
 							<Setter Property="Foreground"
-									Value="{DynamicResource WarningLevelForeground}" />
+									Value="{StaticResource WarningLevelForeground_Level2}" />
 						</DataTrigger>
 						<DataTrigger Binding="{Binding Path=Level}"
 									 Value="V">
 							<Setter Property="Foreground"
-									Value="{DynamicResource VerboseLevelForeground}" />
+									Value="{StaticResource VerboseLevelForeground_Level2}" />
 						</DataTrigger>
 						<DataTrigger Binding="{Binding Path=Level}"
 									 Value="F">
 							<Setter Property="Foreground"
-									Value="{DynamicResource FatalLevelForeground}" />
+									Value="{StaticResource FatalLevelForeground_Level2}" />
 						</DataTrigger>
 						<DataTrigger Binding="{Binding Path=Level}"
 									 Value="I">
 							<Setter Property="Foreground"
-									Value="{DynamicResource InfoLevelForeground}" />
+									Value="{StaticResource InfoLevelForeground_Level2}" />
 						</DataTrigger>
 					</Style.Triggers>
 				</Style>

@@ -18,7 +18,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         private RangeObservableCollection<LogWatcherItemViewModel> _rawSource;
         private RangeObservableCollection<LogWatcherItemViewModel> _displaySource;
         private List<ISourceHolder> _sourceHolder;
-
+        private Dictionary<object, int> _logLevelCountMap;
         public List<ISourceHolder> SourceHolders { get => _sourceHolder; }
         public RangeObservableCollection<LogWatcherItemViewModel> RawSource => _rawSource;
         public RangeObservableCollection<LogWatcherItemViewModel> DisplaySource => _displaySource;
@@ -32,12 +32,25 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
             _rawSource = new RangeObservableCollection<LogWatcherItemViewModel>();
             _displaySource = new RangeObservableCollection<LogWatcherItemViewModel>();
             _sourceHolder = new List<ISourceHolder>();
+            _logLevelCountMap = new Dictionary<object, int>();
+            ResetLogLevelCountMap();
+        }
+
+        private void ResetLogLevelCountMap()
+        {
+            _logLevelCountMap.Clear();
+            _logLevelCountMap.Add("V", 0);
+            _logLevelCountMap.Add("D", 0);
+            _logLevelCountMap.Add("I", 0);
+            _logLevelCountMap.Add("F", 0);
+            _logLevelCountMap.Add("W", 0);
+            _logLevelCountMap.Add("E", 0);
         }
 
         public void AddItem(string line)
         {
             var item = LogInfoManager.ParseLogInfos(line, false, false);
-            if(item != null)
+            if (item != null)
             {
                 LogWatcherItemViewModel livm = new LogWatcherItemViewModel(item);
                 AddItem(livm);
@@ -45,6 +58,15 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         }
         public void AddItem(LogWatcherItemViewModel model)
         {
+            if (model == null)
+            {
+                return;
+            }
+            if (model.Level != null)
+            {
+                _logLevelCountMap[model.Level]++;
+            }
+
             _rawSource.Add(model);
             _displaySource.Add(model);
             SourceCollectionChanged?.Invoke(this);
@@ -53,6 +75,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         public void ClearSource()
         {
             LogInfoManager.ResetLogInfos();
+            ResetLogLevelCountMap();
             RawSource.Clear();
             DisplaySource.Clear();
             foreach (var holder in SourceHolders)
@@ -85,6 +108,36 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
             _sourceHolder.Add(holder);
             holder.ItemsSource = DisplaySource;
 
+        }
+
+        public int ErrorItemsCount()
+        {
+            return _logLevelCountMap["E"];
+        }
+
+        public int InfoItemsCount()
+        {
+            return _logLevelCountMap["I"];
+        }
+
+        public int DebugItemsCount()
+        {
+            return _logLevelCountMap["D"];
+        }
+
+        public int WarningItemsCount()
+        {
+            return _logLevelCountMap["W"];
+        }
+
+        public int FatalItemsCount()
+        {
+            return _logLevelCountMap["F"];
+        }
+
+        public int VerboseItemsCount()
+        {
+            return _logLevelCountMap["V"];
         }
 
         public static SourceManagerImpl Current

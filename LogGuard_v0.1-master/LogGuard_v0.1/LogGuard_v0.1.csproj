@@ -140,6 +140,7 @@
     <Compile Include="Windows\MainWindow\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\MSW_LogWatcherControlButtonCommandVM.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPageViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\UserControls\AdvanceFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>

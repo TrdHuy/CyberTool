@@ -5,10 +5,14 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control"
 			 mc:Ignorable="d"
+			 xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls"
 			 d:DesignHeight="309"
 			 d:DesignWidth="427"
 			 FontFamily="Calibri">
 
+	<UserControl.DataContext>
+		<vm:AdvanceFilterUCViewModel />
+	</UserControl.DataContext>
 	<Border Background="{StaticResource Background_Level2}"
 			CornerRadius="{StaticResource DefaultPanelCornerRadius}">
 		<Grid>
@@ -158,6 +162,8 @@
 
 			<Grid Margin="20,10,10,10"
 				  Grid.Column="2"
+				  x:Name="LogPercentGrid"
+				  ClipToBounds="True"
 				  Grid.RowSpan="3"
 				  Grid.Row="1">
 				<Grid.RowDefinitions>
@@ -166,30 +172,119 @@
 					<RowDefinition Height="0.4*" />
 					<RowDefinition Height="0.6*" />
 				</Grid.RowDefinitions>
+				
 
-				<Label Content="Pending log"
-					   FontSize=" 9"
-					   FontWeight="Bold"
-					   Foreground="{StaticResource Foreground_Level1}" />
-				<ctrl:RadialProgressBar Grid.Row="1"
+				<StackPanel Orientation="Horizontal">
+					<Label Content="{Binding CurrentLogLevel}"
+						   FontSize=" 9"
+						   Width="60"
+						   VerticalAlignment="Center"
+						   FontWeight="Bold"
+						   Foreground="{StaticResource Foreground_Level1}" />
+					<CheckBox x:Name="InfoRadialCheckBox"
+							  Template="{StaticResource ColorCheckBoxTmpl}"
+							  VerticalAlignment="Center"
+							  IsChecked="{Binding IsInfoChecked}"
+							  HorizontalAlignment="Center"
+							  BorderBrush="{StaticResource InfoLevelForeground_Level2}"
+							  Width="8"
+							  Checked="RadialCheckBox_Checked"
+							  Height="8"
+							  Margin="10,0,0,0"
+							  Background="{StaticResource InfoLevelForeground_Level2}" />
+					<CheckBox x:Name="ErrorRadialCheckBox"
+							  Template="{StaticResource ColorCheckBoxTmpl}"
+							  VerticalAlignment="Center"
+							  HorizontalAlignment="Center"
+							  IsChecked="{Binding IsErrorChecked}"
+							  Checked="RadialCheckBox_Checked"
+							  BorderBrush="{StaticResource ErrorLevelForeground_Level2}"
+							  Width="8"
+							  Height="8"
+							  Margin="5,0,0,0"
+							  Background="{StaticResource ErrorLevelForeground_Level2}" />
+					<CheckBox x:Name="DebugRadialCheckBox"
+							  Template="{StaticResource ColorCheckBoxTmpl}"
+							  VerticalAlignment="Center"
+							  IsChecked="{Binding IsDebugChecked}"
+							  HorizontalAlignment="Center"
+							  Checked="RadialCheckBox_Checked"
+							  BorderBrush="{StaticResource DebugLevelForeground_Level2}"
+							  Width="8"
+							  Height="8"
+							  Margin="5,0,0,0"
+							  Background="{StaticResource DebugLevelForeground_Level2}" />
+					<CheckBox x:Name="WarningRadialCheckBox"
+							  Template="{StaticResource ColorCheckBoxTmpl}"
+							  VerticalAlignment="Center"
+							  IsChecked="{Binding IsWarningChecked}"
+							  HorizontalAlignment="Center"
+							  Checked="RadialCheckBox_Checked"
+							  BorderBrush="{StaticResource WarningLevelForeground_Level2}"
+							  Width="8"
+							  Height="8"
+							  Margin="5,0,0,0"
+							  Background="{StaticResource WarningLevelForeground_Level2}" />
+					<CheckBox x:Name="VerboseRadialCheckBox"
+							  Template="{StaticResource ColorCheckBoxTmpl}"
+							  VerticalAlignment="Center"
+							  IsChecked="{Binding IsVerboseChecked}"
+							  HorizontalAlignment="Center"
+							  Checked="RadialCheckBox_Checked"
+							  BorderBrush="{StaticResource VerboseLevelForeground_Level2}"
+							  Width="8"
+							  Height="8"
+							  Margin="5,0,0,0"
+							  Background="{StaticResource VerboseLevelForeground_Level2}" />
+					<CheckBox x:Name="FatalRadialCheckBox"
+							  Template="{StaticResource ColorCheckBoxTmpl}"
+							  VerticalAlignment="Center"
+							  HorizontalAlignment="Center"
+							  IsChecked="{Binding IsFatalChecked}"
+							  Checked="RadialCheckBox_Checked"
+							  BorderBrush="{StaticResource FatalLevelForeground_Level2}"
+							  Width="8"
+							  Height="8"
+							  Margin="5,0,0,0"
+							  Background="{StaticResource FatalLevelForeground_Level2}" />
+				</StackPanel>
+				<ctrl:RadialProgressBar x:Name="LogLevelRadialPB"
+										Grid.Row="1"
 										Offset="12"
 										StrokeThickness="25"
-										Value="50"
-										PercentContForeground="{StaticResource ButtonBackground_Level1}"
-										DetailContent="101 Lines"
-										ValPathBackground="{StaticResource ButtonBackground_Level1}"
-										BgPathBackground="#FFACE0D4"
-										FontFamily="Calibri" />
+										Value="{Binding LogValue}"
+										Maximum="{Binding LogCount}"
+										DetailContent="{Binding DetailContent}"
+										FontFamily="Calibri">
+
+					<ctrl:RadialProgressBar.BgPathBackground>
+						<SolidColorBrush x:Name="RadialPBBrush"
+										 Color="#33CAF1E1"/>
+					</ctrl:RadialProgressBar.BgPathBackground>
+					<ctrl:RadialProgressBar.PercentContForeground>
+						<SolidColorBrush x:Name="RadialPBPercentContForegroundBrush"
+										 Color="#FFCAF1E1"/>
+					</ctrl:RadialProgressBar.PercentContForeground>
+					<ctrl:RadialProgressBar.ValPathBackground>
+						<SolidColorBrush x:Name="RadialPBValPathBackgroundBrush"
+										 Color="#FFCAF1E1" />
+					</ctrl:RadialProgressBar.ValPathBackground>
+					
+					<ctrl:RadialProgressBar.RenderTransform>
+						<TranslateTransform x:Name="RadialPBTranslateTransform"
+											X="0" />
+					</ctrl:RadialProgressBar.RenderTransform>
+				</ctrl:RadialProgressBar>
 				<StackPanel Orientation="Horizontal"
 							Grid.Row="2">
 					<Label Content="Auto scroll"
 						   FontSize="8"
-						   FontFamily="Calibri" 
+						   FontFamily="Calibri"
 						   VerticalAlignment="Center"
-						   Foreground="{StaticResource Foreground_Level2}"/>
-					<CheckBox Template="{StaticResource RoundCheckBoxTmpl}" 
-							 VerticalAlignment="Center"
-							  Background="{StaticResource ButtonBackground_Level1}"/>
+						   Foreground="{StaticResource Foreground_Level2}" />
+					<CheckBox Template="{StaticResource RoundCheckBoxTmpl}"
+							  VerticalAlignment="Center"
+							  Background="{StaticResource ButtonBackground_Level1}" />
 				</StackPanel>
 			</Grid>
 
