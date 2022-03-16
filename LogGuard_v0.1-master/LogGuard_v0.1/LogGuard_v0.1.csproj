@@ -124,6 +124,7 @@
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\ProcessManagement.cs" />
     <Compile Include="Utils\RangeObservableCollection.cs" />
+    <Compile Include="Utils\ViewModelHelper\VMManagerMarkupExtension.cs" />
     <Compile Include="WindowDirector.cs" />
     <Compile Include="Windows\BaseWindow\Models\PageVO.cs" />
     <Compile Include="Windows\BaseWindow\Utils\BasePageController.cs" />

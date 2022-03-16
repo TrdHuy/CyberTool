@@ -9,11 +9,12 @@
 	  xmlns:local="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.Pages"
 	  xmlns:uc="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.UserControls"
 	  xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages"
+	  xmlns:vmh="clr-namespace:LogGuard_v0._1.Utils.ViewModelHelper"
 	  mc:Ignorable="d"
 	  d:DesignHeight="820" d:DesignWidth="883.714"
       Title="LogGuard">
 	<Page.DataContext>
-		<vm:LogGuardPageViewModel />
+		<Binding Source="{vmh:VMManagerMarkup {x:Type vm:LogGuardPageViewModel}}" />
 	</Page.DataContext>
     <Grid>
 		<Grid.ColumnDefinitions>
@@ -128,7 +129,7 @@
 				  Stretch="Uniform" />
 		</Button>
 
-		<logguard:LogWatcher UseAutoScroll="True"
+		<logguard:LogWatcher UseAutoScroll="{Binding UseAutoScroll}"
 							 Grid.Row="4"
 							 Grid.Column="0"
 							 Grid.ColumnSpan="7"

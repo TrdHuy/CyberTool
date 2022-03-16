@@ -5,14 +5,18 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control"
 			 mc:Ignorable="d"
+			 xmlns:vmh="clr-namespace:LogGuard_v0._1.Utils.ViewModelHelper"
 			 xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls"
+			 xmlns:vmp="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages"
 			 d:DesignHeight="309"
 			 d:DesignWidth="427"
 			 FontFamily="Calibri">
 
 	<UserControl.DataContext>
-		<vm:AdvanceFilterUCViewModel />
+		<Binding Source="{vmh:VMManagerMarkup {x:Type vm:AdvanceFilterUCViewModel},
+			{x:Type vmp:LogGuardPageViewModel}}" />
 	</UserControl.DataContext>
+	
 	<Border Background="{StaticResource Background_Level2}"
 			CornerRadius="{StaticResource DefaultPanelCornerRadius}">
 		<Grid>
@@ -284,6 +288,7 @@
 						   Foreground="{StaticResource Foreground_Level2}" />
 					<CheckBox Template="{StaticResource RoundCheckBoxTmpl}"
 							  VerticalAlignment="Center"
+							  IsChecked="{Binding ParentsModel.UseAutoScroll}"
 							  Background="{StaticResource ButtonBackground_Level1}" />
 				</StackPanel>
 			</Grid>

@@ -37,6 +37,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
             }
 
         }
+
         [Bindable(true)]
         public double LogCount
         {
@@ -174,6 +175,13 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
         }
 
         public AdvanceFilterUCViewModel()
+        {
+            IsInfoChecked = true;
+            SourceManagerImpl.Current.SourceCollectionChanged -= OnLogSourceCollectionChanged;
+            SourceManagerImpl.Current.SourceCollectionChanged += OnLogSourceCollectionChanged;
+        }
+
+        public AdvanceFilterUCViewModel(BaseViewModel baseViewModel) : base(baseViewModel)
         {
             IsInfoChecked = true;
             SourceManagerImpl.Current.SourceCollectionChanged -= OnLogSourceCollectionChanged;

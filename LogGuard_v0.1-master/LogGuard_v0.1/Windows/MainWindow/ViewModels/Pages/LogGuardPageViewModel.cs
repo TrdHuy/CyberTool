@@ -18,6 +18,21 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
         private RangeObservableCollection<LogWatcherItemViewModel> _logItemVMs;
         private int _logCount;
         private LogGuardState _currentLogGuardState = LogGuardState.NONE;
+        private bool _useAutoScroll = false;
+
+        [Bindable(true)]
+        public bool UseAutoScroll
+        {
+            get
+            {
+                return _useAutoScroll;
+            }
+            set
+            {
+                _useAutoScroll = value;
+                InvalidateOwn();
+            }
+        }
 
         [Bindable(true)]
         public MSW_LogWatcherControlButtonCommandVM CommandViewModel { get; set; }
@@ -84,6 +99,19 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
             LogItemVMs = new RangeObservableCollection<LogWatcherItemViewModel>();
             SourceManagerImpl.Current.AddSourceHolder(this);
 
+        }
+
+        public LogGuardPageViewModel(BaseViewModel parentVM) : base(parentVM)
+        {
+            CommandViewModel = new MSW_LogWatcherControlButtonCommandVM(this);
+            LogItemVMs = new RangeObservableCollection<LogWatcherItemViewModel>();
+            SourceManagerImpl.Current.AddSourceHolder(this);
+
+        }
+
+        ~LogGuardPageViewModel()
+        {
+            // Your code
         }
     }
 }
