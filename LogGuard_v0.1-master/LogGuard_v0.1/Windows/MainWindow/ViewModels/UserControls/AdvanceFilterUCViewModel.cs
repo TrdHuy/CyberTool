@@ -190,6 +190,11 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
 
         private void OnLogSourceCollectionChanged(object sender)
         {
+            UpdateChartcInfo();
+        }
+
+        private void UpdateChartcInfo()
+        {
             LogCount = (double)SourceManagerImpl.Current.RawItemsCount();
 
             if (SourceManagerImpl.Current.RawItemsCount() > 0)
@@ -224,7 +229,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
             }
             DetailContent = LogValue + " line(s)";
         }
-
         private void UpdateCurrentShowProcess(string level, bool show)
         {
             if (show)
@@ -286,8 +290,8 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
                         _isFatalChecked = true;
                         break;
                 }
-
                 RefreshViewModel();
+                UpdateChartcInfo();
             }
             else
             {
@@ -302,6 +306,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
                     _isInfoChecked = true;
                 }
                 RefreshViewModel();
+                UpdateChartcInfo();
             }
         }
     }
