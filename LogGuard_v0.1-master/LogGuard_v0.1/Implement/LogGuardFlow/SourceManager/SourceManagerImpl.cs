@@ -19,11 +19,13 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         private RangeObservableCollection<LogWatcherItemViewModel> _displaySource;
         private List<ISourceHolder> _sourceHolder;
         private Dictionary<object, int> _logLevelCountMap;
+        private RangeObservableCollection<string> _rawLog;
+
         public List<ISourceHolder> SourceHolders { get => _sourceHolder; }
         public RangeObservableCollection<LogWatcherItemViewModel> RawSource => _rawSource;
         public RangeObservableCollection<LogWatcherItemViewModel> DisplaySource => _displaySource;
         public ILogInfoManager LogInfoManager => LogInfoManagerImpl.Current;
-
+        public RangeObservableCollection<string> RawLog { get => _rawLog; }
 
         public event SourceCollectionChangedHandler SourceCollectionChanged;
 
@@ -33,6 +35,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
             _displaySource = new RangeObservableCollection<LogWatcherItemViewModel>();
             _sourceHolder = new List<ISourceHolder>();
             _logLevelCountMap = new Dictionary<object, int>();
+            _rawLog = new RangeObservableCollection<string>();
             ResetLogLevelCountMap();
         }
 
@@ -49,6 +52,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
 
         public void AddItem(string line)
         {
+            _rawLog.Add(line);
             var item = LogInfoManager.ParseLogInfos(line, false, false);
             if (item != null)
             {
@@ -75,6 +79,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         public void ClearSource()
         {
             LogInfoManager.ResetLogInfos();
+            RawLog.Clear();
             ResetLogLevelCountMap();
             RawSource.Clear();
             DisplaySource.Clear();
@@ -138,6 +143,11 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         public int VerboseItemsCount()
         {
             return _logLevelCountMap["V"];
+        }
+
+        public void UpdateLogParser(IRunThreadConfig runThreadConfig)
+        {
+            LogInfoManager.UpdateLogParser(runThreadConfig);
         }
 
         public static SourceManagerImpl Current

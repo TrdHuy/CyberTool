@@ -18,6 +18,7 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         RangeObservableCollection<LogWatcherItemViewModel> RawSource { get; }
         RangeObservableCollection<LogWatcherItemViewModel> DisplaySource { get; }
         ILogInfoManager LogInfoManager { get; }
+        RangeObservableCollection<string> RawLog { get; }
 
         int RawItemsCount();
         int DisplayItemsCount();
@@ -30,8 +31,10 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
 
         void AddSourceHolder(ISourceHolder holder);
         void AddItem(LogWatcherItemViewModel model);
+        void AddItem(string line);
         void RemoveItem(LogWatcherItemViewModel model);
         void ClearSource();
+        void UpdateLogParser(IRunThreadConfig runThreadConfig);
     }
 
     public delegate void SourceCollectionChangedHandler(object sender);

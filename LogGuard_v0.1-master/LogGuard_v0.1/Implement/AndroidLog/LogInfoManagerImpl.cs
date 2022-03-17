@@ -1,5 +1,6 @@
 ﻿using LogGuard_v0._1.Base.AndroidLog.LogParser;
 using LogGuard_v0._1.Base.Log;
+using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Implement.AndroidLog.LogParser;
 using LogGuard_v0._1.Windows.MainWindow.Models;
@@ -23,7 +24,6 @@ namespace LogGuard_v0._1.Implement.AndroidLog
         private LogInfoManagerImpl()
         {
             ResetLogInfos();
-            UpdateLogParser();
         }
 
         public void ResetLogInfos()
@@ -47,25 +47,21 @@ namespace LogGuard_v0._1.Implement.AndroidLog
             }
         }
 
-        public void UpdateLogParser()
+        public void UpdateLogParser(IRunThreadConfig runThreadConfig)
         {
 
-            _logParser = new AdbCmdLogParser();
-
-            //switch (_runThreadConfig.LogParserFormat)
-            //{
-            //    case LogParserFormatContact.NORMAL_ADB_COMMAND:
-            //        _logParser = new AdbCmdLogParser();
-            //        break;
-            //    case LogParserFormatContact.TIME_ADB_COMMAND:
-            //        _logParser = new TimeAdbCmdLogParser();
-            //        break;
-            //    case LogParserFormatContact.NONE:
-            //        break;
-            //    default:
-            //        _logParser = new AdbCmdLogParser();
-            //        break;
-            //}
+            switch (runThreadConfig.LogParserFormat.FormatContact)
+            {
+                case LogParserFormatContact.NORMAL_ADB_COMMAND:
+                    _logParser = new AdbCmdLogParser();
+                    break;
+                case LogParserFormatContact.TIME_ADB_COMMAND:
+                    _logParser = new TimeAdbCmdLogParser();
+                    break;
+                default:
+                    _logParser = new AdbCmdLogParser();
+                    break;
+            }
         }
 
 

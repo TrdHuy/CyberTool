@@ -1,9 +1,12 @@
 ﻿using LogGuard_v0._1.Base.Log;
 using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Implement.AndroidLog;
+using LogGuard_v0._1.Implement.Device;
+using LogGuard_v0._1.Implement.LogGuardFlow.RunThreadConfig;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceManager;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -19,6 +22,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
         public LogGuardState CurrentState { get => _currentState; set => _currentState = value; }
         public LogGuardState PreviousState { get => _previousState; set => _previousState = value; }
         public object SynchronizeStateObject { get => _syncObject; set => _syncObject = value; }
+        public IRunThreadConfig RunThreadConfig => RunThreadConfigImpl.Current;
 
         public bool IsRunning { get; private set; }
         public bool IsPausing { get; private set; }
@@ -75,10 +79,13 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
         {
             if(CurrentState == LogGuardState.STOP || CurrentState == LogGuardState.NONE)
             {
+                LGSourceManager.UpdateLogParser(RunThreadConfig);
                 RunningThread = new Thread(OnRunning);
             }
 
             OnStart();
+            RunningThread.Start();
+
             bool isNeedNotifyStateChange = CurrentState != LogGuardState.RUNNING;
             UpdateRunningState();
             if (isNeedNotifyStateChange)
@@ -87,6 +94,12 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
             }
         }
 
+        protected virtual Process CreateProcess()
+        {
+            var proc = DeviceCmdExecuterImpl.Current.CreateProcess(RunThreadConfig.LogParserFormat.Cmd);
+            //var proc = DeviceCmdExecuterImpl.Current.CreateProcess(" logcat");
+            return proc;
+        }
         protected abstract void OnStart();
         protected abstract void OnStop();
         protected abstract void OnResume();

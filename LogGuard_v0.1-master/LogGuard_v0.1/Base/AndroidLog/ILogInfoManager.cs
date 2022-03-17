@@ -1,4 +1,5 @@
-﻿using LogGuard_v0._1.Base.ViewModel;
+﻿using LogGuard_v0._1.Base.LogGuardFlow;
+using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Windows.MainWindow.Models;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace LogGuard_v0._1.Base.Log
          * dùng muốn hiển thị
          * 
          */
-        void UpdateLogParser();
+        void UpdateLogParser(IRunThreadConfig runThreadConfig);
 
     }
 }

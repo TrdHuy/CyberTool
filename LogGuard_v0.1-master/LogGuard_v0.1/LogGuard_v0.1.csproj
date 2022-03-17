@@ -66,6 +66,7 @@
     <Compile Include="Base\Command\BaseCommandImpl.cs" />
     <Compile Include="Base\Device\IDeviceCmdExecuter.cs" />
     <Compile Include="Base\AndroidLog\ILogInfoManager.cs" />
+    <Compile Include="Base\LogGuardFlow\IRunThreadConfig.cs" />
     <Compile Include="Base\LogGuardFlow\ISourceHolder.cs" />
     <Compile Include="Base\LogGuardFlow\ISourceManager.cs" />
     <Compile Include="Base\LogGuardFlow\IStateController.cs" />
@@ -95,8 +96,10 @@
     <Compile Include="Base\ViewModel\BaseViewModel.cs" />
     <Compile Include="Implement\AndroidLog\LogInfoManagerImpl.cs" />
     <Compile Include="Implement\AndroidLog\LogParser\AdbCmdLogParser.cs" />
+    <Compile Include="Implement\AndroidLog\LogParser\TimeAdbCmdLogParser.cs" />
     <Compile Include="Implement\Device\DeviceCmdContact.cs" />
     <Compile Include="Implement\Device\DeviceCmdExecuterImpl.cs" />
+    <Compile Include="Implement\LogGuardFlow\RunThreadConfig\RunThreadConfigImpl.cs" />
     <Compile Include="Implement\LogGuardFlow\SourceManager\SourceManagerImpl.cs" />
     <Compile Include="Implement\LogGuardFlow\StateController\HighCpu_StateController.cs" />
     <Compile Include="Implement\LogGuardFlow\StateController\LowCpu_StateController.cs" />

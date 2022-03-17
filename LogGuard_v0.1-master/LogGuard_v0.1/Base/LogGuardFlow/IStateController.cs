@@ -21,6 +21,7 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         void Resume();
         void Pause();
         ISourceManager LGSourceManager { get; }
+        IRunThreadConfig RunThreadConfig { get; }
         LogGuardState CurrentState { get; set; }
         LogGuardState PreviousState { get; set; }
         object SynchronizeStateObject { get; set; }

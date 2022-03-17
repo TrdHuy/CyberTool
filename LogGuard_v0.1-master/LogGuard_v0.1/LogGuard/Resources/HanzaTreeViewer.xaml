@@ -27,7 +27,7 @@
 							SnapsToDevicePixels="True">
 						<ctrl:ScrollViewWatcher Focusable="False"
 												CanContentScroll="False"
-												Style="{StaticResource HideTrackBtn_ScrollViewWatcherStyle}"
+												Style="{StaticResource HanzaScrollViewWatcherStyle}"
 												Background="Transparent"
 												ScrollHeaderHeight="0"
 												ThumbBackground="#009a76"

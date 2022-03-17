@@ -27,7 +27,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
 
         protected override void OnRunning()
         {
-            var proc = DeviceCmdExecuterImpl.Current.CreateProcess(" logcat");
+            var proc = CreateProcess();
 
             try
             {
@@ -56,12 +56,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
                 {
                     lock (SynchronizeStateObject)
                     {
-                        LogInfo lif = LogInfoManagerImpl.Current.ParseLogInfos(line, false, false);
-                        if (lif != null)
-                        {
-                            LogWatcherItemViewModel livm = new LogWatcherItemViewModel(lif);
-                            LGSourceManager.AddItem(livm);
-                        }
+                        LGSourceManager.AddItem(line);
                     }
 
                     PausingEvent.WaitOne();
@@ -104,7 +99,6 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
         protected override void OnStart()
         {
             StopEvent.Reset();
-            RunningThread.Start();
         }
 
         public static HighCpu_StateController Current
