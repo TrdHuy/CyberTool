@@ -55,7 +55,7 @@
 												<ColumnDefinition Width="*" />
 											</Grid.ColumnDefinitions>
 											<Rectangle	Grid.ColumnSpan="4"
-														StrokeThickness="2"
+														StrokeThickness="1"
 														Fill="#19B8E7F9"
 														Stroke="#FFB8EAF9"
 														x:Name="FeedBackRec"

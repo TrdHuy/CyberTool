@@ -122,6 +122,7 @@
     <Compile Include="MVVM\View\Windows\FloatingWindow.xaml.cs">
       <DependentUpon>FloatingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Converters\StringToGeoPathConverter.cs" />
     <Compile Include="Utils\CustomAttachedProperties.cs" />
     <Compile Include="Utils\Definitions\LogGuardDefinition.cs" />
     <Compile Include="Utils\Logger.cs" />

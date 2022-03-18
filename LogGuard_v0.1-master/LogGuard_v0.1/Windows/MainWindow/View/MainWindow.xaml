@@ -15,17 +15,21 @@
 						 xmlns:vmh="clr-namespace:LogGuard_v0._1.Utils.ViewModelHelper"
 						 xmlns:pages="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.Pages"
 						 xmlns:flow="clr-namespace:LogGuard_v0._1.Base.LogGuardFlow"
+						 xmlns:converter="clr-namespace:LogGuard_v0._1.Utils.Converters"
 						 Title="MainWindow"
 						 Height="820"
 						 Width="1066"
 						 MinHeight="820"
 						 MinWidth="1066"
 						 Background="{StaticResource Background_Level1}"
-						 Style="{StaticResource DefaultLogGuardStyle}">
-
+						 Style="{StaticResource DefaultLogGuardStyle}"
+						 FontFamily="Calibri">
 	<Window.DataContext>
 		<vm:MainWindowViewModel />
 	</Window.DataContext>
+	<Window.Resources>
+		<converter:StringToGeoPathConverter x:Key="GeoPathConverter" />
+	</Window.Resources>
 	<!--<Window.DataContext>
 		<Binding Source="{vmh:VMManagerMarkup {x:Type vm:MainWindowViewModel}}" />
 	</Window.DataContext>-->
@@ -33,26 +37,105 @@
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="1.71*" />
-			<ColumnDefinition Width="1.33*" />
-			<ColumnDefinition Width="1.41*" />
-			<ColumnDefinition Width="0.29*" />
-			<ColumnDefinition Width="0.29*" />
-			<ColumnDefinition Width="0.29*" />
-			<ColumnDefinition Width="2.1*" />
-			<ColumnDefinition Width="2.58*" />
+			<ColumnDefinition Width="8.29*" />
 		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="0.2*" />
-			<RowDefinition Height="1.41*" />
-			<RowDefinition Height="1.8*" />
-			<RowDefinition Height="0.37*" />
-			<RowDefinition Height="3.72*" />
-		</Grid.RowDefinitions>
+	
+		<Grid Grid.RowSpan="3"
+			  Margin="0,0,10,0"
+			  Background="{StaticResource Background_Level2}">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" />
+				<RowDefinition Height="2*" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			<ListView BorderThickness="0"
+					  Grid.Row="1"
+					  Background="{StaticResource Background_Level2}">
+				<ListView.ItemContainerStyle>
+					<Style TargetType="ListViewItem">
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="ListViewItem">
+									<Grid Height="40">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="*" />
+											<ColumnDefinition Width="2*" />
+										</Grid.ColumnDefinitions>
+										<Rectangle x:Name="FeedbackRec"
+												   StrokeThickness="1"
+												   Fill="#19B8E7F9"
+												   Stroke="#FFB8EAF9"
+												   Visibility="Hidden"
+												   Grid.ColumnSpan="2" />
+										<Path Data="{TemplateBinding Tag,Converter={StaticResource GeoPathConverter}}"
+											  Fill="{StaticResource Foreground_Level3}"
+											  Height="20"
+											  Width="20"
+											  Stretch="Uniform" />
+										<Label Grid.Column="1"
+											   VerticalAlignment="Center"
+											   Foreground="{StaticResource Foreground_Level3}"
+											   Content="{TemplateBinding Content}">
+										</Label>
 
+									</Grid>
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsMouseOver"
+												 Value="True">
+											<Setter Property="Visibility"
+													TargetName="FeedbackRec"
+													Value="Visible" />
+										</Trigger>
+
+										<Trigger Property="IsSelected"
+												 Value="True">
+											<Setter Property="Visibility"
+													TargetName="FeedbackRec"
+													Value="Visible" />
+											<Setter Property="Fill"
+													TargetName="FeedbackRec"
+													Value="{StaticResource SelectedItemBackground}" />
+											<Setter Property="StrokeThickness"
+													TargetName="FeedbackRec"
+													Value="0" />
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+
+				</ListView.ItemContainerStyle>
+				<ListViewItem Content="Dashboard"
+							  Foreground="White"
+							  FontSize="14"
+							  Tag="{StaticResource DashboardBtnPathGeomerty}" />
+				<ListViewItem Content="Log guard"
+							  Foreground="White"
+							  FontSize="14"
+							  Tag="{StaticResource LoguardPathGeomerty}" />
+				<ListViewItem Content="Issues"
+							  Foreground="White"
+							  FontSize="14"
+							  Tag="{StaticResource IssuesPathGeomerty}" />
+				<ListViewItem Content="Extensions"
+							  Foreground="White"
+							  FontSize="14"
+							  Tag="{StaticResource ExtensionsBtnPathGeomerty}" />
+				<ListViewItem Content="About"
+							  Foreground="White"
+							  FontSize="14"
+							  Tag="{StaticResource AboutBtnPathGeomerty}" />
+				<ListViewItem Content="Exit"
+							  Foreground="White"
+							  FontSize="14"
+							  Tag="{StaticResource ExitBtnPathGeomerty}" />
+			</ListView>
+		</Grid>
+		
 		<Frame Grid.Column="1"
+			   Grid.RowSpan="3"
 			   x:Name="mainFrame"
-			   Source="{Binding }"
-			   Grid.ColumnSpan="8"
-			   Grid.RowSpan="10" />
+			   Source="{Binding }" />
 	</Grid>
 </lgWindow:LogGuardWindow>

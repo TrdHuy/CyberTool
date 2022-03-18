@@ -110,9 +110,9 @@
 							 x:Key="ExtrusionHeaderForeground" />
 			<SolidColorBrush Color="#26292e"
 							 x:Key="BorderMapBackground" />
-			<SolidColorBrush Color="#16171c"
+			<SolidColorBrush Color="#1e2024"
 							 x:Key="LogGuardBackground" />
-			<SolidColorBrush Color="#1e2023"
+			<SolidColorBrush Color="#1e2024"
 							 x:Key="SelectedRowIndicatorPanelBackground" />
 
 			<Style x:Key="{x:Type GridViewColumnHeader}"
@@ -136,7 +136,7 @@
 		<Setter Property="VerticalContentAlignment"
 				Value="Center" />
 		<Setter Property="Background"
-				Value="{DynamicResource LogGuardBackground}" />
+				Value="{StaticResource Background_Level1}" />
 		<Setter Property="BorderThickness"
 				Value="0" />
 		<Setter Property="ItemContainerStyle">
@@ -209,6 +209,9 @@
 										<Setter Property="StrokeThickness"
 												TargetName="FeedbackBorder"
 												Value="0" />
+										<Setter Property="Background"
+												TargetName="FeedbackGrid"
+												Value="{StaticResource Background_Level1}" />
 									</Trigger>
 								</ControlTemplate.Triggers>
 							</ControlTemplate>
@@ -299,7 +302,6 @@
 							<Grid Height="{DynamicResource GridViewWatcherHeaderHeight}" />
 							<Grid Grid.Row="2"
 								  Height="{StaticResource {x:Static SystemParameters.HorizontalScrollBarHeightKey}}" />
-
 							<TextBlock Grid.Row="0"
 									   Foreground="{DynamicResource LabelIndicatorForeground}"
 									   Grid.Column="2"
@@ -365,7 +367,7 @@
 								<ctrl:ScrollViewWatcher x:Name="PART_MainScrollViewer"
 														ScrollHeaderHeight="{DynamicResource GridViewWatcherHeaderHeight}"
 														HeaderBackground="{DynamicResource HeaderBackground}"
-														Background="{DynamicResource LogGuardBackground }"
+														Background="{StaticResource Background_Level2 }"
 														ThumbBackground="{DynamicResource ThumbBackground}"
 														ScrollBarBackground="{DynamicResource ScrollBarBackground}">
 									<ItemsPresenter />
