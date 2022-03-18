@@ -12,7 +12,9 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
     public class AdvanceFilterUCViewModel : BaseViewModel
     {
         private string _detailContent = "line(s)";
+        private string _extraContent = "Total: line(s)";
         private string _currentLogLevel = "Info log";
+        private string _currentLogLevelShorcutS = "I";
         private double _logCount;
         private double _logValuePercent;
         private bool _isInfoChecked;
@@ -83,6 +85,21 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
                 InvalidateOwn();
             }
         }
+
+        [Bindable(true)]
+        public string ExtraContent
+        {
+            get
+            {
+                return _extraContent;
+            }
+            set
+            {
+                _extraContent = value;
+                InvalidateOwn();
+            }
+        }
+
 
         [Bindable(true)]
         public bool IsInfoChecked
@@ -196,10 +213,10 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
         private void UpdateChartcInfo()
         {
             LogCount = (double)SourceManagerImpl.Current.RawItemsCount();
+            double per = 0d;
 
             if (SourceManagerImpl.Current.RawItemsCount() > 0)
             {
-                double per = 0d;
                 if (IsVerboseChecked)
                 {
                     per = (double)SourceManagerImpl.Current.VerboseItemsCount();
@@ -225,9 +242,10 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
                     per = (double)SourceManagerImpl.Current.FatalItemsCount();
                 }
 
-                LogValue = per;
+                LogValue = Math.Round(per / LogCount * 100, 2);
             }
-            DetailContent = LogValue + " line(s)";
+            DetailContent = _currentLogLevelShorcutS + ": " + per + " line(s)";
+            ExtraContent = "Total: " + LogCount + " line(s)";
         }
         private void UpdateCurrentShowProcess(string level, bool show)
         {
@@ -237,6 +255,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
                 {
                     case "V":
                         _currentLogLevel = "Verbose log";
+                        _currentLogLevelShorcutS = "V";
                         _isVerboseChecked = true;
                         _isDebugChecked = false;
                         _isErrorChecked = false;
@@ -246,6 +265,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
                         break;
                     case "D":
                         _currentLogLevel = "Debug log";
+                        _currentLogLevelShorcutS = "D";
                         _isDebugChecked = true;
                         _isVerboseChecked = false;
                         _isErrorChecked = false;
@@ -255,6 +275,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
                         break;
                     case "E":
                         _currentLogLevel = "Error log";
+                        _currentLogLevelShorcutS = "E";
                         _isDebugChecked = false;
                         _isVerboseChecked = false;
                         _isErrorChecked = true;
@@ -264,6 +285,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
                         break;
                     case "I":
                         _currentLogLevel = "Info log";
+                        _currentLogLevelShorcutS = "I";
                         _isDebugChecked = false;
                         _isVerboseChecked = false;
                         _isErrorChecked = false;
@@ -273,6 +295,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
                         break;
                     case "W":
                         _currentLogLevel = "Warning log";
+                        _currentLogLevelShorcutS = "W";
                         _isDebugChecked = false;
                         _isVerboseChecked = false;
                         _isErrorChecked = false;
@@ -282,6 +305,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
                         break;
                     case "F":
                         _currentLogLevel = "Fatal log";
+                        _currentLogLevelShorcutS = "F";
                         _isDebugChecked = false;
                         _isVerboseChecked = false;
                         _isErrorChecked = false;

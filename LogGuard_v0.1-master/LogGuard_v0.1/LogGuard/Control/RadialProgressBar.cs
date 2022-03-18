@@ -168,6 +168,22 @@ namespace LogGuard_v0._1.LogGuard.Control
         }
         #endregion
 
+        #region ExtraContent
+        public static readonly DependencyProperty ExtraContentProperty =
+            DependencyProperty.Register(
+                "ExtraContent",
+                typeof(string),
+                typeof(RadialProgressBar),
+                new PropertyMetadata(""));
+
+        public string ExtraContent
+        {
+            get { return (string)GetValue(ExtraContentProperty); }
+            set { SetValue(ExtraContentProperty, value); }
+        }
+        #endregion
+
+
         #region bgPathBrush
         public static readonly DependencyProperty BgPathBackgroundProperty =
             DependencyProperty.Register(
@@ -226,8 +242,7 @@ namespace LogGuard_v0._1.LogGuard.Control
         private Label DetailContLabel;
         private Label PercentContLabel;
 
-        private double CalculatedRadius;
-        private double CalculatedStrokeThickness;
+        private double CalculatedRadForPath = 0d;
 
         public override void OnApplyTemplate()
         {
@@ -247,45 +262,13 @@ namespace LogGuard_v0._1.LogGuard.Control
                 throw new InvalidOperationException("Not found some UI elements!");
             }
 
-            CalculatedRadius = Radius;
-            CalculatedStrokeThickness = StrokeThickness;
 
             MainGrid.SizeChanged -= OnMainGridSizeChangedHandler;
             MainGrid.SizeChanged += OnMainGridSizeChangedHandler;
-            MinLabel.SizeChanged -= OnMinLabelSizeChangedHandler;
-            MinLabel.SizeChanged += OnMinLabelSizeChangedHandler;
-            MaxLabel.SizeChanged -= OnMaxLabelSizeChangedHandler;
-            MaxLabel.SizeChanged += OnMaxLabelSizeChangedHandler;
-
-            DetailContLabel.SizeChanged -= OnDetailContLabelSizeChangedHandler;
-            DetailContLabel.SizeChanged += OnDetailContLabelSizeChangedHandler;
-            PercentContLabel.SizeChanged -= OnPercentContLabelSizeChangedHandler;
-            PercentContLabel.SizeChanged += OnPercentContLabelSizeChangedHandler;
             UpdatePercentCont();
-
         }
 
-        private void OnPercentContLabelSizeChangedHandler(object sender, SizeChangedEventArgs e)
-        {
-            RefrestDetailContLabelPos();
-            RefreshPercentContLabelPos();
-        }
 
-        private void OnDetailContLabelSizeChangedHandler(object sender, SizeChangedEventArgs e)
-        {
-            RefrestDetailContLabelPos();
-            RefreshPercentContLabelPos();
-        }
-
-        private void OnMaxLabelSizeChangedHandler(object sender, SizeChangedEventArgs e)
-        {
-            RefreshMaxLabelPos();
-        }
-
-        private void OnMinLabelSizeChangedHandler(object sender, SizeChangedEventArgs e)
-        {
-            RefreshMinLabelPos();
-        }
 
         private void OnMainGridSizeChangedHandler(object sender, SizeChangedEventArgs e)
         {
@@ -295,55 +278,13 @@ namespace LogGuard_v0._1.LogGuard.Control
         protected void OnRefreshUI(bool force = false)
         {
             if (!IsInitialized && !force) return;
-
-            CalculatedRadius = Radius;
-            CalculatedStrokeThickness = StrokeThickness;
-
-            double radiusX2 = MainGrid.ActualWidth > MainGrid.ActualHeight * 2 - 50 ? MainGrid.ActualHeight * 2 - 50 : MainGrid.ActualWidth;
-            CalculatedRadius = radiusX2 / 2 - Offset - StrokeThickness / 2;
-            var radPercent = CalculatedRadius / Radius;
-            CalculatedStrokeThickness = radPercent * CalculatedStrokeThickness;
-
-            CreateBackgroundPathData(BgPath, CalculatedRadius, CalculatedStrokeThickness);
-            CreateValuePathData(CurValPath, CalculatedRadius, CalculatedStrokeThickness, Value, Maximum);
-
-            RefreshMinLabelPos();
-            RefreshMaxLabelPos();
-            RefrestDetailContLabelPos();
-            RefreshPercentContLabelPos();
+            var radius = MainGrid.ActualWidth / 2;
+            CaculateRadForPath(radius, StrokeThickness);
+            CreateBackgroundPathData(BgPath, radius, StrokeThickness);
+            CreateValuePathData(CurValPath, radius, StrokeThickness, Value, Maximum);
         }
 
-        private void RefreshPercentContLabelPos()
-        {
-            PercentContLabel.Margin = new Thickness(Offset + CalculatedRadius + CalculatedStrokeThickness / 2 - PercentContLabel.ActualWidth / 2
-                , CalculatedRadius + DetailContLabel.ActualHeight - 30
-                , 0
-                , 0);
-        }
 
-        private void RefrestDetailContLabelPos()
-        {
-            DetailContLabel.Margin = new Thickness(Offset + CalculatedRadius + CalculatedStrokeThickness / 2 - DetailContLabel.ActualWidth / 2
-                            , CalculatedRadius - 20
-                            , 0
-                            , 0);
-        }
-
-        private void RefreshMaxLabelPos()
-        {
-            MaxLabel.Margin = new Thickness(Offset + CalculatedRadius * 2 + CalculatedStrokeThickness / 2 - MaxLabel.ActualWidth / 2
-                            , CalculatedRadius + CalculatedStrokeThickness + Offset
-                            , 0
-                            , 0);
-        }
-
-        private void RefreshMinLabelPos()
-        {
-            MinLabel.Margin = new Thickness(Offset + CalculatedStrokeThickness / 2 - MinLabel.ActualWidth / 2
-                            , CalculatedRadius + CalculatedStrokeThickness + Offset
-                            , 0
-                            , 0);
-        }
 
         private void UpdatePercentCont()
         {
@@ -365,29 +306,23 @@ namespace LogGuard_v0._1.LogGuard.Control
             ValueChanged?.Invoke(this, arg);
 
             if (arg.Handled == true) return;
-
-            CreateValuePathData(CurValPath, CalculatedRadius, CalculatedStrokeThickness, Value, Maximum);
+            var radius = MainGrid.ActualWidth / 2;
+            CreateValuePathData(CurValPath, radius, StrokeThickness, Value, Maximum);
             UpdatePercentCont();
         }
 
-        private Thickness GetMargin(double strokeThickness)
-        {
-            return new Thickness(strokeThickness / 2 + Offset
-                , strokeThickness + Offset
-                , 0
-                , 0);
-        }
+
+
         private Geometry GetMainOpacityMask(double radius, double strokeThickness)
         {
-
-            Point startClipPoint = new Point(-strokeThickness / 2, radius - (strokeThickness / 2) - 1);
             double cornerRadius = 1;
-            Point arcSeg1DesPoint = new Point(strokeThickness / 2, radius - (strokeThickness / 2) - 1);
+            var offsetThickness = 1;
 
-            Point arcSeg2DesPoint = new Point(2 * radius - strokeThickness / 2, radius - strokeThickness / 2 - 1);
-
-            Point arcSeg3DesPoint = new Point(2 * radius + strokeThickness / 2, radius - (strokeThickness / 2) - 1);
-            Point arcSeg4DesPoint = new Point(-strokeThickness / 2, radius - (strokeThickness / 2) - 1);
+            Point startClipPoint = new Point(0 + offsetThickness, (int)(radius + (strokeThickness / 2) - offsetThickness));
+            Point arcSeg1DesPoint = new Point(strokeThickness + offsetThickness, (int)(radius + (strokeThickness / 2) - offsetThickness));
+            Point arcSeg2DesPoint = new Point((int)(2 * radius - strokeThickness) - offsetThickness, (int)(radius + (strokeThickness / 2) - offsetThickness));
+            Point arcSeg3DesPoint = new Point((int)(2 * radius) - offsetThickness, (int)(radius + (strokeThickness / 2) - offsetThickness));
+            Point arcSeg4DesPoint = new Point(0 + offsetThickness, (int)(radius + (strokeThickness / 2) - offsetThickness));
 
             string clipData = "m {2},{3} A {0},{1} 0 0 0 {4},{5} A {0},{1} 0 0 1 {6},{7} A {0},{1} 0 0 0 {8},{9} A {0},{1} 0 0 0 {10},{11} Z";
 
@@ -405,50 +340,66 @@ namespace LogGuard_v0._1.LogGuard.Control
                 , arcSeg4DesPoint.X
                 , arcSeg4DesPoint.Y));
         }
+
+        private void CaculateRadForPath(double radius, double strokeThickness)
+        {
+            var offsetThickness = 1;
+
+            Point startMainDataPoint = new Point(strokeThickness / 2 + offsetThickness, 0);
+            Point arcSeg1MainDataDesPoint = new Point((int)(2 * radius - strokeThickness / 2 - offsetThickness), 0);
+
+            CalculatedRadForPath = ((double)arcSeg1MainDataDesPoint.X - (double)startMainDataPoint.X) / 2;
+        }
+        private void CreateBackgroundPathData(Path path, double radius, double strokeThickness)
+        {
+            if (!IsInitialized) return;
+            var offsetThicknessForX = 1;
+            var offsetThicknessForY = radius - CalculatedRadForPath;
+            path.Clip = GetMainOpacityMask(radius, strokeThickness);
+
+            Point startMainDataPoint = new Point(strokeThickness / 2 + offsetThicknessForX, (int)(CalculatedRadForPath + strokeThickness + offsetThicknessForY));
+
+            Point arcSeg1MainDataDesPoint = new Point((int)(2 * CalculatedRadForPath + strokeThickness / 2 + offsetThicknessForX), (int)(CalculatedRadForPath + strokeThickness + offsetThicknessForY));
+
+            string mainData = "m {0},{1} A {2},{2} 0 0 1 {3},{4}";
+
+            path.Data = Geometry.Parse(string.Format(mainData
+                , startMainDataPoint.X
+                , startMainDataPoint.Y
+                , CalculatedRadForPath
+                , arcSeg1MainDataDesPoint.X
+                , arcSeg1MainDataDesPoint.Y));
+            path.StrokeThickness = strokeThickness * 3;
+        }
+
         private void CreateValuePathData(Path path, double radius, double strokeThickness, double currentValue, double maxValue)
         {
             if (!IsInitialized) return;
+            var offsetThicknessForX = 1;
+            var offsetThicknessForY = radius - CalculatedRadForPath;
 
             var percent = currentValue / maxValue;
             if (percent > 1) percent = 1;
 
             path.Clip = GetMainOpacityMask(radius, strokeThickness);
 
-            Point startMainDataPoint = new Point(0, radius);
+            Point startMainDataPoint = new Point(strokeThickness / 2 + offsetThicknessForX, (int)(CalculatedRadForPath + strokeThickness + offsetThicknessForY));
+
             Point arcSeg1MainDataDesPoint =
-                new Point(radius * (1 - Math.Cos(Math.PI * percent))
-                , radius * (1 - Math.Sin(Math.PI * percent)));
+                new Point(
+                    CalculatedRadForPath * (1 - Math.Cos(Math.PI * percent)) + strokeThickness / 2 + offsetThicknessForX
+                , CalculatedRadForPath * (1 - Math.Sin(Math.PI * percent)) + strokeThickness + offsetThicknessForY);
+
             string mainData = "m {0},{1} A {2},{2} 0 0 1 {3},{4}";
 
             path.Data = Geometry.Parse(string.Format(mainData
                 , startMainDataPoint.X
                 , startMainDataPoint.Y
-                , radius
+                , CalculatedRadForPath
                 , arcSeg1MainDataDesPoint.X
                 , arcSeg1MainDataDesPoint.Y));
 
-            path.Margin = GetMargin(strokeThickness);
-            path.StrokeThickness = strokeThickness * 2;
-        }
-
-        private void CreateBackgroundPathData(Path path, double radius, double strokeThickness)
-        {
-            if (!IsInitialized) return;
-
-            path.Clip = GetMainOpacityMask(radius, strokeThickness);
-
-            Point startMainDataPoint = new Point(0, radius);
-            Point arcSeg1MainDataDesPoint = new Point(2 * radius, radius);
-            string mainData = "m {0},{1} A {2},{2} 0 0 1 {3},{4}";
-
-            path.Data = Geometry.Parse(string.Format(mainData
-                , startMainDataPoint.X
-                , startMainDataPoint.Y
-                , radius
-                , arcSeg1MainDataDesPoint.X
-                , arcSeg1MainDataDesPoint.Y));
-            path.Margin = GetMargin(strokeThickness);
-            path.StrokeThickness = strokeThickness * 2;
+            path.StrokeThickness = strokeThickness * 3;
         }
 
     }

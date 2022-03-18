@@ -255,10 +255,11 @@
 				<ctrl:RadialProgressBar x:Name="LogLevelRadialPB"
 										Grid.Row="1"
 										Offset="12"
-										StrokeThickness="25"
+										StrokeThickness="15"
 										Value="{Binding LogValue}"
-										Maximum="{Binding LogCount}"
+										Maximum="100"
 										DetailContent="{Binding DetailContent}"
+										ExtraContent="{Binding ExtraContent}"
 										FontFamily="Calibri">
 
 					<ctrl:RadialProgressBar.BgPathBackground>
