@@ -18,10 +18,15 @@ namespace LogGuard_v0._1.Windows.MainWindow.Utils
                new Uri(LogGuardDefinition.LOG_GUARD_PAGE_URI_ORIGINAL_STRING, UriKind.Relative),
                LogGuardDefinition.LOG_GUARD_PAGE_LOADING_DELAY_TIME));
 
+        private Lazy<PageVO> UnderConstructionPage = new Lazy<PageVO>(() =>
+          new PageVO(
+              new Uri(LogGuardDefinition.UNDER_CONSTRUCTION_PAGE_URI_ORIGINAL_STRING, UriKind.Relative),
+              LogGuardDefinition.UNDER_CONSTRUCTION_PAGE_LOADING_DELAY_TIME));
+
         private MSW_PageController()
         {
-            CurrentPageOV = new PageVO(LogGuardPage.Value.PageUri,
-                LogGuardPage.Value.LoadingDelayTime);
+            CurrentPageOV = new PageVO(new Uri(LogGuardDefinition.UNDER_CONSTRUCTION_PAGE_URI_ORIGINAL_STRING, UriKind.Relative),
+              LogGuardDefinition.UNDER_CONSTRUCTION_PAGE_LOADING_DELAY_TIME);
         }
 
         public override void UpdateCurrentPageSource(PageSource pageNum)
@@ -36,9 +41,13 @@ namespace LogGuard_v0._1.Windows.MainWindow.Utils
                     CurrentPageOV.PageUri = LogGuardPage.Value.PageUri;
                     CurrentPageOV.LoadingDelayTime = LogGuardPage.Value.LoadingDelayTime;
                     break;
+                case PageSource.UNDER_CONSTRUCTION_PAGE:
+                    CurrentPageOV.PageUri = UnderConstructionPage.Value.PageUri;
+                    CurrentPageOV.LoadingDelayTime = UnderConstructionPage.Value.LoadingDelayTime;
+                    break;
                 default:
-                    CurrentPageOV.PageUri = LogGuardPage.Value.PageUri;
-                    CurrentPageOV.LoadingDelayTime = LogGuardPage.Value.LoadingDelayTime;
+                    CurrentPageOV.PageUri = UnderConstructionPage.Value.PageUri;
+                    CurrentPageOV.LoadingDelayTime = UnderConstructionPage.Value.LoadingDelayTime;
                     break;
             }
             NotifyChange(CurrentPageOV);
@@ -55,10 +64,15 @@ namespace LogGuard_v0._1.Windows.MainWindow.Utils
                     CurrentPageOV.PageUri = LogGuardPage.Value.PageUri;
                     CurrentPageOV.LoadingDelayTime = LogGuardPage.Value.LoadingDelayTime;
                     break;
+                case LogGuardDefinition.UNDER_CONSTRUCTION_PAGE_URI_ORIGINAL_STRING:
+                    CurrentPageSource = PageSource.UNDER_CONSTRUCTION_PAGE;
+                    CurrentPageOV.PageUri = UnderConstructionPage.Value.PageUri;
+                    CurrentPageOV.LoadingDelayTime = UnderConstructionPage.Value.LoadingDelayTime;
+                    break;
                 default:
-                    CurrentPageSource = PageSource.LOG_GUARD_PAGE;
-                    CurrentPageOV.PageUri = LogGuardPage.Value.PageUri;
-                    CurrentPageOV.LoadingDelayTime = LogGuardPage.Value.LoadingDelayTime;
+                    CurrentPageSource = PageSource.UNDER_CONSTRUCTION_PAGE;
+                    CurrentPageOV.PageUri = UnderConstructionPage.Value.PageUri;
+                    CurrentPageOV.LoadingDelayTime = UnderConstructionPage.Value.LoadingDelayTime;
                     break;
             }
 

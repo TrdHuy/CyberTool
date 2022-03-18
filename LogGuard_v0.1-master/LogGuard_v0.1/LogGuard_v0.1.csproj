@@ -61,6 +61,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppResources\Controls\LogGPages\LogGPage.cs" />
     <Compile Include="AppResources\Controls\LogGWindows\LogGuardWindow.cs" />
     <Compile Include="Base\AndroidLog\LogParser\AbstractLogParser.cs" />
     <Compile Include="Base\Command\BaseCommandImpl.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Base\Utils\ILogger.cs" />
     <Compile Include="Base\ViewModel\BaseButtonCommandViewModel.cs" />
     <Compile Include="Base\ViewModel\BaseViewModel.cs" />
+    <Compile Include="Base\ViewModel\IPageViewModel.cs" />
     <Compile Include="Implement\AndroidLog\LogInfoManagerImpl.cs" />
     <Compile Include="Implement\AndroidLog\LogParser\AdbCmdLogParser.cs" />
     <Compile Include="Implement\AndroidLog\LogParser\TimeAdbCmdLogParser.cs" />
@@ -118,10 +120,6 @@
     <Compile Include="LogGuard\Control\HeaderLabel.cs" />
     <Compile Include="LogGuard\Control\RadialProgressBar.cs" />
     <Compile Include="LogGuard\Control\TrippleToggle.cs" />
-    <Compile Include="MVVM\ViewModels\LogByTeamItemViewModel.cs" />
-    <Compile Include="MVVM\View\Windows\FloatingWindow.xaml.cs">
-      <DependentUpon>FloatingWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Utils\Converters\StringToGeoPathConverter.cs" />
     <Compile Include="Utils\CustomAttachedProperties.cs" />
     <Compile Include="Utils\Definitions\LogGuardDefinition.cs" />
@@ -134,6 +132,9 @@
     <Compile Include="Windows\BaseWindow\Utils\BasePageController.cs" />
     <Compile Include="Windows\BaseWindow\Utils\PageSource.cs" />
     <Compile Include="Windows\BaseWindow\Utils\PageSourceWatcher.cs" />
+    <Compile Include="Windows\FloatinWindow\FloatingWindow.xaml.cs">
+      <DependentUpon>FloatingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\MainWindow\Action\MSW_CommandExecuterBuilder.cs" />
     <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_PlayButtonAction.cs" />
     <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_StopButtonAction.cs" />
@@ -146,11 +147,15 @@
     <Compile Include="Windows\MainWindow\ViewModels\MSW_LogWatcherControlButtonCommandVM.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPageViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\AdvanceFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCLogManager\LogByTeamItemViewModel.cs" />
     <Compile Include="Windows\MainWindow\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MainWindow\View\Pages\LogGuard.xaml.cs">
       <DependentUpon>LogGuard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MainWindow\View\Pages\UndercontrucstionPage.xaml.cs">
+      <DependentUpon>UndercontrucstionPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MainWindow\View\UserControls\UC_AdvanceFilter.xaml.cs">
       <DependentUpon>UC_AdvanceFilter.xaml</DependentUpon>
@@ -200,10 +205,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MVVM\View\Windows\FloatingWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -219,11 +220,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\FloatinWindow\FloatingWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\MainWindow\View\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\MainWindow\View\Pages\LogGuard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MainWindow\View\Pages\UndercontrucstionPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -271,8 +280,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MVVM\ViewModels\Windows\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

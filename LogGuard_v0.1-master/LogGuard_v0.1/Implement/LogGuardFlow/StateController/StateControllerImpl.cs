@@ -4,6 +4,7 @@ using LogGuard_v0._1.Implement.AndroidLog;
 using LogGuard_v0._1.Implement.Device;
 using LogGuard_v0._1.Implement.LogGuardFlow.RunThreadConfig;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceManager;
+using LogGuard_v0._1.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -34,6 +35,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
         public event StateChangedHandler StateChanged;
 
         protected Thread RunningThread;
+        protected Process CaptureProc;
 
         protected StateControllerImpl()
         {
@@ -52,7 +54,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
                 StateChanged?.Invoke(this, new StateChangedEventArgs(CurrentState, PreviousState));
             }
         }
-      
+
         public void Resume()
         {
             OnResume();
@@ -63,10 +65,23 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
                 StateChanged?.Invoke(this, new StateChangedEventArgs(CurrentState, PreviousState));
             }
         }
-      
+
         public void Stop()
         {
             OnStop();
+
+            if (CaptureProc != null)
+            {
+                lock (CaptureProc)
+                {
+                    if (!CaptureProc.HasExited)
+                        CaptureProc.Kill();
+                    CaptureProc.Dispose();
+                    CaptureProc.Close();
+                    CaptureProc = null;
+                }
+            }
+
             bool isNeedNotifyStateChange = CurrentState != LogGuardState.STOP;
             UpdateStopState();
             if (isNeedNotifyStateChange)
@@ -74,13 +89,14 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
                 StateChanged?.Invoke(this, new StateChangedEventArgs(CurrentState, PreviousState));
             }
         }
-       
+
         public void Start()
         {
-            if(CurrentState == LogGuardState.STOP || CurrentState == LogGuardState.NONE)
+            if (CurrentState == LogGuardState.STOP || CurrentState == LogGuardState.NONE)
             {
+                CaptureProc = DeviceCmdExecuterImpl.Current.CreateProcess(RunThreadConfig.LogParserFormat.Cmd);
                 LGSourceManager.UpdateLogParser(RunThreadConfig);
-                RunningThread = new Thread(OnRunning);
+                RunningThread = new Thread(Running);
             }
 
             OnStart();
@@ -94,12 +110,16 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
             }
         }
 
-        protected virtual Process CreateProcess()
+        private void Running()
         {
-            var proc = DeviceCmdExecuterImpl.Current.CreateProcess(RunThreadConfig.LogParserFormat.Cmd);
-            //var proc = DeviceCmdExecuterImpl.Current.CreateProcess(" logcat");
-            return proc;
+            lock (CaptureProc)
+            {
+                CaptureProc.Start();
+                ProcessManagement.GetInstance().AddNewProcessID(CaptureProc.Id);
+                OnRunning();
+            }
         }
+
         protected abstract void OnStart();
         protected abstract void OnStop();
         protected abstract void OnResume();
@@ -132,5 +152,12 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
             CurrentState = LogGuardState.STOP;
         }
 
+        public static StateControllerImpl Current
+        {
+            get
+            {
+                return HighCpu_StateController.Current;
+            }
+        }
     }
 }

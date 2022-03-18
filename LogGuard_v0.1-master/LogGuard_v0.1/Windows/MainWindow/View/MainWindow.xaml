@@ -16,7 +16,7 @@
 						 xmlns:pages="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.Pages"
 						 xmlns:flow="clr-namespace:LogGuard_v0._1.Base.LogGuardFlow"
 						 xmlns:converter="clr-namespace:LogGuard_v0._1.Utils.Converters"
-						 Title="MainWindow"
+						 Title="LogGuard"
 						 Height="820"
 						 Width="1066"
 						 MinHeight="820"
@@ -30,9 +30,6 @@
 	<Window.Resources>
 		<converter:StringToGeoPathConverter x:Key="GeoPathConverter" />
 	</Window.Resources>
-	<!--<Window.DataContext>
-		<Binding Source="{vmh:VMManagerMarkup {x:Type vm:MainWindowViewModel}}" />
-	</Window.DataContext>-->
 
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -50,6 +47,7 @@
 			</Grid.RowDefinitions>
 			<ListView BorderThickness="0"
 					  Grid.Row="1"
+					  SelectedIndex="{Binding SelectedPageIndex}"
 					  Background="{StaticResource Background_Level2}">
 				<ListView.ItemContainerStyle>
 					<Style TargetType="ListViewItem">
@@ -135,7 +133,8 @@
 		
 		<Frame Grid.Column="1"
 			   Grid.RowSpan="3"
+			   NavigationUIVisibility="Hidden"
 			   x:Name="mainFrame"
-			   Source="{Binding }" />
+			   Source="{Binding CurrentPageSource}" />
 	</Grid>
 </lgWindow:LogGuardWindow>

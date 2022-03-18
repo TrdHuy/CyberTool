@@ -27,13 +27,10 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
 
         protected override void OnRunning()
         {
-            var proc = CreateProcess();
 
             try
             {
-                proc.Start();
-                ProcessManagement.GetInstance().AddNewProcessID(proc.Id);
-
+                
                 if (PreviousState == LogGuardState.NONE 
                     || PreviousState == LogGuardState.STOP)
                 {
@@ -52,7 +49,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
                 /// 
                 /// </summary>
 
-                while ((line = proc.StandardOutput.ReadLine()) != null)
+                while ((line = CaptureProc.StandardOutput.ReadLine()) != null)
                 {
                     lock (SynchronizeStateObject)
                     {
@@ -65,18 +62,12 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
                         break;
                 }
                 #endregion
-
-                if (!proc.HasExited)
-                    proc.Kill();
             }
             catch (Exception e)
             {
             }
             finally
             {
-                //StopAllActivities();
-                proc.Dispose();
-                proc.Close();
             }
         }
 

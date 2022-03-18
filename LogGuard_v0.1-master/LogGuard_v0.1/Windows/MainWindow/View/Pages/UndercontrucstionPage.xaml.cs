@@ -1,5 +1,4 @@
-﻿using LogGuard_v0._1.AppResources.Controls.LogGPages;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,11 +16,11 @@ using System.Windows.Shapes;
 namespace LogGuard_v0._1.Windows.MainWindow.View.Pages
 {
     /// <summary>
-    /// Interaction logic for LogGuard.xaml
+    /// Interaction logic for UndercontrucstionPage.xaml
     /// </summary>
-    public partial class LogGuard : LogGPage
+    public partial class UndercontrucstionPage : Page
     {
-        public LogGuard()
+        public UndercontrucstionPage()
         {
             InitializeComponent();
         }

@@ -292,6 +292,8 @@
 										 Grid.ColumnSpan="3"
 										 Margin="20,8,8,8">
 									<TextBlock x:Name="SubContentTitleText"
+											   FontWeight="Bold"
+											   FontFamily="Calibri"
 											   Foreground="{StaticResource Foreground_Level2}"
 											   Text="{TemplateBinding Title}"
 											   TextAlignment="Center" />

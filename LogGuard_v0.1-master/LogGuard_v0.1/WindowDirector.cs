@@ -1,5 +1,5 @@
-﻿using LogGuard_v0._1.MVVM.View.Windows;
-using LogGuard_v0._1.Utils;
+﻿using LogGuard_v0._1.Utils;
+using LogGuard_v0._1.Windows.FloatinWindow;
 using LogGuard_v0._1.Windows.MainWindow.View;
 using System;
 using System.Windows;

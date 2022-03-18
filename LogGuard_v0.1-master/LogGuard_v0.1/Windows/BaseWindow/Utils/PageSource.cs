@@ -9,6 +9,7 @@ namespace LogGuard_v0._1.Windows.BaseWindow.Utils
     public enum PageSource
     {
         NONE = -1,
-        LOG_GUARD_PAGE = 1000
+        LOG_GUARD_PAGE = 1000,
+        UNDER_CONSTRUCTION_PAGE = 2000
     }
 }

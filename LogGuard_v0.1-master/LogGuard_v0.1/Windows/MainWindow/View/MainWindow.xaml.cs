@@ -83,7 +83,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.View
             //    RawSource.Add(x);
             //}
             //LogView.LogWatcherItemsSource = RawSource;
-            mainFrame.Source = new Uri("/LogGuard_v0.1;component/Windows/MainWindow/View/Pages/LogGuard.xaml", UriKind.Relative);
+            //mainFrame.Source = new Uri("/LogGuard_v0.1;component/Windows/MainWindow/View/Pages/LogGuard.xaml", UriKind.Relative);
         }
     }
 }

@@ -1,0 +1,34 @@
+﻿<Page x:Class="LogGuard_v0._1.Windows.MainWindow.View.Pages.UndercontrucstionPage"
+	  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	  xmlns:local="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.Pages"
+	  xmlns:logguard="clr-namespace:LogGuard_v0._1.LogGuard.Control"
+	  xmlns:hpss="clr-namespace:HPSolutionCCDevPackage.netFramework;assembly=HPSolutionCCDevPackage.netFramework"
+	  xmlns:uc="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.UserControls"
+	  xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages"
+	  xmlns:vmh="clr-namespace:LogGuard_v0._1.Utils.ViewModelHelper"
+	  mc:Ignorable="d"
+	  d:DesignHeight="820"
+	  d:DesignWidth="883.714"
+	  Title="UndercontrucstionPage">
+	<Grid Background="{StaticResource Background_Level2}">
+		<StackPanel Orientation="Vertical"
+					VerticalAlignment="Center">
+			<Path Fill="{StaticResource Foreground_Level2}"
+				  Height="200"
+				  Width="200"
+				  Stretch="Uniform"
+				  Data="{Binding Source={StaticResource UnderContructionPathGeomerty}}" />
+			<Label Content="Page under construction"
+				   HorizontalAlignment="Center"
+				   FontSize="40"
+				   Padding="0"
+				   FontWeight="Bold"
+				   Foreground="{StaticResource Foreground_Level2}"
+				   FontFamily="Calibri" />
+		</StackPanel>
+		
+	</Grid>
+</Page>

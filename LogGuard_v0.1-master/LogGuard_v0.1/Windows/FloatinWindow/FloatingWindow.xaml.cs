@@ -13,7 +13,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace LogGuard_v0._1.MVVM.View.Windows
+namespace LogGuard_v0._1.Windows.FloatinWindow
 {
     /// <summary>
     /// Interaction logic for FloatingWindow.xaml

@@ -27,7 +27,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action.Types
         {
             base.ExecuteCommand();
             LGPViewModel.CurrentLogGuardState = Base.LogGuardFlow.LogGuardState.STOP;
-            HighCpu_StateController.Current.Stop();
+            StateControllerImpl.Current.Stop();
         }
 
 

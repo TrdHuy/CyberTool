@@ -37,43 +37,24 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action.Types
         {
             base.ExecuteCommand();
 
-            if (HighCpu_StateController.Current.CurrentState == LogGuardState.NONE
-                || HighCpu_StateController.Current.CurrentState == LogGuardState.STOP)
+            if (StateControllerImpl.Current.CurrentState == LogGuardState.NONE
+                || StateControllerImpl.Current.CurrentState == LogGuardState.STOP)
             {
                 LGPViewModel.CurrentLogGuardState = LogGuardState.RUNNING;
-                HighCpu_StateController.Current.Start();
+                StateControllerImpl.Current.Start();
             }
-            else if (HighCpu_StateController.Current.CurrentState == LogGuardState.RUNNING)
+            else if (StateControllerImpl.Current.CurrentState == LogGuardState.RUNNING)
             {
                 LGPViewModel.CurrentLogGuardState = LogGuardState.PAUSING;
-                HighCpu_StateController.Current.Pause();
+                StateControllerImpl.Current.Pause();
             }
-            else if (HighCpu_StateController.Current.CurrentState == LogGuardState.PAUSING)
+            else if (StateControllerImpl.Current.CurrentState == LogGuardState.PAUSING)
             {
                 LGPViewModel.CurrentLogGuardState = LogGuardState.RUNNING;
 
-                HighCpu_StateController.Current.Resume();
+                StateControllerImpl.Current.Resume();
             }
-
-
-            //if (LowCpu_StateController.Current.CurrentState == LogGuardState.NONE
-            //    || LowCpu_StateController.Current.CurrentState == LogGuardState.STOP)
-            //{
-            //    MSWViewModel.CurrentLogGuardState = LogGuardState.RUNNING;
-            //    LowCpu_StateController.Current.Start();
-            //}
-            //else if (LowCpu_StateController.Current.CurrentState == LogGuardState.RUNNING)
-            //{
-            //    MSWViewModel.CurrentLogGuardState = LogGuardState.PAUSING;
-            //    LowCpu_StateController.Current.Pause();
-            //}
-            //else if (LowCpu_StateController.Current.CurrentState == LogGuardState.PAUSING)
-            //{
-            //    MSWViewModel.CurrentLogGuardState = LogGuardState.RUNNING;
-
-            //    LowCpu_StateController.Current.Resume();
-            //}
-
+           
         }
 
 

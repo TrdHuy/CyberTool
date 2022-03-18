@@ -39,11 +39,12 @@ namespace LogGuard_v0._1.Utils.ViewModelHelper
             // if null mean this view model is the most parent
             if(ParentDataContextType == null)
             {
+                var dataContext = Activator.CreateInstance(DataContextType);
+
                 if (ParentDataContextInstanceCache.ContainsKey(DataContextType))
                 {
-                    return ParentDataContextInstanceCache[DataContextType];
+                    ParentDataContextInstanceCache.Remove(DataContextType);
                 }
-                var dataContext = Activator.CreateInstance(DataContextType);
                 ParentDataContextInstanceCache.Add(DataContextType, dataContext);
                 return dataContext;
             }
@@ -56,6 +57,11 @@ namespace LogGuard_v0._1.Utils.ViewModelHelper
                 }
                 var parentInCache = ParentDataContextInstanceCache[ParentDataContextType];
                 var childContext = Activator.CreateInstance(DataContextType, parentInCache);
+
+                if (ParentDataContextInstanceCache.ContainsKey(DataContextType))
+                {
+                    ParentDataContextInstanceCache.Remove(DataContextType);
+                }
                 ParentDataContextInstanceCache.Add(DataContextType, childContext);
                 return childContext;
             }

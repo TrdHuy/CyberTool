@@ -256,6 +256,7 @@
 										Grid.Row="1"
 										Offset="12"
 										StrokeThickness="15"
+										MaxWidth="220"
 										Value="{Binding LogValue}"
 										Maximum="100"
 										DetailContent="{Binding DetailContent}"

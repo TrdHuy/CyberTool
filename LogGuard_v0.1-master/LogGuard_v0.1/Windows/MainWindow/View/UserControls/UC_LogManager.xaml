@@ -4,7 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control"
-			 xmlns:vm="clr-namespace:LogGuard_v0._1.MVVM.ViewModels"
+			 xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCLogManager"
 			 mc:Ignorable="d"
 			 d:DesignHeight="345"
 			 d:DesignWidth="247"

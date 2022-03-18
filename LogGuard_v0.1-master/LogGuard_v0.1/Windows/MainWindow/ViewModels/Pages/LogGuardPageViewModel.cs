@@ -3,6 +3,7 @@ using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Implement.Device;
 using LogGuard_v0._1.Implement.LogGuardFlow.RunThreadConfig;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceManager;
+using LogGuard_v0._1.Implement.LogGuardFlow.StateController;
 using LogGuard_v0._1.Utils;
 using LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher;
 using System;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
 {
-    public class LogGuardPageViewModel : BaseViewModel, ISourceHolder
+    public class LogGuardPageViewModel : BaseViewModel, ISourceHolder, IPageViewModel
     {
 
         private RangeObservableCollection<LogWatcherItemViewModel> _logItemVMs;
@@ -151,9 +152,19 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
             }
             SelectedCmdIndex = 0;
         }
-        ~LogGuardPageViewModel()
+
+        public void OnUnloaded()
         {
+            SourceManagerImpl.Current.ClearSource();
+            StateControllerImpl.Current.Stop();
+        }
+
+        public void OnLoaded()
+        {
+            int a = 1;
 
         }
+
+        
     }
 }
