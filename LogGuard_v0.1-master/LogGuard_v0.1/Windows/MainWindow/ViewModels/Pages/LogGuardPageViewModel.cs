@@ -72,19 +72,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
         [Bindable(true)]
         public MSW_LogWatcherControlButtonCommandVM CommandViewModel { get; set; }
 
-        [Bindable(true)]
-        public RangeObservableCollection<LogWatcherItemViewModel> LogItemVMs
-        {
-            get
-            {
-                return _logItemVMs;
-            }
-            set
-            {
-                _logItemVMs = value;
-                InvalidateOwn();
-            }
-        }
 
         [Bindable(true)]
         public LogGuardState CurrentLogGuardState
@@ -131,7 +118,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
         public LogGuardPageViewModel()
         {
             CommandViewModel = new MSW_LogWatcherControlButtonCommandVM(this);
-            LogItemVMs = new RangeObservableCollection<LogWatcherItemViewModel>();
             SourceManagerImpl.Current.AddSourceHolder(this);
             InitDeviceCmdItemsList();
         }
@@ -139,7 +125,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
         public LogGuardPageViewModel(BaseViewModel parentVM) : base(parentVM)
         {
             CommandViewModel = new MSW_LogWatcherControlButtonCommandVM(this);
-            LogItemVMs = new RangeObservableCollection<LogWatcherItemViewModel>();
             SourceManagerImpl.Current.AddSourceHolder(this);
             InitDeviceCmdItemsList();
         }
@@ -158,7 +143,8 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
             // Stop before clear
             StateControllerImpl.Current.Stop();
             SourceManagerImpl.Current.ClearSource();
-            foreach(var child in ChildModels)
+            SourceManagerImpl.Current.RemoveSourceHolder(this);
+            foreach (var child in ChildModels)
             {
                 child.OnDestroy();
             }

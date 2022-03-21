@@ -112,8 +112,14 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         {
             _sourceHolder.Add(holder);
             holder.ItemsSource = DisplaySource;
-
         }
+
+        public void RemoveSourceHolder(ISourceHolder holder)
+        {
+            _sourceHolder.Remove(holder);
+            holder.ItemsSource = null;
+        }
+
 
         public int ErrorItemsCount()
         {

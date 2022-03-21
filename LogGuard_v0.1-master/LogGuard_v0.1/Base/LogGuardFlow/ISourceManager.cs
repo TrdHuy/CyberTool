@@ -30,6 +30,7 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         int VerboseItemsCount();
 
         void AddSourceHolder(ISourceHolder holder);
+        void RemoveSourceHolder(ISourceHolder holder);
         void AddItem(LogWatcherItemViewModel model);
         void AddItem(string line);
         void RemoveItem(LogWatcherItemViewModel model);

@@ -40,8 +40,16 @@ namespace LogGuard_v0._1.LogGuard.Control
 
         public void SetCacheElements(IEnumerable newVal)
         {
-            CacheElements = newVal.OfType<ILogWatcherElements>();
-            CurrentSourceCount = CacheElements.Count();
+            if (newVal == null)
+            {
+                CacheElements = null;
+                CurrentSourceCount = 0;
+            }
+            else
+            {
+                CacheElements = newVal.OfType<ILogWatcherElements>();
+                CurrentSourceCount = CacheElements.Count();
+            }
         }
 
         public void HandleLogWatcherItemsSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
