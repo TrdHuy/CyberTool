@@ -1,4 +1,5 @@
 ﻿using LogGuard_v0._1.Base.Observable;
+using LogGuard_v0._1.Base.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,10 +11,11 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Base.ViewModel
 {
-    public class BaseViewModel : BaseObservable<object>, INotifyPropertyChanged
+    public class BaseViewModel : BaseObservable<object>, INotifyPropertyChanged, IDestroyable
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public BaseViewModel ParentsModel { get; private set; }
+        public List<BaseViewModel> ChildModels { get; private set; } = new List<BaseViewModel>();
         public BaseViewModel()
         {
         }
@@ -21,6 +23,14 @@ namespace LogGuard_v0._1.Base.ViewModel
         public BaseViewModel(BaseViewModel parent)
         {
             ParentsModel = parent;
+        }
+
+        public void AddChild(BaseViewModel child)
+        {
+            if (child != null)
+            {
+                ChildModels.Add(child);
+            }
         }
 
         public void OnChanged(object viewModel, string propertyName)
@@ -61,5 +71,8 @@ namespace LogGuard_v0._1.Base.ViewModel
             }
         }
 
+        public virtual void OnDestroy()
+        {
+        }
     }
 }

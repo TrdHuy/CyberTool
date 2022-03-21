@@ -1,6 +1,9 @@
-﻿using LogGuard_v0._1.Base.LogGuardFlow;
+﻿using LogGuard_v0._1.Base.AsyncTask;
+using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Base.ViewModel;
+using LogGuard_v0._1.Implement.FileHelper;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceManager;
+using LogGuard_v0._1.Implement.LogGuardFlow.StateController;
 using LogGuard_v0._1.Utils;
 using LogGuard_v0._1.Windows.BaseWindow.Models;
 using LogGuard_v0._1.Windows.BaseWindow.Utils;
@@ -32,18 +35,23 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels
         };
 
         [Bindable(true)]
-        public int SelectedPageIndex {
+        public int SelectedPageIndex
+        {
             get
             {
                 return _selectedPageIndex;
             }
             set
             {
-                _selectedPageIndex = value;
-                _pageHost.UpdateCurrentPageSource(_lstItemPageSourceMap[value]);
-                InvalidateOwn();
+                if (IsShouldChangePage(_selectedPageIndex, value))
+                {
+                    _selectedPageIndex = value;
+                    _pageHost.UpdateCurrentPageSource(_lstItemPageSourceMap[value]);
+                    InvalidateOwn();
+                }
             }
         }
+
 
         [Bindable(true)]
         public Uri CurrentPageSource
@@ -70,5 +78,51 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels
         {
             Invalidate("CurrentPageSource");
         }
+
+        private bool IsShouldChangePage(int oleValue, int newValue)
+        {
+            if (_lstItemPageSourceMap[oleValue] == PageSource.LOG_GUARD_PAGE)
+            {
+                if (SourceManagerImpl.Current.RawItemsCount() > 0)
+                {
+                    var mesResult = App.Current.ShowEscapeCaptureLogWarningBox();
+                    if (mesResult == MessageWindow.LogGuardMesBoxResult.No)
+                    {
+                        return false;
+                    }
+                    else if (mesResult == MessageWindow.LogGuardMesBoxResult.Continue)
+                    {
+                        StateControllerImpl.Current.Stop();
+                        return true;
+                    }
+                    else if (mesResult == MessageWindow.LogGuardMesBoxResult.Yes)
+                    {
+                        StateControllerImpl.Current.Stop();
+                        var savePath = App.Current.OpenSaveFileDialogWindow();
+
+                        var resMes = App.Current.OpenWaitingTaskBox("Saving!"
+                            , "Please wait!"
+                            , async () =>
+                                {
+                                    var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
+                                    FileHelperImpl.Current.ExportLinesToFile(savePath, SourceManagerImpl.Current.RawLog);
+                                    await Task.Delay(1000);
+                                    return result;
+                                }
+                            , null
+                            , null
+                            , 3000);
+
+                        if (resMes == WaitingWindow.LogGuardWaitingBoxResult.cancel)
+                        {
+                            FileHelperImpl.Current.DeleteLogFile(savePath);
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+
     }
 }

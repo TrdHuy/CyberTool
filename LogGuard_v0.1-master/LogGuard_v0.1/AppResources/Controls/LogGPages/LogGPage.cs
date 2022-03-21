@@ -1,4 +1,5 @@
 ﻿using LogGuard_v0._1.Base.ViewModel;
+using LogGuard_v0._1.Base.ViewModel.ViewModelHelper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +19,12 @@ namespace LogGuard_v0._1.AppResources.Controls.LogGPages
 
         private void LogGPage_Unloaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            var pageVM = DataContext as IPageViewModel;
-            pageVM?.OnUnloaded();
+            VMManagerMarkupExtension.OnPageViewModelUnloaded(DataContext?.GetType());
         }
 
         private void LogGPage_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            var pageVM = DataContext as IPageViewModel;
-            pageVM?.OnLoaded();
+            VMManagerMarkupExtension.OnPageViewModelLoaded(DataContext?.GetType());
         }
     }
 }

@@ -5,7 +5,7 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control"
 			 mc:Ignorable="d"
-			 xmlns:vmh="clr-namespace:LogGuard_v0._1.Utils.ViewModelHelper"
+			 xmlns:vmh="clr-namespace:LogGuard_v0._1.Base.ViewModel.ViewModelHelper"
 			 xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls"
 			 xmlns:vmp="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages"
 			 d:DesignHeight="309"
@@ -16,7 +16,7 @@
 		<Binding Source="{vmh:VMManagerMarkup {x:Type vm:AdvanceFilterUCViewModel},
 			{x:Type vmp:LogGuardPageViewModel}}" />
 	</UserControl.DataContext>
-	
+
 	<Border Background="{StaticResource Background_Level2}"
 			CornerRadius="{StaticResource DefaultPanelCornerRadius}">
 		<Grid>
@@ -32,17 +32,17 @@
 				<RowDefinition Height="1" />
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
-			<Grid Grid.Row="2"
-				  Background="{StaticResource HorizontalFench1pixel_Background}" />
+			<Rectangle Grid.Row="2"
+					   Fill="{StaticResource HorizontalFench1pixel_Background}" />
 
-			<Grid Grid.Row="0"
-				  Grid.RowSpan="2"
-				  Grid.Column="1"
-				  Background="{StaticResource VerticalFench1pixel_Background}" />
+			<Rectangle Grid.Row="0"
+					   Grid.RowSpan="2"
+					   Grid.Column="1"
+					   Fill="{StaticResource VerticalFench1pixel_Background}" />
 
-			<Grid Grid.Row="3"
-				  Grid.Column="1"
-				  Background="{StaticResource VerticalFench1pixel_Background}" />
+			<Rectangle Grid.Row="3"
+					   Grid.Column="1"
+					   Fill="{StaticResource VerticalFench1pixel_Background}" />
 
 
 			<Grid Margin="10,10,20,10"
@@ -176,7 +176,7 @@
 					<RowDefinition Height="0.4*" />
 					<RowDefinition Height="0.6*" />
 				</Grid.RowDefinitions>
-				
+
 
 				<StackPanel Orientation="Horizontal">
 					<Label Content="{Binding CurrentLogLevel}"
@@ -265,17 +265,17 @@
 
 					<ctrl:RadialProgressBar.BgPathBackground>
 						<SolidColorBrush x:Name="RadialPBBrush"
-										 Color="#33CAF1E1"/>
+										 Color="#33CAF1E1" />
 					</ctrl:RadialProgressBar.BgPathBackground>
 					<ctrl:RadialProgressBar.PercentContForeground>
 						<SolidColorBrush x:Name="RadialPBPercentContForegroundBrush"
-										 Color="#FFCAF1E1"/>
+										 Color="#FFCAF1E1" />
 					</ctrl:RadialProgressBar.PercentContForeground>
 					<ctrl:RadialProgressBar.ValPathBackground>
 						<SolidColorBrush x:Name="RadialPBValPathBackgroundBrush"
 										 Color="#FFCAF1E1" />
 					</ctrl:RadialProgressBar.ValPathBackground>
-					
+
 					<ctrl:RadialProgressBar.RenderTransform>
 						<TranslateTransform x:Name="RadialPBTranslateTransform"
 											X="0" />

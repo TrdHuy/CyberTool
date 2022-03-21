@@ -50,6 +50,8 @@ namespace LogGuard_v0._1.Utils
             {
                 Process proc = Process.GetProcessById(pid);
                 proc.Kill();
+                proc.Dispose();
+                proc.Close();
             }
             catch (ArgumentException)
             {

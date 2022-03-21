@@ -12,7 +12,6 @@
 						 xmlns:hpss="clr-namespace:HPSolutionCCDevPackage.netFramework;assembly=HPSolutionCCDevPackage.netFramework"
 						 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 						 xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels"
-						 xmlns:vmh="clr-namespace:LogGuard_v0._1.Utils.ViewModelHelper"
 						 xmlns:pages="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.Pages"
 						 xmlns:flow="clr-namespace:LogGuard_v0._1.Base.LogGuardFlow"
 						 xmlns:converter="clr-namespace:LogGuard_v0._1.Utils.Converters"

@@ -42,6 +42,13 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
             _syncObject = new object();
             CurrentState = LogGuardState.STOP;
             PreviousState = LogGuardState.NONE;
+            App.Current.OnMainWindowClosing += StateControllerMainWindowClosing;
+        }
+
+        private void StateControllerMainWindowClosing(object sender, EventArgs e)
+        {
+            // Force stop when close main window
+            Stop();
         }
 
         public void Pause()

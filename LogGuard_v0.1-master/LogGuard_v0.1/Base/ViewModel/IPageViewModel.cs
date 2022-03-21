@@ -8,8 +8,18 @@ namespace LogGuard_v0._1.Base.ViewModel
 {
     internal interface IPageViewModel
     {
-        void OnUnloaded();
+        /// <summary>
+        /// Occur when the page was unloaded
+        /// </summary>
+        /// <returns> 
+        ///     true if should remove all the child models in cache
+        ///     false if not remove all child models in cache
+        /// </returns>
+        bool OnUnloaded();
 
+        /// <summary>
+        /// Occur when the page was loaded
+        /// </summary>
         void OnLoaded();
     }
 }

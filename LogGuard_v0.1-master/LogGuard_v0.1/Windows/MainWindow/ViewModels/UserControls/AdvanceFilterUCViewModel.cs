@@ -205,6 +205,16 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
             SourceManagerImpl.Current.SourceCollectionChanged += OnLogSourceCollectionChanged;
         }
 
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            LogCount = 0;
+            LogValue = 0;
+            DetailContent = _currentLogLevelShorcutS + ": " + 0 + " line(s)";
+            ExtraContent = "Total: " + LogCount + " line(s)";
+            SourceManagerImpl.Current.SourceCollectionChanged -= OnLogSourceCollectionChanged;
+        }
+
         private void OnLogSourceCollectionChanged(object sender)
         {
             UpdateChartcInfo();

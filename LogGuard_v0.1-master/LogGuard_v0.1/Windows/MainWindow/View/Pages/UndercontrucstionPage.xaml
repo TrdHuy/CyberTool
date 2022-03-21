@@ -8,7 +8,6 @@
 	  xmlns:hpss="clr-namespace:HPSolutionCCDevPackage.netFramework;assembly=HPSolutionCCDevPackage.netFramework"
 	  xmlns:uc="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.UserControls"
 	  xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages"
-	  xmlns:vmh="clr-namespace:LogGuard_v0._1.Utils.ViewModelHelper"
 	  mc:Ignorable="d"
 	  d:DesignHeight="820"
 	  d:DesignWidth="883.714"

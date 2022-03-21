@@ -63,8 +63,8 @@ namespace LogGuard_v0._1.Base.UIEventHandler.Litstener
 
         /// <summary>
         /// Update the action cache
-        /// Check for the action is completed or cancled or not
-        /// if it was cancled or completed, unregister it from the cache
+        /// Check for the action is completed or canceled or not
+        /// if it was canceled or completed, unregister it from the cache
         /// </summary>
         /// <param name="action"></param>
         private void HelperUpdate(IAction action)

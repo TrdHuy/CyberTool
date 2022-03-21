@@ -43,6 +43,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -64,9 +65,13 @@
     <Compile Include="AppResources\Controls\LogGPages\LogGPage.cs" />
     <Compile Include="AppResources\Controls\LogGWindows\LogGuardWindow.cs" />
     <Compile Include="Base\AndroidLog\LogParser\AbstractLogParser.cs" />
+    <Compile Include="Base\AsyncTask\AsyncTask.cs" />
+    <Compile Include="Base\AsyncTask\AsyncTaskResult.cs" />
+    <Compile Include="Base\AsyncTask\IAsyncTask.cs" />
     <Compile Include="Base\Command\BaseCommandImpl.cs" />
     <Compile Include="Base\Device\IDeviceCmdExecuter.cs" />
     <Compile Include="Base\AndroidLog\ILogInfoManager.cs" />
+    <Compile Include="Base\FileHelper\IFileHelper.cs" />
     <Compile Include="Base\LogGuardFlow\IRunThreadConfig.cs" />
     <Compile Include="Base\LogGuardFlow\ISourceHolder.cs" />
     <Compile Include="Base\LogGuardFlow\ISourceManager.cs" />
@@ -96,11 +101,13 @@
     <Compile Include="Base\ViewModel\BaseButtonCommandViewModel.cs" />
     <Compile Include="Base\ViewModel\BaseViewModel.cs" />
     <Compile Include="Base\ViewModel\IPageViewModel.cs" />
+    <Compile Include="Base\ViewModel\ViewModelHelper\VMManagerMarkupExtension.cs" />
     <Compile Include="Implement\AndroidLog\LogInfoManagerImpl.cs" />
     <Compile Include="Implement\AndroidLog\LogParser\AdbCmdLogParser.cs" />
     <Compile Include="Implement\AndroidLog\LogParser\TimeAdbCmdLogParser.cs" />
     <Compile Include="Implement\Device\DeviceCmdContact.cs" />
     <Compile Include="Implement\Device\DeviceCmdExecuterImpl.cs" />
+    <Compile Include="Implement\FileHelper\FileHelperImpl.cs" />
     <Compile Include="Implement\LogGuardFlow\RunThreadConfig\RunThreadConfigImpl.cs" />
     <Compile Include="Implement\LogGuardFlow\SourceManager\SourceManagerImpl.cs" />
     <Compile Include="Implement\LogGuardFlow\StateController\HighCpu_StateController.cs" />
@@ -126,7 +133,6 @@
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\ProcessManagement.cs" />
     <Compile Include="Utils\RangeObservableCollection.cs" />
-    <Compile Include="Utils\ViewModelHelper\VMManagerMarkupExtension.cs" />
     <Compile Include="WindowDirector.cs" />
     <Compile Include="Windows\BaseWindow\Models\PageVO.cs" />
     <Compile Include="Windows\BaseWindow\Utils\BasePageController.cs" />
@@ -168,6 +174,12 @@
     </Compile>
     <Compile Include="Windows\MainWindow\View\UserControls\UC_LogManager.xaml.cs">
       <DependentUpon>UC_LogManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MessageWindow\MessageBox.xaml.cs">
+      <DependentUpon>MessageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WaitingWindow\WaitingBox.xaml.cs">
+      <DependentUpon>WaitingBox.xaml</DependentUpon>
     </Compile>
     <Page Include="AppResources\Controls\LogGWindows\LogGuardWindow.xaml">
       <SubType>Designer</SubType>
@@ -251,6 +263,14 @@
     <Page Include="Windows\MainWindow\View\UserControls\UC_LogManager.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\MessageWindow\MessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\WaitingWindow\WaitingBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

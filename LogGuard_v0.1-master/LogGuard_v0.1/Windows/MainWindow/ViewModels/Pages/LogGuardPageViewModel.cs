@@ -153,10 +153,16 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
             SelectedCmdIndex = 0;
         }
 
-        public void OnUnloaded()
+        public bool OnUnloaded()
         {
-            SourceManagerImpl.Current.ClearSource();
+            // Stop before clear
             StateControllerImpl.Current.Stop();
+            SourceManagerImpl.Current.ClearSource();
+            foreach(var child in ChildModels)
+            {
+                child.OnDestroy();
+            }
+            return true;
         }
 
         public void OnLoaded()

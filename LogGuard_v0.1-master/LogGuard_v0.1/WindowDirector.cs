@@ -1,7 +1,12 @@
-﻿using LogGuard_v0._1.Utils;
+﻿using LogGuard_v0._1.Base.AsyncTask;
+using LogGuard_v0._1.Utils;
 using LogGuard_v0._1.Windows.FloatinWindow;
 using LogGuard_v0._1.Windows.MainWindow.View;
+using LogGuard_v0._1.Windows.MessageWindow;
+using LogGuard_v0._1.Windows.WaitingWindow;
 using System;
+using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -46,7 +51,6 @@ namespace LogGuard_v0._1
         public WindowDirector()
         {
             MainScreenWindow.Closing += MainScreenWindow_Closing;
-
         }
 
         private void MainScreenWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -59,6 +63,44 @@ namespace LogGuard_v0._1
             MainScreenWindow.Show();
             _displayStatus = WindowDisplayStatus.OnMainScreen;
         }
+
+        public LogGuardMesBoxResult ShowErrorBox(string error)
+        {
+            Windows.MessageWindow.MessageBox mesBox = new Windows.MessageWindow.MessageBox(
+                "Error",
+                Application.Current.Resources["QuestionPathGeomerty"] as string,
+                error,
+                "",
+                "",
+                "Continue",
+                "",
+                MainScreenWindow
+                );
+            return mesBox.Show();
+        }
+        public LogGuardMesBoxResult ShowEscapeCaptureLogWarningBox()
+        {
+            Windows.MessageWindow.MessageBox mesBox = new Windows.MessageWindow.MessageBox(
+                "Warning",
+                Application.Current.Resources["QuestionPathGeomerty"] as string,
+                "Do you want to save the captured logs?",
+                "Yes",
+                "No",
+                "Continue without saving",
+                "",
+                MainScreenWindow
+                );
+
+
+            return mesBox.Show();
+        }
+
+        public LogGuardWaitingBoxResult OpenWaitingTaskBox(string content, string title, Func<Task<AsyncTaskResult>> asyncTask, Func<bool> canExecute = null, Action<AsyncTaskResult> callback = null, long delayTime = 0)
+        {
+            var newWaitingBox = new WaitingBox(content, title, asyncTask, canExecute, callback, delayTime);
+            return newWaitingBox.Show();
+        }
+
         public void ShowPopupCustomControlWindow(ContentControl cc, UIElement opener, OwnerWindow ownerWindow = OwnerWindow.Default, double width = 500, double height = 400)
         {
             if (_displayStatus == WindowDisplayStatus.OnPopupCustomControl)
@@ -84,6 +126,17 @@ namespace LogGuard_v0._1
 
             StartDispandCCAnim(cc, _floatingWindow, 200);
 
+        }
+
+        public string OpenSaveLogFileDialogWindow()
+        {
+            System.Windows.Forms.SaveFileDialog saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            saveFileDialog1.Filter = "Text files (*.txt)|*.txt|Log files (*.log)|*.log";
+            saveFileDialog1.Title = "Save an log File";
+            saveFileDialog1.FileName = "Log_" + DateTime.Now.ToString("MM-dd-yyyy_HH-mm-ss");
+
+            saveFileDialog1.ShowDialog();
+            return saveFileDialog1.FileName;
         }
         private void StartDispandCCAnim(ContentControl cc, FloatingWindow floatWindow, int animTime)
         {
@@ -145,5 +198,9 @@ namespace LogGuard_v0._1
             expandSB.Begin(cc);
 
         }
+
+
     }
+
+
 }
