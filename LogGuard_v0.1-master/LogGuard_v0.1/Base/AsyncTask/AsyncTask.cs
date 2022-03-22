@@ -18,7 +18,9 @@ namespace LogGuard_v0._1.Base.AsyncTask
 
         private Action<AsyncTaskResult> _callback;
         private Func<Task<AsyncTaskResult>> _execute;
+        private Func<CancellationToken, Task<AsyncTaskResult>> _cancelableExecute;
         private Func<bool> _canExecute;
+        private CancellationTokenSource _cancellationTokenSource;
 
         public long DelayTime { get => _delayTime; }
         public AsyncTaskResult Result { get => _result; }
@@ -26,6 +28,8 @@ namespace LogGuard_v0._1.Base.AsyncTask
         public Func<bool> CanExecute => _canExecute;
 
         public Func<Task<AsyncTaskResult>> Execute => _execute;
+
+        public Func<CancellationToken, Task<AsyncTaskResult>> CancelableExecute => _cancelableExecute;
 
         public Action<AsyncTaskResult> CallbackHandler => _callback;
 
@@ -81,6 +85,11 @@ namespace LogGuard_v0._1.Base.AsyncTask
             InitializeAsyncTask(execute, canExecute, callback, delayTime);
         }
 
+        public AsyncTask(Func<CancellationToken, Task<AsyncTaskResult>> cancelablExecute, Func<bool> canExecute, Action<AsyncTaskResult> callback, long delayTime, CancellationTokenSource cancellationTokenSource)
+        {
+            InitializeAsyncTask(cancelablExecute, canExecute, callback, delayTime, cancellationTokenSource);
+        }
+
         private void InitializeAsyncTask(
             Func<Task<AsyncTaskResult>> execute,
             Func<bool> canExecute = null,
@@ -94,8 +103,21 @@ namespace LogGuard_v0._1.Base.AsyncTask
             _result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
         }
 
+        private void InitializeAsyncTask(
+            Func<CancellationToken, Task<AsyncTaskResult>> cancelablExecute,
+            Func<bool> canExecute = null,
+            Action<AsyncTaskResult> callback = null,
+            long delayTime = 0,
+            CancellationTokenSource cancellationTokenSource = null)
+        {
+            _cancelableExecute = cancelablExecute;
+            _canExecute = canExecute;
+            _callback = callback;
+            _delayTime = delayTime;
+            _result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
+            _cancellationTokenSource = cancellationTokenSource;
+        }
 
-        private static Stopwatch AsynTaskExecuteWatcher;
 
         public event IsCompletedChangedHandler OnCompletedChanged;
         public event IscanceldChangedHandler OncanceldChanged;
@@ -109,7 +131,7 @@ namespace LogGuard_v0._1.Base.AsyncTask
 
             try
             {
-                AsynTaskExecuteWatcher = Stopwatch.StartNew();
+                var asynTaskExecuteWatcher = Stopwatch.StartNew();
 
                 var canExecute = asyncTask.CanExecute == null ? true : (bool)asyncTask.CanExecute?.Invoke();
 
@@ -134,8 +156,8 @@ namespace LogGuard_v0._1.Base.AsyncTask
                         asyncTask.IsCanceled = true;
                     }
 
-                    AsynTaskExecuteWatcher.Stop();
-                    long restLoadingTime = asyncTask.DelayTime - AsynTaskExecuteWatcher.ElapsedMilliseconds;
+                    asynTaskExecuteWatcher.Stop();
+                    long restLoadingTime = asyncTask.DelayTime - asynTaskExecuteWatcher.ElapsedMilliseconds;
                     if (restLoadingTime > 0 && !asyncTask.IsCanceled)
                     {
                         try
@@ -171,7 +193,7 @@ namespace LogGuard_v0._1.Base.AsyncTask
 
             try
             {
-                AsynTaskExecuteWatcher = Stopwatch.StartNew();
+                var asynTaskExecuteWatcher = Stopwatch.StartNew();
 
                 var canExecute = asyncTask.CanExecute == null ? true : (bool)asyncTask.CanExecute?.Invoke();
 
@@ -191,8 +213,8 @@ namespace LogGuard_v0._1.Base.AsyncTask
                         asyncTask.IsCanceled = true;
                     }
 
-                    AsynTaskExecuteWatcher.Stop();
-                    long restLoadingTime = asyncTask.DelayTime - AsynTaskExecuteWatcher.ElapsedMilliseconds;
+                    asynTaskExecuteWatcher.Stop();
+                    long restLoadingTime = asyncTask.DelayTime - asynTaskExecuteWatcher.ElapsedMilliseconds;
                     if (restLoadingTime > 0 && !asyncTask.IsCanceled)
                     {
                         await Task.Delay(Convert.ToInt32(restLoadingTime));
@@ -210,6 +232,80 @@ namespace LogGuard_v0._1.Base.AsyncTask
                 asyncTask.IsCompleted = false;
                 asyncTask.IsCanceled = true;
             }
+        }
+
+        public static async void CancelableAsyncExecute(AsyncTask asyncTask)
+        {
+            if (asyncTask == null)
+                return;
+
+            var asyncTaskResult = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
+
+            try
+            {
+                var asynTaskExecuteWatcher = Stopwatch.StartNew();
+
+                var canExecute = asyncTask.CanExecute == null ? true : (bool)asyncTask.CanExecute?.Invoke();
+
+                if (canExecute)
+                {
+                    try
+                    {
+                        asyncTaskResult = await asyncTask.CancelableExecute?.Invoke(asyncTask._cancellationTokenSource.Token);
+                        if (asyncTask._cancellationTokenSource.Token.IsCancellationRequested)
+                        {
+                            throw new OperationCanceledException();
+                        }
+
+                        if (asyncTaskResult != null && asyncTaskResult.MesResult == MessageAsyncTaskResult.Aborted)
+                        {
+                            throw new OperationCanceledException(asyncTaskResult.Messsage);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        asyncTask.IsCanceled = true;
+                    }
+
+                    asynTaskExecuteWatcher.Stop();
+
+                    //
+                    //Console.WriteLine("Execute time = " + asynTaskExecuteWatcher.ElapsedMilliseconds + "(ms)");
+
+                    long restLoadingTime = asyncTask.DelayTime - asynTaskExecuteWatcher.ElapsedMilliseconds;
+                    if (restLoadingTime > 0 && !asyncTask.IsCanceled)
+                    {
+                        try
+                        {
+                            await Task.Delay(Convert.ToInt32(restLoadingTime), asyncTask._cancellationTokenSource.Token);
+                        }
+                        catch
+                        {
+                            asyncTask.IsCanceled = true;
+                        }
+                    }
+                    asyncTask.IsCompleted = true;
+
+                    //asynTaskExecuteWatcher = Stopwatch.StartNew();
+                    asyncTask.CallbackHandler?.Invoke(asyncTaskResult);
+                    //asynTaskExecuteWatcher.Stop();
+                    //Console.WriteLine("Callback time = " + asynTaskExecuteWatcher.ElapsedMilliseconds + "(ms)");
+
+                    asyncTask.IsCompletedCallback = true;
+                }
+
+            }
+            catch (OperationCanceledException)
+            {
+                asyncTask.IsCompletedCallback = false;
+                asyncTask.IsCompleted = false;
+                asyncTask.IsCanceled = true;
+            }
+        }
+
+        public static void CancelAsyncExecute(AsyncTask asyncTask)
+        {
+            asyncTask._cancellationTokenSource?.Cancel();
         }
 
     }

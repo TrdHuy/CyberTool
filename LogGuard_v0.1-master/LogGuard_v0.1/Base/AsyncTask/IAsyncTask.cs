@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Base.AsyncTask
@@ -27,6 +28,12 @@ namespace LogGuard_v0._1.Base.AsyncTask
         /// Triển khai task cho 1 đối tượng  được định nghĩa trước
         /// </summary>
         Func<Task<AsyncTaskResult>> Execute { get; }
+
+        /// <summary>
+        /// Triển khai task cho 1 đối tượng  được định nghĩa trước
+        /// </summary>
+        Func<CancellationToken, Task<AsyncTaskResult>> CancelableExecute { get; }
+
 
         /// <summary>
         /// Xử lý call back sau khi async task được triển khai 

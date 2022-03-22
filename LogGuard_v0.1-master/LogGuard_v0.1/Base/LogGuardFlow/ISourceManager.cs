@@ -18,6 +18,7 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         RangeObservableCollection<LogWatcherItemViewModel> RawSource { get; }
         RangeObservableCollection<LogWatcherItemViewModel> DisplaySource { get; }
         ILogInfoManager LogInfoManager { get; }
+        ISourceFilterManager SourceFilterManager { get; }
         RangeObservableCollection<string> RawLog { get; }
 
         int RawItemsCount();

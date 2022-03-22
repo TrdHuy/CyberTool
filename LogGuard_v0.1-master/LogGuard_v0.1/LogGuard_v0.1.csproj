@@ -73,6 +73,8 @@
     <Compile Include="Base\AndroidLog\ILogInfoManager.cs" />
     <Compile Include="Base\FileHelper\IFileHelper.cs" />
     <Compile Include="Base\LogGuardFlow\IRunThreadConfig.cs" />
+    <Compile Include="Base\LogGuardFlow\ISourceFilter.cs" />
+    <Compile Include="Base\LogGuardFlow\ISourceFilterManager.cs" />
     <Compile Include="Base\LogGuardFlow\ISourceHolder.cs" />
     <Compile Include="Base\LogGuardFlow\ISourceManager.cs" />
     <Compile Include="Base\LogGuardFlow\IStateController.cs" />
@@ -109,6 +111,7 @@
     <Compile Include="Implement\Device\DeviceCmdExecuterImpl.cs" />
     <Compile Include="Implement\FileHelper\FileHelperImpl.cs" />
     <Compile Include="Implement\LogGuardFlow\RunThreadConfig\RunThreadConfigImpl.cs" />
+    <Compile Include="Implement\LogGuardFlow\SourceFilterManager\SourceFilterManagerImpl.cs" />
     <Compile Include="Implement\LogGuardFlow\SourceManager\SourceManagerImpl.cs" />
     <Compile Include="Implement\LogGuardFlow\StateController\HighCpu_StateController.cs" />
     <Compile Include="Implement\LogGuardFlow\StateController\LowCpu_StateController.cs" />
@@ -152,7 +155,8 @@
     <Compile Include="Windows\MainWindow\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\MSW_LogWatcherControlButtonCommandVM.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPageViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\AdvanceFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\AdvanceFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TagFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCLogManager\LogByTeamItemViewModel.cs" />
     <Compile Include="Windows\MainWindow\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

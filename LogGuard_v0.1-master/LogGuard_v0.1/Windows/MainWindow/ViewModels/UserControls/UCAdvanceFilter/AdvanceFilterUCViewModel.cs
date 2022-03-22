@@ -1,4 +1,5 @@
 ﻿using LogGuard_v0._1.Base.ViewModel;
+using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceManager;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
+namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFilter
 {
     public class AdvanceFilterUCViewModel : BaseViewModel
     {
@@ -24,7 +25,9 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
         private bool _isWarningChecked;
         private bool _isFatalChecked;
 
+        private TagFilterUCViewModel _tagFilterVM;
 
+        #region Log measure tool binding area
         [Bindable(true)]
         public string CurrentLogLevel
         {
@@ -99,7 +102,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
                 InvalidateOwn();
             }
         }
-
 
         [Bindable(true)]
         public bool IsInfoChecked
@@ -191,18 +193,42 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
             }
         }
 
+        #endregion
+
+        #region Filter tool binding area
+
+        [Bindable(true)]
+        public TagFilterUCViewModel TagFilterContent
+        {
+            get
+            {
+                return _tagFilterVM;
+            }
+            set
+            {
+                _tagFilterVM = value;
+                InvalidateOwn();
+            }
+        }
+        #endregion
         public AdvanceFilterUCViewModel()
         {
-            IsInfoChecked = true;
-            SourceManagerImpl.Current.SourceCollectionChanged -= OnLogSourceCollectionChanged;
-            SourceManagerImpl.Current.SourceCollectionChanged += OnLogSourceCollectionChanged;
+            Init();
         }
 
         public AdvanceFilterUCViewModel(BaseViewModel baseViewModel) : base(baseViewModel)
         {
+            Init();
+        }
+
+        private void Init()
+        {
             IsInfoChecked = true;
             SourceManagerImpl.Current.SourceCollectionChanged -= OnLogSourceCollectionChanged;
             SourceManagerImpl.Current.SourceCollectionChanged += OnLogSourceCollectionChanged;
+            TagFilterContent = new TagFilterUCViewModel(this);
+
+            SourceFilterManagerImpl.Current.LogTagFilter = TagFilterContent;
         }
 
         public override void OnDestroy()
@@ -220,6 +246,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
             UpdateChartcInfo();
         }
 
+        #region Log measure tool method
         private void UpdateChartcInfo()
         {
             LogCount = (double)SourceManagerImpl.Current.RawItemsCount();
@@ -343,5 +370,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls
                 UpdateChartcInfo();
             }
         }
+
+        #endregion
     }
 }

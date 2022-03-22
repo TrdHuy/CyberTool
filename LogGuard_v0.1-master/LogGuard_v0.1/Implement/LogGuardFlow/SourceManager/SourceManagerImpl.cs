@@ -1,13 +1,18 @@
-﻿using LogGuard_v0._1.Base.Log;
+﻿
+using LogGuard_v0._1.Base.AsyncTask;
+using LogGuard_v0._1.Base.Log;
 using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Implement.AndroidLog;
+using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
 using LogGuard_v0._1.Utils;
 using LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
@@ -20,6 +25,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         private List<ISourceHolder> _sourceHolder;
         private Dictionary<object, int> _logLevelCountMap;
         private RangeObservableCollection<string> _rawLog;
+        private SourceFilterManagerImpl _sourceFilter;
 
         public List<ISourceHolder> SourceHolders { get => _sourceHolder; }
         public RangeObservableCollection<LogWatcherItemViewModel> RawSource => _rawSource;
@@ -28,27 +34,33 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         public RangeObservableCollection<string> RawLog { get => _rawLog; }
 
         public event SourceCollectionChangedHandler SourceCollectionChanged;
+        public ISourceFilterManager SourceFilterManager => _sourceFilter;
+        public static SourceManagerImpl Current
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new SourceManagerImpl();
+                }
+                return _instance;
+            }
+        }
 
         private SourceManagerImpl()
         {
+            _sourceFilter = SourceFilterManagerImpl.Current;
             _rawSource = new RangeObservableCollection<LogWatcherItemViewModel>();
             _displaySource = new RangeObservableCollection<LogWatcherItemViewModel>();
             _sourceHolder = new List<ISourceHolder>();
             _logLevelCountMap = new Dictionary<object, int>();
             _rawLog = new RangeObservableCollection<string>();
             ResetLogLevelCountMap();
+
+            _sourceFilter.FilterConditionChanged -= OnFilterConditionChanged;
+            _sourceFilter.FilterConditionChanged += OnFilterConditionChanged;
         }
 
-        private void ResetLogLevelCountMap()
-        {
-            _logLevelCountMap.Clear();
-            _logLevelCountMap.Add("V", 0);
-            _logLevelCountMap.Add("D", 0);
-            _logLevelCountMap.Add("I", 0);
-            _logLevelCountMap.Add("F", 0);
-            _logLevelCountMap.Add("W", 0);
-            _logLevelCountMap.Add("E", 0);
-        }
 
         public void AddItem(string line)
         {
@@ -71,8 +83,20 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
                 _logLevelCountMap[model.Level]++;
             }
 
-            _rawSource.Add(model);
-            _displaySource.Add(model);
+            lock (RawSource.ThreadSafeLock)
+            {
+                _rawSource.Add(model);
+            }
+
+            lock (DisplaySource.ThreadSafeLock)
+            {
+                if (SourceFilterManager.Filter(model))
+                {
+                    _displaySource.Add(model);
+                }
+            }
+
+            
             SourceCollectionChanged?.Invoke(this);
         }
 
@@ -111,12 +135,16 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         public void AddSourceHolder(ISourceHolder holder)
         {
             _sourceHolder.Add(holder);
+
+            // Attach display source for the Holder
             holder.ItemsSource = DisplaySource;
         }
 
         public void RemoveSourceHolder(ISourceHolder holder)
         {
             _sourceHolder.Remove(holder);
+
+            // Detach display source for the Holder
             holder.ItemsSource = null;
         }
 
@@ -156,17 +184,80 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
             LogInfoManager.UpdateLogParser(runThreadConfig);
         }
 
-        public static SourceManagerImpl Current
+        private void ResetLogLevelCountMap()
         {
-            get
+            _logLevelCountMap.Clear();
+            _logLevelCountMap.Add("V", 0);
+            _logLevelCountMap.Add("D", 0);
+            _logLevelCountMap.Add("I", 0);
+            _logLevelCountMap.Add("F", 0);
+            _logLevelCountMap.Add("W", 0);
+            _logLevelCountMap.Add("E", 0);
+        }
+
+        #region Filter area
+        private CancellationTokenSource SourceFilterCancellationTokenCache { get; set; }
+        private AsyncTask FilterTaskCache { get; set; }
+        private void OnFilterConditionChanged(object sender, ConditionChangedEventArgs e)
+        {
+            if (FilterTaskCache != null)
             {
-                if (_instance == null)
+                if (!FilterTaskCache.IsCompleted)
                 {
-                    _instance = new SourceManagerImpl();
+                    AsyncTask.CancelAsyncExecute(FilterTaskCache);
                 }
-                return _instance;
+            }
+
+            SourceFilterCancellationTokenCache = new CancellationTokenSource();
+            FilterTaskCache = new AsyncTask(OnDoFilterSource
+                   , null
+                   , OnFinishFilterSource
+                   , 0
+                   , SourceFilterCancellationTokenCache);
+            AsyncTask.CancelableAsyncExecute(FilterTaskCache);
+        }
+
+        private async Task<AsyncTaskResult> OnDoFilterSource(CancellationToken token)
+        {
+            var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
+
+
+            var filterLst = new List<LogWatcherItemViewModel>();
+
+            var watcher = Stopwatch.StartNew();
+            lock (RawSource.ThreadSafeLock)
+            {
+                foreach (var item in RawSource)
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        token.ThrowIfCancellationRequested();
+                    }
+                    if (SourceFilterManager.Filter(item))
+                    {
+                        filterLst.Add(item);
+                    }
+                }
+            }
+
+            result.Result = filterLst;
+            result.MesResult = MessageAsyncTaskResult.Done;
+            watcher.Stop();
+            Console.WriteLine("Time filter = " + watcher.ElapsedMilliseconds + " _ start wating");
+            return result;
+        }
+
+        private void OnFinishFilterSource(AsyncTaskResult result)
+        {
+            if (result.MesResult == MessageAsyncTaskResult.Done)
+            {
+                lock (DisplaySource.ThreadSafeLock)
+                {
+                    _displaySource.AddNewRange((IEnumerable<LogWatcherItemViewModel>)result.Result);
+                }
             }
         }
 
+        #endregion
     }
 }
