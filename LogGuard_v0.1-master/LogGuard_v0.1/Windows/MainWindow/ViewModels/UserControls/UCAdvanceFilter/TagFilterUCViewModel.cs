@@ -1,6 +1,8 @@
-﻿using LogGuard_v0._1.Base.LogGuardFlow;
+﻿using LogGuard_v0._1.AppResources.AttachedProperties;
+using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
+using LogGuard_v0._1.Implement.UIEventHandler;
 using LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher;
 using System;
 using System.Collections.Generic;
@@ -15,27 +17,196 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 {
     public class TagFilterUCViewModel : BaseViewModel, ISourceFilter
     {
-        private string _tagFilterContent = "";
+        private string _tagShowFilterContent = "";
+        private string _tagShowHelperContent = "";
+        private bool _isTagShowEnable = true;
+        private FilterType _tagShowFilterLevel = FilterType.Simple;
+        private string _tagRemoveFilterContent = "";
+        private string _tagRemoveHelperContent = "";
+        private bool _isTagRemoveEnable = true;
+        private FilterType _tagRemoveFilterLevel = FilterType.Simple;
 
         [Bindable(true)]
-        public string TagFilterContent
+        public CommandExecuterModel TagShowRightClickCommand { get; set; }
+
+        [Bindable(true)]
+        public CommandExecuterModel TagShowLeftClickCommand { get; set; }
+
+        [Bindable(true)]
+        public string TagRemoveHelperContent
         {
             get
             {
-                return _tagFilterContent;
+                return _tagRemoveHelperContent;
             }
             set
             {
-                _tagFilterContent = value;
-                var watcher = Stopwatch.StartNew();
-                SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, value);
-                watcher.Stop();
-                Console.WriteLine("Time validate filter = " + watcher.ElapsedMilliseconds);
+                _tagRemoveHelperContent = value;
                 InvalidateOwn();
             }
         }
 
-        public TagFilterUCViewModel(BaseViewModel parent) : base(parent) { }
+        [Bindable(true)]
+        public string TagShowHelperContent
+        {
+            get
+            {
+                return _tagShowHelperContent;
+            }
+            set
+            {
+                _tagShowHelperContent = value;
+                InvalidateOwn();
+            }
+        }
+        [Bindable(true)]
+        public string TagShowFilterContent
+        {
+            get
+            {
+                return _tagShowFilterContent;
+            }
+            set
+            {
+                _tagShowFilterContent = value;
+                SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, value);
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public bool IsTagShowEnable
+        {
+            get
+            {
+                return _isTagShowEnable;
+            }
+            set
+            {
+                _isTagShowEnable = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public FilterType TagShowFilterLevel
+        {
+            get
+            {
+                return _tagShowFilterLevel;
+            }
+            set
+            {
+                _tagShowFilterLevel = value;
+                InvalidateOwn();
+            }
+        }
+
+
+        [Bindable(true)]
+        public CommandExecuterModel TagRemoveRightClickCommand { get; set; }
+
+        [Bindable(true)]
+        public CommandExecuterModel TagRemoveLeftClickCommand { get; set; }
+
+        [Bindable(true)]
+        public string TagRemoveFilterContent
+        {
+            get
+            {
+                return _tagRemoveFilterContent;
+            }
+            set
+            {
+                _tagRemoveFilterContent = value;
+                SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, value);
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public bool IsTagRemoveEnable
+        {
+            get
+            {
+                return _isTagRemoveEnable;
+            }
+            set
+            {
+                _isTagRemoveEnable = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public FilterType TagRemoveFilterLevel
+        {
+            get
+            {
+                return _tagRemoveFilterLevel;
+            }
+            set
+            {
+                _tagRemoveFilterLevel = value;
+                InvalidateOwn();
+            }
+        }
+
+        public TagFilterUCViewModel(BaseViewModel parent) : base(parent)
+        {
+            TagShowLeftClickCommand = new CommandExecuterModel((paramaters) =>
+            {
+                IsTagShowEnable = !IsTagShowEnable;
+                return null;
+            });
+
+            TagShowRightClickCommand = new CommandExecuterModel((paramaters) =>
+            {
+                switch (_tagShowFilterLevel)
+                {
+                    case FilterType.Simple:
+                        TagShowFilterLevel = FilterType.Syntax;
+                        break;
+                    case FilterType.Syntax:
+                        TagShowFilterLevel = FilterType.Advance;
+                        break;
+                    case FilterType.Advance:
+                        TagShowFilterLevel = FilterType.Simple;
+                        break;
+                }
+                UpdateTagShowHelperContent();
+                return null;
+            });
+
+            TagRemoveLeftClickCommand = new CommandExecuterModel((paramaters) =>
+            {
+                IsTagRemoveEnable = !IsTagRemoveEnable;
+
+
+                return null;
+            });
+
+
+            TagRemoveRightClickCommand = new CommandExecuterModel((paramaters) =>
+            {
+                switch (_tagRemoveFilterLevel)
+                {
+                    case FilterType.Simple:
+                        TagRemoveFilterLevel = FilterType.Syntax;
+                        break;
+                    case FilterType.Syntax:
+                        TagRemoveFilterLevel = FilterType.Advance;
+                        break;
+                    case FilterType.Advance:
+                        TagRemoveFilterLevel = FilterType.Simple;
+                        break;
+                }
+                UpdateTagRemoveHelperContent();
+                return null;
+            });
+            UpdateTagShowHelperContent();
+            UpdateTagRemoveHelperContent();
+        }
 
         public bool Filter(object obj)
         {
@@ -45,9 +216,24 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 return itemVM
                     .Tag
                     .ToString()
-                    .IndexOf(TagFilterContent, StringComparison.InvariantCultureIgnoreCase) != -1;
+                    .IndexOf(TagShowFilterContent, StringComparison.InvariantCultureIgnoreCase) != -1;
             }
             return true;
         }
+
+        private void UpdateTagShowHelperContent()
+        {
+            TagShowHelperContent = "Left click to enable filter\n" +
+                "Right click to change filter mode\n" +
+                "Filter mode: " + TagShowFilterLevel.ToString(); ;
+        }
+
+        private void UpdateTagRemoveHelperContent()
+        {
+            TagRemoveHelperContent = "Left click to enable filter\n" +
+                "Right click to change filter mode\n" +
+                "Filter mode: " + TagRemoveFilterLevel.ToString(); ;
+        }
+
     }
 }

@@ -15,20 +15,26 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager
         private Thread NotifyFilterConditionChangedMessage { get; set; }
 
         private ISourceFilter _logTagFilter;
+        private ISourceFilter _logMessageFilter;
+        private ISourceFilter _logPidTidFilter;
 
         public ISourceFilter LogTagFilter { get => _logTagFilter; set => _logTagFilter = value; }
+        public ISourceFilter LogMessageFilter { get => _logMessageFilter; set => _logMessageFilter = value; }
+        public ISourceFilter LogPidTidFilter { get => _logPidTidFilter; set => _logPidTidFilter = value; }
 
 
         public event SourceFilterConditionChangedHandler FilterConditionChanged;
 
         public bool Filter(object obj)
         {
-            return _logTagFilter.Filter(obj);
+            return _logTagFilter.Filter(obj)
+                && _logMessageFilter.Filter(obj)
+                && _logPidTidFilter.Filter(obj);
         }
 
         public void NotifyFilterPropertyChanged(ISourceFilter sender, object e)
         {
-            if (NotifyFilterConditionChangedMessage != null 
+            if (NotifyFilterConditionChangedMessage != null
                 && NotifyFilterConditionChangedMessage.IsAlive)
             {
                 NotifyFilterConditionChangedMessage.Interrupt();
@@ -53,5 +59,6 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager
                 return _instance;
             }
         }
+
     }
 }

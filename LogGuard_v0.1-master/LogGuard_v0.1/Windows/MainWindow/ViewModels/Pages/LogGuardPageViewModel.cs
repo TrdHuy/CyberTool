@@ -23,7 +23,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
         private int _logCount;
         private int _selectedCmdIndex;
         private LogGuardState _currentLogGuardState = LogGuardState.NONE;
-        private bool _useAutoScroll = false;
+        private bool _useAutoScroll = true;
         private ObservableCollection<LogParserVO> _deviceCmdItemsSource = new ObservableCollection<LogParserVO>();
 
         [Bindable(true)]

@@ -62,6 +62,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppResources\AttachedProperties\TextBoxAttProperties.cs" />
     <Compile Include="AppResources\Controls\LogGPages\LogGPage.cs" />
     <Compile Include="AppResources\Controls\LogGWindows\LogGuardWindow.cs" />
     <Compile Include="Base\AndroidLog\LogParser\AbstractLogParser.cs" />
@@ -156,6 +157,8 @@
     <Compile Include="Windows\MainWindow\ViewModels\MSW_LogWatcherControlButtonCommandVM.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPageViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\AdvanceFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\MessageFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\PidTidFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TagFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCLogManager\LogByTeamItemViewModel.cs" />
     <Compile Include="Windows\MainWindow\View\MainWindow.xaml.cs">

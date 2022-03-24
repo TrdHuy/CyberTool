@@ -4,6 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control"
+			 xmlns:attPTB="clr-namespace:LogGuard_v0._1.AppResources.AttachedProperties"
 			 mc:Ignorable="d"
 			 xmlns:vmh="clr-namespace:LogGuard_v0._1.Base.ViewModel.ViewModelHelper"
 			 xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFilter"
@@ -27,10 +28,11 @@
 				<ColumnDefinition Width="0.23*" />
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
-				<RowDefinition Height="0.5*" />
-				<RowDefinition Height="0.5*" />
+				<RowDefinition Height="0.925*" />
+				<RowDefinition Height="0.925*" />
 				<RowDefinition Height="1" />
-				<RowDefinition Height="*" />
+				<RowDefinition Height="1.11*" />
+				<RowDefinition Height="0.12*" />
 			</Grid.RowDefinitions>
 			<Rectangle Grid.Row="2"
 					   Fill="{StaticResource HorizontalFench1pixel_Background}" />
@@ -45,14 +47,14 @@
 					   Fill="{StaticResource VerticalFench1pixel_Background}" />
 
 
-			<Grid Margin="10,10,20,10"
+			<Grid Margin="10,0,10,0"
 				  Grid.RowSpan="2">
 				<Grid.RowDefinitions>
-					<RowDefinition Height="0.8*" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="*" />
-					<RowDefinition Height="0.3*" />
+					<RowDefinition Height="*" />
+					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*" />
@@ -60,49 +62,83 @@
 				</Grid.ColumnDefinitions>
 				<Label Content="Content filter"
 					   FontSize=" 9"
+					   VerticalAlignment="Center"
 					   FontWeight="Bold"
 					   Foreground="{StaticResource Foreground_Level1}" />
 				<TextBox Grid.Row="1"
 						 Margin="0,0,0,10"
-						 Tag="Tag"
-						 Text="{Binding TagFilterContent.TagFilterContent, UpdateSourceTrigger=PropertyChanged}"
+						 Tag="Tag show"
+						 Text="{Binding TagFilterContent.TagShowFilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 Grid.ColumnSpan="2"
+						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TagFilterContent.TagShowHelperContent}"
+						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding TagFilterContent.TagShowLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding TagFilterContent.TagShowRightClickCommand}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding TagFilterContent.IsTagShowEnable}"
+						 attPTB:TextBoxAttProperties.Filter="{Binding TagFilterContent.TagShowFilterLevel}"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
 						 Template="{StaticResource SearchTextBoxTmpl}" />
+
 
 				<TextBox Grid.Row="2"
 						 Margin="0,0,0,10"
 						 Grid.ColumnSpan="2"
-						 Tag="Message"
+						 Tag="Tag remove"
+						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TagFilterContent.TagRemoveHelperContent}"
+						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding TagFilterContent.TagRemoveLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding TagFilterContent.TagRemoveRightClickCommand}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding TagFilterContent.IsTagRemoveEnable}"
+						 attPTB:TextBoxAttProperties.Filter="{Binding TagFilterContent.TagRemoveFilterLevel}"
+						 Text="{Binding MessageFilterContent.MessageFilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
 						 Template="{StaticResource SearchTextBoxTmpl}" />
 
+				
 				<TextBox Grid.Row="3"
-						 Margin="0,0,10,10"
-						 Tag="PID"
+						 Margin="0,0,0,10"
+						 Grid.ColumnSpan="2"
+						 Tag="Message"
+						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding MessageFilterContent.MessageFilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding MessageFilterContent.MessageFilterRightClickCommand}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding MessageFilterContent.IsMessageFilterEnable}"
+						 attPTB:TextBoxAttProperties.Filter="{Binding MessageFilterContent.MessageFilterLevel}"
+						 Text="{Binding MessageFilterContent.MessageFilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
 						 Template="{StaticResource SearchTextBoxTmpl}" />
-				<TextBox Grid.Row="3"
+
+				<TextBox Grid.Row="4"
+						 Margin="0,0,10,10"
+						 Tag="PID"
+						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding PidTidFilterContent.PidFilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding PidTidFilterContent.IsPidFilterEnable}"
+						 Text="{Binding PidTidFilterContent.PidFilterContent, UpdateSourceTrigger=PropertyChanged}"
+						 attPTB:TextBoxAttProperties.PathData="{StaticResource SearchPathGeomerty}"
+						 Foreground="{StaticResource Foreground_Level3}"
+						 BorderThickness="0"
+						 Background="{StaticResource Background_Level3}"
+						 Template="{StaticResource SearchTextBoxTmpl}" />
+				<TextBox Grid.Row="4"
 						 Grid.Column="1"
 						 Margin="10,0,0,10"
+						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding PidTidFilterContent.TidFilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding PidTidFilterContent.IsTidFilterEnable}"
+						 Text="{Binding PidTidFilterContent.TidFilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 Tag="TID"
+						 attPTB:TextBoxAttProperties.PathData="{StaticResource SearchPathGeomerty}"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
 						 Template="{StaticResource SearchTextBoxTmpl}" />
 			</Grid>
 
-			<Grid Margin="10,10,20,10"
+			<Grid Margin="10,0,10,0"
 				  Grid.Row="3">
 				<Grid.RowDefinitions>
-					<RowDefinition Height="0.3*" />
-					<RowDefinition Height="0.8*" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="*" />
@@ -112,39 +148,42 @@
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
 				<Label Content="Date time filter"
-					   Grid.Row="1"
+					   Grid.Row="0"
 					   FontSize=" 9"
+					   VerticalAlignment="Center"
 					   FontWeight="Bold"
 					   Foreground="{StaticResource Foreground_Level1}" />
-				<TextBox Grid.Row="2"
+				<TextBox Grid.Row="1"
 						 Margin="0,0,0,10"
 						 Tag="Start time"
+						 attPTB:TextBoxAttProperties.PathData="{StaticResource SearchPathGeomerty}"
 						 Grid.ColumnSpan="2"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
-						 Template="{StaticResource CalendarTextBoxTmpl}" />
+						 Template="{StaticResource SearchTextBoxTmpl}" />
 
 				<TextBox Grid.Row="3"
 						 Margin="0,0,0,10"
 						 Grid.ColumnSpan="2"
 						 Tag="End Time"
+						 attPTB:TextBoxAttProperties.PathData="{StaticResource SearchPathGeomerty}"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
-						 Template="{StaticResource CalendarTextBoxTmpl}" />
+						 Template="{StaticResource SearchTextBoxTmpl}" />
 			</Grid>
 
-			<Grid Margin="20,10,10,10"
+			<Grid Margin="10,0,10,0"
 				  Grid.Column="2"
 				  Grid.RowSpan="2"
 				  Grid.Row="0">
 				<Grid.RowDefinitions>
-					<RowDefinition Height="0.8*" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="*" />
-					<RowDefinition Height="0.3*" />
+					<RowDefinition Height="*" />
+					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*" />
@@ -152,6 +191,7 @@
 				</Grid.ColumnDefinitions>
 				<Label Content="Content highlight"
 					   FontSize=" 9"
+					   VerticalAlignment="Center"
 					   FontWeight="Bold"
 					   Foreground="{StaticResource Foreground_Level1}" />
 				<TextBox Grid.Row="1"
@@ -165,11 +205,11 @@
 
 			</Grid>
 
-			<Grid Margin="20,10,10,10"
+			<Grid Margin="10,10,10,10"
 				  Grid.Column="2"
 				  x:Name="LogPercentGrid"
 				  ClipToBounds="True"
-				  Grid.RowSpan="3"
+				  Grid.RowSpan="4"
 				  Grid.Row="1">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="0.5*" />

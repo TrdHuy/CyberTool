@@ -224,7 +224,6 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
 
             var filterLst = new List<LogWatcherItemViewModel>();
 
-            var watcher = Stopwatch.StartNew();
             lock (RawSource.ThreadSafeLock)
             {
                 foreach (var item in RawSource)
@@ -242,8 +241,6 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
 
             result.Result = filterLst;
             result.MesResult = MessageAsyncTaskResult.Done;
-            watcher.Stop();
-            Console.WriteLine("Time filter = " + watcher.ElapsedMilliseconds + " _ start wating");
             return result;
         }
 

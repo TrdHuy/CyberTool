@@ -2,6 +2,7 @@
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:logwatcher_ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control"
 					xmlns:sys="clr-namespace:System;assembly=mscorlib"
+					xmlns:attPTB="clr-namespace:LogGuard_v0._1.AppResources.AttachedProperties"
 					xmlns:hpss="clr-namespace:HPSolutionCCDevPackage.netFramework;assembly=HPSolutionCCDevPackage.netFramework">
 	<SolidColorBrush Color="#7f7f7f"
 					 x:Key="Foreground_Level1" />
@@ -17,7 +18,11 @@
 					 x:Key="Background_Level3" />
 	<SolidColorBrush Color="#FF262930"
 					 x:Key="Background_Level4" />
-
+	<SolidColorBrush Color="#FF2E3139"
+					 x:Key="Background_Level5" />
+	<SolidColorBrush Color="#FFB8EAF9"
+					 x:Key="BorderbrushEffect_Level1" />
+	
 	<SolidColorBrush Color="#33ADFF55"
 					 x:Key="DebugLevelForeground_Level1" />
 	<SolidColorBrush Color="#33FFB855"
@@ -43,7 +48,7 @@
 					 x:Key="VerboseLevelForeground_Level2" />
 	<SolidColorBrush Color="#FFF0ADF1"
 					 x:Key="FatalLevelForeground_Level2" />
-	
+
 
 	<SolidColorBrush Color="#009a76"
 					 x:Key="SelectedItemBackground" />
@@ -104,6 +109,13 @@
 		<GradientStop Color="#1e2024"
 					  Offset="0.86" />
 	</LinearGradientBrush>
+
+	<sys:String x:Key="AdvanceSearchIconPathGeomerty">
+		m 22.328769,250.29502 c -0.08291,-0.0248 -0.238404,-0.10591 -0.345546,-0.18016 -0.851755,-0.59027 -0.75956,-1.90353 0.166012,-2.36477 l 0.272042,-0.13556 H 27.9876 c 5.41711,0 5.571717,0.003 5.767566,0.10267 0.531093,0.27094 0.806975,0.70147 0.812271,1.26759 0.0027,0.29057 -0.02205,0.38974 -0.157635,0.63108 -0.181053,0.32227 -0.503559,0.59723 -0.79566,0.67836 -0.24178,0.0671 -11.061335,0.0679 -11.285373,7.9e-4 z m 23.684823,-0.009 c -0.13622,-0.0434 -0.746805,-0.61888 -2.348988,-2.21384 -1.659296,-1.65182 -2.187449,-2.14832 -2.261375,-2.12585 -0.05305,0.0161 -0.31816,0.12694 -0.589135,0.24627 -0.998263,0.43957 -2.24656,0.63732 -3.377145,0.53498 -3.172159,-0.28713 -5.670493,-2.43229 -6.500655,-5.58169 -0.137219,-0.52056 -0.145598,-0.61696 -0.146277,-1.68288 -6.73e-4,-1.0544 0.0088,-1.16816 0.140211,-1.68606 0.565563,-2.2287 1.957207,-3.95454 3.960553,-4.91165 0.554443,-0.26489 1.31123,-0.51392 1.866949,-0.61436 0.58877,-0.10641 2.123402,-0.093 2.66936,0.0233 0.993951,0.21173 1.945299,0.61154 2.732226,1.14824 0.561851,0.38319 1.552864,1.38584 1.916035,1.93854 0.540637,0.82278 0.931472,1.76379 1.121128,2.69932 0.388543,1.91661 -0.111905,4.12223 -1.30075,5.73279 l -0.265387,0.35953 2.001905,2.00703 c 1.367767,1.37127 2.039529,2.08199 2.120682,2.24368 0.162668,0.32411 0.164544,0.77725 0.0047,1.13003 -0.235983,0.52077 -0.608973,0.77133 -1.184231,0.79554 -0.206648,0.009 -0.458551,-0.0106 -0.559787,-0.0429 z m -6.977752,-5.83036 c 3.591098,-0.73182 5.259046,-4.81427 3.22005,-7.88136 -1.512943,-2.27579 -4.684745,-2.91378 -7.009482,-1.40991 -1.11547,0.72159 -1.919698,1.90259 -2.202177,3.23386 -0.156076,0.73556 -0.161046,1.32038 -0.01725,2.02942 0.568601,2.80362 3.237569,4.59275 6.008856,4.02799 z m -16.572934,-0.62977 c -1.02154,-0.20787 -1.424023,-1.55524 -0.686952,-2.29968 0.416569,-0.42074 0.303248,-0.40473 2.986577,-0.42181 2.621835,-0.0167 2.653317,-0.0136 3.047133,0.29831 0.108449,0.0859 0.265847,0.28215 0.349775,0.43614 0.125062,0.22944 0.152243,0.34164 0.150638,0.6218 -0.0011,0.18966 -0.03867,0.42704 -0.08443,0.53324 -0.119591,0.27754 -0.430523,0.59938 -0.713972,0.739 -0.245055,0.1207 -0.2595,0.12145 -2.53413,0.13029 -1.258219,0.005 -2.389805,-0.0119 -2.514636,-0.0373 z m -0.143626,-6.53622 c -0.60113,-0.23162 -0.918477,-0.69644 -0.917353,-1.34366 6.5e-4,-0.37385 0.172799,-0.75838 0.447492,-0.99956 0.408022,-0.35825 0.319969,-0.34803 2.996648,-0.34803 2.672858,0 2.589346,-0.01 2.991692,0.34367 0.482354,0.42352 0.61795,1.12821 0.32168,1.67177 -0.168274,0.30873 -0.45667,0.56588 -0.75357,0.67191 -0.262535,0.0938 -4.844243,0.0973 -5.086589,0.004 z m 0.194245,-6.45499 c -0.125916,-0.025 -0.332188,-0.10592 -0.458382,-0.17987 -0.919384,-0.5388 -0.854986,-1.94273 0.111087,-2.42178 0.204964,-0.10164 0.392418,-0.10319 12.435305,-0.10319 h 12.227204 l 0.244833,0.14393 c 0.454913,0.26742 0.703027,0.7037 0.697658,1.22674 -0.0041,0.39549 -0.155558,0.73005 -0.451765,0.99765 -0.445005,0.40204 0.785129,0.36547 -12.586455,0.37414 -6.594801,0.004 -12.09357,-0.0127 -12.219485,-0.0376 z
+	</sys:String>
+	<sys:String x:Key="SyntaxIconPathGeomerty">
+		m 140.64936,227.7209 c -0.41075,-0.0955 -0.77781,-0.39572 -0.98012,-0.8017 -0.30346,-0.60896 -0.28794,-0.69021 0.60376,-3.15873 0.1645,-0.4554 0.3422,-0.9576 0.39487,-1.11601 0.0527,-0.1584 0.20815,-0.5958 0.34549,-0.972 0.13734,-0.37621 1.34131,-3.75996 2.67548,-7.51946 1.33416,-3.75951 2.46918,-6.91853 2.52225,-7.02007 0.23811,-0.45553 0.80704,-0.8036 1.31983,-0.80747 0.85613,-0.006 1.59755,0.69111 1.59755,1.50304 0,0.17063 -0.4753,1.60735 -1.26915,3.83635 -0.69804,1.95995 -1.44167,4.04955 -1.65251,4.64356 -3.20663,9.03398 -3.77295,10.57753 -3.97148,10.82456 -0.37853,0.47101 -1.03771,0.71537 -1.58597,0.58793 z m -5.30901,-3.70837 c -0.0396,-0.0133 -0.2016,-0.0454 -0.36001,-0.0712 -0.26254,-0.0428 -0.55103,-0.30908 -3.26321,-3.01192 -1.63637,-1.63073 -3.03769,-3.08518 -3.11403,-3.2321 -0.18998,-0.3656 -0.1847,-0.97829 0.0119,-1.37375 0.0982,-0.19754 1.15786,-1.31304 3.04202,-3.20228 2.58621,-2.59315 2.93155,-2.91422 3.27207,-3.04202 0.20939,-0.0786 0.45239,-0.14271 0.54001,-0.14249 0.54042,0.001 1.12526,0.3888 1.35703,0.89899 0.16138,0.35523 0.17114,0.88877 0.0228,1.24494 -0.0731,0.17561 -0.80103,0.9612 -2.11597,2.28371 -1.10247,1.10881 -2.0405,2.08679 -2.08452,2.17329 -0.044,0.0865 -0.08,0.27858 -0.08,0.42686 0,0.2567 0.0976,0.36805 2.03924,2.32676 1.25341,1.26442 2.08798,2.16309 2.16573,2.33207 0.0696,0.1512 0.1433,0.4428 0.16385,0.648 0.0322,0.32149 0.006,0.43285 -0.19113,0.8051 -0.2641,0.49933 -0.39882,0.66314 -0.64949,0.78975 -0.19613,0.0991 -0.64093,0.18513 -0.75617,0.14631 z m 17.36683,-0.0668 c -0.82921,-0.22262 -1.27763,-1.08298 -1.02228,-1.96136 0.11551,-0.39734 0.2009,-0.4948 2.2019,-2.51308 l 2.08173,-2.09971 v -0.34187 c 0,-0.38996 0.19406,-0.16688 -2.59689,-2.98521 -0.81449,-0.82247 -1.53565,-1.61081 -1.60258,-1.75185 -0.60732,-1.27982 0.46673,-2.51198 1.85945,-2.13319 0.24353,0.0662 0.74145,0.53039 3.22421,3.00562 1.91749,1.91167 2.98541,3.02886 3.07803,3.22003 0.2028,0.41862 0.18993,1.02112 -0.0311,1.45739 -0.23755,0.46879 -5.58619,5.76516 -6.03352,5.97456 -0.42928,0.20094 -0.75499,0.23711 -1.1589,0.12867 z
+	</sys:String>
 	<sys:String x:Key="UnderContructionPathGeomerty">
 		M 465.73047 460.83594 L 386.80273 593.78516 L 431.12109 593.78516 L 423.50195 582.61133 L 405.91992 582.61133 L 465.73047 481.86523 L 525.53906 582.61133 L 508 582.61133 L 515.62109 593.78516 L 544.6582 593.78516 L 465.73047 460.83594 z M 471.72461 532.24805 C 467.85029 532.24805 462.72461 536.96228 462.72461 540.52539 C 462.72461 541.86236 463.82706 544.14817 465.17578 545.60352 C 467.00606 547.57839 468.59129 548.24376 471.42578 548.23242 C 473.51454 548.22399 475.70131 547.88649 476.2832 547.48242 C 478.17845 546.16628 480.72461 541.8476 480.72461 539.94922 C 480.72461 536.88104 475.31055 532.24805 471.72461 532.24805 z M 441.55469 536.74805 C 440.77104 536.74805 440.37239 537.56929 440.58594 538.74805 C 440.78516 539.84804 441.16474 545.13554 441.42969 550.49805 C 441.85099 559.02916 441.70904 560.24805 440.28711 560.24805 C 439.39333 560.24805 438.40266 560.92305 438.08594 561.74805 C 437.76933 562.57304 436.88334 563.24805 436.11719 563.24805 C 435.35104 563.24805 434.72461 563.69805 434.72461 564.24805 C 434.72461 564.84064 438.39128 565.24805 443.72461 565.24805 L 452.72461 565.24805 L 452.72461 570.58203 C 452.72461 573.51536 453.02401 576.21542 453.39062 576.58203 C 454.99258 578.18398 455.64339 576.87722 455.92383 571.49805 C 456.20771 566.05477 456.37131 565.73098 458.97461 565.43164 C 463.70669 564.88716 461.97387 563.24805 456.66602 563.24805 C 453.58128 563.24805 451.84571 562.86163 452.21875 562.25781 C 452.55535 561.71314 455.61897 561.42191 459.02734 561.60938 L 465.22461 561.95117 L 465.22461 569.34961 L 465.22461 576.74805 L 472.21094 576.74805 C 478.98684 576.74805 479.24108 576.6576 480.63867 573.74805 C 481.50551 571.94347 482.10888 567.49455 482.15234 562.58203 C 482.21728 555.26211 481.97371 554.14733 479.80078 551.83203 C 476.53878 548.35626 475.05482 548.56554 470.82031 553.09961 C 467.88691 556.24055 466.30283 557.07282 462.22461 557.61133 C 452.78675 558.85759 446.72461 560.63968 446.72461 562.16797 C 446.72461 563.23618 446.32736 563.1061 445.25586 561.68945 C 443.65583 559.57401 443.16798 552.24805 444.62695 552.24805 C 445.12313 552.24805 445.99901 553.59806 446.57422 555.24805 C 447.6964 558.46715 450.74797 559.39441 450.6875 556.49805 C 450.62276 553.38973 442.92753 536.74805 441.55469 536.74805 z M 495.95898 539.69141 C 495.85112 539.70017 495.73065 539.74518 495.59961 539.82617 C 492.94117 541.46917 482.72461 569.46733 482.72461 575.10938 C 482.72461 576.59431 483.34679 577.24805 484.75977 577.24805 C 487.27274 577.24805 489.35569 572.66926 493.64258 557.71484 C 496.60702 547.37381 497.57699 539.5599 495.95898 539.69141 z M 432.00586 582.61133 L 439.625 593.78516 L 446.56445 593.78516 L 438.94336 582.61133 L 432.00586 582.61133 z M 447.44727 582.61133 L 455.07031 593.78516 L 461.80273 593.78516 L 454.18164 582.61133 L 447.44727 582.61133 z M 462.68555 582.61133 L 470.30664 593.78516 L 477.24609 593.78516 L 469.625 582.61133 L 462.68555 582.61133 z M 478.12891 582.61133 L 485.75 593.78516 L 491.67383 593.78516 L 484.05273 582.61133 L 478.12891 582.61133 z M 492.55859 582.61133 L 500.17773 593.78516 L 507.11719 593.78516 L 499.49609 582.61133 L 492.55859 582.61133 z
 	</sys:String>
@@ -361,115 +373,135 @@
 
 	<ControlTemplate TargetType="{x:Type TextBox}"
 					 x:Key="SearchTextBoxTmpl">
-		<Border Name="Border"
-				Padding="2"
-				BorderBrush="{TemplateBinding BorderBrush}"
-				BorderThickness="{TemplateBinding BorderThickness}"
-				Background="{TemplateBinding Background}">
-			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*" />
-					<ColumnDefinition Width="30" />
-				</Grid.ColumnDefinitions>
-				<ScrollViewer Margin="5,2,0,0"
-							  VerticalContentAlignment="Center"
-							  VerticalScrollBarVisibility="Disabled"
-							  HorizontalScrollBarVisibility="Disabled"
-							  x:Name="PART_ContentHost" />
-				<TextBox x:Name="TagTextBox"
-						 Text="{TemplateBinding Tag}"
-						 Background="Transparent"
-						 BorderThickness="0"
-						 IsReadOnly="True"
-						 IsHitTestVisible="False"
-						 Foreground="{StaticResource Foreground_Level1}"
-						 FontSize="{TemplateBinding FontSize}"
-						 Grid.ColumnSpan="2"
-						 Height="20"
-						 Margin="5,2,30,0"
-						 VerticalAlignment="Top">
-					<TextBox.Style>
-						<Style TargetType="{x:Type TextBox}">
-							<Setter Property="Visibility"
-									Value="Collapsed" />
-							<Style.Triggers>
-								<DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
-											 Value="">
-									<Setter Property="Visibility"
-											Value="Visible" />
-								</DataTrigger>
-							</Style.Triggers>
-						</Style>
-					</TextBox.Style>
-				</TextBox>
-				<Path x:Name="CheckPath"
-					  Fill="{StaticResource Foreground_Level2}"
-					  Stretch="Uniform"
-					  Grid.Column="1"
-					  Margin="6"
-					  Data="{Binding Source={StaticResource SearchPathGeomerty}}" />
-			</Grid>
+		<ControlTemplate.Resources>
+			<Style TargetType="ToolTip"
+				   BasedOn="{StaticResource {x:Type ToolTip}}">
+				<Setter Property="Background"
+						Value="{StaticResource Background_Level5}" />
+				<Setter Property="Foreground"
+						Value="{StaticResource Foreground_Level1}" />
+				<Setter Property="BorderBrush"
+						Value="{StaticResource BorderbrushEffect_Level1}" />
+				<Setter Property="FontFamily"
+						Value="Calibri" />
+				<Setter Property="FontSize"
+						Value="8" />
+				<Setter Property="BorderThickness"
+						Value="1" />
+			</Style>
+		</ControlTemplate.Resources>
+		<Grid Name="Border"
+			  Background="{TemplateBinding Background}">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="auto" />
+			</Grid.ColumnDefinitions>
+			<ScrollViewer Margin="5,0,0,0"
+						  VerticalContentAlignment="Center"
+						  VerticalAlignment="Center"
+						  VerticalScrollBarVisibility="Disabled"
+						  HorizontalScrollBarVisibility="Disabled"
+						  x:Name="PART_ContentHost" />
+			<TextBox x:Name="TagTextBox"
+					 Margin="5,0,0,0"
+					 Text="{TemplateBinding Tag}"
+					 Background="Transparent"
+					 BorderThickness="0"
+					 VerticalAlignment="Center"
+					 IsReadOnly="True"
+					 IsHitTestVisible="False"
+					 Foreground="{StaticResource Foreground_Level1}"
+					 FontSize="{TemplateBinding FontSize}">
+				<TextBox.Style>
+					<Style TargetType="{x:Type TextBox}">
+						<Setter Property="Visibility"
+								Value="Collapsed" />
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
+										 Value="">
+								<Setter Property="Visibility"
+										Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</TextBox.Style>
+			</TextBox>
 
-		</Border>
+			<Path x:Name="CheckPath"
+				  Stretch="Uniform"
+				  Grid.Column="1"
+				  Height="10"
+				  IsHitTestVisible="False"
+				  Width="10"
+				  Fill="{StaticResource Foreground_Level2}" />
+			<Rectangle Grid.Column="1"
+					   Fill="Transparent"
+					   StrokeThickness="1"
+					   RadiusX="10"
+					   RadiusY="10"
+					   Width="20"
+					   ToolTip="{Binding Path=(attPTB:TextBoxAttProperties.FilterHelperContent),
+									RelativeSource={RelativeSource TemplatedParent}}"
+					   Height="20">
+				<Rectangle.InputBindings>
+					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.LeftDoubleClickCommand),
+									RelativeSource={RelativeSource TemplatedParent}}"
+								  MouseAction="LeftDoubleClick" />
+					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.LeftClickCommand),
+									RelativeSource={RelativeSource TemplatedParent}}"
+								  MouseAction="LeftClick" />
+					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.RightClickCommand),
+									RelativeSource={RelativeSource TemplatedParent}}"
+								  MouseAction="RightClick" />
+				</Rectangle.InputBindings>
+				<Rectangle.Style>
+					<Style>
+						<Style.Triggers>
+							<Trigger Property="Rectangle.IsMouseOver"
+									 Value="True">
+								<Setter Property="Rectangle.Fill"
+										Value="#19B8E7F9" />
+								<Setter Property="Rectangle.Stroke"
+										Value="{StaticResource BorderbrushEffect_Level1}" />
+							</Trigger>
+						</Style.Triggers>
+					</Style>
+				</Rectangle.Style>
+			</Rectangle>
+
+		</Grid>
 		<ControlTemplate.Triggers>
+			<DataTrigger Binding="{Binding Path=(attPTB:TextBoxAttProperties.IsFilterEnable),
+									RelativeSource={RelativeSource Self}}"
+						 Value="true">
+				<Setter TargetName="CheckPath"
+						Property="Fill"
+						Value="{StaticResource ButtonBackground_Level1}" />
+			</DataTrigger>
 
-		</ControlTemplate.Triggers>
-	</ControlTemplate>
+			<DataTrigger Binding="{Binding Path=(attPTB:TextBoxAttProperties.Filter),
+									RelativeSource={RelativeSource Self}}"
+						 Value="Simple">
+				<Setter TargetName="CheckPath"
+						Property="Data"
+						Value="{Binding Source={StaticResource SearchPathGeomerty}}" />
+			</DataTrigger>
 
-	<ControlTemplate TargetType="{x:Type TextBox}"
-					 x:Key="CalendarTextBoxTmpl">
-		<Border Name="Border"
-				Padding="2"
-				BorderBrush="{TemplateBinding BorderBrush}"
-				BorderThickness="{TemplateBinding BorderThickness}"
-				Background="{TemplateBinding Background}">
-			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*" />
-					<ColumnDefinition Width="30" />
-				</Grid.ColumnDefinitions>
-				<ScrollViewer Margin="5,2,0,0"
-							  VerticalContentAlignment="Center"
-							  VerticalScrollBarVisibility="Disabled"
-							  HorizontalScrollBarVisibility="Disabled"
-							  x:Name="PART_ContentHost" />
-				<TextBox x:Name="TagTextBox"
-						 Text="{TemplateBinding Tag}"
-						 Background="Transparent"
-						 BorderThickness="0"
-						 IsReadOnly="True"
-						 IsHitTestVisible="False"
-						 Foreground="{StaticResource Foreground_Level1}"
-						 FontSize="{TemplateBinding FontSize}"
-						 Grid.ColumnSpan="2"
-						 Height="20"
-						 Margin="5,2,30,0"
-						 VerticalAlignment="Top">
-					<TextBox.Style>
-						<Style TargetType="{x:Type TextBox}">
-							<Setter Property="Visibility"
-									Value="Collapsed" />
-							<Style.Triggers>
-								<DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
-											 Value="">
-									<Setter Property="Visibility"
-											Value="Visible" />
-								</DataTrigger>
-							</Style.Triggers>
-						</Style>
-					</TextBox.Style>
-				</TextBox>
-				<Path x:Name="CheckPath"
-					  Fill="{StaticResource Foreground_Level2}"
-					  Stretch="Uniform"
-					  Grid.Column="1"
-					  Margin="6"
-					  Data="{Binding Source={StaticResource CalendarPathGeomerty}}" />
-			</Grid>
+			<DataTrigger Binding="{Binding Path=(attPTB:TextBoxAttProperties.Filter),
+									RelativeSource={RelativeSource Self}}"
+						 Value="Syntax">
+				<Setter TargetName="CheckPath"
+						Property="Data"
+						Value="{Binding Source={StaticResource SyntaxIconPathGeomerty}}" />
+			</DataTrigger>
 
-		</Border>
-		<ControlTemplate.Triggers>
-
+			<DataTrigger Binding="{Binding Path=(attPTB:TextBoxAttProperties.Filter),
+									RelativeSource={RelativeSource Self}}"
+						 Value="Advance">
+				<Setter TargetName="CheckPath"
+						Property="Data"
+						Value="{Binding Source={StaticResource AdvanceSearchIconPathGeomerty}}" />
+			</DataTrigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
 
