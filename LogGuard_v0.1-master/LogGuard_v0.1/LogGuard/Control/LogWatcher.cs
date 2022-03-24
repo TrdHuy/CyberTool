@@ -1,4 +1,5 @@
 ﻿using LogGuard_v0._1.LogGuard.Base;
+using LogGuard_v0._1.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -60,7 +61,15 @@ namespace LogGuard_v0._1.LogGuard.Control
             }
             else if (e.Action == NotifyCollectionChangedAction.Reset)
             {
-                CurrentSourceCount = 0;
+                var arg = e as RangeObservableCollectionChangedEventArgs;
+                if (arg != null)
+                {
+                    CurrentSourceCount = arg.NewCount;
+                }
+                else
+                {
+                    CurrentSourceCount = CacheElements.Count();
+                }
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {

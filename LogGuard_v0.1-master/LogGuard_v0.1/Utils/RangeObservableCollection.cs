@@ -46,7 +46,7 @@ namespace LogGuard_v0._1.Utils
             Items.Clear();
             foreach (T item in list)
                 Items.Add(item);
-            SendNotifications();
+            SendNotifications(Items.Count);
         }
 
         public void RemoveRange(IEnumerable<T> list)
@@ -58,11 +58,20 @@ namespace LogGuard_v0._1.Utils
                 Items.Remove(item);
         }
 
-        public void SendNotifications()
+        public void SendNotifications(int count)
         {
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            OnCollectionChanged(new RangeObservableCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset, count));
             OnPropertyChanged(new PropertyChangedEventArgs("Count"));
             OnPropertyChanged(new PropertyChangedEventArgs("Items"));
+        }
+    }
+
+    public class RangeObservableCollectionChangedEventArgs : NotifyCollectionChangedEventArgs
+    {
+        public int NewCount { get;}
+        public RangeObservableCollectionChangedEventArgs(NotifyCollectionChangedAction action, int count) : base(action)
+        {
+            NewCount = count;
         }
     }
 }
