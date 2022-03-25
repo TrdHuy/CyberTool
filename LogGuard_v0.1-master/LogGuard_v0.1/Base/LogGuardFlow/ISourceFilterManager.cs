@@ -14,7 +14,8 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         ISourceFilter LogPidTidFilter { get; set; }
 
         void NotifyFilterPropertyChanged(ISourceFilter sender, object e);
-
+        void NotifyFilterEngineSourceChanged(ISourceFilter sender, object e);
+        
     }
 
     public delegate void SourceFilterConditionChangedHandler(object sender, ConditionChangedEventArgs e);

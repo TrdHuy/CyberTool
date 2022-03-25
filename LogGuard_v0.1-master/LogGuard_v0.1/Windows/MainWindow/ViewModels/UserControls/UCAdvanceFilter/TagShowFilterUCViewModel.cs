@@ -15,36 +15,18 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFilter
 {
-    public class TagFilterUCViewModel : BaseViewModel, ISourceFilter
+    public class TagShowFilterUCViewModel : ChildOfAdvanceFilterUCViewModel
     {
         private string _tagShowFilterContent = "";
         private string _tagShowHelperContent = "";
         private bool _isTagShowEnable = true;
-        private FilterType _tagShowFilterLevel = FilterType.Simple;
-        private string _tagRemoveFilterContent = "";
-        private string _tagRemoveHelperContent = "";
-        private bool _isTagRemoveEnable = true;
-        private FilterType _tagRemoveFilterLevel = FilterType.Simple;
+        
 
         [Bindable(true)]
         public CommandExecuterModel TagShowRightClickCommand { get; set; }
 
         [Bindable(true)]
         public CommandExecuterModel TagShowLeftClickCommand { get; set; }
-
-        [Bindable(true)]
-        public string TagRemoveHelperContent
-        {
-            get
-            {
-                return _tagRemoveHelperContent;
-            }
-            set
-            {
-                _tagRemoveHelperContent = value;
-                InvalidateOwn();
-            }
-        }
 
         [Bindable(true)]
         public string TagShowHelperContent
@@ -59,6 +41,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 InvalidateOwn();
             }
         }
+
         [Bindable(true)]
         public string TagShowFilterContent
         {
@@ -69,6 +52,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             set
             {
                 _tagShowFilterContent = value;
+                SourceFilterManagerImpl.Current.NotifyFilterEngineSourceChanged(this, value);
                 SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, value);
                 InvalidateOwn();
             }
@@ -84,6 +68,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             set
             {
                 _isTagShowEnable = value;
+                SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, value);
                 InvalidateOwn();
             }
         }
@@ -93,66 +78,18 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
         {
             get
             {
-                return _tagShowFilterLevel;
+                return CurrentFilterMode;
             }
             set
             {
-                _tagShowFilterLevel = value;
+                CurrentFilterMode = value;
                 InvalidateOwn();
             }
         }
 
 
-        [Bindable(true)]
-        public CommandExecuterModel TagRemoveRightClickCommand { get; set; }
-
-        [Bindable(true)]
-        public CommandExecuterModel TagRemoveLeftClickCommand { get; set; }
-
-        [Bindable(true)]
-        public string TagRemoveFilterContent
-        {
-            get
-            {
-                return _tagRemoveFilterContent;
-            }
-            set
-            {
-                _tagRemoveFilterContent = value;
-                SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, value);
-                InvalidateOwn();
-            }
-        }
-
-        [Bindable(true)]
-        public bool IsTagRemoveEnable
-        {
-            get
-            {
-                return _isTagRemoveEnable;
-            }
-            set
-            {
-                _isTagRemoveEnable = value;
-                InvalidateOwn();
-            }
-        }
-
-        [Bindable(true)]
-        public FilterType TagRemoveFilterLevel
-        {
-            get
-            {
-                return _tagRemoveFilterLevel;
-            }
-            set
-            {
-                _tagRemoveFilterLevel = value;
-                InvalidateOwn();
-            }
-        }
-
-        public TagFilterUCViewModel(BaseViewModel parent) : base(parent)
+        
+        public TagShowFilterUCViewModel(BaseViewModel parent) : base(parent)
         {
             TagShowLeftClickCommand = new CommandExecuterModel((paramaters) =>
             {
@@ -162,7 +99,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 
             TagShowRightClickCommand = new CommandExecuterModel((paramaters) =>
             {
-                switch (_tagShowFilterLevel)
+                switch (CurrentFilterMode)
                 {
                     case FilterType.Simple:
                         TagShowFilterLevel = FilterType.Syntax;
@@ -178,48 +115,21 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 return null;
             });
 
-            TagRemoveLeftClickCommand = new CommandExecuterModel((paramaters) =>
-            {
-                IsTagRemoveEnable = !IsTagRemoveEnable;
-
-
-                return null;
-            });
-
-
-            TagRemoveRightClickCommand = new CommandExecuterModel((paramaters) =>
-            {
-                switch (_tagRemoveFilterLevel)
-                {
-                    case FilterType.Simple:
-                        TagRemoveFilterLevel = FilterType.Syntax;
-                        break;
-                    case FilterType.Syntax:
-                        TagRemoveFilterLevel = FilterType.Advance;
-                        break;
-                    case FilterType.Advance:
-                        TagRemoveFilterLevel = FilterType.Simple;
-                        break;
-                }
-                UpdateTagRemoveHelperContent();
-                return null;
-            });
+            
             UpdateTagShowHelperContent();
-            UpdateTagRemoveHelperContent();
+            UpdateEngingeComparableSource(TagShowFilterContent);
         }
 
-        public bool Filter(object obj)
+        public override bool Filter(object obj)
         {
             var itemVM = obj as LogWatcherItemViewModel;
             if (itemVM != null)
             {
-                return itemVM
-                    .Tag
-                    .ToString()
-                    .IndexOf(TagShowFilterContent, StringComparison.InvariantCultureIgnoreCase) != -1;
+                return TagShow(itemVM) ;
             }
             return true;
         }
+
 
         private void UpdateTagShowHelperContent()
         {
@@ -228,12 +138,20 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 "Filter mode: " + TagShowFilterLevel.ToString(); ;
         }
 
-        private void UpdateTagRemoveHelperContent()
+        private bool TagShow(LogWatcherItemViewModel data)
         {
-            TagRemoveHelperContent = "Left click to enable filter\n" +
-                "Right click to change filter mode\n" +
-                "Filter mode: " + TagRemoveFilterLevel.ToString(); ;
+            if (_isTagShowEnable)
+            {
+                if (CurrentEngine.ContainIgnoreCase(data.Tag.ToString()))
+                {
+                    return true;
+                }
+                return false;
+            }
+            return true;
         }
+
+      
 
     }
 }

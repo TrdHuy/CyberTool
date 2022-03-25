@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFilter
 {
-    public class PidTidFilterUCViewModel : BaseViewModel, ISourceFilter
+    public class PidTidFilterUCViewModel : ChildOfAdvanceFilterUCViewModel
     {
         private string _pidFilterContent = "";
         private string _tidFilterContent = "";
@@ -99,7 +99,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             });
         }
 
-        public bool Filter(object obj)
+        public override bool Filter(object obj)
         {
             var itemVM = obj as LogWatcherItemViewModel;
             if (itemVM != null)

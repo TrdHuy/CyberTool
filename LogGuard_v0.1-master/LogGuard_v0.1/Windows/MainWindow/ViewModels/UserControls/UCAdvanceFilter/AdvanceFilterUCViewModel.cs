@@ -25,7 +25,8 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
         private bool _isWarningChecked;
         private bool _isFatalChecked;
 
-        private TagFilterUCViewModel _tagFilterVM;
+        private TagShowFilterUCViewModel _tagFilterVM;
+        private TagRemoveFilterUCViewModel _tagRemoveVM;
         private MessageFilterUCViewModel _messageFilterVM;
         private PidTidFilterUCViewModel _pidTidFilterVM;
 
@@ -199,7 +200,20 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 
         #region Filter tool binding area
         [Bindable(true)]
-        public TagFilterUCViewModel TagFilterContent
+        public TagRemoveFilterUCViewModel TagRemoveContent
+        {
+            get
+            {
+                return _tagRemoveVM;
+            }
+            set
+            {
+                _tagRemoveVM = value;
+                InvalidateOwn();
+            }
+        }
+        [Bindable(true)]
+        public TagShowFilterUCViewModel TagFilterContent
         {
             get
             {
@@ -255,10 +269,12 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             IsInfoChecked = true;
             SourceManagerImpl.Current.SourceCollectionChanged -= OnLogSourceCollectionChanged;
             SourceManagerImpl.Current.SourceCollectionChanged += OnLogSourceCollectionChanged;
-            TagFilterContent = new TagFilterUCViewModel(this);
+            TagFilterContent = new TagShowFilterUCViewModel(this);
             MessageFilterContent = new MessageFilterUCViewModel(this);
             PidTidFilterContent = new PidTidFilterUCViewModel(this);
+            TagRemoveContent = new TagRemoveFilterUCViewModel(this);
 
+            SourceFilterManagerImpl.Current.LogTagRemoveFilter = TagRemoveContent;
             SourceFilterManagerImpl.Current.LogTagFilter = TagFilterContent;
             SourceFilterManagerImpl.Current.LogMessageFilter = MessageFilterContent;
             SourceFilterManagerImpl.Current.LogPidTidFilter = PidTidFilterContent;

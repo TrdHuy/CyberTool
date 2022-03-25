@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogGuard_v0._1.AppResources.AttachedProperties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,8 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         /// <returns></returns>
         bool Filter(object obj);
 
+        void UpdateEngine();
 
+        void UpdateEngingeComparableSource(string source);
     }
 }

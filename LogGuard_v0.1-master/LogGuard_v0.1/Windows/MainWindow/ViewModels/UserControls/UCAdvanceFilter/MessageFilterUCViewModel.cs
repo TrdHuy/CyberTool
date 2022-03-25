@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFilter
 {
-    public class MessageFilterUCViewModel : BaseViewModel, ISourceFilter
+    public class MessageFilterUCViewModel : ChildOfAdvanceFilterUCViewModel
     {
         private string _messageFilterContent = "";
         private bool _isMessageFilterEnable = false;
@@ -96,7 +96,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             });
         }
 
-        public bool Filter(object obj)
+        public override bool Filter(object obj)
         {
             var itemVM = obj as LogWatcherItemViewModel;
             if (itemVM != null)
