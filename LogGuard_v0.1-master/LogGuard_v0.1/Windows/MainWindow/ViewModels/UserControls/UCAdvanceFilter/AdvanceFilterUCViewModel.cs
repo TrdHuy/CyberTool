@@ -28,7 +28,8 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
         private TagShowFilterUCViewModel _tagFilterVM;
         private TagRemoveFilterUCViewModel _tagRemoveVM;
         private MessageFilterUCViewModel _messageFilterVM;
-        private PidTidFilterUCViewModel _pidTidFilterVM;
+        private TidFilterUCViewModel _tidFilterVM;
+        private PidFilterUCViewModel _pidFilterVM;
 
         #region Log measure tool binding area
         [Bindable(true)]
@@ -227,18 +228,32 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
         }
 
         [Bindable(true)]
-        public PidTidFilterUCViewModel PidTidFilterContent
+        public TidFilterUCViewModel TidFilterContent
         {
             get
             {
-                return _pidTidFilterVM;
+                return _tidFilterVM;
             }
             set
             {
-                _pidTidFilterVM = value;
+                _tidFilterVM = value;
                 InvalidateOwn();
             }
         }
+        [Bindable(true)]
+        public PidFilterUCViewModel PidFilterContent
+        {
+            get
+            {
+                return _pidFilterVM;
+            }
+            set
+            {
+                _pidFilterVM = value;
+                InvalidateOwn();
+            }
+        }
+
 
         [Bindable(true)]
         public MessageFilterUCViewModel MessageFilterContent
@@ -271,13 +286,15 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             SourceManagerImpl.Current.SourceCollectionChanged += OnLogSourceCollectionChanged;
             TagFilterContent = new TagShowFilterUCViewModel(this);
             MessageFilterContent = new MessageFilterUCViewModel(this);
-            PidTidFilterContent = new PidTidFilterUCViewModel(this);
+            TidFilterContent = new TidFilterUCViewModel(this);
+            PidFilterContent = new PidFilterUCViewModel(this);
             TagRemoveContent = new TagRemoveFilterUCViewModel(this);
 
             SourceFilterManagerImpl.Current.LogTagRemoveFilter = TagRemoveContent;
             SourceFilterManagerImpl.Current.LogTagFilter = TagFilterContent;
             SourceFilterManagerImpl.Current.LogMessageFilter = MessageFilterContent;
-            SourceFilterManagerImpl.Current.LogPidTidFilter = PidTidFilterContent;
+            SourceFilterManagerImpl.Current.LogTidFilter = TidFilterContent;
+            SourceFilterManagerImpl.Current.LogPidFilter = PidFilterContent;
         }
 
         public override void OnDestroy()

@@ -1,0 +1,46 @@
+﻿using LogGuard_v0._1.Base.LogGuardFlow;
+using LogGuard_v0._1.Base.ViewModel;
+using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
+using LogGuard_v0._1.Implement.UIEventHandler;
+using LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFilter
+{
+    public class TidFilterUCViewModel : ChildOfAdvanceFilterUCViewModel
+    {
+        [Bindable(true)]
+        public CommandExecuterModel TidFilterLeftClickCommand { get; set; }
+
+        public TidFilterUCViewModel(BaseViewModel parent) : base(parent)
+        {
+            TidFilterLeftClickCommand = new CommandExecuterModel((paramaters) =>
+            {
+                IsFilterEnable = !IsFilterEnable;
+                return null;
+            });
+
+            UpdateHelperContent();
+        }
+        protected override bool IsUseFilterEngine => false;
+
+        public override bool Filter(object obj)
+        {
+            var data = obj as LogWatcherItemViewModel;
+            if (IsFilterEnable && data?.Tid != null)
+            {
+                return data
+                    .Tid
+                    .ToString()
+                    .IndexOf(FilterContent, StringComparison.InvariantCultureIgnoreCase) != -1;
+            }
+
+            return true;
+        }
+    }
+}

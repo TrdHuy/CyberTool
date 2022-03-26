@@ -11,11 +11,10 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         event SourceFilterConditionChangedHandler FilterConditionChanged;
         ISourceFilter LogTagFilter { get; set; }
         ISourceFilter LogMessageFilter { get; set; }
-        ISourceFilter LogPidTidFilter { get; set; }
+        ISourceFilter LogPidFilter { get; set; }
+        ISourceFilter LogTidFilter { get; set; }
 
         void NotifyFilterPropertyChanged(ISourceFilter sender, object e);
-        void NotifyFilterEngineSourceChanged(ISourceFilter sender, object e);
-        
     }
 
     public delegate void SourceFilterConditionChangedHandler(object sender, ConditionChangedEventArgs e);

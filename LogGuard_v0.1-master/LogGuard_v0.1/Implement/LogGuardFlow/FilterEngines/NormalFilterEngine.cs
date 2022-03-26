@@ -33,7 +33,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
             return MatchedWord;
         }
 
-        public virtual bool IsVaild(string input)
+        public virtual bool IsVaild()
         {
             return true;
         }

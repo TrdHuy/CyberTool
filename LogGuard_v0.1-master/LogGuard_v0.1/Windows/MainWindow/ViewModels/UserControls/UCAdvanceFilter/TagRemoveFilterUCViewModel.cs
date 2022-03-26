@@ -14,9 +14,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 {
     public class TagRemoveFilterUCViewModel : ChildOfAdvanceFilterUCViewModel
     {
-        private string _tagRemoveFilterContent = "";
-        private string _tagRemoveHelperContent = "";
-        private bool _isTagRemoveEnable = true;
 
         [Bindable(true)]
         public CommandExecuterModel TagRemoveRightClickCommand { get; set; }
@@ -24,68 +21,11 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
         [Bindable(true)]
         public CommandExecuterModel TagRemoveLeftClickCommand { get; set; }
 
-        [Bindable(true)]
-        public string TagRemoveHelperContent
-        {
-            get
-            {
-                return _tagRemoveHelperContent;
-            }
-            set
-            {
-                _tagRemoveHelperContent = value;
-                InvalidateOwn();
-            }
-        }
-        [Bindable(true)]
-        public string TagRemoveFilterContent
-        {
-            get
-            {
-                return _tagRemoveFilterContent;
-            }
-            set
-            {
-                _tagRemoveFilterContent = value;
-                SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, value);
-                InvalidateOwn();
-            }
-        }
-
-        [Bindable(true)]
-        public bool IsTagRemoveEnable
-        {
-            get
-            {
-                return _isTagRemoveEnable;
-            }
-            set
-            {
-                _isTagRemoveEnable = value;
-                SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, value);
-                InvalidateOwn();
-            }
-        }
-
-        [Bindable(true)]
-        public FilterType TagRemoveFilterLevel
-        {
-            get
-            {
-                return CurrentFilterMode;
-            }
-            set
-            {
-                CurrentFilterMode = value;
-                InvalidateOwn();
-            }
-        }
-
         public TagRemoveFilterUCViewModel(BaseViewModel parent) : base(parent)
         {
             TagRemoveLeftClickCommand = new CommandExecuterModel((paramaters) =>
             {
-                IsTagRemoveEnable = !IsTagRemoveEnable;
+                IsFilterEnable = !IsFilterEnable;
                 return null;
             });
 
@@ -95,18 +35,21 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 switch (CurrentFilterMode)
                 {
                     case FilterType.Simple:
-                        TagRemoveFilterLevel = FilterType.Syntax;
+                        CurrentFilterMode = FilterType.Syntax;
                         break;
                     case FilterType.Syntax:
-                        TagRemoveFilterLevel = FilterType.Advance;
+                        CurrentFilterMode = FilterType.Advance;
                         break;
                     case FilterType.Advance:
-                        TagRemoveFilterLevel = FilterType.Simple;
+                        CurrentFilterMode = FilterType.Simple;
                         break;
                 }
-                UpdateTagRemoveHelperContent();
                 return null;
             });
+
+            _isFilterEnable = true;
+            UpdateHelperContent();
+            UpdateEngingeComparableSource(FilterContent);
         }
 
         public override bool Filter(object obj)
@@ -118,19 +61,15 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             }
             return true;
         }
-        private void UpdateTagRemoveHelperContent()
-        {
-            TagRemoveHelperContent = "Left click to enable filter\n" +
-                "Right click to change filter mode\n" +
-                "Filter mode: " + TagRemoveFilterLevel.ToString(); ;
-        }
+        protected override bool IsUseFilterEngine => true;
 
         private bool TagRemove(LogWatcherItemViewModel data)
         {
-            if (_isTagRemoveEnable)
+            if (IsFilterEnable && data.Tag != null)
             {
-                if (!string.IsNullOrEmpty(TagRemoveFilterContent)
-                    && data.Tag.ToString().IndexOf(TagRemoveFilterContent, StringComparison.InvariantCultureIgnoreCase) != -1)
+                if (!string.IsNullOrEmpty(FilterContent)
+                    && CurrentEngine.IsVaild()
+                    && CurrentEngine.ContainIgnoreCase(data.Tag.ToString()))
                 {
                     return false;
                 }

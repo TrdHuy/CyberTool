@@ -22,10 +22,11 @@
 			CornerRadius="{StaticResource DefaultPanelCornerRadius}">
 		<Grid>
 			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="0.115*" />
 				<ColumnDefinition Width="2.02*" />
 				<ColumnDefinition Width="1" />
 				<ColumnDefinition Width="2.02*" />
-				<ColumnDefinition Width="0.23*" />
+				<ColumnDefinition Width="0.115*" />
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="0.925*" />
@@ -35,19 +36,21 @@
 				<RowDefinition Height="0.12*" />
 			</Grid.RowDefinitions>
 			<Rectangle Grid.Row="2"
+					   Grid.Column="1"
 					   Fill="{StaticResource HorizontalFench1pixel_Background}" />
 
 			<Rectangle Grid.Row="0"
 					   Grid.RowSpan="2"
-					   Grid.Column="1"
+					   Grid.Column="2"
 					   Fill="{StaticResource VerticalFench1pixel_Background}" />
 
 			<Rectangle Grid.Row="3"
-					   Grid.Column="1"
+					   Grid.Column="2"
 					   Fill="{StaticResource VerticalFench1pixel_Background}" />
 
 
 			<Grid Margin="10,0,10,0"
+				  Grid.Column="1"
 				  Grid.RowSpan="2">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="*" />
@@ -68,13 +71,13 @@
 				<TextBox Grid.Row="1"
 						 Margin="0,0,0,10"
 						 Tag="Tag show"
-						 Text="{Binding TagFilterContent.TagShowFilterContent, UpdateSourceTrigger=PropertyChanged}"
+						 Text="{Binding TagFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 Grid.ColumnSpan="2"
-						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TagFilterContent.TagShowHelperContent}"
+						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TagFilterContent.HelperContent}"
 						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding TagFilterContent.TagShowLeftClickCommand}"
 						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding TagFilterContent.TagShowRightClickCommand}"
-						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding TagFilterContent.IsTagShowEnable}"
-						 attPTB:TextBoxAttProperties.Filter="{Binding TagFilterContent.TagShowFilterLevel}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding TagFilterContent.IsFilterEnable}"
+						 attPTB:TextBoxAttProperties.Filter="{Binding TagFilterContent.CurrentFilterMode}"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
@@ -85,12 +88,12 @@
 						 Margin="0,0,0,10"
 						 Grid.ColumnSpan="2"
 						 Tag="Tag remove"
-						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TagRemoveContent.TagRemoveHelperContent}"
+						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TagRemoveContent.HelperContent}"
 						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding TagRemoveContent.TagRemoveLeftClickCommand}"
 						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding TagRemoveContent.TagRemoveRightClickCommand}"
-						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding TagRemoveContent.IsTagRemoveEnable}"
-						 attPTB:TextBoxAttProperties.Filter="{Binding TagRemoveContent.TagRemoveFilterLevel}"
-						 Text="{Binding TagRemoveContent.TagRemoveFilterContent, UpdateSourceTrigger=PropertyChanged}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding TagRemoveContent.IsFilterEnable}"
+						 attPTB:TextBoxAttProperties.Filter="{Binding TagRemoveContent.CurrentFilterMode}"
+						 Text="{Binding TagRemoveContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
@@ -101,11 +104,12 @@
 						 Margin="0,0,0,10"
 						 Grid.ColumnSpan="2"
 						 Tag="Message"
+						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding MessageFilterContent.HelperContent}"
 						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding MessageFilterContent.MessageFilterLeftClickCommand}"
 						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding MessageFilterContent.MessageFilterRightClickCommand}"
-						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding MessageFilterContent.IsMessageFilterEnable}"
-						 attPTB:TextBoxAttProperties.Filter="{Binding MessageFilterContent.MessageFilterLevel}"
-						 Text="{Binding MessageFilterContent.MessageFilterContent, UpdateSourceTrigger=PropertyChanged}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding MessageFilterContent.IsFilterEnable}"
+						 attPTB:TextBoxAttProperties.Filter="{Binding MessageFilterContent.CurrentFilterMode}"
+						 Text="{Binding MessageFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
@@ -114,9 +118,10 @@
 				<TextBox Grid.Row="4"
 						 Margin="0,0,10,10"
 						 Tag="PID"
-						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding PidTidFilterContent.PidFilterLeftClickCommand}"
-						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding PidTidFilterContent.IsPidFilterEnable}"
-						 Text="{Binding PidTidFilterContent.PidFilterContent, UpdateSourceTrigger=PropertyChanged}"
+						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding PidFilterContent.HelperContent}"
+						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding PidFilterContent.PidFilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding PidFilterContent.IsFilterEnable}"
+						 Text="{Binding PidFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 attPTB:TextBoxAttProperties.PathData="{StaticResource SearchPathGeomerty}"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
@@ -125,9 +130,10 @@
 				<TextBox Grid.Row="4"
 						 Grid.Column="1"
 						 Margin="10,0,0,10"
-						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding PidTidFilterContent.TidFilterLeftClickCommand}"
-						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding PidTidFilterContent.IsTidFilterEnable}"
-						 Text="{Binding PidTidFilterContent.TidFilterContent, UpdateSourceTrigger=PropertyChanged}"
+						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TidFilterContent.HelperContent}"
+						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding TidFilterContent.TidFilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding TidFilterContent.IsFilterEnable}"
+						 Text="{Binding TidFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 Tag="TID"
 						 attPTB:TextBoxAttProperties.PathData="{StaticResource SearchPathGeomerty}"
 						 Foreground="{StaticResource Foreground_Level3}"
@@ -137,6 +143,7 @@
 			</Grid>
 
 			<Grid Margin="10,0,10,0"
+				  Grid.Column="1"
 				  Grid.Row="3">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="*" />
@@ -175,7 +182,7 @@
 			</Grid>
 
 			<Grid Margin="10,0,10,0"
-				  Grid.Column="2"
+				  Grid.Column="3"
 				  Grid.RowSpan="2"
 				  Grid.Row="0">
 				<Grid.RowDefinitions>
@@ -206,7 +213,7 @@
 			</Grid>
 
 			<Grid Margin="10,10,10,10"
-				  Grid.Column="2"
+				  Grid.Column="3"
 				  x:Name="LogPercentGrid"
 				  ClipToBounds="True"
 				  Grid.RowSpan="4"

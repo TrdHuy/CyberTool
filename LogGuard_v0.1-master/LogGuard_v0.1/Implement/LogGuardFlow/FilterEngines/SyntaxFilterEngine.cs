@@ -31,7 +31,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
             return true;
         }
 
-        public override bool IsVaild(string input)
+        public override bool IsVaild()
         {
             return _isVailCache;
         }
@@ -53,6 +53,14 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
 
         private bool IsValid(string[] input, string rawInput)
         {
+            foreach(var i in input)
+            {
+                if (string.IsNullOrEmpty(i))
+                {
+                    return false;
+                }
+            }
+
             Regex operators = new Regex(@"[&|]", RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
             var len = input.Length;
 

@@ -175,7 +175,8 @@
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\AdvanceFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\ChildOfAdvanceFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\MessageFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\PidTidFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\PidFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TidFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TagRemoveFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TagShowFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCListOfDevice\ListOfDeviceUCViewModel.cs" />

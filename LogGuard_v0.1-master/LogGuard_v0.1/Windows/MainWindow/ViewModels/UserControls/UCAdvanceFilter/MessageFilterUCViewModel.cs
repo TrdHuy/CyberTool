@@ -15,96 +15,53 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 {
     public class MessageFilterUCViewModel : ChildOfAdvanceFilterUCViewModel
     {
-        private string _messageFilterContent = "";
-        private bool _isMessageFilterEnable = false;
-        private FilterType _messageFilterLevel = FilterType.Simple;
-
         [Bindable(true)]
         public CommandExecuterModel MessageFilterRightClickCommand { get; set; }
 
         [Bindable(true)]
         public CommandExecuterModel MessageFilterLeftClickCommand { get; set; }
 
-        [Bindable(true)]
-        public string MessageFilterContent
-        {
-            get
-            {
-                return _messageFilterContent;
-            }
-            set
-            {
-                _messageFilterContent = value;
-                SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, value);
-                InvalidateOwn();
-            }
-        }
-
-        [Bindable(true)]
-        public bool IsMessageFilterEnable
-        {
-            get
-            {
-                return _isMessageFilterEnable;
-            }
-            set
-            {
-                _isMessageFilterEnable = value;
-                InvalidateOwn();
-            }
-        }
-
-        [Bindable(true)]
-        public FilterType MessageFilterLevel
-        {
-            get
-            {
-                return _messageFilterLevel;
-            }
-            set
-            {
-                _messageFilterLevel = value;
-                InvalidateOwn();
-            }
-        }
-
-
+        protected override bool IsUseFilterEngine { get => true; }
 
         public MessageFilterUCViewModel(BaseViewModel parent) : base(parent)
         {
             MessageFilterLeftClickCommand = new CommandExecuterModel((paramaters) =>
             {
-                IsMessageFilterEnable = !IsMessageFilterEnable;
+                IsFilterEnable = !IsFilterEnable;
                 return null;
             });
 
             MessageFilterRightClickCommand = new CommandExecuterModel((paramaters) =>
             {
-                switch (_messageFilterLevel)
+                switch (CurrentFilterMode)
                 {
                     case FilterType.Simple:
-                        MessageFilterLevel = FilterType.Syntax;
+                        CurrentFilterMode = FilterType.Syntax;
                         break;
                     case FilterType.Syntax:
-                        MessageFilterLevel = FilterType.Advance;
+                        CurrentFilterMode = FilterType.Advance;
                         break;
                     case FilterType.Advance:
-                        MessageFilterLevel = FilterType.Simple;
+                        CurrentFilterMode = FilterType.Simple;
                         break;
                 }
                 return null;
             });
+
+            UpdateHelperContent();
+            UpdateEngingeComparableSource(FilterContent);
         }
 
         public override bool Filter(object obj)
         {
-            var itemVM = obj as LogWatcherItemViewModel;
-            if (itemVM != null)
+            var data = obj as LogWatcherItemViewModel;
+            if (IsFilterEnable && data.Message != null)
             {
-                return itemVM
-                    .Message
-                    .ToString()
-                    .IndexOf(MessageFilterContent, StringComparison.InvariantCultureIgnoreCase) != -1;
+                if (CurrentEngine.ContainIgnoreCase(data.Message.ToString()))
+                {
+                    return true;
+                }
+                return false;
             }
             return true;
         }

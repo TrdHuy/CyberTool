@@ -14,7 +14,7 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
 
         void UpdateComparableSource(string source);
 
-        bool IsVaild(string input);
+        bool IsVaild();
 
         List<string> GetMatchWords(string input);
     }
