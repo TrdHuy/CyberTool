@@ -6,6 +6,7 @@ using LogGuard_v0._1.Windows.MessageWindow;
 using LogGuard_v0._1.Windows.WaitingWindow;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -95,9 +96,9 @@ namespace LogGuard_v0._1
             return mesBox.Show();
         }
 
-        public LogGuardWaitingBoxResult OpenWaitingTaskBox(string content, string title, Func<Task<AsyncTaskResult>> asyncTask, Func<bool> canExecute = null, Action<AsyncTaskResult> callback = null, long delayTime = 0)
+        public LogGuardWaitingBoxResult OpenWaitingTaskBox(string content, string title, Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask, Func<bool> canExecute = null, Action<object, AsyncTaskResult> callback = null, long delayTime = 0)
         {
-            var newWaitingBox = new WaitingBox(content, title, asyncTask, canExecute, callback, delayTime);
+            var newWaitingBox = new WaitingBox(content, title, asyncTask, canExecute, callback, delayTime, MainScreenWindow);
             return newWaitingBox.Show();
         }
 

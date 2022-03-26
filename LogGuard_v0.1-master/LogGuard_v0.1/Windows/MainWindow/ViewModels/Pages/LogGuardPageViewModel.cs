@@ -1,10 +1,12 @@
-﻿using LogGuard_v0._1.Base.LogGuardFlow;
+﻿using LogGuard_v0._1.Base.Device;
+using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Implement.Device;
 using LogGuard_v0._1.Implement.LogGuardFlow.RunThreadConfig;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceManager;
 using LogGuard_v0._1.Implement.LogGuardFlow.StateController;
 using LogGuard_v0._1.Utils;
+using LogGuard_v0._1.Windows.MainWindow.ViewModels.Device;
 using LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher;
 using System;
 using System.Collections.Generic;
@@ -114,6 +116,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
                 InvalidateOwn();
             }
         }
+
 
         public LogGuardPageViewModel()
         {

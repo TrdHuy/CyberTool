@@ -102,7 +102,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels
 
                         var resMes = App.Current.OpenWaitingTaskBox("Saving!"
                             , "Please wait!"
-                            , async () =>
+                            , async (param, token) =>
                                 {
                                     var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
                                     FileHelperImpl.Current.ExportLinesToFile(savePath, SourceManagerImpl.Current.RawLog);

@@ -16,9 +16,11 @@ namespace LogGuard_v0._1.Base.AsyncTask
         private bool _isCompletedCallback;
         private bool _isCanceled;
 
+        private Action<object, AsyncTaskResult> _paramExecuteCallback;
         private Action<AsyncTaskResult> _callback;
         private Func<Task<AsyncTaskResult>> _execute;
         private Func<CancellationToken, Task<AsyncTaskResult>> _cancelableExecute;
+        private Func<object, CancellationToken, Task<AsyncTaskResult>> _paramExecute;
         private Func<bool> _canExecute;
         private CancellationTokenSource _cancellationTokenSource;
 
@@ -31,7 +33,10 @@ namespace LogGuard_v0._1.Base.AsyncTask
 
         public Func<CancellationToken, Task<AsyncTaskResult>> CancelableExecute => _cancelableExecute;
 
+        public Func<object, CancellationToken, Task<AsyncTaskResult>> ParamExecute => _paramExecute;
+
         public Action<AsyncTaskResult> CallbackHandler => _callback;
+        public Action<object, AsyncTaskResult> ParamExecuteCallbackHandler => _paramExecuteCallback;
 
         public bool IsCompletedCallback { get => _isCompletedCallback; private set => _isCompletedCallback = value; }
 
@@ -65,6 +70,7 @@ namespace LogGuard_v0._1.Base.AsyncTask
             }
         }
 
+
         public AsyncTask(Func<Task<AsyncTaskResult>> execute)
         {
             InitializeAsyncTask(execute);
@@ -88,6 +94,11 @@ namespace LogGuard_v0._1.Base.AsyncTask
         public AsyncTask(Func<CancellationToken, Task<AsyncTaskResult>> cancelablExecute, Func<bool> canExecute, Action<AsyncTaskResult> callback, long delayTime, CancellationTokenSource cancellationTokenSource)
         {
             InitializeAsyncTask(cancelablExecute, canExecute, callback, delayTime, cancellationTokenSource);
+        }
+
+        public AsyncTask(Func<object, CancellationToken, Task<AsyncTaskResult>> paramExecute, Func<bool> canExecute, Action<object, AsyncTaskResult> callback, long delayTime, CancellationTokenSource cancellationTokenSource)
+        {
+            InitializeAsyncTask(paramExecute, canExecute, callback, delayTime, cancellationTokenSource);
         }
 
         private void InitializeAsyncTask(
@@ -118,6 +129,20 @@ namespace LogGuard_v0._1.Base.AsyncTask
             _cancellationTokenSource = cancellationTokenSource;
         }
 
+        private void InitializeAsyncTask(
+            Func<object, CancellationToken, Task<AsyncTaskResult>> paramExecute,
+            Func<bool> canExecute = null,
+            Action<object, AsyncTaskResult> callback = null,
+            long delayTime = 0,
+            CancellationTokenSource cancellationTokenSource = null)
+        {
+            _paramExecute = paramExecute;
+            _canExecute = canExecute;
+            _paramExecuteCallback = callback;
+            _delayTime = delayTime;
+            _result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
+            _cancellationTokenSource = cancellationTokenSource;
+        }
 
         public event IsCompletedChangedHandler OnCompletedChanged;
         public event IscanceldChangedHandler OncanceldChanged;
@@ -302,6 +327,76 @@ namespace LogGuard_v0._1.Base.AsyncTask
                 asyncTask.IsCanceled = true;
             }
         }
+
+        public static async void ParamAsyncExecute(AsyncTask asyncTask, object param)
+        {
+            if (asyncTask == null)
+                return;
+
+            var asyncTaskResult = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
+
+            try
+            {
+                var asynTaskExecuteWatcher = Stopwatch.StartNew();
+
+                var canExecute = asyncTask.CanExecute == null ? true : (bool)asyncTask.CanExecute?.Invoke();
+
+                if (canExecute)
+                {
+                    try
+                    {
+                        asyncTaskResult = await asyncTask.ParamExecute?.Invoke(param, asyncTask._cancellationTokenSource.Token);
+                        if (asyncTask._cancellationTokenSource.Token.IsCancellationRequested)
+                        {
+                            throw new OperationCanceledException();
+                        }
+
+                        if (asyncTaskResult != null && asyncTaskResult.MesResult == MessageAsyncTaskResult.Aborted)
+                        {
+                            throw new OperationCanceledException(asyncTaskResult.Messsage);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        asyncTask.IsCanceled = true;
+                    }
+
+                    asynTaskExecuteWatcher.Stop();
+
+                    //
+                    //Console.WriteLine("Execute time = " + asynTaskExecuteWatcher.ElapsedMilliseconds + "(ms)");
+
+                    long restLoadingTime = asyncTask.DelayTime - asynTaskExecuteWatcher.ElapsedMilliseconds;
+                    if (restLoadingTime > 0 && !asyncTask.IsCanceled)
+                    {
+                        try
+                        {
+                            await Task.Delay(Convert.ToInt32(restLoadingTime), asyncTask._cancellationTokenSource.Token);
+                        }
+                        catch
+                        {
+                            asyncTask.IsCanceled = true;
+                        }
+                    }
+                    asyncTask.IsCompleted = true;
+
+                    //asynTaskExecuteWatcher = Stopwatch.StartNew();
+                    asyncTask.ParamExecuteCallbackHandler?.Invoke(param, asyncTaskResult);
+                    //asynTaskExecuteWatcher.Stop();
+                    //Console.WriteLine("Callback time = " + asynTaskExecuteWatcher.ElapsedMilliseconds + "(ms)");
+
+                    asyncTask.IsCompletedCallback = true;
+                }
+
+            }
+            catch (OperationCanceledException)
+            {
+                asyncTask.IsCompletedCallback = false;
+                asyncTask.IsCompleted = false;
+                asyncTask.IsCanceled = true;
+            }
+        }
+
 
         public static void CancelAsyncExecute(AsyncTask asyncTask)
         {

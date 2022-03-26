@@ -75,6 +75,8 @@
     <Compile Include="Base\Command\BaseCommandImpl.cs" />
     <Compile Include="Base\Device\IDeviceCmdExecuter.cs" />
     <Compile Include="Base\AndroidLog\ILogInfoManager.cs" />
+    <Compile Include="Base\Device\IDeviceHolder.cs" />
+    <Compile Include="Base\Device\IDeviceManager.cs" />
     <Compile Include="Base\FileHelper\IFileHelper.cs" />
     <Compile Include="Base\LogGuardFlow\IFilterEngine.cs" />
     <Compile Include="Base\LogGuardFlow\IRunThreadConfig.cs" />
@@ -114,6 +116,7 @@
     <Compile Include="Implement\AndroidLog\LogParser\TimeAdbCmdLogParser.cs" />
     <Compile Include="Implement\Device\DeviceCmdContact.cs" />
     <Compile Include="Implement\Device\DeviceCmdExecuterImpl.cs" />
+    <Compile Include="Implement\Device\DeviceManagerImpl.cs" />
     <Compile Include="Implement\FileHelper\FileHelperImpl.cs" />
     <Compile Include="Implement\LogGuardFlow\FilterEngines\AdvanceFilterEngine.cs" />
     <Compile Include="Implement\LogGuardFlow\FilterEngines\NormalFilterEngine.cs" />
@@ -154,14 +157,18 @@
     </Compile>
     <Compile Include="Windows\MainWindow\Action\MSW_CommandExecuterBuilder.cs" />
     <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_PlayButtonAction.cs" />
+    <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_RefreshDeviceButtonAction.cs" />
     <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_StopButtonAction.cs" />
+    <Compile Include="Windows\MainWindow\Models\Builder\DeviceBuilder.cs" />
     <Compile Include="Windows\MainWindow\Models\Builder\LogBuilder.cs" />
-    <Compile Include="Windows\MainWindow\Models\LogInfo.cs" />
+    <Compile Include="Windows\MainWindow\Models\DeviceInfo\DeviceInfo.cs" />
+    <Compile Include="Windows\MainWindow\Models\LogInfo\LogInfo.cs" />
     <Compile Include="Windows\MainWindow\Utils\MSW_PageController.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Device\DeviceItemViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\LogWatcher\LogWatcherItemViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\MSW_ButtonCommandViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\MSW_LogWatcherControlButtonCommandVM.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\MSW_LogWatcherControlButtonCommandVM.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPageViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\AdvanceFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\ChildOfAdvanceFilterUCViewModel.cs" />
@@ -169,6 +176,8 @@
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\PidTidFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TagRemoveFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TagShowFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCListOfDevice\ListOfDeviceUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCListOfDevice\MSW_UC_ListOfDeviceControlButtonCommand.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCLogManager\LogByTeamItemViewModel.cs" />
     <Compile Include="Windows\MainWindow\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

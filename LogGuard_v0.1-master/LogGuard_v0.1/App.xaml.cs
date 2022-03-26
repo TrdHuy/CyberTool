@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -68,9 +69,9 @@ namespace LogGuard_v0._1
 
         public LogGuardWaitingBoxResult OpenWaitingTaskBox(string content
             , string title
-            , Func<Task<AsyncTaskResult>> asyncTask
+            , Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask
             , Func<bool> canExecute = null
-            , Action<AsyncTaskResult> callback = null
+            , Action<object, AsyncTaskResult> callback = null
             , long delayTime = 0)
         {
             return _windowDirector.OpenWaitingTaskBox(content, title, asyncTask, canExecute, callback, delayTime);

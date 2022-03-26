@@ -28,39 +28,65 @@ namespace LogGuard_v0._1.Windows.WaitingWindow
         private CancellationToken cancelToken { get; set; }
         public WaitingBox(string content
             , string title
-            , Func<Task<AsyncTaskResult>> asyncTask
+            , Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask
             , Func<bool> canExecute = null
-            , Action<AsyncTaskResult> callback = null
-            , long delayTime = 0)
+            , Action<object, AsyncTaskResult> callback = null
+            , long delayTime = 0
+            , Window owner = null)
         {
             InitializeComponent();
+            if (owner != null)
+            {
+                Owner = owner;
+                WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            }
+            else
+            {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
+
             MainContent.Content = content;
             Title = title;
             ContinueBtn.Visibility = Visibility.Collapsed;
+
+            var cts = new CancellationTokenSource();
+            cancelToken = cts.Token;
             var task = new AsyncTask(asyncTask
                    , canExecute
                    , callback
-                   , delayTime);
+                   , delayTime
+                   , cts);
             task.OnCompletedChanged -= Task_OnCompletedChanged;
             task.OnCompletedChanged += Task_OnCompletedChanged;
 
             MainTask = task;
-            var cts = new CancellationTokenSource();
-            cancelToken = cts.Token;
+           
 
             cancelBtn.Click += (s, e) =>
             {
                 cts.Cancel();
+                MesResult = LogGuardWaitingBoxResult.cancel;
                 CancelIconPath.Visibility = Visibility.Visible;
                 IconPath.Visibility = Visibility.Collapsed;
+                ContinueBtn.Visibility = Visibility.Visible;
+                cancelBtn.Visibility = Visibility.Collapsed;
                 Title = "Canceled!";
                 MainContent.Content = "Your process is canceled!~";
             };
+
             ContinueBtn.Click += (s, e) =>
             {
                 this.Close();
             };
 
+            Closing += (s, e) =>
+            {
+                if (!MainTask.IsCompleted)
+                {
+                    cts.Cancel();
+                    MesResult = LogGuardWaitingBoxResult.cancel;
+                }
+            };
         }
 
         private void Task_OnCompletedChanged(object sender, bool oldValue, bool newValue)
@@ -68,6 +94,12 @@ namespace LogGuard_v0._1.Windows.WaitingWindow
             if (newValue)
             {
                 MesResult = MainTask.IsCanceled ? LogGuardWaitingBoxResult.cancel : LogGuardWaitingBoxResult.Done;
+                if (MesResult == LogGuardWaitingBoxResult.Done)
+                {
+                    IconPath.Visibility = Visibility.Collapsed;
+                    CancelIconPath.Visibility = Visibility.Collapsed;
+                    SuccessIconPath.Visibility = Visibility.Visible;
+                }
                 ContinueBtn.Visibility = Visibility.Visible;
                 cancelBtn.Visibility = Visibility.Collapsed;
             }
@@ -75,9 +107,15 @@ namespace LogGuard_v0._1.Windows.WaitingWindow
 
         public new LogGuardWaitingBoxResult Show()
         {
-            AsyncTask.AsyncExecute(MainTask, cancelToken);
+            AsyncTask.ParamAsyncExecute(MainTask, this);
             base.ShowDialog();
             return MesResult;
+        }
+
+        public void UpdateMessageAndTitle(string message, string title)
+        {
+            Title = title;
+            MainContent.Content = message;
         }
     }
     public enum LogGuardWaitingBoxResult

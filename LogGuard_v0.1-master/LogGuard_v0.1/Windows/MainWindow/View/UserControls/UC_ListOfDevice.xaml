@@ -6,9 +6,17 @@
 			 xmlns:logwatcher_ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control"
 			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 			 mc:Ignorable="d"
+			 xmlns:vmh="clr-namespace:LogGuard_v0._1.Base.ViewModel.ViewModelHelper"
+			 xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCListOfDevice"
+			 xmlns:vmp="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages"
 			 d:DesignHeight="125"
 			 d:DesignWidth="110"
 			 FontFamily="Calibri">
+	<UserControl.DataContext>
+		<Binding Source="{vmh:VMManagerMarkup {x:Type vm:ListOfDeviceUCViewModel},
+			{x:Type vmp:LogGuardPageViewModel}}" />
+	</UserControl.DataContext>
+	
 	<Border Background="{StaticResource Background_Level2}"
 			CornerRadius="{StaticResource DefaultPanelCornerRadius}"
 			x:Name="MainBorder">
@@ -27,6 +35,7 @@
 				   Foreground="{StaticResource Foreground_Level1}" />
 			<Button Grid.Row="2"
 					Content="Refresh"
+					Command="{Binding CommandViewModel.RefreshDeviceButtonCommand}"
 					HorizontalAlignment="Center"
 					Foreground="{StaticResource Foreground_Level3}"
 					Background="{StaticResource ButtonBackground_Level1}"
@@ -39,6 +48,7 @@
 			<ListView Grid.Row="1"
 					  Background="Transparent"
 					  BorderThickness="0"
+					  ItemsSource="{Binding DevicesSource}"
 					  Foreground="{StaticResource Foreground_Level3}"
 					  Margin="0,0,0,5">
 				<ListView.ItemContainerStyle>
@@ -83,7 +93,7 @@
 														Visibility="Hidden"
 														HorizontalAlignment="Stretch" />
 											</Grid>
-											<ContentPresenter Margin="10,0,0,0"
+											<ContentPresenter Margin="15,0,0,0"
 															  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
 															  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
 
@@ -149,10 +159,6 @@
 
 					</ControlTemplate>
 				</ListView.Template>
-				<ListViewItem Content="G967BXXUGFA1" />
-				<ListViewItem Content="G967BXXUGFA2" />
-				<ListViewItem Content="G967BXXUGFA3" />
-				<ListViewItem Content="G967BXXUGFA4" />
 			</ListView>
 		</Grid>
 	</Border>

@@ -34,11 +34,21 @@ namespace LogGuard_v0._1.Base.AsyncTask
         /// </summary>
         Func<CancellationToken, Task<AsyncTaskResult>> CancelableExecute { get; }
 
+        /// <summary>
+        /// Triển khai task cho 1 đối tượng  được định nghĩa trước
+        /// </summary>
+        Func<object, CancellationToken, Task<AsyncTaskResult>> ParamExecute { get; }
+
 
         /// <summary>
         /// Xử lý call back sau khi async task được triển khai 
         /// </summary>
         Action<AsyncTaskResult> CallbackHandler { get; }
+
+        /// <summary>
+        /// Xử lý call back sau khi async task được triển khai 
+        /// </summary>
+        Action<object, AsyncTaskResult> ParamExecuteCallbackHandler { get; }
 
         /// <summary>
         /// Task chính đã được thực hiện xong chưa
