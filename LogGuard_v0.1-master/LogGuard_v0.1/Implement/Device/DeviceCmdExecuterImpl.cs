@@ -27,18 +27,18 @@ namespace LogGuard_v0._1.Implement.Device
             return process;
         }
 
-        public string CreateCommandADB(string command, int type, bool asroot, bool multiDevice, string deviceID)
+        public string CreateCommandADB(string command, int type, bool asroot, bool multiDevice, string serialNumber)
         {
             string cmd = "";
 
             switch (type)
             {
                 case DeviceCmdContact.ADB_SHELL_COMMAND_TYPE:
-                    cmd = asroot ? (multiDevice ? " -s " + deviceID : "") + " shell su -c " + command :
-                        (multiDevice ? " -s " + deviceID : "") + " shell " + command;
+                    cmd = asroot ? (multiDevice ? " -s " + serialNumber : "") + " shell su -c " + command :
+                        (multiDevice ? " -s " + serialNumber : "") + " shell " + command;
                     break;
                 case DeviceCmdContact.ADB_NONE_SHELL_COMMAND_TYPE:
-                    cmd = (multiDevice ? " -s " + deviceID : "") + command;
+                    cmd = (multiDevice ? " -s " + serialNumber : "") + command;
                     break;
                 default:
                     break;

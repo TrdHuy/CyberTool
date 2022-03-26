@@ -1,4 +1,5 @@
-﻿using LogGuard_v0._1.Base.Log;
+﻿using LogGuard_v0._1.Base.Device;
+using LogGuard_v0._1.Base.Log;
 using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Implement.AndroidLog;
 using LogGuard_v0._1.Implement.Device;
@@ -30,6 +31,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
         public bool IsStop { get; private set; }
 
         public ISourceManager LGSourceManager => SourceManagerImpl.Current;
+        public IDeviceManager DeviceManager => DeviceManagerImpl.Current;
 
 
         public event StateChangedHandler StateChanged;
@@ -97,11 +99,33 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
             }
         }
 
-        public void Start()
+        public bool Start()
         {
             if (CurrentState == LogGuardState.STOP || CurrentState == LogGuardState.NONE)
             {
-                CaptureProc = DeviceCmdExecuterImpl.Current.CreateProcess(RunThreadConfig.LogParserFormat.Cmd);
+                if (DeviceManager.DeviceSource.Count == 0)
+                {
+                    App.Current.ShowWaringBox("No devices found!");
+                    return false;
+                }
+                if (DeviceManager.SelectedDevice == null)
+                {
+                    App.Current.ShowWaringBox("Please select a device!");
+                    return false;
+                }
+                var cmd = DeviceCmdExecuterImpl
+                    .Current
+                    .CreateCommandADB(command: RunThreadConfig.LogParserFormat.Cmd
+                        , type: DeviceCmdContact.ADB_NONE_SHELL_COMMAND_TYPE
+                        , asroot: false
+                        , multiDevice: true
+                        , serialNumber: DeviceManager.SelectedDevice.SerialNumber.ToString());
+
+                CaptureProc = DeviceCmdExecuterImpl
+                    .Current
+                    .CreateProcess(cmd);
+
+
                 LGSourceManager.UpdateLogParser(RunThreadConfig);
                 RunningThread = new Thread(Running);
             }
@@ -115,6 +139,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
             {
                 StateChanged?.Invoke(this, new StateChangedEventArgs(CurrentState, PreviousState));
             }
+            return true;
         }
 
         private void Running()
@@ -166,5 +191,6 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
                 return HighCpu_StateController.Current;
             }
         }
+
     }
 }

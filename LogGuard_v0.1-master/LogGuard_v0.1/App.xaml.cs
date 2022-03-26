@@ -62,6 +62,11 @@ namespace LogGuard_v0._1
             return _windowDirector.ShowErrorBox(error);
         }
 
+        public Windows.MessageWindow.LogGuardMesBoxResult ShowWaringBox(string warning)
+        {
+            return _windowDirector.ShowWarningBox(warning);
+        }
+
         public string OpenSaveFileDialogWindow()
         {
             return _windowDirector.OpenSaveLogFileDialogWindow();

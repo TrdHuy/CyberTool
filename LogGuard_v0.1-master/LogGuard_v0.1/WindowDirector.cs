@@ -79,6 +79,21 @@ namespace LogGuard_v0._1
                 );
             return mesBox.Show();
         }
+
+        public LogGuardMesBoxResult ShowWarningBox(string warning)
+        {
+            Windows.MessageWindow.MessageBox mesBox = new Windows.MessageWindow.MessageBox(
+                "Warning",
+                Application.Current.Resources["QuestionPathGeomerty"] as string,
+                warning,
+                "",
+                "",
+                "Continue",
+                "",
+                MainScreenWindow
+                );
+            return mesBox.Show();
+        }
         public LogGuardMesBoxResult ShowEscapeCaptureLogWarningBox()
         {
             Windows.MessageWindow.MessageBox mesBox = new Windows.MessageWindow.MessageBox(

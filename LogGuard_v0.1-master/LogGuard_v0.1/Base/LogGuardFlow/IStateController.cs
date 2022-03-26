@@ -1,4 +1,5 @@
-﻿using LogGuard_v0._1.Base.Log;
+﻿using LogGuard_v0._1.Base.Device;
+using LogGuard_v0._1.Base.Log;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +17,13 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
     }
     public interface IStateController
     {
-        void Start();
+        bool Start();
         void Stop();
         void Resume();
         void Pause();
         ISourceManager LGSourceManager { get; }
         IRunThreadConfig RunThreadConfig { get; }
+        IDeviceManager DeviceManager { get; }
         LogGuardState CurrentState { get; set; }
         LogGuardState PreviousState { get; set; }
         object SynchronizeStateObject { get; set; }

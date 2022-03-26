@@ -17,6 +17,8 @@ namespace LogGuard_v0._1.Base.Device
         /// </summary>
         void ForceUpdateListDevices();
 
+        DeviceItemViewModel SelectedDevice { get; set; }
+
         RangeObservableCollection<DeviceItemViewModel> DeviceSource { get; }
 
         List<IDeviceHolder> DeviceHolders { get; }
@@ -26,8 +28,23 @@ namespace LogGuard_v0._1.Base.Device
         void RemoveDeviceHolder(IDeviceHolder holder);
 
         event FinishScanDeviceHandler FinishScanDevice;
+        event SelectedDeviceChangedHandler SelectedDeviceChanged;
 
     }
 
-    public delegate void FinishScanDeviceHandler(object sender);
+    public delegate void FinishScanDeviceHandler(object sender, EventArgs e);
+    public delegate void SelectedDeviceChangedHandler(object sender, SelectedDeviceChangedEventArgs e);
+
+    public class SelectedDeviceChangedEventArgs : EventArgs
+    {
+        public DeviceItemViewModel OldDevice { get; }
+        public DeviceItemViewModel NewDevice { get; }
+
+
+        public SelectedDeviceChangedEventArgs(DeviceItemViewModel oldMd, DeviceItemViewModel newMd)
+        {
+            OldDevice = oldMd;
+            NewDevice = newMd;
+        }
+    }
 }

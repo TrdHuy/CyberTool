@@ -26,11 +26,30 @@ namespace LogGuard_v0._1.Implement.Device
         private RangeObservableCollection<DeviceItemViewModel> _deviceSource;
         private Thread _scanDeviceThread;
         private Process _process;
+        private DeviceItemViewModel _selectedDevice;
 
         public event FinishScanDeviceHandler FinishScanDevice;
+        public event SelectedDeviceChangedHandler SelectedDeviceChanged;
 
         public RangeObservableCollection<DeviceItemViewModel> DeviceSource => _deviceSource;
         public List<IDeviceHolder> DeviceHolders => _deviceHolders;
+        public DeviceItemViewModel SelectedDevice
+        {
+            get => _selectedDevice;
+            set
+            {
+                var oldVal = _selectedDevice;
+                _selectedDevice = value;
+                if(oldVal == null )
+                {
+                    SelectedDeviceChanged?.Invoke(this, new SelectedDeviceChangedEventArgs(null, value));
+                }
+                else if (!oldVal.Equals(_selectedDevice))
+                {
+                    SelectedDeviceChanged?.Invoke(this, new SelectedDeviceChangedEventArgs(oldVal, value));
+                }
+            }
+        }
 
         private DeviceManagerImpl()
         {
@@ -67,6 +86,7 @@ namespace LogGuard_v0._1.Implement.Device
                                {
                                    DeviceSource.Clear();
                                    DeviceSource.AddNewRange(lstDevice);
+
                                    waitingBox?.UpdateMessageAndTitle("Found " + lstDevice?.Count() + " device(s)", "Done");
                                }
                            }
@@ -126,7 +146,7 @@ namespace LogGuard_v0._1.Implement.Device
             {
                 _process.Dispose();
                 _process.Close();
-                FinishScanDevice?.Invoke(this);
+                FinishScanDevice?.Invoke(this, EventArgs.Empty);
             }
             return dIVMs;
         }

@@ -40,8 +40,10 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action.Types
             if (StateControllerImpl.Current.CurrentState == LogGuardState.NONE
                 || StateControllerImpl.Current.CurrentState == LogGuardState.STOP)
             {
-                LGPViewModel.CurrentLogGuardState = LogGuardState.RUNNING;
-                StateControllerImpl.Current.Start();
+                if (StateControllerImpl.Current.Start())
+                {
+                    LGPViewModel.CurrentLogGuardState = LogGuardState.RUNNING;
+                }
             }
             else if (StateControllerImpl.Current.CurrentState == LogGuardState.RUNNING)
             {

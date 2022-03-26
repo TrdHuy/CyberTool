@@ -27,6 +27,22 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
         private LogGuardState _currentLogGuardState = LogGuardState.NONE;
         private bool _useAutoScroll = true;
         private ObservableCollection<LogParserVO> _deviceCmdItemsSource = new ObservableCollection<LogParserVO>();
+        private DeviceItemViewModel _selectedDevice;
+
+        [Bindable(true)]
+        public DeviceItemViewModel SelectedDevice
+        {
+            get
+            {
+                return _selectedDevice;
+            }
+            set
+            {
+                _selectedDevice = value;
+                DeviceManagerImpl.Current.SelectedDevice = value;
+                InvalidateOwn();
+            }
+        }
 
         [Bindable(true)]
         public int SelectedCmdIndex
@@ -156,8 +172,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
 
         public void OnLoaded()
         {
-            int a = 1;
-
         }
 
         
