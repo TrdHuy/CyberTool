@@ -66,6 +66,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppResources\AttachedProperties\TextBoxAttProperties.cs" />
+    <Compile Include="AppResources\Controls\LogGListView\LoadingListView.cs" />
     <Compile Include="AppResources\Controls\LogGPages\LogGPage.cs" />
     <Compile Include="AppResources\Controls\LogGWindows\LogGuardWindow.cs" />
     <Compile Include="Base\AndroidLog\LogParser\AbstractLogParser.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Base\UIEventHandler\Litstener\ActionExecuteHelper.cs" />
     <Compile Include="Base\UIEventHandler\Litstener\IActionListener.cs" />
     <Compile Include="Base\UIEventHandler\Litstener\BaseKeyActionListener.cs" />
+    <Compile Include="Base\Utils\IBeginable.cs" />
     <Compile Include="Base\Utils\ICancelable.cs" />
     <Compile Include="Base\Utils\IDestroyable.cs" />
     <Compile Include="Base\Utils\ILogger.cs" />
@@ -206,6 +208,10 @@
     <Compile Include="Windows\WaitingWindow\WaitingBox.xaml.cs">
       <DependentUpon>WaitingBox.xaml</DependentUpon>
     </Compile>
+    <Page Include="AppResources\Controls\LogGListView\LoadingListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AppResources\Controls\LogGWindows\LogGuardWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

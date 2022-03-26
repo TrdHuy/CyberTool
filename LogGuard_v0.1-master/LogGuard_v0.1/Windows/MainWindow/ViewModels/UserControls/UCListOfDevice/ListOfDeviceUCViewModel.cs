@@ -16,6 +16,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCListOfDevi
     {
         private RangeObservableCollection<DeviceItemViewModel> _deviceItemVMs;
         private int _deviceCount;
+        private bool _isLoadingDevice;
 
         [Bindable(true)]
         public MSW_UC_ListOfDeviceControlButtonCommand CommandViewModel { get; set; }
@@ -48,6 +49,20 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCListOfDevi
             }
         }
 
+        [Bindable(true)]
+        public bool IsLoadingDevice
+        {
+            get
+            {
+                return _isLoadingDevice;
+            }
+            set
+            {
+                _isLoadingDevice = value;
+                InvalidateOwn();
+            }
+        }
+
         public ListOfDeviceUCViewModel()
         {
             CommandViewModel = new MSW_UC_ListOfDeviceControlButtonCommand(this);
@@ -63,8 +78,27 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCListOfDevi
 
         public override void OnDestroy()
         {
-            base.OnDestroy();
             DeviceManagerImpl.Current.RemoveDeviceHolder(this);
+        }
+
+        public override void OnBegin()
+        {
+            IsLoadingDevice = true;
+            DeviceManagerImpl.Current.FinishScanDevice -= OnFinishScanDevice;
+            DeviceManagerImpl.Current.ForceUpdateListDevices();
+            DeviceManagerImpl.Current.FinishScanDevice += OnFinishScanDevice;
+            DeviceManagerImpl.Current.SerialPortChanged -= OnSerialPortChanged;
+            DeviceManagerImpl.Current.SerialPortChanged += OnSerialPortChanged;
+        }
+
+        private void OnSerialPortChanged(object sender, EventArgs e)
+        {
+            IsLoadingDevice = true;
+        }
+
+        private void OnFinishScanDevice(object sender, EventArgs e)
+        {
+            IsLoadingDevice = false;
         }
     }
 }

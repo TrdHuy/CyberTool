@@ -172,8 +172,17 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
 
         public void OnLoaded()
         {
+            foreach (var child in ChildModels)
+            {
+                child.OnBegin();
+            }
+            StateControllerImpl.Current.StateChanged -= OnLogGuardStateChanged;
+            StateControllerImpl.Current.StateChanged += OnLogGuardStateChanged;
         }
 
-        
+        private void OnLogGuardStateChanged(object sender, StateChangedEventArgs e)
+        {
+            CurrentLogGuardState = e.NewState;
+        }
     }
 }

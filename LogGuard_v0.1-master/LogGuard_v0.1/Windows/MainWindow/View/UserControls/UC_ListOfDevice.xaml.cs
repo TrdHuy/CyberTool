@@ -24,5 +24,10 @@ namespace LogGuard_v0._1.Windows.MainWindow.View.UserControls
         {
             InitializeComponent();
         }
+
+        private void DevicesItemSource_SourceUpdated(object sender, DataTransferEventArgs e)
+        {
+            int a = 1;
+        }
     }
 }

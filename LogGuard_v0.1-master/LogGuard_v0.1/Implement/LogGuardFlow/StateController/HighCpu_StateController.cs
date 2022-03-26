@@ -61,6 +61,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
                     if (StopEvent.WaitOne(0))
                         break;
                 }
+
                 #endregion
             }
             catch (Exception e)

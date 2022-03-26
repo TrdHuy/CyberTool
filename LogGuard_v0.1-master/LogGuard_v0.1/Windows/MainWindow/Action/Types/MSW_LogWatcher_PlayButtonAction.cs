@@ -42,17 +42,17 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action.Types
             {
                 if (StateControllerImpl.Current.Start())
                 {
-                    LGPViewModel.CurrentLogGuardState = LogGuardState.RUNNING;
+                    //LGPViewModel.CurrentLogGuardState = LogGuardState.RUNNING;
                 }
             }
             else if (StateControllerImpl.Current.CurrentState == LogGuardState.RUNNING)
             {
-                LGPViewModel.CurrentLogGuardState = LogGuardState.PAUSING;
+                //LGPViewModel.CurrentLogGuardState = LogGuardState.PAUSING;
                 StateControllerImpl.Current.Pause();
             }
             else if (StateControllerImpl.Current.CurrentState == LogGuardState.PAUSING)
             {
-                LGPViewModel.CurrentLogGuardState = LogGuardState.RUNNING;
+                //LGPViewModel.CurrentLogGuardState = LogGuardState.RUNNING;
 
                 StateControllerImpl.Current.Resume();
             }

@@ -29,11 +29,15 @@ namespace LogGuard_v0._1.Base.Device
 
         event FinishScanDeviceHandler FinishScanDevice;
         event SelectedDeviceChangedHandler SelectedDeviceChanged;
+        event SerialPortChangedHandler SerialPortChanged;
+        event SelectedDeviceUnplugedHandler SelectedDeviceUnpluged;
 
     }
 
     public delegate void FinishScanDeviceHandler(object sender, EventArgs e);
+    public delegate void SerialPortChangedHandler(object sender, EventArgs e);
     public delegate void SelectedDeviceChangedHandler(object sender, SelectedDeviceChangedEventArgs e);
+    public delegate void SelectedDeviceUnplugedHandler(object sender, EventArgs e);
 
     public class SelectedDeviceChangedEventArgs : EventArgs
     {

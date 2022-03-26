@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Base.ViewModel
 {
-    public class BaseViewModel : BaseObservable<object>, INotifyPropertyChanged, IDestroyable
+    public class BaseViewModel : BaseObservable<object>, INotifyPropertyChanged, IDestroyable, IBeginable
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public BaseViewModel ParentsModel { get; private set; }
@@ -72,6 +72,10 @@ namespace LogGuard_v0._1.Base.ViewModel
         }
 
         public virtual void OnDestroy()
+        {
+        }
+
+        public virtual void OnBegin()
         {
         }
     }

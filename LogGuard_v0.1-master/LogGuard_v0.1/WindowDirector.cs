@@ -77,10 +77,10 @@ namespace LogGuard_v0._1
                 "",
                 MainScreenWindow
                 );
-            return mesBox.Show();
+            return mesBox.ShowDialog();
         }
 
-        public LogGuardMesBoxResult ShowWarningBox(string warning)
+        public LogGuardMesBoxResult ShowWarningBox(string warning, bool isDialog)
         {
             Windows.MessageWindow.MessageBox mesBox = new Windows.MessageWindow.MessageBox(
                 "Warning",
@@ -92,7 +92,16 @@ namespace LogGuard_v0._1
                 "",
                 MainScreenWindow
                 );
-            return mesBox.Show();
+            LogGuardMesBoxResult res = LogGuardMesBoxResult.Continue;
+            if (isDialog)
+            {
+                res = mesBox.ShowDialog();
+            }
+            else
+            {
+                mesBox.Show();
+            }
+            return res;
         }
         public LogGuardMesBoxResult ShowEscapeCaptureLogWarningBox()
         {
@@ -108,7 +117,7 @@ namespace LogGuard_v0._1
                 );
 
 
-            return mesBox.Show();
+            return mesBox.ShowDialog();
         }
 
         public LogGuardWaitingBoxResult OpenWaitingTaskBox(string content, string title, Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask, Func<bool> canExecute = null, Action<object, AsyncTaskResult> callback = null, long delayTime = 0)

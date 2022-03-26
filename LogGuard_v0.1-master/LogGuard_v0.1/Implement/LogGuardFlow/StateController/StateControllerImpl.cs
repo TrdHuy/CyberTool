@@ -128,6 +128,8 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
 
                 LGSourceManager.UpdateLogParser(RunThreadConfig);
                 RunningThread = new Thread(Running);
+                DeviceManager.SelectedDeviceUnpluged -= OnSelectedDeviceUnpluged;
+                DeviceManager.SelectedDeviceUnpluged += OnSelectedDeviceUnpluged;
             }
 
             OnStart();
@@ -140,6 +142,20 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
                 StateChanged?.Invoke(this, new StateChangedEventArgs(CurrentState, PreviousState));
             }
             return true;
+        }
+
+        private void OnSelectedDeviceUnpluged(object sender, EventArgs e)
+        {
+            if (IsRunning)
+            {
+                Stop();
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    App.Current.ShowWaringBox(warning: "Your capturing device is unpluged",
+                        isDialog: false);
+                });
+
+            }
         }
 
         private void Running()

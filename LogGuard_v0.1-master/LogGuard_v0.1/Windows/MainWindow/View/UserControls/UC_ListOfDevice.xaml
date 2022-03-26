@@ -9,6 +9,7 @@
 			 xmlns:vmh="clr-namespace:LogGuard_v0._1.Base.ViewModel.ViewModelHelper"
 			 xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCListOfDevice"
 			 xmlns:vmp="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages"
+			 xmlns:lglv="clr-namespace:LogGuard_v0._1.AppResources.Controls.LogGListView"
 			 d:DesignHeight="125"
 			 d:DesignWidth="110"
 			 FontFamily="Calibri">
@@ -16,7 +17,8 @@
 		<Binding Source="{vmh:VMManagerMarkup {x:Type vm:ListOfDeviceUCViewModel},
 			{x:Type vmp:LogGuardPageViewModel}}" />
 	</UserControl.DataContext>
-	
+	<UserControl.Resources>
+	</UserControl.Resources>
 	<Border Background="{StaticResource Background_Level2}"
 			CornerRadius="{StaticResource DefaultPanelCornerRadius}"
 			x:Name="MainBorder">
@@ -45,13 +47,13 @@
 
 			</Button>
 
-			<ListView Grid.Row="1"
-					  Background="Transparent"
-					  BorderThickness="0"
-					  SelectedItem="{Binding ParentsModel.SelectedDevice}"
-					  ItemsSource="{Binding DevicesSource}"
-					  Foreground="{StaticResource Foreground_Level3}"
-					  Margin="0,0,0,5">
+			<lglv:LoadingListView Grid.Row="1"
+								  Background="Transparent"
+								  SelectedItem="{Binding ParentsModel.SelectedDevice}"
+								  BorderThickness="0"
+								  IsLoading="{Binding IsLoadingDevice}"
+								  Foreground="{StaticResource Foreground_Level3}"
+								  Margin="0,0,0,5">
 				<ListView.ItemContainerStyle>
 					<Style TargetType="ListViewItem">
 						<Setter Property="Height"
@@ -96,7 +98,7 @@
 											</Grid>
 											<ContentPresenter Margin="15,0,0,0"
 															  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-															  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+															  VerticalAlignment="Center" />
 
 
 										</Grid>
@@ -140,27 +142,27 @@
 					</Style>
 
 				</ListView.ItemContainerStyle>
-				<ListView.Template>
-					<ControlTemplate TargetType="ListView">
-						<ControlTemplate.Resources>
-							<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
-							<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">0</sys:Double>
+				<ListView.ItemsSource>
+					<Binding Path="DevicesSource"
+							 x:Name="DevicesItemSource" />
+				</ListView.ItemsSource>
+			</lglv:LoadingListView>
 
-						</ControlTemplate.Resources>
-						<Border Name="Border"
-								BorderThickness="1">
+			<!--<Grid.Triggers>
+				<EventTrigger RoutedEvent="Grid.Loaded">
+					<BeginStoryboard x:Name="WatingStoryBoard">
+						<Storyboard RepeatBehavior="Forever">
+							<DoubleAnimation Storyboard.TargetName="WaitingIconTransform"
+											 Storyboard.TargetProperty="(RotateTransform.Angle)"
+											 From="0.0"
+											 To="360"
+											 Duration="0:0:2" />
+						</Storyboard>
+					</BeginStoryboard>
+				</EventTrigger>
 
-							<logwatcher_ctrl:ScrollViewWatcher Background="Transparent"
-															   ScrollHeaderHeight="0"
-															   ThumbBackground="{StaticResource ButtonBackground_Level1}"
-															   ScrollBarBackground="Transparent">
-								<ItemsPresenter />
-							</logwatcher_ctrl:ScrollViewWatcher>
-						</Border>
 
-					</ControlTemplate>
-				</ListView.Template>
-			</ListView>
+			</Grid.Triggers>-->
 		</Grid>
 	</Border>
 </UserControl>

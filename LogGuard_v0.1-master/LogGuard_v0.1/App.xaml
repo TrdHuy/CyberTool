@@ -15,7 +15,9 @@
 				<ResourceDictionary Source="LogGuard/Resources/TrippleToggle.xaml" />
 				<ResourceDictionary Source="LogGuard/Resources/HanzaTreeViewer.xaml" />
 				<ResourceDictionary Source="LogGuard/Resources/HanzaTreeViewItem.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="AppResources/Controls/LogGListView/LoadingListView.xaml" />
+
+			</ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

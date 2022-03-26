@@ -134,7 +134,7 @@ namespace LogGuard_v0._1.Windows.MessageWindow
             _cacheLoadedWidth = this.ActualWidth;
         }
 
-        public new LogGuardMesBoxResult Show()
+        public new LogGuardMesBoxResult ShowDialog()
         {
             base.ShowDialog();
             return MesResult;
