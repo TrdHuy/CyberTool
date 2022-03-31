@@ -55,10 +55,22 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
         public override bool Filter(object obj)
         {
             var data = obj as LogWatcherItemViewModel;
+            data.HighlightMessageSource = null;
+
+            if (!CurrentEngine.IsVaild())
+            {
+                CurrentEngine.Refresh();
+                return true;
+            }
+
             if (IsFilterEnable && data.Message != null)
             {
                 if (CurrentEngine.ContainIgnoreCase(data.Message.ToString()))
                 {
+                    data.HighlightMessageSource = CurrentEngine
+                        .GetMatchWords()
+                        .OrderBy(o => o.StartIndex)
+                        .ToArray();
                     return true;
                 }
                 return false;

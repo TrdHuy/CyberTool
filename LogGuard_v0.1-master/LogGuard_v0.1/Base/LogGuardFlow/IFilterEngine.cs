@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogGuard_v0._1.AppResources.AttachedProperties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,25 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
 
         bool IsVaild();
 
-        List<string> GetMatchWords(string input);
+        void Refresh();
+
+        List<MatchedWord> GetMatchWords();
+
+    }
+
+    public class MatchedWord : IHighlightable
+    {
+        public string SearchWord { get; }
+        public int StartIndex { get; }
+        public int WordLength { get; }
+        public string RawWord { get; }
+
+        public MatchedWord(int startIndex, string word, string rawWord)
+        {
+            StartIndex = startIndex;
+            WordLength = word.Length;
+            SearchWord = word;
+            RawWord = rawWord;
+        }
     }
 }

@@ -1,20 +1,21 @@
 ﻿<appCtrl:LogGPage x:Class="LogGuard_v0._1.Windows.MainWindow.View.Pages.LogGuard"
-	  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	  xmlns:flow="clr-namespace:LogGuard_v0._1.Base.LogGuardFlow"
-	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	  xmlns:logguard="clr-namespace:LogGuard_v0._1.LogGuard.Control"
-	  xmlns:hpss="clr-namespace:HPSolutionCCDevPackage.netFramework;assembly=HPSolutionCCDevPackage.netFramework"
-	  xmlns:local="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.Pages"
-	  xmlns:appCtrl="clr-namespace:LogGuard_v0._1.AppResources.Controls.LogGPages"
-	  xmlns:uc="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.UserControls"
-	  xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages"
-	  xmlns:vmh="clr-namespace:LogGuard_v0._1.Base.ViewModel.ViewModelHelper"
-	  mc:Ignorable="d"
-	  d:DesignHeight="820"
-	  d:DesignWidth="883.714"
-	  Title="LogGuard">
+				  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				  xmlns:flow="clr-namespace:LogGuard_v0._1.Base.LogGuardFlow"
+				  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				  xmlns:logguard="clr-namespace:LogGuard_v0._1.LogGuard.Control"
+				  xmlns:hpss="clr-namespace:HPSolutionCCDevPackage.netFramework;assembly=HPSolutionCCDevPackage.netFramework"
+				  xmlns:local="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.Pages"
+				  xmlns:appCtrl="clr-namespace:LogGuard_v0._1.AppResources.Controls.LogGPages"
+				  xmlns:uc="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.UserControls"
+				  xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages"
+				  xmlns:vmh="clr-namespace:LogGuard_v0._1.Base.ViewModel.ViewModelHelper"
+				  xmlns:attProp="clr-namespace:LogGuard_v0._1.AppResources.AttachedProperties"
+				  mc:Ignorable="d"
+				  d:DesignHeight="820"
+				  d:DesignWidth="883.714"
+				  Title="LogGuard">
 	<Page.DataContext>
 		<Binding Source="{vmh:VMManagerMarkup {x:Type vm:LogGuardPageViewModel}}" />
 	</Page.DataContext>
@@ -172,20 +173,47 @@
 					<GridViewColumn DisplayMemberBinding="{Binding Time}">
 						<GridViewColumnHeader Content="Time" />
 					</GridViewColumn>
-					<GridViewColumn DisplayMemberBinding="{Binding Pid}">
+					<GridViewColumn>
 						<GridViewColumnHeader Content="PID" />
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightPidSource, UpdateSourceTrigger=PropertyChanged}"
+										   attProp:TextBlockAttProperties.BackgroundColor="#CCDDFF69"
+										   attProp:TextBlockAttProperties.ForegroundColor="#FFD1002D"
+										   Text="{Binding Pid}" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
 					</GridViewColumn>
-					<GridViewColumn DisplayMemberBinding="{Binding Tid}">
+					<GridViewColumn>
 						<GridViewColumnHeader Content="TID" />
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightPidSource, UpdateSourceTrigger=PropertyChanged}"
+										   attProp:TextBlockAttProperties.BackgroundColor="#CCDDFF69"
+										   attProp:TextBlockAttProperties.ForegroundColor="#FFD1002D"
+										   Text="{Binding Tid}" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
 					</GridViewColumn>
-					<GridViewColumn DisplayMemberBinding="{Binding Tag}">
+					<GridViewColumn>
 						<GridViewColumnHeader Content="Tag" />
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightTagSource, UpdateSourceTrigger=PropertyChanged}"
+										   attProp:TextBlockAttProperties.BackgroundColor="#CCDDFF69"
+										   attProp:TextBlockAttProperties.ForegroundColor="#FFD1002D"
+										   Text="{Binding Tag}" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
 					</GridViewColumn>
 					<GridViewColumn>
 						<GridViewColumnHeader Content="Message" />
 						<GridViewColumn.CellTemplate>
 							<DataTemplate>
-								<TextBlock Text="{Binding Message}" />
+								<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightMessageSource, UpdateSourceTrigger=PropertyChanged}"
+										   attProp:TextBlockAttProperties.BackgroundColor="#CCDDFF69"
+										   attProp:TextBlockAttProperties.ForegroundColor="#FFD1002D"
+										   Text="{Binding Message}" />
 							</DataTemplate>
 						</GridViewColumn.CellTemplate>
 					</GridViewColumn>

@@ -20,16 +20,61 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
             this._logInfo = logInfo;
         }
 
-        public bool IsBookmarked
+        [Bindable(true)]
+        public object HighlightTidSource
         {
-            get { return _isBookmarked; }
+            get
+            {
+                return _logInfo[LogInfo.KEY_HIGHLIGHT_TID_SOURCE];
+            }
             set
             {
-                _isBookmarked = value;
+                _logInfo[LogInfo.KEY_HIGHLIGHT_TID_SOURCE] = value;
                 InvalidateOwn();
             }
         }
-        private bool _isBookmarked = false;
+
+        [Bindable(true)]
+        public object HighlightPidSource
+        {
+            get
+            {
+                return _logInfo[LogInfo.KEY_HIGHLIGHT_PID_SOURCE];
+            }
+            set
+            {
+                _logInfo[LogInfo.KEY_HIGHLIGHT_PID_SOURCE] = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public object HighlightMessageSource
+        {
+            get
+            {
+                return _logInfo[LogInfo.KEY_HIGHLIGHT_MESSAGE_SOURCE];
+            }
+            set
+            {
+                _logInfo[LogInfo.KEY_HIGHLIGHT_MESSAGE_SOURCE] = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public object HighlightTagSource
+        {
+            get
+            {
+                return _logInfo[LogInfo.KEY_HIGHLIGHT_TAG_SOURCE];
+            }
+            set
+            {
+                _logInfo[LogInfo.KEY_HIGHLIGHT_TAG_SOURCE] = value;
+                InvalidateOwn();
+            }
+        }
 
         [Bindable(true)]
         public object Line

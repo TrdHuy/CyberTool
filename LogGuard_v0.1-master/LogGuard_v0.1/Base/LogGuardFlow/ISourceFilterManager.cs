@@ -13,7 +13,7 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         ISourceFilter LogMessageFilter { get; set; }
         ISourceFilter LogPidFilter { get; set; }
         ISourceFilter LogTidFilter { get; set; }
-
+        ISourceFilter LogTagRemoveFilter { get; set; }
         void NotifyFilterPropertyChanged(ISourceFilter sender, object e);
     }
 

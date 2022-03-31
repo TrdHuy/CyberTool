@@ -14,11 +14,15 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 {
     public class TidFilterUCViewModel : ChildOfAdvanceFilterUCViewModel
     {
+        private List<MatchedWord> matchedWords;
+
         [Bindable(true)]
         public CommandExecuterModel TidFilterLeftClickCommand { get; set; }
 
         public TidFilterUCViewModel(BaseViewModel parent) : base(parent)
         {
+            matchedWords = new List<MatchedWord>();
+
             TidFilterLeftClickCommand = new CommandExecuterModel((paramaters) =>
             {
                 IsFilterEnable = !IsFilterEnable;
@@ -31,16 +35,31 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 
         public override bool Filter(object obj)
         {
+            matchedWords.Clear();
+            if (string.IsNullOrEmpty(FilterContent))
+            {
+                return true;
+            }
+
             var data = obj as LogWatcherItemViewModel;
+            data.HighlightTidSource = null;
+
             if (IsFilterEnable && data?.Tid != null)
             {
-                return data
+                var contain = data
                     .Tid
                     .ToString()
-                    .IndexOf(FilterContent, StringComparison.InvariantCultureIgnoreCase) != -1;
+                    .IndexOf(FilterContent, StringComparison.InvariantCultureIgnoreCase);
+                if(contain != -1)
+                {
+                    matchedWords.Add(new MatchedWord(contain, FilterContent, data.Tid.ToString()));
+                }
+                data.HighlightTidSource = matchedWords.ToArray();
+                return contain != -1;
             }
 
             return true;
         }
+
     }
 }

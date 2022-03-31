@@ -3,13 +3,8 @@ using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFilter
 {
@@ -31,6 +26,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 InvalidateOwn();
             }
         }
+
         [Bindable(true)]
         public bool IsFilterEnable
         {
@@ -46,6 +42,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 InvalidateOwn();
             }
         }
+
         [Bindable(true)]
         public string HelperContent
         {
@@ -59,6 +56,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 InvalidateOwn();
             }
         }
+
         [Bindable(true)]
         public string FilterContent
         {
@@ -74,6 +72,8 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 InvalidateOwn();
             }
         }
+        public abstract bool Filter(object obj);
+        protected abstract bool IsUseFilterEngine { get; }
 
         private string _helperContent = "";
         private string _filterContent = "";
@@ -88,8 +88,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             UpdateEngine();
         }
 
-        public abstract bool Filter(object obj);
-        protected abstract bool IsUseFilterEngine { get; }
         public void UpdateEngine()
         {
             switch (CurrentFilterMode)

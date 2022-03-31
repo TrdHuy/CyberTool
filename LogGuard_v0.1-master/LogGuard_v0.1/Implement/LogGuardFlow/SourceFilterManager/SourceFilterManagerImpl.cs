@@ -14,7 +14,6 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager
         private static SourceFilterManagerImpl _instance;
 
         private Thread NotifyFilterConditionChangedMessage { get; set; }
-        private Thread NotifyFilterEngineChangedMessage { get; set; }
 
         private ISourceFilter _logTagFilter;
         private ISourceFilter _logTagRemoveFilter;

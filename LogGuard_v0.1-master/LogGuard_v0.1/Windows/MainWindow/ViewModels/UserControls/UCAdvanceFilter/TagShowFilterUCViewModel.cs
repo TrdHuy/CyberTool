@@ -69,10 +69,21 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 
         private bool TagShow(LogWatcherItemViewModel data)
         {
+            data.HighlightTagSource = null;
+            if (!CurrentEngine.IsVaild())
+            {
+                CurrentEngine.Refresh();
+                return true;
+            }
+
             if (IsFilterEnable && data.Tag != null)
             {
                 if (CurrentEngine.ContainIgnoreCase(data.Tag.ToString()))
                 {
+                    data.HighlightTagSource = CurrentEngine
+                        .GetMatchWords()
+                        .OrderBy(o => o.StartIndex)
+                        .ToArray();
                     return true;
                 }
                 return false;

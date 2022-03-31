@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogGuard_v0._1.Base.LogGuardFlow;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,15 +26,15 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
         {
             if (_isVailCache)
             {
-                MatchedWord.Clear();
-                return Evaluate(input, PostFix, MatchedWord);
+                MatchedWords.Clear();
+                return Evaluate(input, PostFix);
             }
             return true;
         }
 
         public override bool IsVaild()
         {
-            return _isVailCache;
+            return _isVailCache && !string.IsNullOrEmpty(ComparableSource);
         }
 
         public override void UpdateComparableSource(string source)
@@ -53,7 +54,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
 
         private bool IsValid(string[] input, string rawInput)
         {
-            foreach(var i in input)
+            foreach (var i in input)
             {
                 if (string.IsNullOrEmpty(i))
                 {
@@ -215,7 +216,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
             return (precedence[firstPoint] >= precedence[secondPoint]) ? true : false;
         }
 
-        private bool Evaluate(string content, string[] postFix, List<string> matchWord)
+        private bool Evaluate(string content, string[] postFix)
         {
             Stack<object> stack = new Stack<object>();
             int len = postFix.Length;
@@ -270,21 +271,21 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
                         case 0:
                             if (postFix[i].Equals("&"))
                             {
-                                result = AndOperateCalC(b_string, a_bool, content, matchWord);
+                                result = AndOperateCalC(b_string, a_bool, content);
                             }
                             else
                             {
-                                result = OrOperateCalC(b_string, a_bool, content, matchWord);
+                                result = OrOperateCalC(b_string, a_bool, content);
                             }
                             break;
                         case 1:
                             if (postFix[i].Equals("&"))
                             {
-                                result = AndOperateCalC(a_string, b_bool, content, matchWord);
+                                result = AndOperateCalC(a_string, b_bool, content);
                             }
                             else
                             {
-                                result = OrOperateCalC(a_string, b_bool, content, matchWord);
+                                result = OrOperateCalC(a_string, b_bool, content);
                             }
                             break;
                         case 2:
@@ -300,11 +301,11 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
                         case 3:
                             if (postFix[i].Equals("&"))
                             {
-                                result = AndOperateCalC(a_string, b_string, content, matchWord);
+                                result = AndOperateCalC(a_string, b_string, content);
                             }
                             else
                             {
-                                result = OrOperateCalC(a_string, b_string, content, matchWord);
+                                result = OrOperateCalC(a_string, b_string, content);
                             }
                             break;
                     }
@@ -317,44 +318,47 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
             return result;
         }
 
-        private bool OrOperateCalC(string A, string B, string Cmp, List<string> matchW)
+        private bool OrOperateCalC(string A, string B, string Cmp)
         {
             int res = 0;
-
-            if (Cmp.IndexOf(A, StringComparison.InvariantCultureIgnoreCase) != -1)
+            int startA = Cmp.IndexOf(A, StringComparison.InvariantCultureIgnoreCase);
+            int startB = Cmp.IndexOf(B, StringComparison.InvariantCultureIgnoreCase);
+            if (startA != -1)
             {
                 res = 1;
-                matchW.Add(A);
+                MatchedWords.Add(new MatchedWord(startA, A, Cmp));
             }
-            if (Cmp.IndexOf(B, StringComparison.InvariantCultureIgnoreCase) != -1)
+            if (startB != -1)
             {
                 res = 2;
-                matchW.Add(B);
+                MatchedWords.Add(new MatchedWord(startB, B, Cmp));
             }
 
             return res != 0;
         }
 
-        private bool AndOperateCalC(string A, string B, string Cmp, List<string> matchW)
+        private bool AndOperateCalC(string A, string B, string Cmp)
         {
-            if (Cmp.IndexOf(A, StringComparison.InvariantCultureIgnoreCase) != -1 
-                && Cmp.IndexOf(B, StringComparison.InvariantCultureIgnoreCase) != -1)
+            int startA = Cmp.IndexOf(A, StringComparison.InvariantCultureIgnoreCase);
+            int startB = Cmp.IndexOf(B, StringComparison.InvariantCultureIgnoreCase);
+            if (startA != -1 && startB != -1)
             {
-                matchW.Add(A);
-                matchW.Add(B);
+                MatchedWords.Add(new MatchedWord(startA, A, Cmp));
+                MatchedWords.Add(new MatchedWord(startB, B, Cmp));
                 return true;
             }
             return false;
         }
 
-        private bool OrOperateCalC(string A, bool B, string Cmp, List<string> matchW)
+        private bool OrOperateCalC(string A, bool B, string Cmp)
         {
             int res = 0;
+            int startA = Cmp.IndexOf(A, StringComparison.InvariantCultureIgnoreCase);
 
-            if (Cmp.IndexOf(A, StringComparison.InvariantCultureIgnoreCase) != -1)
+            if (startA != -1)
             {
                 res = 1;
-                matchW.Add(A);
+                MatchedWords.Add(new MatchedWord(startA, A, Cmp));
             }
             if (B)
             {
@@ -364,12 +368,13 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
             return res != 0;
         }
 
-        private bool AndOperateCalC(string A, bool B, string Cmp, List<string> matchW)
+        private bool AndOperateCalC(string A, bool B, string Cmp)
         {
+            int startA = Cmp.IndexOf(A, StringComparison.InvariantCultureIgnoreCase);
 
-            if (Cmp.IndexOf(A, StringComparison.InvariantCultureIgnoreCase) != -1 && B)
+            if (startA != -1 && B)
             {
-                matchW.Add(A);
+                MatchedWords.Add(new MatchedWord(startA, A, Cmp));
                 return true;
             }
             return false;

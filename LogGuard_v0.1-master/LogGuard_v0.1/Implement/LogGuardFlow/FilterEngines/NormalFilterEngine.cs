@@ -10,37 +10,53 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
     public class NormalFilterEngine : IFilterEngine
     {
         protected string ComparableSource { get; set; }
-        protected List<string> MatchedWord { get; set; }
+        protected List<MatchedWord> MatchedWords { get; set; }
 
         public NormalFilterEngine()
         {
-            MatchedWord = new List<string>();
+            MatchedWords = new List<MatchedWord>();
         }
 
         public virtual bool Contain(string input)
         {
-            return input.IndexOf(ComparableSource, StringComparison.InvariantCulture) != -1;
+            MatchedWords.Clear();
+            var contain = input.IndexOf(ComparableSource, StringComparison.InvariantCulture);
+            if (contain != -1)
+            {
+                MatchedWords.Add(new MatchedWord(contain, ComparableSource, input));
+            }
+            return contain != -1;
         }
 
         public virtual bool ContainIgnoreCase(string input)
         {
-            var contain = input.IndexOf(ComparableSource, StringComparison.InvariantCultureIgnoreCase) != -1;
-            return contain;
+            MatchedWords.Clear();
+            var contain = input.IndexOf(ComparableSource, StringComparison.InvariantCultureIgnoreCase);
+            if(contain != -1)
+            {
+                MatchedWords.Add(new MatchedWord(contain, ComparableSource, input));
+            }
+            return contain != -1;
         }
 
-        public List<string> GetMatchWords(string input)
+        public List<MatchedWord> GetMatchWords()
         {
-            return MatchedWord;
+            return MatchedWords;
         }
 
         public virtual bool IsVaild()
         {
-            return true;
+            return !string.IsNullOrEmpty(ComparableSource);
         }
 
         public virtual void UpdateComparableSource(string source)
         {
             ComparableSource = source;
+        }
+
+        public void Refresh()
+        {
+            MatchedWords.Clear();
         }
     }
 }

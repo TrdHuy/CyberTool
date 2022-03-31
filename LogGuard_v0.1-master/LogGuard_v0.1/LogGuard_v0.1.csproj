@@ -65,6 +65,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppResources\AttachedProperties\TextBlockAttProperties.cs" />
     <Compile Include="AppResources\AttachedProperties\TextBoxAttProperties.cs" />
     <Compile Include="AppResources\Controls\LogGListView\LoadingListView.cs" />
     <Compile Include="AppResources\Controls\LogGPages\LogGPage.cs" />

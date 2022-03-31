@@ -65,11 +65,15 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 
         private bool TagRemove(LogWatcherItemViewModel data)
         {
+            if (!CurrentEngine.IsVaild())
+            {
+                CurrentEngine.Refresh();
+                return true;
+            }
+
             if (IsFilterEnable && data.Tag != null)
             {
-                if (!string.IsNullOrEmpty(FilterContent)
-                    && CurrentEngine.IsVaild()
-                    && CurrentEngine.ContainIgnoreCase(data.Tag.ToString()))
+                if (CurrentEngine.ContainIgnoreCase(data.Tag.ToString()))
                 {
                     return false;
                 }
