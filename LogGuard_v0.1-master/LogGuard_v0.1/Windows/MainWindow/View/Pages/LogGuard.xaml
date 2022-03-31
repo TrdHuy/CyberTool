@@ -188,7 +188,7 @@
 						<GridViewColumnHeader Content="TID" />
 						<GridViewColumn.CellTemplate>
 							<DataTemplate>
-								<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightPidSource, UpdateSourceTrigger=PropertyChanged}"
+								<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightTidSource, UpdateSourceTrigger=PropertyChanged}"
 										   attProp:TextBlockAttProperties.BackgroundColor="#CCDDFF69"
 										   attProp:TextBlockAttProperties.ForegroundColor="#FFD1002D"
 										   Text="{Binding Tid}" />

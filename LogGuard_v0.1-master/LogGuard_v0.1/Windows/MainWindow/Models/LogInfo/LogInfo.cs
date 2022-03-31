@@ -44,10 +44,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.Models
         public const string KEY_MESSAGE = "Message";
         public const string KEY_LINE = "Line";
         public const string KEY_COLOR = "Color";
-        public const string KEY_HIGHLIGHT_TAG_SOURCE = "HighlightTagSource";
-        public const string KEY_HIGHLIGHT_MESSAGE_SOURCE = "HighlightMessageSource";
-        public const string KEY_HIGHLIGHT_TID_SOURCE = "HighlightTidSource";
-        public const string KEY_HIGHLIGHT_PID_SOURCE = "HighlightPidSource";
         public const string KEY_RAW_TEXT = "RawText";
 
         private Dictionary<string, object> _parts = new Dictionary<string, object>();

@@ -14,7 +14,10 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
     public class LogWatcherItemViewModel : BaseViewModel, ILogWatcherElements
     {
         private LogInfo _logInfo;
-
+        private IEnumerable<Base.LogGuardFlow.MatchedWord> _pidSource;
+        private IEnumerable<Base.LogGuardFlow.MatchedWord> _tidSource;
+        private IEnumerable<Base.LogGuardFlow.MatchedWord> _tagSource;
+        private IEnumerable<Base.LogGuardFlow.MatchedWord> _mesSource;
         public LogWatcherItemViewModel(LogInfo logInfo)
         {
             this._logInfo = logInfo;
@@ -25,11 +28,11 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
         {
             get
             {
-                return _logInfo[LogInfo.KEY_HIGHLIGHT_TID_SOURCE];
+                return _tidSource;
             }
             set
             {
-                _logInfo[LogInfo.KEY_HIGHLIGHT_TID_SOURCE] = value;
+                _tidSource = (IEnumerable<Base.LogGuardFlow.MatchedWord>)value;
                 InvalidateOwn();
             }
         }
@@ -39,11 +42,11 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
         {
             get
             {
-                return _logInfo[LogInfo.KEY_HIGHLIGHT_PID_SOURCE];
+                return _pidSource;
             }
             set
             {
-                _logInfo[LogInfo.KEY_HIGHLIGHT_PID_SOURCE] = value;
+                _pidSource = (IEnumerable<Base.LogGuardFlow.MatchedWord>)value;
                 InvalidateOwn();
             }
         }
@@ -53,11 +56,11 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
         {
             get
             {
-                return _logInfo[LogInfo.KEY_HIGHLIGHT_MESSAGE_SOURCE];
+                return _mesSource;
             }
             set
             {
-                _logInfo[LogInfo.KEY_HIGHLIGHT_MESSAGE_SOURCE] = value;
+                _mesSource = (IEnumerable<Base.LogGuardFlow.MatchedWord>)value;
                 InvalidateOwn();
             }
         }
@@ -67,11 +70,11 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
         {
             get
             {
-                return _logInfo[LogInfo.KEY_HIGHLIGHT_TAG_SOURCE];
+                return _tagSource;
             }
             set
             {
-                _logInfo[LogInfo.KEY_HIGHLIGHT_TAG_SOURCE] = value;
+                _tagSource = (IEnumerable<Base.LogGuardFlow.MatchedWord>)value;
                 InvalidateOwn();
             }
         }
