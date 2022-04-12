@@ -130,5 +130,18 @@ namespace LogGuard_v0._1.Windows.MainWindow.View.UserControls
             }
             return brush.Color;
         }
+
+        /// <summary>
+        /// Hàm này để tránh trường hợp bug binding đến từ .Net 4.7.2
+        /// Khi người dùng nhập liên tục trong trường search, UpdateSourceTrigger=Propertychanged
+        /// hoạt động không chính xác, có thể lỗi đến từ .Net
+        /// nhưng khi gán thêm sự kiện textchagned này cho textbox thì nó sẽ hoạt động bình thường
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextChangeEventToAvoidDotNetBindingBug(object sender, TextChangedEventArgs e)
+        {
+            int a = 1;
+        }
     }
 }

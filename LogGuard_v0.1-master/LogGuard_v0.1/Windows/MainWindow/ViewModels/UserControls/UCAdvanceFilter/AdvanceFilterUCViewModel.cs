@@ -1,5 +1,6 @@
 ﻿using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
+using LogGuard_v0._1.Implement.LogGuardFlow.SourceHighlightManager;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceManager;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
         private TagShowFilterUCViewModel _tagFilterVM;
         private TagRemoveFilterUCViewModel _tagRemoveVM;
         private MessageFilterUCViewModel _messageFilterVM;
+        private MessageHighlightUCViewModel _messageHighlightVM;
         private TidFilterUCViewModel _tidFilterVM;
         private PidFilterUCViewModel _pidFilterVM;
 
@@ -268,6 +270,20 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 InvalidateOwn();
             }
         }
+
+        [Bindable(true)]
+        public MessageHighlightUCViewModel MessageHighlightContent
+        {
+            get
+            {
+                return _messageHighlightVM;
+            }
+            set
+            {
+                _messageHighlightVM = value;
+                InvalidateOwn();
+            }
+        }
         #endregion
         public AdvanceFilterUCViewModel()
         {
@@ -289,12 +305,16 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             TidFilterContent = new TidFilterUCViewModel(this);
             PidFilterContent = new PidFilterUCViewModel(this);
             TagRemoveContent = new TagRemoveFilterUCViewModel(this);
+            MessageHighlightContent = new MessageHighlightUCViewModel(this);
 
             SourceFilterManagerImpl.Current.LogTagRemoveFilter = TagRemoveContent;
             SourceFilterManagerImpl.Current.LogTagFilter = TagFilterContent;
             SourceFilterManagerImpl.Current.LogMessageFilter = MessageFilterContent;
             SourceFilterManagerImpl.Current.LogTidFilter = TidFilterContent;
             SourceFilterManagerImpl.Current.LogPidFilter = PidFilterContent;
+            SourceHighlightManagerImpl.Current.TagFilterHighlightor = TagFilterContent;
+            SourceHighlightManagerImpl.Current.MessageHighlightor = MessageHighlightContent;
+            SourceHighlightManagerImpl.Current.MessageFilterHighlightor = MessageFilterContent;
         }
 
         public override void OnDestroy()

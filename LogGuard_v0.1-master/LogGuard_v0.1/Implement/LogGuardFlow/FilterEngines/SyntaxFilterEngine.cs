@@ -26,6 +26,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
         {
             if (_isVailCache)
             {
+                IsMatchLstEmpty = true;
                 MatchedWords.Clear();
                 return Evaluate(input, PostFix);
             }
@@ -327,11 +328,13 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
             {
                 res = 1;
                 MatchedWords.Add(new MatchedWord(startA, A, Cmp));
+                IsMatchLstEmpty = false;
             }
             if (startB != -1)
             {
                 res = 2;
                 MatchedWords.Add(new MatchedWord(startB, B, Cmp));
+                IsMatchLstEmpty = false;
             }
 
             return res != 0;
@@ -345,6 +348,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
             {
                 MatchedWords.Add(new MatchedWord(startA, A, Cmp));
                 MatchedWords.Add(new MatchedWord(startB, B, Cmp));
+                IsMatchLstEmpty = false;
                 return true;
             }
             return false;
@@ -359,6 +363,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
             {
                 res = 1;
                 MatchedWords.Add(new MatchedWord(startA, A, Cmp));
+                IsMatchLstEmpty = false;
             }
             if (B)
             {
@@ -375,6 +380,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
             if (startA != -1 && B)
             {
                 MatchedWords.Add(new MatchedWord(startA, A, Cmp));
+                IsMatchLstEmpty = false;
                 return true;
             }
             return false;

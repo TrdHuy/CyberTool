@@ -178,8 +178,9 @@
 						<GridViewColumn.CellTemplate>
 							<DataTemplate>
 								<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightPidSource, UpdateSourceTrigger=PropertyChanged}"
-										   attProp:TextBlockAttProperties.BackgroundColor="#CCDDFF69"
-										   attProp:TextBlockAttProperties.ForegroundColor="#FFD1002D"
+										   attProp:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
+										   attProp:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
+										   attProp:TextBlockAttProperties.RawText="{Binding Pid}"
 										   Text="{Binding Pid}" />
 							</DataTemplate>
 						</GridViewColumn.CellTemplate>
@@ -189,8 +190,9 @@
 						<GridViewColumn.CellTemplate>
 							<DataTemplate>
 								<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightTidSource, UpdateSourceTrigger=PropertyChanged}"
-										   attProp:TextBlockAttProperties.BackgroundColor="#CCDDFF69"
-										   attProp:TextBlockAttProperties.ForegroundColor="#FFD1002D"
+										   attProp:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
+										   attProp:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
+										   attProp:TextBlockAttProperties.RawText="{Binding Tid}"
 										   Text="{Binding Tid}" />
 							</DataTemplate>
 						</GridViewColumn.CellTemplate>
@@ -200,8 +202,9 @@
 						<GridViewColumn.CellTemplate>
 							<DataTemplate>
 								<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightTagSource, UpdateSourceTrigger=PropertyChanged}"
-										   attProp:TextBlockAttProperties.BackgroundColor="#CCDDFF69"
-										   attProp:TextBlockAttProperties.ForegroundColor="#FFD1002D"
+										   attProp:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
+										   attProp:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
+										   attProp:TextBlockAttProperties.RawText="{Binding Tag}"
 										   Text="{Binding Tag}" />
 							</DataTemplate>
 						</GridViewColumn.CellTemplate>
@@ -211,8 +214,10 @@
 						<GridViewColumn.CellTemplate>
 							<DataTemplate>
 								<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightMessageSource, UpdateSourceTrigger=PropertyChanged}"
-										   attProp:TextBlockAttProperties.BackgroundColor="#CCDDFF69"
-										   attProp:TextBlockAttProperties.ForegroundColor="#FFD1002D"
+										   attProp:TextBlockAttProperties.ExtraHighlightSource="{Binding ExtraHighlightMessageSource, UpdateSourceTrigger=PropertyChanged}"
+										   attProp:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
+										   attProp:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
+										   attProp:TextBlockAttProperties.RawText="{Binding Message}"
 										   Text="{Binding Message}" />
 							</DataTemplate>
 						</GridViewColumn.CellTemplate>

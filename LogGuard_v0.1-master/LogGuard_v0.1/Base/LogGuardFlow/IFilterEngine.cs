@@ -21,6 +21,7 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
 
         List<MatchedWord> GetMatchWords();
 
+        bool IsMatchLstEmpty { get; }
     }
 
     public class MatchedWord : IHighlightable

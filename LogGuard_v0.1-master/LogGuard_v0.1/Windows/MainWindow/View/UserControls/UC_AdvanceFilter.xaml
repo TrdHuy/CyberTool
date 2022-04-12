@@ -72,6 +72,7 @@
 						 Margin="0,0,0,10"
 						 Tag="Tag show"
 						 Text="{Binding TagFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
+						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
 						 Grid.ColumnSpan="2"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TagFilterContent.HelperContent}"
 						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding TagFilterContent.TagShowLeftClickCommand}"
@@ -88,6 +89,7 @@
 						 Margin="0,0,0,10"
 						 Grid.ColumnSpan="2"
 						 Tag="Tag remove"
+						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TagRemoveContent.HelperContent}"
 						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding TagRemoveContent.TagRemoveLeftClickCommand}"
 						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding TagRemoveContent.TagRemoveRightClickCommand}"
@@ -104,6 +106,8 @@
 						 Margin="0,0,0,10"
 						 Grid.ColumnSpan="2"
 						 Tag="Message"
+						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
+						 Template="{StaticResource SearchTextBoxTmpl}"
 						 Text="{Binding MessageFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding MessageFilterContent.HelperContent}"
 						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding MessageFilterContent.MessageFilterLeftClickCommand}"
@@ -112,12 +116,12 @@
 						 attPTB:TextBoxAttProperties.Filter="{Binding MessageFilterContent.CurrentFilterMode}"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
-						 Background="{StaticResource Background_Level3}"
-						 Template="{StaticResource SearchTextBoxTmpl}" />
+						 Background="{StaticResource Background_Level3}" />
 
 				<TextBox Grid.Row="4"
 						 Margin="0,0,10,10"
 						 Tag="PID"
+						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding PidFilterContent.HelperContent}"
 						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding PidFilterContent.PidFilterLeftClickCommand}"
 						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding PidFilterContent.IsFilterEnable}"
@@ -129,6 +133,7 @@
 						 Template="{StaticResource SearchTextBoxTmpl}" />
 				<TextBox Grid.Row="4"
 						 Grid.Column="1"
+						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
 						 Margin="10,0,0,10"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TidFilterContent.HelperContent}"
 						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding TidFilterContent.TidFilterLeftClickCommand}"
@@ -208,7 +213,14 @@
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
-						 Template="{StaticResource SearchTextBoxTmpl}" />
+						 Template="{StaticResource SearchTextBoxTmpl}"
+						 Text="{Binding MessageHighlightContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
+						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding MessageHighlightContent.HelperContent}"
+						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding MessageHighlightContent.MessageHighlightLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding MessageHighlightContent.MessageHighlightRightClickCommand}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding MessageHighlightContent.IsFilterEnable}"
+						 attPTB:TextBoxAttProperties.Filter="{Binding MessageHighlightContent.CurrentFilterMode}"
+						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"/>
 
 			</Grid>
 

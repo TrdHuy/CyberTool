@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Base.LogGuardFlow
 {
-    public interface ISourceFilter
+    public interface ISourceFilter : ISourceHighlightor
     {
         /// <summary>
         /// Lọc các giá trị theo điều kiện, trả về kiểu bool

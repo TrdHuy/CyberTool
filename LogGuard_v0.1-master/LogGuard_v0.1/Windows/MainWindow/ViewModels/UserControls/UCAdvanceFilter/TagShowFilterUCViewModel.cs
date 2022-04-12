@@ -78,18 +78,31 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 
             if (IsFilterEnable && data.Tag != null)
             {
-                if (CurrentEngine.ContainIgnoreCase(data.Tag.ToString()))
-                {
-                    data.HighlightTagSource = CurrentEngine
-                        .GetMatchWords()
-                        .OrderBy(o => o.StartIndex)
-                        .ToArray();
-                    return true;
-                }
-                return false;
+                return CurrentEngine.ContainIgnoreCase(data.Tag.ToString());
             }
             return true;
         }
 
+        protected override bool DoHighlight(object obj)
+        {
+            var data = obj as LogWatcherItemViewModel;
+            if (data != null)
+            {
+                data.HighlightTagSource = CurrentEngine
+                            .GetMatchWords()
+                            .OrderBy(o => o.StartIndex)
+                            .ToArray();
+            }
+            return true;
+        }
+
+        protected override void DoCleanHighlightSource(object obj)
+        {
+            var data = obj as LogWatcherItemViewModel;
+            if (data != null)
+            {
+                data.HighlightTagSource = null;
+            }
+        }
     }
 }

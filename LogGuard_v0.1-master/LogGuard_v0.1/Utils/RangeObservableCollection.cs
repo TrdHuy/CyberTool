@@ -64,6 +64,11 @@ namespace LogGuard_v0._1.Utils
             OnPropertyChanged(new PropertyChangedEventArgs("Count"));
             OnPropertyChanged(new PropertyChangedEventArgs("Items"));
         }
+
+        public void SendItemsChangedNotifications()
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs("Items"));
+        }
     }
 
     public class RangeObservableCollectionChangedEventArgs : NotifyCollectionChangedEventArgs

@@ -18,6 +18,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
         private IEnumerable<Base.LogGuardFlow.MatchedWord> _tidSource;
         private IEnumerable<Base.LogGuardFlow.MatchedWord> _tagSource;
         private IEnumerable<Base.LogGuardFlow.MatchedWord> _mesSource;
+        private IEnumerable<Base.LogGuardFlow.MatchedWord> _extraMesSource;
         public LogWatcherItemViewModel(LogInfo logInfo)
         {
             this._logInfo = logInfo;
@@ -61,6 +62,20 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
             set
             {
                 _mesSource = (IEnumerable<Base.LogGuardFlow.MatchedWord>)value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public object ExtraHighlightMessageSource
+        {
+            get
+            {
+                return _extraMesSource;
+            }
+            set
+            {
+                _extraMesSource = (IEnumerable<Base.LogGuardFlow.MatchedWord>)value;
                 InvalidateOwn();
             }
         }
@@ -192,5 +207,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
         }
 
         string ILogWatcherElements.Level { get => Level.ToString(); set { } }
+
     }
 }

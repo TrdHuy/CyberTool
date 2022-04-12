@@ -37,7 +37,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             set
             {
                 _isFilterEnable = value;
-                SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, value);
+                OnFilterEnableChanged(value);
                 UpdateHelperContent();
                 InvalidateOwn();
             }
@@ -67,8 +67,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             set
             {
                 _filterContent = value;
-                UpdateEngingeComparableSource(value);
-                NotifyFilterContentChanged(value);
+                OnFilterContentChanged(value);
                 InvalidateOwn();
             }
         }
@@ -124,6 +123,16 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             _notifyFilterEngineChangedMessage.Start();
         }
 
+        public bool Highlight(object obj)
+        {
+            return DoHighlight(obj);
+        }
+
+        public void Clean(object obj)
+        {
+            DoCleanHighlightSource(obj);
+        }
+
         protected void UpdateHelperContent()
         {
             var turnHelper = IsFilterEnable ? "disable" : "enable";
@@ -141,5 +150,29 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             if (IsFilterEnable)
                 SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, conditionChanged);
         }
+
+        protected virtual void OnFilterContentChanged(string value)
+        {
+            UpdateEngingeComparableSource(value);
+            NotifyFilterContentChanged(value);
+        }
+
+        protected virtual void OnFilterEnableChanged(bool value)
+        {
+            SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, value);
+        }
+
+        protected virtual bool DoHighlight(object obj)
+        {
+            return false;
+        }
+
+        protected virtual void DoCleanHighlightSource(object obj)
+        {
+
+        }
+        
+
+
     }
 }

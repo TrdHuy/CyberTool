@@ -1,7 +1,6 @@
 ﻿using LogGuard_v0._1.AppResources.AttachedProperties;
-using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Base.ViewModel;
-using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
+using LogGuard_v0._1.Implement.LogGuardFlow.SourceHighlightManager;
 using LogGuard_v0._1.Implement.UIEventHandler;
 using LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher;
 using System;
@@ -13,25 +12,25 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFilter
 {
-    public class MessageFilterUCViewModel : ChildOfAdvanceFilterUCViewModel
+    public class MessageHighlightUCViewModel : ChildOfAdvanceFilterUCViewModel
     {
         [Bindable(true)]
-        public CommandExecuterModel MessageFilterRightClickCommand { get; set; }
+        public CommandExecuterModel MessageHighlightRightClickCommand { get; set; }
 
         [Bindable(true)]
-        public CommandExecuterModel MessageFilterLeftClickCommand { get; set; }
+        public CommandExecuterModel MessageHighlightLeftClickCommand { get; set; }
 
         protected override bool IsUseFilterEngine { get => true; }
 
-        public MessageFilterUCViewModel(BaseViewModel parent) : base(parent)
+        public MessageHighlightUCViewModel(BaseViewModel parent) : base(parent)
         {
-            MessageFilterLeftClickCommand = new CommandExecuterModel((paramaters) =>
+            MessageHighlightLeftClickCommand = new CommandExecuterModel((paramaters) =>
             {
                 IsFilterEnable = !IsFilterEnable;
                 return null;
             });
 
-            MessageFilterRightClickCommand = new CommandExecuterModel((paramaters) =>
+            MessageHighlightRightClickCommand = new CommandExecuterModel((paramaters) =>
             {
                 switch (CurrentFilterMode)
                 {
@@ -58,16 +57,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             if (!CurrentEngine.IsVaild())
             {
                 CurrentEngine.Refresh();
-                return true;
-            }
-
-            if (IsFilterEnable && data.Message != null)
-            {
-                if (CurrentEngine.ContainIgnoreCase(data.Message.ToString()))
-                {
-                    return true;
-                }
-                return false;
             }
             return true;
         }
@@ -75,12 +64,26 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
         protected override bool DoHighlight(object obj)
         {
             var data = obj as LogWatcherItemViewModel;
+
             if (data != null)
             {
-                data.HighlightMessageSource = CurrentEngine
-                            .GetMatchWords()
-                            .OrderBy(o => o.StartIndex)
-                            .ToArray();
+                if (!IsFilterEnable || FilterContent == "")
+                {
+                    data.ExtraHighlightMessageSource = null;
+                    return false;
+                }
+
+                if (data.Message.Equals(""))
+                {
+                    return false;
+                }
+
+                CurrentEngine.ContainIgnoreCase(data.Message.ToString());
+
+                data.ExtraHighlightMessageSource = CurrentEngine
+                           .GetMatchWords()
+                           .OrderBy(o => o.StartIndex)
+                           .ToArray();
 
                 return !CurrentEngine.IsMatchLstEmpty;
             }
@@ -92,8 +95,20 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             var data = obj as LogWatcherItemViewModel;
             if (data != null)
             {
-                data.HighlightMessageSource = null;
+                data.ExtraHighlightMessageSource = null;
             }
+        }
+
+        protected override void OnFilterContentChanged(string value)
+        {
+            UpdateEngingeComparableSource(value);
+            if (IsFilterEnable)
+                SourceHighlightManagerImpl.Current.NotifyHighlightPropertyChanged(this, value);
+        }
+
+        protected override void OnFilterEnableChanged(bool value)
+        {
+            SourceHighlightManagerImpl.Current.NotifyHighlightPropertyChanged(this, value);
         }
     }
 }

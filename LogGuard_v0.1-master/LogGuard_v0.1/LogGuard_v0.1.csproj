@@ -84,6 +84,8 @@
     <Compile Include="Base\LogGuardFlow\IRunThreadConfig.cs" />
     <Compile Include="Base\LogGuardFlow\ISourceFilter.cs" />
     <Compile Include="Base\LogGuardFlow\ISourceFilterManager.cs" />
+    <Compile Include="Base\LogGuardFlow\ISourceHighlightManager.cs" />
+    <Compile Include="Base\LogGuardFlow\ISourceHighlightor.cs" />
     <Compile Include="Base\LogGuardFlow\ISourceHolder.cs" />
     <Compile Include="Base\LogGuardFlow\ISourceManager.cs" />
     <Compile Include="Base\LogGuardFlow\IStateController.cs" />
@@ -126,6 +128,7 @@
     <Compile Include="Implement\LogGuardFlow\FilterEngines\SyntaxFilterEngine.cs" />
     <Compile Include="Implement\LogGuardFlow\RunThreadConfig\RunThreadConfigImpl.cs" />
     <Compile Include="Implement\LogGuardFlow\SourceFilterManager\SourceFilterManagerImpl.cs" />
+    <Compile Include="Implement\LogGuardFlow\SourceHighlightManager\SourceHighlightManagerImpl.cs" />
     <Compile Include="Implement\LogGuardFlow\SourceManager\SourceManagerImpl.cs" />
     <Compile Include="Implement\LogGuardFlow\StateController\HighCpu_StateController.cs" />
     <Compile Include="Implement\LogGuardFlow\StateController\LowCpu_StateController.cs" />
@@ -176,6 +179,7 @@
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\AdvanceFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\ChildOfAdvanceFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\MessageFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\MessageHighlightUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\PidFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TidFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TagRemoveFilterUCViewModel.cs" />
@@ -336,5 +340,6 @@
   <ItemGroup>
     <Resource Include="cyclone_weather_world_time_icon_194253.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

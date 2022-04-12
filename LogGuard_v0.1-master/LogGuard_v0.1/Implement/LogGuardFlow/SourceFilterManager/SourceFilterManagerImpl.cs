@@ -55,14 +55,6 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager
             NotifyFilterConditionChangedMessage.Start();
         }
 
-        public void UpdateEngine()
-        {
-        }
-
-        public void UpdateEngingeComparableSource(string source)
-        {
-        }
-
         public static SourceFilterManagerImpl Current
         {
             get

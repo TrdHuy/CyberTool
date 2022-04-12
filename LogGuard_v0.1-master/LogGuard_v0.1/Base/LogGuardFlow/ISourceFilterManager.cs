@@ -6,9 +6,17 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Base.LogGuardFlow
 {
-    public interface ISourceFilterManager : ISourceFilter
+    public interface ISourceFilterManager
     {
         event SourceFilterConditionChangedHandler FilterConditionChanged;
+
+        /// <summary>
+        /// Lọc các giá trị theo điều kiện, trả về kiểu bool
+        /// </summary>
+        /// <param name="obj">đối tượng cần kiểm tra điều kiện để lọc</param>
+        /// <returns></returns>
+        bool Filter(object obj);
+
         ISourceFilter LogTagFilter { get; set; }
         ISourceFilter LogMessageFilter { get; set; }
         ISourceFilter LogPidFilter { get; set; }

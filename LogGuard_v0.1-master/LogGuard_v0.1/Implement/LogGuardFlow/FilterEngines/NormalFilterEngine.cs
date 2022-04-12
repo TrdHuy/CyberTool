@@ -12,6 +12,8 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
         protected string ComparableSource { get; set; }
         protected List<MatchedWord> MatchedWords { get; set; }
 
+        public bool IsMatchLstEmpty { get; protected set; }
+
         public NormalFilterEngine()
         {
             MatchedWords = new List<MatchedWord>();
@@ -19,22 +21,26 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
 
         public virtual bool Contain(string input)
         {
+            IsMatchLstEmpty = true;
             MatchedWords.Clear();
             var contain = input.IndexOf(ComparableSource, StringComparison.InvariantCulture);
             if (contain != -1)
             {
                 MatchedWords.Add(new MatchedWord(contain, ComparableSource, input));
+                IsMatchLstEmpty = false;
             }
             return contain != -1;
         }
 
         public virtual bool ContainIgnoreCase(string input)
         {
+            IsMatchLstEmpty = true;
             MatchedWords.Clear();
             var contain = input.IndexOf(ComparableSource, StringComparison.InvariantCultureIgnoreCase);
-            if(contain != -1)
+            if (contain != -1)
             {
                 MatchedWords.Add(new MatchedWord(contain, ComparableSource, input));
+                IsMatchLstEmpty = false;
             }
             return contain != -1;
         }
@@ -57,6 +63,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
         public void Refresh()
         {
             MatchedWords.Clear();
+            IsMatchLstEmpty = true;
         }
     }
 }

@@ -289,7 +289,7 @@ namespace LogGuard_v0._1.Base.AsyncTask
                     }
                     catch (Exception ex)
                     {
-                        asyncTask.IsCanceled = true;
+                       asyncTask.IsCanceled = true;
                     }
 
                     asynTaskExecuteWatcher.Stop();

@@ -4,6 +4,7 @@ using LogGuard_v0._1.Base.Log;
 using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Implement.AndroidLog;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
+using LogGuard_v0._1.Implement.LogGuardFlow.SourceHighlightManager;
 using LogGuard_v0._1.Utils;
 using LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher;
 using System;
@@ -26,6 +27,8 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         private Dictionary<object, int> _logLevelCountMap;
         private RangeObservableCollection<string> _rawLog;
         private SourceFilterManagerImpl _sourceFilter;
+        private SourceHighlightManagerImpl _sourceHighlighter;
+
 
         public List<ISourceHolder> SourceHolders { get => _sourceHolder; }
         public RangeObservableCollection<LogWatcherItemViewModel> RawSource => _rawSource;
@@ -35,6 +38,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
 
         public event SourceCollectionChangedHandler SourceCollectionChanged;
         public ISourceFilterManager SourceFilterManager => _sourceFilter;
+        public ISourceHighlightManager SourceHighlightManager => _sourceHighlighter;
         public static SourceManagerImpl Current
         {
             get
@@ -50,6 +54,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         private SourceManagerImpl()
         {
             _sourceFilter = SourceFilterManagerImpl.Current;
+            _sourceHighlighter = SourceHighlightManagerImpl.Current;
             _rawSource = new RangeObservableCollection<LogWatcherItemViewModel>();
             _displaySource = new RangeObservableCollection<LogWatcherItemViewModel>();
             _sourceHolder = new List<ISourceHolder>();
@@ -59,7 +64,11 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
 
             _sourceFilter.FilterConditionChanged -= OnFilterConditionChanged;
             _sourceFilter.FilterConditionChanged += OnFilterConditionChanged;
+            _sourceHighlighter.HighlightConditionChanged -= OnHighlightConditionChanged;
+            _sourceHighlighter.HighlightConditionChanged += OnHighlightConditionChanged;
+
         }
+
 
 
         public void AddItem(string line)
@@ -92,6 +101,9 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
             {
                 if (SourceFilterManager.Filter(model))
                 {
+                    SourceHighlightManager.FilterHighlight(model);
+                    SourceHighlightManager.Highlight(model);
+
                     _displaySource.Add(model);
                 }
             }
@@ -198,6 +210,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         #region Filter area
         private CancellationTokenSource SourceFilterCancellationTokenCache { get; set; }
         private AsyncTask FilterTaskCache { get; set; }
+
         private void OnFilterConditionChanged(object sender, ConditionChangedEventArgs e)
         {
             if (FilterTaskCache != null)
@@ -232,15 +245,22 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
                     {
                         token.ThrowIfCancellationRequested();
                     }
+
                     if (SourceFilterManager.Filter(item))
                     {
+                        SourceHighlightManager.FilterHighlight(item);
+                        SourceHighlightManager.Highlight(item);
+
                         filterLst.Add(item);
                     }
                 }
             }
 
+
             result.Result = filterLst;
             result.MesResult = MessageAsyncTaskResult.Done;
+
+
             return result;
         }
 
@@ -255,6 +275,59 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
             }
         }
 
+        #endregion
+
+
+        #region Highlight area
+        private CancellationTokenSource SourceHighlightCancellationTokenCache { get; set; }
+        private AsyncTask HighlightTaskCache { get; set; }
+
+        private void OnHighlightConditionChanged(object sender, ConditionChangedEventArgs e)
+        {
+            if (HighlightTaskCache != null)
+            {
+                if (!HighlightTaskCache.IsCompleted)
+                {
+                    AsyncTask.CancelAsyncExecute(HighlightTaskCache);
+                }
+            }
+
+            SourceHighlightCancellationTokenCache = new CancellationTokenSource();
+            HighlightTaskCache = new AsyncTask(OnDoHighlight
+                   , null
+                   , OnFinishHighlightSource
+                   , 0
+                   , SourceHighlightCancellationTokenCache);
+            AsyncTask.CancelableAsyncExecute(HighlightTaskCache);
+        }
+
+        private void OnFinishHighlightSource(AsyncTaskResult result)
+        {
+           
+        }
+
+        private async Task<AsyncTaskResult> OnDoHighlight(CancellationToken token)
+        {
+            var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
+
+
+
+            lock (DisplaySource.ThreadSafeLock)
+            {
+                foreach (var item in DisplaySource)
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        token.ThrowIfCancellationRequested();
+                    }
+
+                    SourceHighlightManager.Highlight(item);
+                }
+            }
+
+            result.MesResult = MessageAsyncTaskResult.Done;
+            return result;
+        }
         #endregion
     }
 }
