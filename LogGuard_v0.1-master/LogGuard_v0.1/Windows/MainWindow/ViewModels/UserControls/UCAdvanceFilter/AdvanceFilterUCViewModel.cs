@@ -32,6 +32,8 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
         private MessageHighlightUCViewModel _messageHighlightVM;
         private TidFilterUCViewModel _tidFilterVM;
         private PidFilterUCViewModel _pidFilterVM;
+        private StartTimeFilterUCViewModel _startTimeFilterVM;
+        private EndTimeFilterUCViewModel _endTimeFilterVM;
 
         #region Log measure tool binding area
         [Bindable(true)]
@@ -215,6 +217,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 InvalidateOwn();
             }
         }
+
         [Bindable(true)]
         public TagShowFilterUCViewModel TagFilterContent
         {
@@ -242,6 +245,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 InvalidateOwn();
             }
         }
+
         [Bindable(true)]
         public PidFilterUCViewModel PidFilterContent
         {
@@ -284,6 +288,35 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 InvalidateOwn();
             }
         }
+
+        [Bindable(true)]
+        public StartTimeFilterUCViewModel StartTimeFilterContent
+        {
+            get
+            {
+                return _startTimeFilterVM;
+            }
+            set
+            {
+                _startTimeFilterVM = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public EndTimeFilterUCViewModel EndTimeFilterContent
+        {
+            get
+            {
+                return _endTimeFilterVM;
+            }
+            set
+            {
+                _endTimeFilterVM = value;
+                InvalidateOwn();
+            }
+        }
+
         #endregion
         public AdvanceFilterUCViewModel()
         {
@@ -306,12 +339,17 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             PidFilterContent = new PidFilterUCViewModel(this);
             TagRemoveContent = new TagRemoveFilterUCViewModel(this);
             MessageHighlightContent = new MessageHighlightUCViewModel(this);
+            StartTimeFilterContent = new StartTimeFilterUCViewModel(this);
+            EndTimeFilterContent = new EndTimeFilterUCViewModel(this);
 
             SourceFilterManagerImpl.Current.LogTagRemoveFilter = TagRemoveContent;
             SourceFilterManagerImpl.Current.LogTagFilter = TagFilterContent;
             SourceFilterManagerImpl.Current.LogMessageFilter = MessageFilterContent;
             SourceFilterManagerImpl.Current.LogTidFilter = TidFilterContent;
             SourceFilterManagerImpl.Current.LogPidFilter = PidFilterContent;
+            SourceFilterManagerImpl.Current.LogStartTimeFilter = StartTimeFilterContent;
+            SourceFilterManagerImpl.Current.LogEndTimeFilter = EndTimeFilterContent;
+
             SourceHighlightManagerImpl.Current.TagFilterHighlightor = TagFilterContent;
             SourceHighlightManagerImpl.Current.MessageHighlightor = MessageHighlightContent;
             SourceHighlightManagerImpl.Current.MessageFilterHighlightor = MessageFilterContent;

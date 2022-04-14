@@ -14,23 +14,14 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 {
     public class MessageHighlightUCViewModel : ChildOfAdvanceFilterUCViewModel
     {
-        [Bindable(true)]
-        public CommandExecuterModel MessageHighlightRightClickCommand { get; set; }
+        protected new bool _isFilterEnable = true;
 
-        [Bindable(true)]
-        public CommandExecuterModel MessageHighlightLeftClickCommand { get; set; }
-
+      
         protected override bool IsUseFilterEngine { get => true; }
 
         public MessageHighlightUCViewModel(BaseViewModel parent) : base(parent)
         {
-            MessageHighlightLeftClickCommand = new CommandExecuterModel((paramaters) =>
-            {
-                IsFilterEnable = !IsFilterEnable;
-                return null;
-            });
-
-            MessageHighlightRightClickCommand = new CommandExecuterModel((paramaters) =>
+            FilterLeftClickCommand = new CommandExecuterModel((paramaters) =>
             {
                 switch (CurrentFilterMode)
                 {
@@ -46,9 +37,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 }
                 return null;
             });
-
-            UpdateHelperContent();
-            UpdateEngingeComparableSource(FilterContent);
         }
 
         public override bool Filter(object obj)

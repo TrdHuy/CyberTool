@@ -206,6 +206,14 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
             }
         }
 
+        public DateTime LogDateTime
+        {
+            get
+            {
+                return (DateTime)_logInfo[LogInfo.KEY_DATE_TIME];
+            }
+        }
+
         string ILogWatcherElements.Level { get => Level.ToString(); set { } }
 
     }

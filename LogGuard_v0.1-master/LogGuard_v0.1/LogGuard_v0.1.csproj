@@ -67,6 +67,8 @@
     </ApplicationDefinition>
     <Compile Include="AppResources\AttachedProperties\TextBlockAttProperties.cs" />
     <Compile Include="AppResources\AttachedProperties\TextBoxAttProperties.cs" />
+    <Compile Include="AppResources\AttachedProperties\UIAttProperties.cs" />
+    <Compile Include="AppResources\Controls\LogGCalendar\DateTimeSeker.cs" />
     <Compile Include="AppResources\Controls\LogGListView\LoadingListView.cs" />
     <Compile Include="AppResources\Controls\LogGPages\LogGPage.cs" />
     <Compile Include="AppResources\Controls\LogGWindows\LogGuardWindow.cs" />
@@ -147,6 +149,7 @@
     <Compile Include="LogGuard\Control\HeaderLabel.cs" />
     <Compile Include="LogGuard\Control\RadialProgressBar.cs" />
     <Compile Include="LogGuard\Control\TrippleToggle.cs" />
+    <Compile Include="Utils\CommonCommand.cs" />
     <Compile Include="Utils\Converters\StringToGeoPathConverter.cs" />
     <Compile Include="Utils\CustomAttachedProperties.cs" />
     <Compile Include="Utils\Definitions\LogGuardDefinition.cs" />
@@ -178,12 +181,15 @@
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPageViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\AdvanceFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\ChildOfAdvanceFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TimeFilter\EndTimeFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\MessageFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\MessageHighlightUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\PidFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TimeFilter\StartTimeFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TidFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TagRemoveFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TagShowFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TimeFilter\TimeFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCListOfDevice\ListOfDeviceUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCListOfDevice\MSW_UC_ListOfDeviceControlButtonCommand.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCLogManager\LogByTeamItemViewModel.cs" />
@@ -214,6 +220,10 @@
     <Compile Include="Windows\WaitingWindow\WaitingBox.xaml.cs">
       <DependentUpon>WaitingBox.xaml</DependentUpon>
     </Compile>
+    <Page Include="AppResources\Controls\LogGCalendar\DateTimeSeker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AppResources\Controls\LogGListView\LoadingListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -15,9 +15,5 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         /// <param name="obj">đối tượng cần kiểm tra điều kiện để lọc</param>
         /// <returns></returns>
         bool Filter(object obj);
-
-        void UpdateEngine();
-
-        void UpdateEngingeComparableSource(string source);
     }
 }

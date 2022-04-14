@@ -44,15 +44,15 @@ namespace LogGuard_v0._1.Base.AndroidLog.LogParser
             foreach (Match match in matches)
             {
                 builder.Reset();
-                builder.BuildLine(lineNumber);
-                builder.BuildDate(match.Groups[LogInfo.KEY_DATE].ToString());
-                builder.BuildTime(match.Groups[LogInfo.KEY_TIME].ToString());
-                builder.BuildPID(match.Groups[LogInfo.KEY_PID].ToString());
-                builder.BuildTID(match.Groups[LogInfo.KEY_TID].ToString());
-                //builder.BuildPackage(match.Groups[LogInfo.KEY_PACKAGE].ToString());
-                builder.BuildMessage(match.Groups[LogInfo.KEY_MESSAGE].ToString());
-                builder.BuildTag(match.Groups[LogInfo.KEY_TAG].ToString());
-                builder.BuildColorByLevel(match.Groups[LogInfo.KEY_LEVEL].ToString());
+                builder.BuildLine(lineNumber)
+                    .BuildDate(match.Groups[LogInfo.KEY_DATE].ToString())
+                    .BuildTime(match.Groups[LogInfo.KEY_TIME].ToString())
+                    .BuildDateTime()
+                    .BuildPID(match.Groups[LogInfo.KEY_PID].ToString())
+                    .BuildTID(match.Groups[LogInfo.KEY_TID].ToString())
+                    .BuildMessage(match.Groups[LogInfo.KEY_MESSAGE].ToString())
+                    .BuildTag(match.Groups[LogInfo.KEY_TAG].ToString())
+                    .BuildColorByLevel(match.Groups[LogInfo.KEY_LEVEL].ToString());
             }
 
             return builder.Build();

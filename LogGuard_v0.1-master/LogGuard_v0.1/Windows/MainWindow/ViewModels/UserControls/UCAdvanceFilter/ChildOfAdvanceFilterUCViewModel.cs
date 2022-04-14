@@ -3,6 +3,7 @@ using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
+using LogGuard_v0._1.Implement.UIEventHandler;
 using System.ComponentModel;
 using System.Threading;
 
@@ -11,6 +12,13 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
     public abstract class ChildOfAdvanceFilterUCViewModel : BaseViewModel, ISourceFilter
     {
         protected IFilterEngine CurrentEngine { get; set; }
+
+        [Bindable(true)]
+        public CommandExecuterModel FilterLeftClickCommand { get; set; }
+
+        [Bindable(true)]
+        public CommandExecuterModel FilterRightClickCommand { get; set; }
+
 
         [Bindable(true)]
         public FilterType CurrentFilterMode
@@ -36,10 +44,15 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             }
             set
             {
+                var oldVal = _isFilterEnable;
                 _isFilterEnable = value;
-                OnFilterEnableChanged(value);
-                UpdateHelperContent();
-                InvalidateOwn();
+
+                if(oldVal != value)
+                {
+                    OnFilterEnableChanged(value);
+                    UpdateHelperContent();
+                    InvalidateOwn();
+                }
             }
         }
 
@@ -71,7 +84,17 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 InvalidateOwn();
             }
         }
+
+        /// <summary>
+        /// Lọc các giá trị theo điều kiện, trả về kiểu bool
+        /// </summary>
+        /// <param name="obj">đối tượng cần kiểm tra điều kiện để lọc</param>
+        /// <returns></returns>
         public abstract bool Filter(object obj);
+
+        /// <summary>
+        /// Dùng để kiểm tra bộ lọc hiện tại có sử dụng engine để lọc không
+        /// </summary>
         protected abstract bool IsUseFilterEngine { get; }
 
         private string _helperContent = "";
@@ -84,10 +107,36 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 
         public ChildOfAdvanceFilterUCViewModel(BaseViewModel parent) : base(parent)
         {
+            FilterRightClickCommand = new CommandExecuterModel((paramaters) =>
+            {
+                IsFilterEnable = !IsFilterEnable;
+                return null;
+            });
+
             UpdateEngine();
         }
 
-        public void UpdateEngine()
+        /// <summary>
+        /// Highlight các giá trị theo điều kiện, trả về kiểu bool
+        /// </summary>
+        /// <param name="obj">đối tượng cần highlight</param>
+        /// <returns>true: nếu có chuỗi đã được highlight</returns>
+        /// <returns>false: nếu không có chuỗi nào được highlight</returns>
+        public bool Highlight(object obj)
+        {
+            return DoHighlight(obj);
+        }
+
+        /// <summary>
+        /// Bỏ toàn bộ các đối tượng đang highlight trong 1 chuỗi
+        /// </summary>
+        /// <param name="obj">đối tượng cần bỏ highlight</param>
+        public void Clean(object obj)
+        {
+            DoCleanHighlightSource(obj);
+        }
+
+        protected void UpdateEngine()
         {
             switch (CurrentFilterMode)
             {
@@ -102,7 +151,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             UpdateHelperContent();
         }
 
-        public void UpdateEngingeComparableSource(string source)
+        protected void UpdateEngingeComparableSource(string source)
         {
             if (!IsUseFilterEngine)
             {
@@ -123,26 +172,16 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             _notifyFilterEngineChangedMessage.Start();
         }
 
-        public bool Highlight(object obj)
-        {
-            return DoHighlight(obj);
-        }
-
-        public void Clean(object obj)
-        {
-            DoCleanHighlightSource(obj);
-        }
-
         protected void UpdateHelperContent()
         {
             var turnHelper = IsFilterEnable ? "disable" : "enable";
             var engineHelper = "";
             if (IsUseFilterEngine)
             {
-                engineHelper = "\nRight click to change filter mode" +
+                engineHelper = "\nLeft click to change filter mode" +
                 "\nFilter mode: " + CurrentFilterMode.ToString();
             }
-            HelperContent = "Left click to " + turnHelper + " filter" + engineHelper;
+            HelperContent = "Right click to " + turnHelper + " filter" + engineHelper;
         }
 
         protected void NotifyFilterContentChanged(string conditionChanged)

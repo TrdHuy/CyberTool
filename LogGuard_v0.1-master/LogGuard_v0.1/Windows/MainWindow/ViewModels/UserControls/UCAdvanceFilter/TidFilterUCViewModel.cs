@@ -16,20 +16,9 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
     {
         private List<MatchedWord> matchedWords;
 
-        [Bindable(true)]
-        public CommandExecuterModel TidFilterLeftClickCommand { get; set; }
-
         public TidFilterUCViewModel(BaseViewModel parent) : base(parent)
         {
             matchedWords = new List<MatchedWord>();
-
-            TidFilterLeftClickCommand = new CommandExecuterModel((paramaters) =>
-            {
-                IsFilterEnable = !IsFilterEnable;
-                return null;
-            });
-
-            UpdateHelperContent();
         }
         protected override bool IsUseFilterEngine => false;
 

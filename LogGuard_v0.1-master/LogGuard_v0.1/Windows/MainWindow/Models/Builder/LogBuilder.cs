@@ -8,6 +8,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.Models.Builder
 {
     public class LogBuilder
     {
+        private static int _currentYear = DateTime.Now.Year;
         private LogInfo _logInfo;
 
         public LogInfo LogInfo
@@ -106,6 +107,18 @@ namespace LogGuard_v0._1.Windows.MainWindow.Models.Builder
         public LogBuilder BuildRawText(object val)
         {
             _logInfo[LogInfo.KEY_RAW_TEXT] = val;
+            return this;
+        }
+
+        public LogBuilder BuildDateTime()
+        {
+            var date = _logInfo[LogInfo.KEY_DATE];
+            var time = _logInfo[LogInfo.KEY_TIME];
+            var dateTime = date + "-" + _currentYear + " " + time;
+
+            _logInfo[LogInfo.KEY_DATE_TIME] = DateTime.ParseExact(dateTime
+                , "MM-dd-yyyy HH:mm:ss.fff"
+                , System.Globalization.CultureInfo.CurrentCulture);
             return this;
         }
 

@@ -20,6 +20,22 @@
 					 x:Key="Background_Level4" />
 	<SolidColorBrush Color="#FF2E3139"
 					 x:Key="Background_Level5" />
+	<SolidColorBrush Color="#FF393C44"
+					 x:Key="Background_Level6" />
+	<SolidColorBrush Color="#FF3D4048"
+					 x:Key="Background_Level7" />
+
+	<SolidColorBrush Color="#FFFFFFFF"
+					 x:Key="InflectBackground_Level1" />
+	<SolidColorBrush Color="#FFC5C5C5"
+					 x:Key="InflectBackground_Level2" />
+	<SolidColorBrush Color="#FF4B4E59"
+					 x:Key="InflectBackground_Level10" />
+	
+	<SolidColorBrush Color="#19B8E7F9"
+					 x:Key="MouseOverFillEffect_Level1" />
+	<SolidColorBrush Color="#4CB8E7F9"
+					 x:Key="MouseOverFillEffect_Level2" />
 	<SolidColorBrush Color="#FFB8EAF9"
 					 x:Key="BorderbrushEffect_Level1" />
 	
@@ -508,6 +524,126 @@
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
 
+	<ControlTemplate TargetType="{x:Type TextBox}"
+					 x:Key="CalendarTextBoxTmpl">
+		<ControlTemplate.Resources>
+			<Style TargetType="ToolTip"
+				   BasedOn="{StaticResource {x:Type ToolTip}}">
+				<Setter Property="Background"
+						Value="{StaticResource Background_Level5}" />
+				<Setter Property="Foreground"
+						Value="{StaticResource Foreground_Level1}" />
+				<Setter Property="BorderBrush"
+						Value="{StaticResource BorderbrushEffect_Level1}" />
+				<Setter Property="FontFamily"
+						Value="Calibri" />
+				<Setter Property="FontSize"
+						Value="8" />
+				<Setter Property="BorderThickness"
+						Value="1" />
+			</Style>
+		</ControlTemplate.Resources>
+		<Grid Name="Border"
+			  Background="{TemplateBinding Background}">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="auto" />
+			</Grid.ColumnDefinitions>
+			<ScrollViewer Margin="5,0,0,0"
+						  VerticalContentAlignment="Center"
+						  VerticalAlignment="Center"
+						  VerticalScrollBarVisibility="Disabled"
+						  HorizontalScrollBarVisibility="Disabled"
+						  x:Name="PART_ContentHost" />
+			<TextBox x:Name="TagTextBox"
+					 Margin="5,0,0,0"
+					 Text="{TemplateBinding Tag}"
+					 Background="Transparent"
+					 BorderThickness="0"
+					 VerticalAlignment="Center"
+					 IsReadOnly="True"
+					 IsHitTestVisible="False"
+					 Foreground="{StaticResource Foreground_Level1}"
+					 FontSize="{TemplateBinding FontSize}">
+				<TextBox.Style>
+					<Style TargetType="{x:Type TextBox}">
+						<Setter Property="Visibility"
+								Value="Collapsed" />
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
+										 Value="">
+								<Setter Property="Visibility"
+										Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</TextBox.Style>
+			</TextBox>
+
+			<Path x:Name="CheckPath"
+				  Stretch="Uniform"
+				  Grid.Column="1"
+				  Height="10"
+				  IsHitTestVisible="False"
+				  Width="10"
+				  Data="{Binding Source={StaticResource CalendarPathGeomerty}}"
+				  Fill="{StaticResource Foreground_Level2}" />
+			
+			<Rectangle Grid.Column="1"
+					   Fill="Transparent"
+					   StrokeThickness="1"
+					   RadiusX="10"
+					   RadiusY="10"
+					   Width="20"
+					   ToolTip="{Binding Path=(attPTB:TextBoxAttProperties.FilterHelperContent),
+									RelativeSource={RelativeSource TemplatedParent}}"
+					   Height="20">
+				<Rectangle.InputBindings>
+					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.LeftDoubleClickCommand),
+									RelativeSource={RelativeSource TemplatedParent}}"
+								  MouseAction="LeftDoubleClick" />
+					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.LeftClickCommand),
+									RelativeSource={RelativeSource TemplatedParent}}"
+								  MouseAction="LeftClick" />
+					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.RightClickCommand),
+									RelativeSource={RelativeSource TemplatedParent}}"
+								  MouseAction="RightClick" />
+				</Rectangle.InputBindings>
+				<Rectangle.Style>
+					<Style>
+						<Style.Triggers>
+							<Trigger Property="Rectangle.IsMouseOver"
+									 Value="True">
+								<Setter Property="Rectangle.Fill"
+										Value="#19B8E7F9" />
+								<Setter Property="Rectangle.Stroke"
+										Value="{StaticResource BorderbrushEffect_Level1}" />
+							</Trigger>
+						</Style.Triggers>
+					</Style>
+				</Rectangle.Style>
+			</Rectangle>
+
+			<Popup x:Name="PART_Popup"
+				   Placement="MousePoint"
+				   StaysOpen="False"
+				   Focusable="False"
+				   AllowsTransparency="True"
+				   PopupAnimation="Slide">
+			</Popup>
+		</Grid>
+		<ControlTemplate.Triggers>
+			<DataTrigger Binding="{Binding Path=(attPTB:TextBoxAttProperties.IsFilterEnable),
+									RelativeSource={RelativeSource Self}}"
+						 Value="true">
+				<Setter TargetName="CheckPath"
+						Property="Fill"
+						Value="{StaticResource ButtonBackground_Level1}" />
+			</DataTrigger>
+		</ControlTemplate.Triggers>
+	</ControlTemplate>
+
+	
 	<ControlTemplate TargetType="ListView"
 					 x:Key="ListViewLV1Tmpl">
 		<ControlTemplate.Resources>

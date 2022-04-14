@@ -17,23 +17,11 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 {
     public class TagShowFilterUCViewModel : ChildOfAdvanceFilterUCViewModel
     {
-
-        [Bindable(true)]
-        public CommandExecuterModel TagShowRightClickCommand { get; set; }
-
-        [Bindable(true)]
-        public CommandExecuterModel TagShowLeftClickCommand { get; set; }
-
+        protected new bool _isFilterEnable = true;
 
         public TagShowFilterUCViewModel(BaseViewModel parent) : base(parent)
         {
-            TagShowLeftClickCommand = new CommandExecuterModel((paramaters) =>
-            {
-                IsFilterEnable = !IsFilterEnable;
-                return null;
-            });
-
-            TagShowRightClickCommand = new CommandExecuterModel((paramaters) =>
+            FilterLeftClickCommand = new CommandExecuterModel((paramaters) =>
             {
                 switch (CurrentFilterMode)
                 {
@@ -49,10 +37,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 }
                 return null;
             });
-
-            _isFilterEnable = true;
-            UpdateHelperContent();
-            UpdateEngingeComparableSource(FilterContent);
         }
 
         public override bool Filter(object obj)

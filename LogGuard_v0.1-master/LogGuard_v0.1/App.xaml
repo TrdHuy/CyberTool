@@ -16,6 +16,7 @@
 				<ResourceDictionary Source="LogGuard/Resources/HanzaTreeViewer.xaml" />
 				<ResourceDictionary Source="LogGuard/Resources/HanzaTreeViewItem.xaml" />
 				<ResourceDictionary Source="AppResources/Controls/LogGListView/LoadingListView.xaml" />
+				<ResourceDictionary Source="AppResources/Controls/LogGCalendar/DateTimeSeker.xaml" />
 
 			</ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

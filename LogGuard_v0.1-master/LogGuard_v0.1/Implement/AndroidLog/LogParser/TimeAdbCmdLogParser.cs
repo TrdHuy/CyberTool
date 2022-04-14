@@ -34,6 +34,7 @@ namespace LogGuard_v0._1.Implement.AndroidLog.LogParser
                 builder.Reset();
                 builder.BuildDate(match.Groups[LogInfo.KEY_DATE].ToString())
                         .BuildTime(match.Groups[LogInfo.KEY_TIME].ToString())
+                        .BuildDateTime()
                         .BuildPID(match.Groups[LogInfo.KEY_PID].ToString())
                         .BuildColorByLevel(match.Groups[LogInfo.KEY_LEVEL].ToString())
                         .BuildTag(match.Groups[LogInfo.KEY_TAG].ToString())
@@ -47,6 +48,7 @@ namespace LogGuard_v0._1.Implement.AndroidLog.LogParser
                 builder.Reset();
                 builder.BuildDate("-")
                          .BuildTime("-")
+                         .BuildDateTime()
                          .BuildColorByLevel("-")
                          .BuildTag("-")
                          .BuildMessage(line);

@@ -15,23 +15,11 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
     {
         private List<MatchedWord> matchedWords;
 
-        [Bindable(true)]
-        public CommandExecuterModel PidFilterLeftClickCommand { get; set; }
-
-
         protected override bool IsUseFilterEngine => false;
 
         public PidFilterUCViewModel(BaseViewModel parent) : base(parent)
         {
             matchedWords = new List<MatchedWord>();
-            
-            PidFilterLeftClickCommand = new CommandExecuterModel((paramaters) =>
-            {
-                IsFilterEnable = !IsFilterEnable;
-                return null;
-            });
-
-            UpdateHelperContent();
         }
 
         public override bool Filter(object obj)

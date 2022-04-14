@@ -14,7 +14,8 @@
 			 FontFamily="Calibri">
 
 	<UserControl.DataContext>
-		<Binding Source="{vmh:VMManagerMarkup {x:Type vm:AdvanceFilterUCViewModel},
+		<Binding Source="{vmh:VMManagerMarkup 
+			{x:Type vm:AdvanceFilterUCViewModel},
 			{x:Type vmp:LogGuardPageViewModel}}" />
 	</UserControl.DataContext>
 
@@ -63,6 +64,7 @@
 					<ColumnDefinition Width="*" />
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
+
 				<Label Content="Content filter"
 					   FontSize=" 9"
 					   VerticalAlignment="Center"
@@ -75,8 +77,8 @@
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
 						 Grid.ColumnSpan="2"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TagFilterContent.HelperContent}"
-						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding TagFilterContent.TagShowLeftClickCommand}"
-						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding TagFilterContent.TagShowRightClickCommand}"
+						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding TagFilterContent.FilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding TagFilterContent.FilterRightClickCommand}"
 						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding TagFilterContent.IsFilterEnable}"
 						 attPTB:TextBoxAttProperties.Filter="{Binding TagFilterContent.CurrentFilterMode}"
 						 Foreground="{StaticResource Foreground_Level3}"
@@ -91,8 +93,8 @@
 						 Tag="Tag remove"
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TagRemoveContent.HelperContent}"
-						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding TagRemoveContent.TagRemoveLeftClickCommand}"
-						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding TagRemoveContent.TagRemoveRightClickCommand}"
+						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding TagRemoveContent.FilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding TagRemoveContent.FilterRightClickCommand}"
 						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding TagRemoveContent.IsFilterEnable}"
 						 attPTB:TextBoxAttProperties.Filter="{Binding TagRemoveContent.CurrentFilterMode}"
 						 Text="{Binding TagRemoveContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
@@ -110,8 +112,8 @@
 						 Template="{StaticResource SearchTextBoxTmpl}"
 						 Text="{Binding MessageFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding MessageFilterContent.HelperContent}"
-						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding MessageFilterContent.MessageFilterLeftClickCommand}"
-						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding MessageFilterContent.MessageFilterRightClickCommand}"
+						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding MessageFilterContent.FilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding MessageFilterContent.FilterRightClickCommand}"
 						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding MessageFilterContent.IsFilterEnable}"
 						 attPTB:TextBoxAttProperties.Filter="{Binding MessageFilterContent.CurrentFilterMode}"
 						 Foreground="{StaticResource Foreground_Level3}"
@@ -123,7 +125,7 @@
 						 Tag="PID"
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding PidFilterContent.HelperContent}"
-						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding PidFilterContent.PidFilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding PidFilterContent.FilterRightClickCommand}"
 						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding PidFilterContent.IsFilterEnable}"
 						 Text="{Binding PidFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 attPTB:TextBoxAttProperties.PathData="{StaticResource SearchPathGeomerty}"
@@ -136,7 +138,7 @@
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
 						 Margin="10,0,0,10"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TidFilterContent.HelperContent}"
-						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding TidFilterContent.TidFilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding TidFilterContent.FilterRightClickCommand}"
 						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding TidFilterContent.IsFilterEnable}"
 						 Text="{Binding TidFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 Tag="TID"
@@ -168,22 +170,34 @@
 				<TextBox Grid.Row="1"
 						 Margin="0,0,0,10"
 						 Tag="Start time"
-						 attPTB:TextBoxAttProperties.PathData="{StaticResource SearchPathGeomerty}"
+						 attPTB:TextBoxAttProperties.IsTimeTextBox="True"
+						 attPTB:TextBoxAttProperties.IsOpenCalendarPopup="{Binding StartTimeFilterContent.IsCalendarOpen, UpdateSourceTrigger=PropertyChanged}"
+						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding StartTimeFilterContent.HelperContent}"
+						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding StartTimeFilterContent.FilterRightClickCommand}"
+						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding StartTimeFilterContent.FilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding StartTimeFilterContent.IsFilterEnable}"
+						 Text="{Binding StartTimeFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 Grid.ColumnSpan="2"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
-						 Template="{StaticResource SearchTextBoxTmpl}" />
+						 Template="{StaticResource CalendarTextBoxTmpl}" />
 
 				<TextBox Grid.Row="3"
 						 Margin="0,0,0,10"
 						 Grid.ColumnSpan="2"
-						 Tag="End Time"
-						 attPTB:TextBoxAttProperties.PathData="{StaticResource SearchPathGeomerty}"
+						 Tag="End time"
+						 attPTB:TextBoxAttProperties.IsTimeTextBox="True"
+						 attPTB:TextBoxAttProperties.IsOpenCalendarPopup="{Binding EndTimeFilterContent.IsCalendarOpen}"
+						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding EndTimeFilterContent.HelperContent}"
+						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding EndTimeFilterContent.FilterRightClickCommand}"
+						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding EndTimeFilterContent.FilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding EndTimeFilterContent.IsFilterEnable}"
+						 Text="{Binding EndTimeFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
-						 Template="{StaticResource SearchTextBoxTmpl}" />
+						 Template="{StaticResource CalendarTextBoxTmpl}" />
 			</Grid>
 
 			<Grid Margin="10,0,10,0"
@@ -216,8 +230,8 @@
 						 Template="{StaticResource SearchTextBoxTmpl}"
 						 Text="{Binding MessageHighlightContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding MessageHighlightContent.HelperContent}"
-						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding MessageHighlightContent.MessageHighlightLeftClickCommand}"
-						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding MessageHighlightContent.MessageHighlightRightClickCommand}"
+						 attPTB:TextBoxAttProperties.LeftClickCommand="{Binding MessageHighlightContent.FilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.RightClickCommand="{Binding MessageHighlightContent.FilterRightClickCommand}"
 						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding MessageHighlightContent.IsFilterEnable}"
 						 attPTB:TextBoxAttProperties.Filter="{Binding MessageHighlightContent.CurrentFilterMode}"
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"/>

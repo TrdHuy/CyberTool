@@ -14,23 +14,11 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 {
     public class TagRemoveFilterUCViewModel : ChildOfAdvanceFilterUCViewModel
     {
-
-        [Bindable(true)]
-        public CommandExecuterModel TagRemoveRightClickCommand { get; set; }
-
-        [Bindable(true)]
-        public CommandExecuterModel TagRemoveLeftClickCommand { get; set; }
+        protected new bool _isFilterEnable = true;
 
         public TagRemoveFilterUCViewModel(BaseViewModel parent) : base(parent)
         {
-            TagRemoveLeftClickCommand = new CommandExecuterModel((paramaters) =>
-            {
-                IsFilterEnable = !IsFilterEnable;
-                return null;
-            });
-
-
-            TagRemoveRightClickCommand = new CommandExecuterModel((paramaters) =>
+            FilterLeftClickCommand = new CommandExecuterModel((paramaters) =>
             {
                 switch (CurrentFilterMode)
                 {
@@ -46,10 +34,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 }
                 return null;
             });
-
-            _isFilterEnable = true;
-            UpdateHelperContent();
-            UpdateEngingeComparableSource(FilterContent);
         }
 
         public override bool Filter(object obj)

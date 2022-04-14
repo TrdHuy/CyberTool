@@ -1,0 +1,1708 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:hpss="clr-namespace:HPSolutionCCDevPackage.netFramework;assembly=HPSolutionCCDevPackage.netFramework"
+					xmlns:local="clr-namespace:LogGuard_v0._1.AppResources.Controls.LogGCalendar"
+					xmlns:attProp="clr-namespace:LogGuard_v0._1.AppResources.AttachedProperties">
+	<Style TargetType="{x:Type local:DateTimeSeker}">
+		<Setter Property="Background"
+				Value="{StaticResource Background_Level6}" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type local:DateTimeSeker}">
+					<ControlTemplate.Resources>
+						<local:SekerTabIsCheckedConverter x:Key="SekerTabIsCheckedConverter" />
+
+						<ControlTemplate x:Key="AMPMButtonTmpl"
+										 TargetType="ToggleButton">
+							<Border x:Name="border"
+									BorderThickness="0"
+									Background="{StaticResource Background_Level6}"
+									SnapsToDevicePixels="True">
+								<Grid>
+									<Rectangle x:Name="FeedBackRec"
+											   Visibility="Hidden" />
+									<ContentPresenter x:Name="contentPresenter"
+													  ContentTemplate="{TemplateBinding ContentTemplate}"
+													  Content="{TemplateBinding Content}"
+													  ContentStringFormat="{TemplateBinding ContentStringFormat}"
+													  Focusable="False"
+													  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+													  Margin="{TemplateBinding Padding}"
+													  RecognizesAccessKey="True"
+													  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+													  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+								</Grid>
+
+							</Border>
+
+							<ControlTemplate.Triggers>
+								<Trigger Property="Button.IsDefaulted"
+										 Value="True">
+									<Setter Property="BorderBrush"
+											TargetName="border"
+											Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+								</Trigger>
+								<Trigger Property="IsMouseOver"
+										 Value="True">
+									<Setter Property="Fill"
+											TargetName="FeedBackRec"
+											Value="{StaticResource MouseOverFillEffect_Level1}" />
+									<Setter Property="Visibility"
+											TargetName="FeedBackRec"
+											Value="Visible" />
+									<Setter Property="Stroke"
+											TargetName="FeedBackRec"
+											Value="{StaticResource BorderbrushEffect_Level1}" />
+								</Trigger>
+
+								<Trigger Property="IsPressed"
+										 Value="True">
+									<Setter Property="Visibility"
+											TargetName="FeedBackRec"
+											Value="Visible" />
+									<Setter Property="Fill"
+											TargetName="FeedBackRec"
+											Value="{StaticResource MouseOverFillEffect_Level2}" />
+								</Trigger>
+								<Trigger Property="ToggleButton.IsChecked"
+										 Value="True">
+									<Setter Property="Visibility"
+											TargetName="FeedBackRec"
+											Value="Visible" />
+									<Setter Property="Fill"
+											TargetName="FeedBackRec"
+											Value="{StaticResource MouseOverFillEffect_Level2}" />
+									<Setter Property="Foreground"
+											Value="{StaticResource Foreground_Level3}" />
+								</Trigger>
+								<Trigger Property="IsEnabled"
+										 Value="False">
+									<Setter Property="Background"
+											TargetName="border"
+											Value="#FFF4F4F4" />
+									<Setter Property="BorderBrush"
+											TargetName="border"
+											Value="#FFADB2B5" />
+									<Setter Property="Foreground"
+											Value="#FF838383" />
+								</Trigger>
+							</ControlTemplate.Triggers>
+
+						</ControlTemplate>
+
+					</ControlTemplate.Resources>
+					<Border x:Name="RootBorder"
+							Background="{TemplateBinding Background}"
+							BorderBrush="Transparent"
+							CornerRadius="0"
+							DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:DateTimeSeker,Mode=FindAncestor}}"
+							BorderThickness="0">
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto" />
+								<RowDefinition Height="Auto" />
+								<RowDefinition Height="Auto" />
+							</Grid.RowDefinitions>
+
+							<!--SELECTOR AREA-->
+							<Grid x:Name="PART_TabSelectorGrid"
+								  Height="60"
+								  Grid.Row="0">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
+								<ToggleButton x:Name="SELECTOR_DteTgBt"
+											  Height="25"
+											  Cursor="Hand"
+											  IsChecked="{Binding CurrentTab, Converter={StaticResource SekerTabIsCheckedConverter}, ConverterParameter=DateTab}"
+											  Margin="30,0,0,0">
+									<ToggleButton.Template>
+										<ControlTemplate TargetType="{x:Type ToggleButton}">
+											<Border BorderBrush="#19000000"
+													BorderThickness="2,2,1,2"
+													Background="{TemplateBinding Background}"
+													CornerRadius="4,0,0,4">
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="*" />
+														<ColumnDefinition Width="Auto" />
+														<ColumnDefinition Width="Auto" />
+														<ColumnDefinition Width="*" />
+													</Grid.ColumnDefinitions>
+													<Grid Grid.Column="1"
+														  Margin="3">
+														<Viewbox Stretch="Uniform">
+															<Path Data="M5.113198,94.969852C2.333418,93.943682 0.65112805,91.723078 0.20427805,88.490138 0.0466880500000001,87.350008 0.000228047250000113,78.895618 0.0407180500000001,58.729548L0.0973180500000001,30.561508 41.222499,30.511308 82.347668,30.461108 82.295268,60.072848 82.242868,89.684608 81.598508,91.010028C80.821438,92.608432,79.568669,93.920532,78.085849,94.689042L76.987109,95.258492 41.559399,95.302192C7.25859799999998,95.344492,6.09928799999998,95.333892,5.11320799999998,94.969912z M20.587329,82.070208L20.638329,74.455878 13.239019,74.455878 5.839708,74.455878 5.839708,82.122378 5.839708,89.788868 13.188039,89.736668 20.536369,89.684468z M39.274469,82.070208L39.325469,74.455878 31.828829,74.455878 24.332199,74.455878 24.332199,81.987268C24.332199,86.129528 24.391599,89.579438 24.464269,89.653728 24.536869,89.728028 27.887459,89.765338 31.909929,89.736628L39.223509,89.684528z M57.986559,89.511858C58.144629,89.317078,58.192939,87.151048,58.156379,81.897528L58.105279,74.555418 50.610959,74.555418 43.116639,74.555418 43.065539,81.920128C43.037439,85.970718 43.056539,89.397168 43.108139,89.534458 43.251809,89.917328 57.675319,89.895418 57.986599,89.511858z M76.648759,82.067848L76.699759,74.451148 69.251779,74.503248 61.803809,74.555348 61.752709,81.897458C61.715909,87.188038 61.763909,89.316298 61.924479,89.514188 62.108029,89.740358 63.421859,89.779598 69.372569,89.736638L76.597789,89.684438z M20.536349,70.521248C20.661809,70.426948,20.712069,67.703728,20.677739,62.860198L20.624439,55.345408 13.232049,55.345408 5.839648,55.345408 5.839648,63.009498 5.839648,70.673598 13.090649,70.670598C17.078699,70.668598,20.429249,70.601698,20.536309,70.521298z M39.320819,63.009498L39.320819,55.345408 31.826499,55.345408 24.332179,55.345408 24.332179,62.876788C24.332179,67.019058 24.390579,70.467898 24.461949,70.540888 24.533349,70.613888 27.905769,70.673598 31.956269,70.673598L39.320819,70.673598z M58.105299,63.009498L58.105299,55.444938 50.610969,55.444938 43.116649,55.444938 43.065549,62.809648C43.037449,66.860238 43.056549,70.287748 43.108949,70.426348 43.183449,70.624818 44.785919,70.667268 50.654379,70.626208L58.105259,70.574108z M76.695109,63.007498L76.695109,55.341038 69.249449,55.393138 61.803789,55.445238 61.752689,62.809948C61.724589,66.860538 61.743689,70.286988 61.795289,70.424278 61.868089,70.618348 63.536689,70.673908 69.292059,70.673908L76.695169,70.673908 76.695169,63.007478z M20.638199,51.314288C20.640199,51.177428 20.638589,47.754988 20.633199,43.708858 20.626199,38.128198 20.566599,36.315898 20.385809,36.201608 20.254709,36.118708 16.949989,36.069948 13.041979,36.093178L5.936518,36.135378 5.885518,43.849238 5.834518,51.563108 13.233799,51.563108C19.021039,51.563108,20.634059,51.508908,20.637599,51.314268z M39.320819,43.899028C39.320819,37.901298 39.267919,36.234588 39.077499,36.233348 38.404449,36.229348 24.784689,36.226348 24.575499,36.230348 24.385139,36.234348 24.332179,37.903308 24.332179,43.899288L24.332179,51.563388 31.826499,51.563388 39.320819,51.563388z M58.156369,44.134588C58.184469,40.103648 58.135869,36.674798 58.048389,36.514938 57.821209,36.099788 43.273379,35.988288 43.118759,36.400508 42.968209,36.801878 42.999619,51.277548 43.151359,51.432748 43.223959,51.507048 46.618329,51.544348 50.694349,51.515648L58.105279,51.463548z M76.695109,43.920328C76.695109,37.280708 76.656409,36.262348 76.400549,36.161928 75.828909,35.937608 62.234929,36.034218 61.963559,36.264538 61.758969,36.438188 61.706459,37.995448 61.706459,43.890228 61.706459,47.964338 61.764859,51.357418 61.836239,51.430408 61.907639,51.503408 65.280049,51.563128 69.330559,51.563128L76.695109,51.563128z M0.11828805,26.365278C-0.08145195,25.832988 -0.01279195,19.574048 0.20878805,18.113488 0.60356805,15.511408 2.203658,13.181588 4.226088,12.264058 4.631788,12.080008 5.138908,11.821778 5.353028,11.690228 5.631118,11.519368 7.730608,11.432408 12.701359,11.385848 17.851619,11.337648 19.662439,11.259998 19.668299,11.087248 19.672299,10.958868 19.669269,9.2219191 19.660299,7.2273491 19.640299,2.5324491 19.739099,1.8001087 20.517209,0.87960872 21.046579,0.25334872 21.274429,0.13964872 22.177989,0.0508587200000002 23.441619,-0.0733112799999998 24.222469,0.29001872 24.867019,1.3020487 25.289749,1.9657887 25.304999,2.1527987 25.304999,6.6717791L25.304999,11.353828 41.218269,11.302928 57.131549,11.252028 57.228849,6.3748691C57.335619,1.0244087 57.363619,0.894708719999999 58.535349,0.323298719999999 59.918719,-0.351331280000001 61.584909,0.0628387199999986 62.297829,1.2585487 62.646379,1.8431487 62.677869,2.2855687 62.678539,6.6082891L62.679309,11.320728 69.638329,11.388328 76.597339,11.455928 77.888949,12.077598C79.254019,12.734618 80.470668,13.829008 81.223658,15.077208 82.135118,16.588168 82.242368,17.327568 82.242368,22.101108L82.242368,26.580128 41.239279,26.630328C3.97530800000001,26.676028,0.225368050000007,26.651828,0.117828050000007,26.365218z M23.587359,24.649068C25.581499,24.189348 27.054879,22.895688 27.849609,20.906738 28.218439,19.983648 28.166969,17.821418 27.753109,16.855048 27.424029,16.086568 25.789239,14.138438 25.473449,14.138438 25.381049,14.138438 25.305429,15.397018 25.305429,16.935268 25.305429,19.969818 25.167499,20.519038 24.212449,21.287298 23.819169,21.603648 23.417329,21.703008 22.531069,21.703008 21.443029,21.703008 21.318059,21.653508 20.630019,20.949868 19.766009,20.066288 19.588959,19.164418 19.693319,16.178428 19.769819,13.989328 19.544309,13.814698 18.402519,15.178838 17.418749,16.354188 17.125629,17.036238 16.994859,18.454198 16.734959,21.272248 18.486609,23.835488 21.193939,24.598828 22.363769,24.928668 22.373599,24.928868 23.587319,24.649028z M61.025159,24.618168C63.366739,23.980068 64.608859,22.775188 65.322319,20.449838 65.623799,19.467228 65.643389,19.135828 65.454479,18.214748 65.332479,17.619968 65.077659,16.799268 64.888199,16.390958 64.545069,15.651498 63.176619,14.138478 62.850939,14.138478 62.756839,14.138478 62.679749,15.350688 62.679749,16.832278 62.679749,19.801988 62.497819,20.554458 61.606469,21.271478 60.935479,21.811238 59.217259,21.868118 58.405029,21.377458 57.378889,20.757568 57.229339,20.220498 57.229339,17.155288 57.229339,15.618448 57.156739,14.315148 57.067989,14.259058 56.778439,14.076058 55.573629,15.268348 55.045669,16.260368 53.300449,19.539558 54.996969,23.595868 58.528879,24.588588 59.747379,24.931078 59.871509,24.932548 61.025159,24.618188z"
+																  Fill="White"
+																  Stroke="White" />
+														</Viewbox>
+													</Grid>
+													<TextBlock Grid.Column="2"
+															   Foreground="White"
+															   FontWeight="Bold"
+															   HorizontalAlignment="Center"
+															   Text="Date"
+															   VerticalAlignment="Center" />
+												</Grid>
+											</Border>
+											<ControlTemplate.Triggers>
+												<Trigger Property="IsChecked"
+														 Value="True">
+													<Setter Property="Background"
+															Value="Transparent" />
+												</Trigger>
+												<Trigger Property="IsChecked"
+														 Value="False">
+													<Setter Property="Background"
+															Value="#19000000" />
+												</Trigger>
+											</ControlTemplate.Triggers>
+										</ControlTemplate>
+									</ToggleButton.Template>
+								</ToggleButton>
+								<ToggleButton x:Name="SELECTOR_TmeTgBt"
+											  Cursor="Hand"
+											  Grid.Column="1"
+											  IsChecked="{Binding CurrentTab, Converter={StaticResource SekerTabIsCheckedConverter}, ConverterParameter=TimeTab}"
+											  Height="25"
+											  Margin="0,0,30,0">
+									<ToggleButton.Template>
+										<ControlTemplate TargetType="{x:Type ToggleButton}">
+											<Border BorderBrush="#19000000"
+													BorderThickness="1,2,2,2"
+													Background="{TemplateBinding Background}"
+													CornerRadius="0,4,4,0">
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="*" />
+														<ColumnDefinition Width="Auto" />
+														<ColumnDefinition Width="Auto" />
+														<ColumnDefinition Width="*" />
+													</Grid.ColumnDefinitions>
+													<Grid Grid.Column="1"
+														  Margin="3">
+														<Viewbox Stretch="Uniform">
+															<Path Data="M10.818314,59.212074C9.954231,58.862944 9.128125,57.637374 9.128125,56.704604 9.128125,56.134334 9.512726,55.310584 10.315896,54.160594 10.969171,53.225224 11.504952,52.335884 11.506521,52.184284 11.508121,52.032684 10.962689,51.377834 10.294518,50.729074 4.078464,44.693584 1.846069,34.504264 4.846645,25.863354 8.534759,15.242497 19.712734,8.2537022 30.677916,9.7128952 35.892356,10.406808 40.654076,12.607639 44.330296,16.022915 47.790326,19.23735 49.950846,22.715064 51.364336,27.345384 52.020316,29.494214 52.084896,30.085154 52.084896,33.939094 52.084896,37.777904 52.018796,38.388964 51.375016,40.495954 50.113236,44.625964 48.175626,47.964784 45.352876,50.873094L44.068236,52.196684 45.224906,53.858744C46.633536,55.882864 46.821466,56.549344 46.321196,57.746674 45.811046,58.967624 44.438206,59.658374 43.217536,59.308284 42.432936,59.083264 40.641116,57.244234 39.878176,55.880944 39.645006,55.464294 39.436166,55.505374 37.406536,56.367154 34.090646,57.775084 31.538186,58.264514 27.648958,58.238154 23.964306,58.213154 20.440693,57.472144 17.91078,56.190144 17.164578,55.812014 16.452632,55.502634 16.328677,55.502634 16.204721,55.502634 15.543895,56.280254 14.860173,57.230684 13.356171,59.321364 12.331734,59.823564 10.818314,59.212074z M33.503656,50.553944C38.744626,48.747464 42.953406,44.516634 44.632216,39.367094 45.406176,36.993064 45.594026,32.172304 45.004386,29.815894 43.103686,22.220017 36.527336,16.814802 28.707296,16.421051 23.595633,16.163671 19.277441,17.833507 15.584455,21.495623 11.892065,25.157154 10.332827,28.851684 10.332827,33.939094 10.332827,38.945614 11.89488,42.703954 15.455632,46.264704 17.649332,48.458404 19.916974,49.864034 22.621875,50.706794 25.073692,51.470704 25.355312,51.505074 28.445416,51.417634 30.703506,51.353734 31.654356,51.191374 33.503656,50.553944z M35.851046,41.390494C35.487236,41.199664 33.893876,40.240904 32.310236,39.259914 29.693646,37.639064 29.339056,37.491824 28.424486,37.646334 25.516866,38.137574 23.521868,34.764164 25.4,32.532134 25.998038,31.821404 26.063474,31.508704 26.082498,29.270684 26.120718,24.773654 26.410642,22.421933 26.977962,22.007098 27.71425,21.468712 29.070786,21.543521 29.622286,22.152926 30.040366,22.6149 30.079906,23.159303 29.994026,27.271264 29.925126,30.569374 29.987026,31.980384 30.213346,32.253074 30.386826,32.462314 30.642066,32.931504 30.780536,33.295714 30.953446,33.750514 32.152366,34.640424 34.608396,36.136994 37.292436,37.772504 38.247386,38.496494 38.436626,39.039364 39.010006,40.684174 37.361756,42.182964 35.851046,41.390494z M2.222831,17.905672C1.917419,17.60026 1.292341,16.558463 0.833768,15.590568 0.063138,13.964021 0,13.620382 0,11.052633 0,8.4787082 0.06194,8.1437542 0.842693,6.4956262 2.481545,3.0360942 5.44685,0.78047523 9.201505,0.13733023 12.646402,-0.45275579 16.476684,0.89150823 18.897418,3.5401782 21.243527,6.1071942 21.031293,6.7670162 17.4625,8.0012552 12.994666,9.5464202 9.079692,12.176412 6.553733,15.32952 3.81467,18.748641 3.345109,19.02795 2.222831,17.905672z M50.952926,17.340205C46.418066,11.9714 41.919126,8.8136072 37.062796,7.5907692 36.257146,7.3879032 35.665606,7.0468402 35.390076,6.6263192 34.994596,6.0227492 34.999086,5.9101942 35.452076,5.0690232 36.172966,3.7304032 38.310526,1.8482522 39.975676,1.0859212 45.681216,-1.5261648 52.021766,0.800218229999996 54.719796,6.4956262 55.501376,8.1454812 55.562496,8.4770062 55.562496,11.066355 55.562496,13.754946 55.526096,13.93182 54.578746,15.848687 53.921276,17.178984 53.368676,17.942289 52.912646,18.15007 51.972816,18.578287 52.012556,18.594711 50.952916,17.340205z"
+																  Fill="White"
+																  Stroke="White" />
+														</Viewbox>
+													</Grid>
+													<TextBlock Grid.Column="2"
+															   Foreground="White"
+															   FontWeight="Bold"
+															   HorizontalAlignment="Center"
+															   Text="Time"
+															   VerticalAlignment="Center" />
+												</Grid>
+											</Border>
+											<ControlTemplate.Triggers>
+												<Trigger Property="IsChecked"
+														 Value="false">
+													<Setter Property="Background"
+															Value="#19000000" />
+												</Trigger>
+												<Trigger Property="IsChecked"
+														 Value="true">
+													<Setter Property="Background"
+															Value="Transparent" />
+												</Trigger>
+											</ControlTemplate.Triggers>
+										</ControlTemplate>
+									</ToggleButton.Template>
+								</ToggleButton>
+							</Grid>
+
+							<!--SEKER CALENDAR AREA-->
+							<local:SekerCalendar x:Name="PART_Calendar"
+												 BorderBrush="Black"
+												 IsTabStop="False"
+												 Background="{StaticResource Background_Level6}"
+												 SelectedDate="{Binding SelectedDateTime}"
+												 Grid.Row="1">
+								<local:SekerCalendar.CalendarDayButtonStyle>
+									<Style TargetType="{x:Type CalendarDayButton}">
+										<Setter Property="FontSize"
+												Value="12" />
+										<Setter Property="Margin"
+												Value="4,2" />
+										<Setter Property="Template">
+											<Setter.Value>
+												<ControlTemplate TargetType="{x:Type CalendarDayButton}">
+													<Grid>
+														<VisualStateManager.VisualStateGroups>
+															<VisualStateGroup x:Name="CommonStates">
+																<VisualStateGroup.Transitions>
+																	<VisualTransition From="{x:Null}"
+																					  GeneratedDuration="0:0:0.1"
+																					  GeneratedEasingFunction="{x:Null}"
+																					  Storyboard="{x:Null}"
+																					  To="{x:Null}" />
+																</VisualStateGroup.Transitions>
+																<VisualState x:Name="Normal" />
+																<VisualState x:Name="MouseOver">
+																	<Storyboard>
+																		<DoubleAnimation Duration="0"
+																						 To="0.5"
+																						 Storyboard.TargetProperty="Opacity"
+																						 Storyboard.TargetName="HighlightBackground" />
+																	</Storyboard>
+																</VisualState>
+																<VisualState x:Name="Pressed">
+																	<Storyboard>
+																		<DoubleAnimation Duration="0"
+																						 To="0.5"
+																						 Storyboard.TargetProperty="Opacity"
+																						 Storyboard.TargetName="HighlightBackground" />
+																	</Storyboard>
+																</VisualState>
+																<VisualState x:Name="Disabled">
+																	<Storyboard>
+																		<DoubleAnimation Duration="0"
+																						 To="0"
+																						 Storyboard.TargetProperty="Opacity"
+																						 Storyboard.TargetName="HighlightBackground" />
+																		<DoubleAnimation Duration="0"
+																						 To="0.35"
+																						 Storyboard.TargetProperty="Opacity"
+																						 Storyboard.TargetName="NormalText" />
+																	</Storyboard>
+																</VisualState>
+															</VisualStateGroup>
+															<VisualStateGroup x:Name="SelectionStates">
+																<VisualStateGroup.Transitions>
+																	<VisualTransition From="{x:Null}"
+																					  GeneratedDuration="0"
+																					  GeneratedEasingFunction="{x:Null}"
+																					  Storyboard="{x:Null}"
+																					  To="{x:Null}" />
+																</VisualStateGroup.Transitions>
+																<VisualState x:Name="Unselected" />
+																<VisualState x:Name="Selected">
+																	<Storyboard>
+																		<DoubleAnimation Duration="0"
+																						 To="0.75"
+																						 Storyboard.TargetProperty="Opacity"
+																						 Storyboard.TargetName="SelectedBackground" />
+																		<ColorAnimation Duration="0"
+																						To="White"
+																						Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+																						Storyboard.TargetName="NormalText" />
+																	</Storyboard>
+																</VisualState>
+															</VisualStateGroup>
+															<VisualStateGroup x:Name="CalendarButtonFocusStates">
+																<VisualStateGroup.Transitions>
+																	<VisualTransition From="{x:Null}"
+																					  GeneratedDuration="0"
+																					  GeneratedEasingFunction="{x:Null}"
+																					  Storyboard="{x:Null}"
+																					  To="{x:Null}" />
+																</VisualStateGroup.Transitions>
+																<VisualState x:Name="CalendarButtonFocused">
+																	<Storyboard>
+																		<ObjectAnimationUsingKeyFrames Duration="0"
+																									   Storyboard.TargetProperty="Visibility"
+																									   Storyboard.TargetName="DayButtonFocusVisual">
+																			<DiscreteObjectKeyFrame KeyTime="0">
+																				<DiscreteObjectKeyFrame.Value>
+																					<Visibility>Visible</Visibility>
+																				</DiscreteObjectKeyFrame.Value>
+																			</DiscreteObjectKeyFrame>
+																		</ObjectAnimationUsingKeyFrames>
+																	</Storyboard>
+																</VisualState>
+																<VisualState x:Name="CalendarButtonUnfocused">
+																	<Storyboard>
+																		<ObjectAnimationUsingKeyFrames Duration="0"
+																									   Storyboard.TargetProperty="Visibility"
+																									   Storyboard.TargetName="DayButtonFocusVisual">
+																			<DiscreteObjectKeyFrame KeyTime="0">
+																				<DiscreteObjectKeyFrame.Value>
+																					<Visibility>Collapsed</Visibility>
+																				</DiscreteObjectKeyFrame.Value>
+																			</DiscreteObjectKeyFrame>
+																		</ObjectAnimationUsingKeyFrames>
+																	</Storyboard>
+																</VisualState>
+															</VisualStateGroup>
+															<VisualStateGroup x:Name="ActiveStates">
+																<VisualStateGroup.Transitions>
+																	<VisualTransition From="{x:Null}"
+																					  GeneratedDuration="0"
+																					  GeneratedEasingFunction="{x:Null}"
+																					  Storyboard="{x:Null}"
+																					  To="{x:Null}" />
+																</VisualStateGroup.Transitions>
+																<VisualState x:Name="Active" />
+																<VisualState x:Name="Inactive">
+																	<Storyboard>
+																		<ColorAnimation Duration="0"
+																						To="#FF777777"
+																						Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+																						Storyboard.TargetName="NormalText" />
+																	</Storyboard>
+																</VisualState>
+															</VisualStateGroup>
+															<VisualStateGroup x:Name="DayStates">
+																<VisualStateGroup.Transitions>
+																	<VisualTransition From="{x:Null}"
+																					  GeneratedDuration="0"
+																					  GeneratedEasingFunction="{x:Null}"
+																					  Storyboard="{x:Null}"
+																					  To="{x:Null}" />
+																</VisualStateGroup.Transitions>
+																<VisualState x:Name="RegularDay" />
+																<VisualState x:Name="Today">
+																	<Storyboard>
+																		<DoubleAnimation Duration="0"
+																						 To="1"
+																						 Storyboard.TargetProperty="Opacity"
+																						 Storyboard.TargetName="TodayBackground" />
+																		<ColorAnimation Duration="0"
+																						To="Black"
+																						Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+																						Storyboard.TargetName="NormalText" />
+																	</Storyboard>
+																</VisualState>
+															</VisualStateGroup>
+															<VisualStateGroup x:Name="BlackoutDayStates">
+																<VisualStateGroup.Transitions>
+																	<VisualTransition From="{x:Null}"
+																					  GeneratedDuration="0"
+																					  GeneratedEasingFunction="{x:Null}"
+																					  Storyboard="{x:Null}"
+																					  To="{x:Null}" />
+																</VisualStateGroup.Transitions>
+																<VisualState x:Name="NormalDay" />
+																<VisualState x:Name="BlackoutDay">
+																	<Storyboard>
+																		<DoubleAnimation Duration="0"
+																						 To="0.2"
+																						 Storyboard.TargetProperty="Opacity"
+																						 Storyboard.TargetName="Blackout" />
+																	</Storyboard>
+																</VisualState>
+															</VisualStateGroup>
+														</VisualStateManager.VisualStateGroups>
+														<Viewbox>
+															<Path x:Name="TodayBackground"
+																  Data="M10.982675,24.875054C5.5897877,24.195084 1.3551497,20.268061 0.20236275,14.87785 -0.06745425,13.616237 -0.06745425,11.306129 0.20236275,10.044516 1.2864438,4.9755665 4.9847157,1.2776835 10.046858,0.2010585 11.307326,-0.0670195 13.619724,-0.0670195 14.880192,0.2010585 19.942334,1.2776835 23.640606,4.9755665 24.724687,10.044516 24.994703,11.307064 24.994538,13.616792 24.724353,14.87785 23.637928,19.948383 19.887212,23.695669 14.880205,24.712994 13.880198,24.916176 11.946509,24.99658 10.982688,24.875054z M15.113242,23.345719C19.208425,22.309197 22.315845,19.189792 23.359811,15.067345 23.570818,14.234115 23.587176,14.046603 23.587176,12.461183 23.587176,10.875763 23.570816,10.688251 23.359811,9.8550215 22.303054,5.6820645 19.168467,2.5760465 14.963525,1.5352605 14.262183,1.3616685 13.976947,1.3393115 12.463525,1.3393115 10.950103,1.3393115 10.664867,1.3616715 9.9635248,1.5352605 5.7585828,2.5760465 2.6239958,5.6820645 1.5672388,9.8550215 1.3562318,10.688251 1.3398738,10.875763 1.3398738,12.461183 1.3398738,14.046603 1.3562338,14.234115 1.5672388,15.067345 2.4665938,18.618748 4.9012658,21.447265 8.2551908,22.837176 9.7399228,23.452468 10.787245,23.629952 12.713525,23.592707 14.03604,23.567137 14.377166,23.532027 15.113242,23.345719z"
+																  Fill="#FFAAAAAA"
+																  HorizontalAlignment="Center"
+																  Opacity="0"
+																  VerticalAlignment="Center" />
+														</Viewbox>
+														<Viewbox>
+															<Path x:Name="SelectedBackground"
+																  Data="M12.591448,29.850357C9.080922,29.117733 6.6828638,27.872248 4.4443646,25.61899 1.9419632,23.100089 0.47486068,19.980664 0.06347828,16.304128 -0.29498594,13.10052 0.89667776,8.7520581 2.831329,6.2040545 5.043179,3.2909694 7.8608982,1.3551992 11.214269,0.444982599999999 12.687786,0.0450201599999995 12.980068,0.0104740899999994 14.969076,0.00117881999999947 16.915715,-0.00791938000000053 17.270535,0.0283151099999995 18.608851,0.372870479999999 20.27423,0.80162903 22.360086,1.7474173 23.638596,2.6535048 24.85422,3.5150243 26.671466,5.3561456 27.40294,6.4673072 29.214196,9.2187266 30,11.795706 30,14.984157 30,19.136435 28.550952,22.684039 25.67627,25.569674 23.70234,27.55112 21.510058,28.818459 18.825518,29.530027 17.515036,29.877387 16.954122,29.952281 15.373495,29.990935 14.118681,30.021615 13.186348,29.974335 12.591448,29.850355z"
+																  Fill="#FF72C8FA"
+																  HorizontalAlignment="Center"
+																  Opacity="0"
+																  VerticalAlignment="Center" />
+														</Viewbox>
+														<Viewbox>
+															<Path x:Name="HighlightBackground"
+																  Data="M12.591448,29.850357C9.080922,29.117733 6.6828638,27.872248 4.4443646,25.61899 1.9419632,23.100089 0.47486068,19.980664 0.06347828,16.304128 -0.29498594,13.10052 0.89667776,8.7520581 2.831329,6.2040545 5.043179,3.2909694 7.8608982,1.3551992 11.214269,0.444982599999999 12.687786,0.0450201599999995 12.980068,0.0104740899999994 14.969076,0.00117881999999947 16.915715,-0.00791938000000053 17.270535,0.0283151099999995 18.608851,0.372870479999999 20.27423,0.80162903 22.360086,1.7474173 23.638596,2.6535048 24.85422,3.5150243 26.671466,5.3561456 27.40294,6.4673072 29.214196,9.2187266 30,11.795706 30,14.984157 30,19.136435 28.550952,22.684039 25.67627,25.569674 23.70234,27.55112 21.510058,28.818459 18.825518,29.530027 17.515036,29.877387 16.954122,29.952281 15.373495,29.990935 14.118681,30.021615 13.186348,29.974335 12.591448,29.850355z"
+																  Fill="#FFBADDE9"
+																  HorizontalAlignment="Center"
+																  Opacity="0"
+																  VerticalAlignment="Center" />
+														</Viewbox>
+														<ContentPresenter x:Name="NormalText"
+																		  ContentTemplate="{TemplateBinding ContentTemplate}"
+																		  Content="{TemplateBinding Content}"
+																		  ContentStringFormat="{TemplateBinding ContentStringFormat}"
+																		  TextElement.Foreground="#FF333333"
+																		  HorizontalAlignment="Center"
+																		  Margin="5,1"
+																		  VerticalAlignment="Center" />
+														<Viewbox>
+															<Path x:Name="Blackout"
+																  Data="M8.1772461,11.029181L10.433105,11.029181 11.700684,12.801641 12.973633,11.029181 15.191895,11.029181 12.844727,13.999395 15.21875,17.060919 12.962891,17.060919 11.673828,15.256231 10.352539,17.060919 8.1396484,17.060919 10.519043,14.042364z"
+																  Fill="Red"
+																  HorizontalAlignment="Stretch"
+																  Margin="3"
+																  Opacity="0"
+																  RenderTransformOrigin="0.5,0.5"
+																  Stretch="Fill"
+																  VerticalAlignment="Stretch" />
+														</Viewbox>
+														<Viewbox>
+															<Path x:Name="DayButtonFocusVisual"
+																  Data="M12.591448,29.850357C9.080922,29.117733 6.6828638,27.872248 4.4443646,25.61899 1.9419632,23.100089 0.47486068,19.980664 0.06347828,16.304128 -0.29498594,13.10052 0.89667776,8.7520581 2.831329,6.2040545 5.043179,3.2909694 7.8608982,1.3551992 11.214269,0.444982599999999 12.687786,0.0450201599999995 12.980068,0.0104740899999994 14.969076,0.00117881999999947 16.915715,-0.00791938000000053 17.270535,0.0283151099999995 18.608851,0.372870479999999 20.27423,0.80162903 22.360086,1.7474173 23.638596,2.6535048 24.85422,3.5150243 26.671466,5.3561456 27.40294,6.4673072 29.214196,9.2187266 30,11.795706 30,14.984157 30,19.136435 28.550952,22.684039 25.67627,25.569674 23.70234,27.55112 21.510058,28.818459 18.825518,29.530027 17.515036,29.877387 16.954122,29.952281 15.373495,29.990935 14.118681,30.021615 13.186348,29.974335 12.591448,29.850355z"
+																  HorizontalAlignment="Center"
+																  IsHitTestVisible="False"
+																  Visibility="Collapsed"
+																  VerticalAlignment="Center" />
+														</Viewbox>
+													</Grid>
+												</ControlTemplate>
+											</Setter.Value>
+										</Setter>
+									</Style>
+								</local:SekerCalendar.CalendarDayButtonStyle>
+								<local:SekerCalendar.CalendarButtonStyle>
+									<Style TargetType="{x:Type Button}">
+										<Setter Property="Background"
+												Value="Cyan" />
+										<Setter Property="FontSize"
+												Value="13" />
+										<Setter Property="Template">
+											<Setter.Value>
+												<ControlTemplate TargetType="{x:Type CalendarButton}">
+													<Grid>
+														<VisualStateManager.VisualStateGroups>
+															<VisualStateGroup x:Name="CommonStates">
+																<VisualStateGroup.Transitions>
+																	<VisualTransition From="{x:Null}"
+																					  GeneratedDuration="0:0:0.1"
+																					  GeneratedEasingFunction="{x:Null}"
+																					  Storyboard="{x:Null}"
+																					  To="{x:Null}" />
+																</VisualStateGroup.Transitions>
+																<VisualState x:Name="Normal" />
+																<VisualState x:Name="MouseOver">
+																	<Storyboard>
+																		<DoubleAnimation Duration="0"
+																						 To="0.5"
+																						 Storyboard.TargetProperty="Opacity"
+																						 Storyboard.TargetName="Background" />
+																	</Storyboard>
+																</VisualState>
+																<VisualState x:Name="Pressed">
+																	<Storyboard>
+																		<DoubleAnimation Duration="0"
+																						 To="0.5"
+																						 Storyboard.TargetProperty="Opacity"
+																						 Storyboard.TargetName="Background" />
+																	</Storyboard>
+																</VisualState>
+															</VisualStateGroup>
+															<VisualStateGroup x:Name="SelectionStates">
+																<VisualStateGroup.Transitions>
+																	<VisualTransition From="{x:Null}"
+																					  GeneratedDuration="0"
+																					  GeneratedEasingFunction="{x:Null}"
+																					  Storyboard="{x:Null}"
+																					  To="{x:Null}" />
+																</VisualStateGroup.Transitions>
+																<VisualState x:Name="Unselected" />
+																<VisualState x:Name="Selected">
+																	<Storyboard>
+																		<DoubleAnimation Duration="0"
+																						 To="0.75"
+																						 Storyboard.TargetProperty="Opacity"
+																						 Storyboard.TargetName="SelectedBackground" />
+																	</Storyboard>
+																</VisualState>
+															</VisualStateGroup>
+															<VisualStateGroup x:Name="ActiveStates">
+																<VisualStateGroup.Transitions>
+																	<VisualTransition From="{x:Null}"
+																					  GeneratedDuration="0"
+																					  GeneratedEasingFunction="{x:Null}"
+																					  Storyboard="{x:Null}"
+																					  To="{x:Null}" />
+																</VisualStateGroup.Transitions>
+																<VisualState x:Name="Active" />
+																<VisualState x:Name="Inactive">
+																	<Storyboard>
+																		<ColorAnimation Duration="0"
+																						To="#FF777777"
+																						Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+																						Storyboard.TargetName="NormalText" />
+																	</Storyboard>
+																</VisualState>
+															</VisualStateGroup>
+															<VisualStateGroup x:Name="CalendarButtonFocusStates">
+																<VisualStateGroup.Transitions>
+																	<VisualTransition From="{x:Null}"
+																					  GeneratedDuration="0"
+																					  GeneratedEasingFunction="{x:Null}"
+																					  Storyboard="{x:Null}"
+																					  To="{x:Null}" />
+																</VisualStateGroup.Transitions>
+																<VisualState x:Name="CalendarButtonFocused">
+																	<Storyboard>
+																		<ObjectAnimationUsingKeyFrames Duration="0"
+																									   Storyboard.TargetProperty="Visibility"
+																									   Storyboard.TargetName="CalendarButtonFocusVisual">
+																			<DiscreteObjectKeyFrame KeyTime="0">
+																				<DiscreteObjectKeyFrame.Value>
+																					<Visibility>Visible</Visibility>
+																				</DiscreteObjectKeyFrame.Value>
+																			</DiscreteObjectKeyFrame>
+																		</ObjectAnimationUsingKeyFrames>
+																	</Storyboard>
+																</VisualState>
+																<VisualState x:Name="CalendarButtonUnfocused">
+																	<Storyboard>
+																		<ObjectAnimationUsingKeyFrames Duration="0"
+																									   Storyboard.TargetProperty="Visibility"
+																									   Storyboard.TargetName="CalendarButtonFocusVisual">
+																			<DiscreteObjectKeyFrame KeyTime="0">
+																				<DiscreteObjectKeyFrame.Value>
+																					<Visibility>Collapsed</Visibility>
+																				</DiscreteObjectKeyFrame.Value>
+																			</DiscreteObjectKeyFrame>
+																		</ObjectAnimationUsingKeyFrames>
+																	</Storyboard>
+																</VisualState>
+															</VisualStateGroup>
+														</VisualStateManager.VisualStateGroups>
+														<Rectangle x:Name="SelectedBackground"
+																   Fill="{TemplateBinding Background}"
+																   Opacity="0"
+																   RadiusY="1"
+																   RadiusX="1" />
+														<Rectangle x:Name="Background"
+																   Fill="{TemplateBinding Background}"
+																   Opacity="0"
+																   RadiusY="1"
+																   RadiusX="1" />
+														<ContentPresenter x:Name="NormalText"
+																		  ContentTemplate="{TemplateBinding ContentTemplate}"
+																		  Content="{TemplateBinding Content}"
+																		  ContentStringFormat="{TemplateBinding ContentStringFormat}"
+																		  TextElement.Foreground="#FF333333"
+																		  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+																		  Margin="1,0,1,1"
+																		  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+														<Rectangle x:Name="CalendarButtonFocusVisual"
+																   IsHitTestVisible="False"
+																   RadiusY="1"
+																   RadiusX="1"
+																   Stroke="#FF45D6FA"
+																   Visibility="Collapsed" />
+													</Grid>
+													<ControlTemplate.Triggers>
+														<Trigger Property="IsFocused"
+																 Value="True">
+															<Setter Property="Visibility"
+																	TargetName="CalendarButtonFocusVisual"
+																	Value="Visible" />
+														</Trigger>
+													</ControlTemplate.Triggers>
+												</ControlTemplate>
+											</Setter.Value>
+										</Setter>
+									</Style>
+								</local:SekerCalendar.CalendarButtonStyle>
+								<local:SekerCalendar.Template>
+									<ControlTemplate TargetType="{x:Type Calendar}">
+										<Grid x:Name="PART_Root"
+											  HorizontalAlignment="Center">
+											<Border BorderBrush="{TemplateBinding BorderBrush}"
+													Grid.RowSpan="4">
+												<Grid>
+													<CalendarItem x:Name="PART_CalendarItem"
+																  BorderBrush="{TemplateBinding BorderBrush}"
+																  BorderThickness="{TemplateBinding BorderThickness}"
+																  Background="{TemplateBinding Background}"
+																  Style="{TemplateBinding CalendarItemStyle}"
+																  Visibility="Visible"
+																  Margin="0">
+														<CalendarItem.Template>
+															<ControlTemplate TargetType="{x:Type CalendarItem}">
+																<ControlTemplate.Resources>
+																	<DataTemplate x:Key="{ComponentResourceKey ResourceId=DayTitleTemplate, TypeInTargetAssembly={x:Type CalendarItem}}">
+																		<Grid Background="White">
+																			<TextBlock Foreground="#FF808DA0"
+																					   FontWeight="Bold"
+																					   FontSize="9.5"
+																					   FontFamily="Verdana"
+																					   HorizontalAlignment="Center"
+																					   Margin="10,5"
+																					   Text="{Binding}"
+																					   VerticalAlignment="Center" />
+																		</Grid>
+																	</DataTemplate>
+																</ControlTemplate.Resources>
+																<Grid x:Name="PART_Root">
+																	<Grid.Resources>
+																		<SolidColorBrush x:Key="Þ"
+																						 Color="#A5FFFFFF" />
+																	</Grid.Resources>
+																	<VisualStateManager.VisualStateGroups>
+																		<VisualStateGroup x:Name="CommonStates">
+																			<VisualState x:Name="Normal" />
+																			<VisualState x:Name="Disabled">
+																				<Storyboard>
+																					<DoubleAnimation Duration="0"
+																									 To="1"
+																									 Storyboard.TargetProperty="Opacity"
+																									 Storyboard.TargetName="PART_DisabledVisual" />
+																				</Storyboard>
+																			</VisualState>
+																		</VisualStateGroup>
+																	</VisualStateManager.VisualStateGroups>
+																	<Grid Background="{TemplateBinding Background}">
+																		<Grid.ColumnDefinitions>
+																			<ColumnDefinition Width="Auto" />
+																			<ColumnDefinition Width="*" />
+																			<ColumnDefinition Width="Auto" />
+																		</Grid.ColumnDefinitions>
+																		<Grid.RowDefinitions>
+																			<RowDefinition Height="Auto" />
+																			<RowDefinition Height="*" />
+																		</Grid.RowDefinitions>
+																		<Grid Background="{TemplateBinding Background}"
+																			  Grid.ColumnSpan="3"
+																			  Grid.Row="0" />
+																		<Button x:Name="PART_PreviousButton"
+																				Grid.Column="0"
+																				Foreground="White"
+																				Focusable="False"
+																				Height="20"
+																				Margin="24,5,0,0"
+																				Grid.Row="0"
+																				VerticalAlignment="Top"
+																				Width="20">
+																			<Button.Template>
+																				<ControlTemplate TargetType="{x:Type Button}">
+																					<Grid x:Name="MainGrid"
+																						  Cursor="Hand">
+																						<VisualStateManager.VisualStateGroups>
+																							<VisualStateGroup x:Name="CommonStates">
+																								<VisualState x:Name="Normal" />
+																								<VisualState x:Name="Disabled">
+																									<Storyboard>
+																										<DoubleAnimation Duration="0"
+																														 To="0.5"
+																														 Storyboard.TargetProperty="(Shape.Fill).(Brush.Opacity)"
+																														 Storyboard.TargetName="path" />
+																									</Storyboard>
+																								</VisualState>
+																							</VisualStateGroup>
+																						</VisualStateManager.VisualStateGroups>
+																						<Rectangle Fill="Transparent"
+																								   Opacity="1"
+																								   Stretch="Fill" />
+																						<Viewbox Stretch="Uniform">
+																							<Canvas Height="100"
+																									Width="100">
+																								<Path Fill="{TemplateBinding Background}"
+																									  StrokeThickness="1">
+																									<Path.Data>
+																										<RectangleGeometry RadiusY="20"
+																														   RadiusX="20"
+																														   Rect="0,0,100,100" />
+																									</Path.Data>
+																								</Path>
+																								<Path x:Name="path"
+																									  Data="M60,15L60,85 30,50"
+																									  Fill="{TemplateBinding Foreground}" />
+																							</Canvas>
+																						</Viewbox>
+																					</Grid>
+																					<ControlTemplate.Triggers>
+																						<Trigger Property="IsPressed"
+																								 Value="True">
+																							<Setter Property="Background"
+																									Value="#FFABDCF9" />
+																						</Trigger>
+																						<Trigger Property="IsPressed"
+																								 Value="False">
+																							<Setter Property="Background"
+																									Value="Transparent" />
+																						</Trigger>
+																					</ControlTemplate.Triggers>
+																				</ControlTemplate>
+																			</Button.Template>
+																		</Button>
+																		<Button x:Name="PART_HeaderButton"
+																				Grid.Column="1"
+																				FontWeight="Bold"
+																				Focusable="False"
+																				FontSize="12.5"
+																				Margin="0,5,0,0"
+																				Grid.Row="0"
+																				VerticalAlignment="Center">
+																			<Button.Template>
+																				<ControlTemplate TargetType="{x:Type Button}">
+																					<Grid Cursor="Hand">
+																						<VisualStateManager.VisualStateGroups>
+																							<VisualStateGroup x:Name="CommonStates">
+																								<VisualState x:Name="Normal" />
+																								<VisualState x:Name="MouseOver">
+																									<Storyboard>
+																										<ColorAnimation Duration="0"
+																														To="#FF73A9D8"
+																														Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+																														Storyboard.TargetName="buttonContent" />
+																									</Storyboard>
+																								</VisualState>
+																								<VisualState x:Name="Disabled">
+																									<Storyboard>
+																										<DoubleAnimation Duration="0"
+																														 To="0.5"
+																														 Storyboard.TargetProperty="Opacity"
+																														 Storyboard.TargetName="buttonContent" />
+																									</Storyboard>
+																								</VisualState>
+																							</VisualStateGroup>
+																						</VisualStateManager.VisualStateGroups>
+																						<ContentPresenter x:Name="buttonContent"
+																										  ContentTemplate="{TemplateBinding ContentTemplate}"
+																										  Content="{TemplateBinding Content}"
+																										  TextElement.Foreground="White"
+																										  TextElement.FontWeight="Medium"
+																										  TextElement.FontSize="12"
+																										  TextElement.FontFamily="10"
+																										  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+																										  Margin="1,4,1,9"
+																										  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+																					</Grid>
+																				</ControlTemplate>
+																			</Button.Template>
+																		</Button>
+																		<Button x:Name="PART_NextButton"
+																				Grid.Column="2"
+																				Foreground="White"
+																				Focusable="False"
+																				Height="20"
+																				Margin="0,5,24,0"
+																				Grid.Row="0"
+																				VerticalAlignment="Top"
+																				Width="20">
+																			<Button.Template>
+																				<ControlTemplate TargetType="{x:Type Button}">
+																					<Grid x:Name="MainGrid2"
+																						  Cursor="Hand">
+																						<VisualStateManager.VisualStateGroups>
+																							<VisualStateGroup x:Name="CommonStates">
+																								<VisualState x:Name="Normal" />
+																								<VisualState x:Name="Disabled">
+																									<Storyboard>
+																										<DoubleAnimation Duration="0"
+																														 To="0.5"
+																														 Storyboard.TargetProperty="(Shape.Fill).(Brush.Opacity)"
+																														 Storyboard.TargetName="path" />
+																									</Storyboard>
+																								</VisualState>
+																							</VisualStateGroup>
+																						</VisualStateManager.VisualStateGroups>
+																						<Rectangle Fill="#11E5EBF1"
+																								   Opacity="1"
+																								   Stretch="Fill" />
+																						<Viewbox Stretch="Uniform">
+																							<Canvas Height="100"
+																									Width="100">
+																								<Path Fill="{TemplateBinding Background}"
+																									  StrokeThickness="1">
+																									<Path.Data>
+																										<RectangleGeometry RadiusY="20"
+																														   RadiusX="20"
+																														   Rect="0,0,100,100" />
+																									</Path.Data>
+																								</Path>
+																								<Path x:Name="path"
+																									  Data="M40,15L40,85 70,50"
+																									  Fill="{TemplateBinding Foreground}" />
+																							</Canvas>
+																						</Viewbox>
+																					</Grid>
+																					<ControlTemplate.Triggers>
+																						<Trigger Property="IsPressed"
+																								 Value="True">
+																							<Setter Property="Background"
+																									Value="#FFABDCF9" />
+																						</Trigger>
+																						<Trigger Property="IsPressed"
+																								 Value="False">
+																							<Setter Property="Background"
+																									Value="Transparent" />
+																						</Trigger>
+																					</ControlTemplate.Triggers>
+																				</ControlTemplate>
+																			</Button.Template>
+																		</Button>
+																		<Grid x:Name="PART_MonthView"
+																			  Background="#FFEFF1F6"
+																			  Grid.ColumnSpan="3"
+																			  HorizontalAlignment="Center"
+																			  Grid.Row="1"
+																			  Visibility="Visible">
+																			<Grid.ColumnDefinitions>
+																				<ColumnDefinition Width="Auto" />
+																				<ColumnDefinition Width="Auto" />
+																				<ColumnDefinition Width="Auto" />
+																				<ColumnDefinition Width="Auto" />
+																				<ColumnDefinition Width="Auto" />
+																				<ColumnDefinition Width="Auto" />
+																				<ColumnDefinition Width="Auto" />
+																			</Grid.ColumnDefinitions>
+																			<Grid.RowDefinitions>
+																				<RowDefinition Height="*" />
+																				<RowDefinition Height="*" />
+																				<RowDefinition Height="*" />
+																				<RowDefinition Height="*" />
+																				<RowDefinition Height="*" />
+																				<RowDefinition Height="*" />
+																				<RowDefinition Height="*" />
+																			</Grid.RowDefinitions>
+																		</Grid>
+																		<Grid x:Name="PART_YearView"
+																			  Grid.ColumnSpan="3"
+																			  HorizontalAlignment="Center"
+																			  Margin="6,-3,7,6"
+																			  Grid.Row="1"
+																			  Visibility="Hidden">
+																			<Grid.ColumnDefinitions>
+																				<ColumnDefinition Width="Auto" />
+																				<ColumnDefinition Width="Auto" />
+																				<ColumnDefinition Width="Auto" />
+																				<ColumnDefinition Width="Auto" />
+																			</Grid.ColumnDefinitions>
+																			<Grid.RowDefinitions>
+																				<RowDefinition Height="Auto" />
+																				<RowDefinition Height="Auto" />
+																				<RowDefinition Height="Auto" />
+																			</Grid.RowDefinitions>
+																		</Grid>
+																	</Grid>
+																	<Rectangle x:Name="PART_DisabledVisual"
+																			   Fill="#A5FFFFFF"
+																			   Opacity="0"
+																			   RadiusY="2"
+																			   RadiusX="2"
+																			   Stretch="Fill"
+																			   Stroke="#A5FFFFFF"
+																			   StrokeThickness="1"
+																			   Visibility="Collapsed" />
+																</Grid>
+																<ControlTemplate.Triggers>
+																	<Trigger Property="IsEnabled"
+																			 Value="False">
+																		<Setter Property="Visibility"
+																				TargetName="PART_DisabledVisual"
+																				Value="Visible" />
+																	</Trigger>
+																	<DataTrigger Binding="{Binding DisplayMode, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type Calendar}}}"
+																				 Value="Year">
+																		<Setter Property="Visibility"
+																				TargetName="PART_MonthView"
+																				Value="Hidden" />
+																		<Setter Property="Visibility"
+																				TargetName="PART_YearView"
+																				Value="Visible" />
+																	</DataTrigger>
+																	<DataTrigger Binding="{Binding DisplayMode, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type Calendar}}}"
+																				 Value="Decade">
+																		<Setter Property="Visibility"
+																				TargetName="PART_MonthView"
+																				Value="Hidden" />
+																		<Setter Property="Visibility"
+																				TargetName="PART_YearView"
+																				Value="Visible" />
+																	</DataTrigger>
+																</ControlTemplate.Triggers>
+															</ControlTemplate>
+														</CalendarItem.Template>
+													</CalendarItem>
+												</Grid>
+											</Border>
+										</Grid>
+									</ControlTemplate>
+								</local:SekerCalendar.Template>
+							</local:SekerCalendar>
+
+							<Grid x:Name="PART_CalendarButton"
+								  Height="40"
+								  Background="{TemplateBinding Background}"
+								  Grid.Row="2">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="1.8*" />
+									<ColumnDefinition Width="1.1*" />
+								</Grid.ColumnDefinitions>
+
+
+								<Button x:Name="SEKER_TDaBt"
+										BorderThickness="0"
+										Cursor="Hand"
+										Background="Transparent">
+									<Button.Template>
+
+										<ControlTemplate TargetType="{x:Type Button}">
+											<Border Background="{TemplateBinding Background}"
+													BorderThickness="{TemplateBinding BorderThickness}">
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="*" />
+														<ColumnDefinition Width="Auto" />
+														<ColumnDefinition Width="7*" />
+													</Grid.ColumnDefinitions>
+													<TextBlock Grid.Column="1"
+															   Foreground="White"
+															   FontWeight="Bold"
+															   HorizontalAlignment="Center"
+															   Text="Today"
+															   VerticalAlignment="Center" />
+
+													<Rectangle Stroke="Transparent"
+															   x:Name="HighlightRectangle"
+															   Fill="Transparent"
+															   Grid.ColumnSpan="3"
+															   StrokeThickness="1">
+
+													</Rectangle>
+
+												</Grid>
+
+											</Border>
+
+											<ControlTemplate.Triggers>
+												<Trigger Property="IsMouseOver"
+														 Value="True">
+													<Setter Property="Stroke"
+															Value="{StaticResource BorderbrushEffect_Level1}"
+															TargetName="HighlightRectangle" />
+												</Trigger>
+												<Trigger Property="IsPressed"
+														 Value="True">
+													<Setter Property="Fill"
+															Value="{StaticResource MouseOverFillEffect_Level1}"
+															TargetName="HighlightRectangle" />
+												</Trigger>
+											</ControlTemplate.Triggers>
+										</ControlTemplate>
+									</Button.Template>
+								</Button>
+
+								<Button x:Name="SEKER_ConBt"
+										BorderThickness="0"
+										Grid.Column="1"
+										Cursor="Hand"
+										Background="Transparent">
+									<Button.Template>
+
+										<ControlTemplate TargetType="{x:Type Button}">
+											<Border Background="{TemplateBinding Background}"
+													BorderThickness="{TemplateBinding BorderThickness}">
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="0.5*" />
+														<ColumnDefinition Width="1.6*" />
+														<ColumnDefinition Width="Auto" />
+														<ColumnDefinition Width="2*" />
+													</Grid.ColumnDefinitions>
+													<Grid Grid.Column="1"
+														  Margin="3">
+														<Viewbox Stretch="Uniform">
+															<Path Data="m 11.85888,16.657774 c -0.301211,-0.17544 -0.550574,-0.745464 -0.475547,-1.087061 0.04409,-0.200749 1.033697,-1.268787 2.952341,-3.186335 l 2.88602,-2.8843703 -8.3438437,-0.05556 -8.34384405,-0.05556 -0.268117,-0.311751 c -0.354519,-0.4122147 -0.354519,-0.9642827 0,-1.3764977 l 0.268117,-0.311751 8.34384405,-0.05556 8.3438437,-0.05555 -2.88602,-2.88437 C 12.41703,2.47586 11.427424,1.407822 11.383333,1.207074 11.305733,0.853774 11.565429,0.283029 11.880506,0.114405 11.998078,0.051485 12.259284,0 12.460964,0 c 0.333939,0 0.721644,0.354951 4.340638,3.973946 3.889515,3.889515 3.973947,3.983316 3.973947,4.414943 0,0.431627 -0.08443,0.5254277 -3.973947,4.414942 -3.718332,3.718332 -3.99885,3.973729 -4.361111,3.970568 -0.21294,-0.0019 -0.474665,-0.05434 -0.581611,-0.116633 z"
+																  Fill="White"
+																  Stroke="White" />
+														</Viewbox>
+													</Grid>
+													<TextBlock Grid.Column="2"
+															   Foreground="White"
+															   FontWeight="Bold"
+															   HorizontalAlignment="Center"
+															   Text="Continue"
+															   VerticalAlignment="Center" />
+													<Rectangle Stroke="Transparent"
+															   x:Name="HighlightRectangle"
+															   Fill="Transparent"
+															   Grid.ColumnSpan="5"
+															   StrokeThickness="1">
+
+													</Rectangle>
+												</Grid>
+											</Border>
+											<ControlTemplate.Triggers>
+												<Trigger Property="IsMouseOver"
+														 Value="True">
+													<Setter Property="Stroke"
+															Value="{StaticResource BorderbrushEffect_Level1}"
+															TargetName="HighlightRectangle" />
+												</Trigger>
+												<Trigger Property="IsPressed"
+														 Value="True">
+													<Setter Property="Fill"
+															Value="{StaticResource MouseOverFillEffect_Level1}"
+															TargetName="HighlightRectangle" />
+												</Trigger>
+											</ControlTemplate.Triggers>
+										</ControlTemplate>
+									</Button.Template>
+								</Button>
+							</Grid>
+
+							<!--SEKER TIME PICKER AREA-->
+							<Grid x:Name="PART_TimeSeker"
+								  Grid.Row="1"
+								  Background="{StaticResource Background_Level7}">
+								<Grid.RowDefinitions>
+									<RowDefinition Height="*" />
+									<RowDefinition Height="1.5*" />
+									<RowDefinition Height="*" />
+								</Grid.RowDefinitions>
+
+								<Grid.Resources>
+									<Style TargetType="ToggleButton"
+										   x:Key="AmPmTgBtStyle">
+										<Setter Property="Foreground"
+												Value="{StaticResource Foreground_Level1}" />
+										<Setter Property="Width"
+												Value="40" />
+										<Setter Property="Height"
+												Value="40" />
+
+									</Style>
+								</Grid.Resources>
+
+								<!--Time display area-->
+								<Grid Grid.Row="0">
+									<StackPanel VerticalAlignment="Center"
+												Orientation="Horizontal"
+												HorizontalAlignment="Center">
+										<hpss:AkerTextBox x:Name="HrTxtBx"
+														  Background="#19000000"
+														  BorderBrush="#22000000"
+														  Foreground="{StaticResource Foreground_Level3}"
+														  Height="30"
+														  Width="30"
+														  HorizontalContentAlignment="Center"
+														  FontSize="15"
+														  FontWeight="Bold"
+														  AkerTextBoxType="Numeric"
+														  BorderThickness="2"
+														  AkerNumerFormat="D2"
+														  AkerNumerRange="0,11"
+														  Text="{Binding CurrentHour,UpdateSourceTrigger=PropertyChanged}" />
+										<Path Fill="#50000000"
+											  VerticalAlignment="Center"
+											  Margin="5,0"
+											  Stretch="Uniform"
+											  Width="7"
+											  Data="m 3.1639198,21.114629 c -0.778932,-0.206752 -1.345902,-0.534443 -1.92275,-1.111292 -1.65489305,-1.654893 -1.65489305,-4.190608 0,-5.8455 1.654892,-1.654894 4.190608,-1.654894 5.8455,0 1.654893,1.654892 1.654893,4.190607 0,5.8455 -1.054257,1.054257 -2.545753,1.476789 -3.92275,1.111292 z m 0,-12.9166673 c -0.778932,-0.206751 -1.345902,-0.534443 -1.92275,-1.111292 -1.65489305,-1.654892 -1.65489305,-4.190608 0,-5.8455 1.654892,-1.65489295 4.190608,-1.65489295 5.8455,0 1.654893,1.654892 1.654893,4.190608 0,5.8455 -1.054257,1.0542571 -2.545753,1.4767891 -3.92275,1.111292 z" />
+
+										<hpss:AkerTextBox x:Name="MnTxtBx"
+														  Background="#19000000"
+														  BorderBrush="#22000000"
+														  Foreground="{StaticResource Foreground_Level3}"
+														  Height="30"
+														  Width="30"
+														  HorizontalContentAlignment="Center"
+														  FontSize="15"
+														  FontWeight="Bold"
+														  AkerTextBoxType="Numeric"
+														  BorderThickness="2"
+														  AkerNumerFormat="D2"
+														  AkerNumerRange="0,59"
+														  Text="{Binding CurrentMinute,UpdateSourceTrigger=PropertyChanged}" />
+
+										<Path Fill="#50000000"
+											  VerticalAlignment="Center"
+											  Margin="5,0"
+											  Stretch="Uniform"
+											  Width="7"
+											  Data="m 3.1639198,21.114629 c -0.778932,-0.206752 -1.345902,-0.534443 -1.92275,-1.111292 -1.65489305,-1.654893 -1.65489305,-4.190608 0,-5.8455 1.654892,-1.654894 4.190608,-1.654894 5.8455,0 1.654893,1.654892 1.654893,4.190607 0,5.8455 -1.054257,1.054257 -2.545753,1.476789 -3.92275,1.111292 z m 0,-12.9166673 c -0.778932,-0.206751 -1.345902,-0.534443 -1.92275,-1.111292 -1.65489305,-1.654892 -1.65489305,-4.190608 0,-5.8455 1.654892,-1.65489295 4.190608,-1.65489295 5.8455,0 1.654893,1.654892 1.654893,4.190608 0,5.8455 -1.054257,1.0542571 -2.545753,1.4767891 -3.92275,1.111292 z" />
+
+										<hpss:AkerTextBox x:Name="SecTxtBx"
+														  Background="#19000000"
+														  BorderBrush="#22000000"
+														  Foreground="{StaticResource Foreground_Level3}"
+														  Height="30"
+														  Width="30"
+														  HorizontalContentAlignment="Center"
+														  FontSize="15"
+														  FontWeight="Bold"
+														  AkerTextBoxType="Numeric"
+														  BorderThickness="2"
+														  AkerNumerFormat="D2"
+														  AkerNumerRange="0,59"
+														  Text="{Binding CurrentSecond,UpdateSourceTrigger=PropertyChanged}" />
+
+										<Path Fill="#50000000"
+											  VerticalAlignment="Center"
+											  Margin="5,0"
+											  Stretch="Uniform"
+											  Width="7"
+											  Data="m 3.1639198,21.114629 c -0.778932,-0.206752 -1.345902,-0.534443 -1.92275,-1.111292 -1.65489305,-1.654893 -1.65489305,-4.190608 0,-5.8455 1.654892,-1.654894 4.190608,-1.654894 5.8455,0 1.654893,1.654892 1.654893,4.190607 0,5.8455 -1.054257,1.054257 -2.545753,1.476789 -3.92275,1.111292 z m 0,-12.9166673 c -0.778932,-0.206751 -1.345902,-0.534443 -1.92275,-1.111292 -1.65489305,-1.654892 -1.65489305,-4.190608 0,-5.8455 1.654892,-1.65489295 4.190608,-1.65489295 5.8455,0 1.654893,1.654892 1.654893,4.190608 0,5.8455 -1.054257,1.0542571 -2.545753,1.4767891 -3.92275,1.111292 z" />
+
+										<hpss:AkerTextBox x:Name="MilSecTxtBx"
+														  Background="#19000000"
+														  BorderBrush="#22000000"
+														  Foreground="{StaticResource Foreground_Level3}"
+														  Height="30"
+														  Width="45"
+														  HorizontalContentAlignment="Center"
+														  FontSize="15"
+														  FontWeight="Bold"
+														  AkerTextBoxType="Numeric"
+														  BorderThickness="2"
+														  AkerNumerFormat="D2"
+														  AkerNumerRange="0,999"
+														  Text="{Binding CurrentMilliSecond,UpdateSourceTrigger=PropertyChanged}" />
+
+									</StackPanel>
+								</Grid>
+
+								<!--Hours & minute picker area-->
+								<Grid Grid.Row="1"
+									  Background="{StaticResource Background_Level6}">
+									<Grid.Resources>
+										<Style x:Key="SekerSlider"
+											   TargetType="Slider">
+											<Setter Property="Margin"
+													Value="10,0" />
+											<Setter Property="Foreground"
+													Value="{StaticResource ButtonBackground_Level1}" />
+											<Setter Property="Template">
+												<Setter.Value>
+
+													<ControlTemplate TargetType="{x:Type Slider}">
+														<Border x:Name="border"
+																BorderBrush="{TemplateBinding BorderBrush}"
+																BorderThickness="{TemplateBinding BorderThickness}"
+																Background="{TemplateBinding Background}"
+																SnapsToDevicePixels="True">
+															<Grid>
+																<Grid.RowDefinitions>
+																	<RowDefinition Height="Auto" />
+																	<RowDefinition Height="Auto"
+																				   MinHeight="{TemplateBinding MinHeight}" />
+																	<RowDefinition Height="Auto" />
+																</Grid.RowDefinitions>
+																<TickBar x:Name="TopTick"
+																		 Fill="{TemplateBinding Foreground}"
+																		 Height="4"
+																		 Margin="0,0,0,2"
+																		 Placement="Top"
+																		 Grid.Row="0"
+																		 Visibility="Collapsed" />
+																<TickBar x:Name="BottomTick"
+																		 Fill="{TemplateBinding Foreground}"
+																		 Height="4"
+																		 Margin="0,2,0,0"
+																		 Placement="Bottom"
+																		 Grid.Row="2"
+																		 Visibility="Collapsed" />
+																<Border x:Name="TrackBackground"
+																		Background="#D9DDE6"
+																		Height="4"
+																		CornerRadius="3"
+																		Margin="5,0"
+																		Grid.Row="1"
+																		VerticalAlignment="Center">
+																	<Canvas Margin="-6,-1">
+																		<Rectangle x:Name="PART_SelectionRange"
+																				   Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
+																				   Height="4"
+																				   Visibility="Hidden" />
+																	</Canvas>
+																</Border>
+																<Track x:Name="PART_Track"
+																	   Grid.Row="1">
+																	<Track.DecreaseRepeatButton>
+																		<RepeatButton Command="Slider.DecreaseLarge"
+																					  Background="{Binding RelativeSource={RelativeSource AncestorType=Slider, Mode=FindAncestor},
+																										   Path=Foreground}">
+																			<RepeatButton.Style>
+																				<Style TargetType="{x:Type RepeatButton}">
+																					<Setter Property="OverridesDefaultStyle"
+																							Value="True" />
+																					<Setter Property="Focusable"
+																							Value="False" />
+																					<Setter Property="IsTabStop"
+																							Value="False" />
+																					<Setter Property="Template">
+																						<Setter.Value>
+																							<ControlTemplate TargetType="{x:Type RepeatButton}">
+																								<Grid>
+																									<Rectangle Fill="{TemplateBinding Background}"
+																											   StrokeThickness="0"
+																											   Height="4"
+																											   RadiusX="3"
+																											   RadiusY="3"
+																											   Margin="5,0,-5,0"
+																											   Width="{TemplateBinding Width}" />
+																								</Grid>
+
+																							</ControlTemplate>
+																						</Setter.Value>
+																					</Setter>
+																				</Style>
+																			</RepeatButton.Style>
+																		</RepeatButton>
+																	</Track.DecreaseRepeatButton>
+																	<Track.IncreaseRepeatButton>
+																		<RepeatButton Command="Slider.IncreaseLarge">
+																			<RepeatButton.Style>
+																				<Style TargetType="{x:Type RepeatButton}">
+																					<Setter Property="OverridesDefaultStyle"
+																							Value="True" />
+																					<Setter Property="Background"
+																							Value="Transparent" />
+																					<Setter Property="Focusable"
+																							Value="False" />
+																					<Setter Property="IsTabStop"
+																							Value="False" />
+																					<Setter Property="Template">
+																						<Setter.Value>
+																							<ControlTemplate TargetType="{x:Type RepeatButton}">
+																								<Grid>
+																									<Rectangle Fill="#D9DDE6"
+																											   Height="4"
+																											   RadiusX="3"
+																											   RadiusY="3"
+																											   StrokeThickness="0"
+																											   Margin="-5,0,5,0"
+																											   Width="{TemplateBinding Width}" />
+																								</Grid>
+																							</ControlTemplate>
+																						</Setter.Value>
+																					</Setter>
+																				</Style>
+																			</RepeatButton.Style>
+																		</RepeatButton>
+																	</Track.IncreaseRepeatButton>
+																	<Track.Thumb>
+																		<Thumb x:Name="Thumb"
+																			   Focusable="False"
+																			   Height="18"
+																			   Background="{Binding RelativeSource={RelativeSource AncestorType=Slider, Mode=FindAncestor},
+																										   Path=Foreground}"
+																			   OverridesDefaultStyle="True"
+																			   VerticalAlignment="Center"
+																			   Width="18">
+																			<Thumb.Template>
+																				<ControlTemplate TargetType="{x:Type Thumb}">
+																					<Grid HorizontalAlignment="Center"
+																						  UseLayoutRounding="True"
+																						  VerticalAlignment="Center">
+																						<Path x:Name="grip"
+																							  Data="M -1,0 A 1,1 0 1 1 1,0 M -1,0 A 1,1 0 1 0 1,0"
+																							  Fill="{TemplateBinding Background}"
+																							  Height="{Binding ElementName=grip,Path=ActualWidth}"
+																							  Stretch="Fill"
+																							  SnapsToDevicePixels="True"
+																							  StrokeThickness="0"
+																							  UseLayoutRounding="True"
+																							  VerticalAlignment="Center" />
+																						<TextBlock FontSize="10"
+																								   VerticalAlignment="Center"
+																								   HorizontalAlignment="Center"
+																								   Foreground="{StaticResource Foreground_Level3}"
+																								   FontWeight="Black"
+																								   Text="{Binding Path=(attProp:UIAttProperties.StringData),
+																												  RelativeSource={RelativeSource AncestorType=Slider, Mode=FindAncestor}}"
+																								   FontFamily="Calibri" />
+
+																					</Grid>
+																					<ControlTemplate.Triggers>
+																						<Trigger Property="IsMouseOver"
+																								 Value="True">
+																							<Setter Property="Fill"
+																									TargetName="grip"
+																									Value="#FFDCECFC" />
+																							<Setter Property="Stroke"
+																									TargetName="grip"
+																									Value="#FF7EB4EA" />
+																						</Trigger>
+																						<Trigger Property="IsDragging"
+																								 Value="True">
+																							<Setter Property="Fill"
+																									TargetName="grip"
+																									Value="#FFDAECFC" />
+																							<Setter Property="Stroke"
+																									TargetName="grip"
+																									Value="#FF569DE5" />
+																						</Trigger>
+																						<Trigger Property="IsEnabled"
+																								 Value="False">
+																							<Setter Property="Fill"
+																									TargetName="grip"
+																									Value="#FFF0F0F0" />
+																							<Setter Property="Stroke"
+																									TargetName="grip"
+																									Value="#FFD9D9D9" />
+																						</Trigger>
+																					</ControlTemplate.Triggers>
+																				</ControlTemplate>
+																			</Thumb.Template>
+																		</Thumb>
+																	</Track.Thumb>
+																</Track>
+															</Grid>
+														</Border>
+														<ControlTemplate.Triggers>
+															<Trigger Property="TickPlacement"
+																	 Value="TopLeft">
+																<Setter Property="Visibility"
+																		TargetName="TopTick"
+																		Value="Visible" />
+																<Setter Property="Template"
+																		TargetName="Thumb">
+																	<Setter.Value>
+																		<ControlTemplate TargetType="{x:Type Thumb}">
+																			<Grid HorizontalAlignment="Center"
+																				  UseLayoutRounding="True"
+																				  VerticalAlignment="Center">
+																				<Path x:Name="grip"
+																					  Data="M0,6C0,6 5.5,0 5.5,0 5.5,0 11,6 11,6 11,6 11,18 11,18 11,18 0,18 0,18 0,18 0,6 0,6z"
+																					  Fill="#FFF0F0F0"
+																					  Stretch="Fill"
+																					  SnapsToDevicePixels="True"
+																					  Stroke="#FFACACAC"
+																					  StrokeThickness="1"
+																					  UseLayoutRounding="True"
+																					  VerticalAlignment="Center" />
+																			</Grid>
+																			<ControlTemplate.Triggers>
+																				<Trigger Property="IsMouseOver"
+																						 Value="True">
+																					<Setter Property="Fill"
+																							TargetName="grip"
+																							Value="#FFDCECFC" />
+																					<Setter Property="Stroke"
+																							TargetName="grip"
+																							Value="#FF7EB4EA" />
+																				</Trigger>
+																				<Trigger Property="IsDragging"
+																						 Value="True">
+																					<Setter Property="Fill"
+																							TargetName="grip"
+																							Value="#FFDAECFC" />
+																					<Setter Property="Stroke"
+																							TargetName="grip"
+																							Value="#FF569DE5" />
+																				</Trigger>
+																				<Trigger Property="IsEnabled"
+																						 Value="False">
+																					<Setter Property="Fill"
+																							TargetName="grip"
+																							Value="#FFF0F0F0" />
+																					<Setter Property="Stroke"
+																							TargetName="grip"
+																							Value="#FFD9D9D9" />
+																				</Trigger>
+																			</ControlTemplate.Triggers>
+																		</ControlTemplate>
+																	</Setter.Value>
+																</Setter>
+																<Setter Property="Margin"
+																		TargetName="TrackBackground"
+																		Value="5,2,5,0" />
+															</Trigger>
+															<Trigger Property="TickPlacement"
+																	 Value="BottomRight">
+																<Setter Property="Visibility"
+																		TargetName="BottomTick"
+																		Value="Visible" />
+																<Setter Property="Template"
+																		TargetName="Thumb">
+																	<Setter.Value>
+																		<ControlTemplate TargetType="{x:Type Thumb}">
+																			<Grid HorizontalAlignment="Center"
+																				  UseLayoutRounding="True"
+																				  VerticalAlignment="Center">
+																				<Path x:Name="grip"
+																					  Data="M0,12C0,12 5.5,18 5.5,18 5.5,18 11,12 11,12 11,12 11,0 11,0 11,0 0,0 0,0 0,0 0,12 0,12z"
+																					  Fill="#FFF0F0F0"
+																					  Stretch="Fill"
+																					  SnapsToDevicePixels="True"
+																					  Stroke="#FFACACAC"
+																					  StrokeThickness="1"
+																					  UseLayoutRounding="True"
+																					  VerticalAlignment="Center" />
+																			</Grid>
+																			<ControlTemplate.Triggers>
+																				<Trigger Property="IsMouseOver"
+																						 Value="True">
+																					<Setter Property="Fill"
+																							TargetName="grip"
+																							Value="#FFDCECFC" />
+																					<Setter Property="Stroke"
+																							TargetName="grip"
+																							Value="#FF7EB4EA" />
+																				</Trigger>
+																				<Trigger Property="IsDragging"
+																						 Value="True">
+																					<Setter Property="Fill"
+																							TargetName="grip"
+																							Value="#FFDAECFC" />
+																					<Setter Property="Stroke"
+																							TargetName="grip"
+																							Value="#FF569DE5" />
+																				</Trigger>
+																				<Trigger Property="IsEnabled"
+																						 Value="False">
+																					<Setter Property="Fill"
+																							TargetName="grip"
+																							Value="#FFF0F0F0" />
+																					<Setter Property="Stroke"
+																							TargetName="grip"
+																							Value="#FFD9D9D9" />
+																				</Trigger>
+																			</ControlTemplate.Triggers>
+																		</ControlTemplate>
+																	</Setter.Value>
+																</Setter>
+																<Setter Property="Margin"
+																		TargetName="TrackBackground"
+																		Value="5,0,5,2" />
+															</Trigger>
+															<Trigger Property="TickPlacement"
+																	 Value="Both">
+																<Setter Property="Visibility"
+																		TargetName="TopTick"
+																		Value="Visible" />
+																<Setter Property="Visibility"
+																		TargetName="BottomTick"
+																		Value="Visible" />
+															</Trigger>
+															<Trigger Property="IsSelectionRangeEnabled"
+																	 Value="True">
+																<Setter Property="Visibility"
+																		TargetName="PART_SelectionRange"
+																		Value="Visible" />
+															</Trigger>
+															<Trigger Property="IsKeyboardFocused"
+																	 Value="True">
+																<Setter Property="Foreground"
+																		TargetName="Thumb"
+																		Value="Blue" />
+															</Trigger>
+														</ControlTemplate.Triggers>
+													</ControlTemplate>
+												</Setter.Value>
+											</Setter>
+										</Style>
+
+									</Grid.Resources>
+
+									<Grid.RowDefinitions>
+										<RowDefinition Height="*" />
+										<RowDefinition Height="*" />
+										<RowDefinition Height="*" />
+										<RowDefinition Height="*" />
+									</Grid.RowDefinitions>
+
+									<Slider Grid.Column="2"
+											Maximum="11"
+											Grid.Row="0"
+											attProp:UIAttProperties.StringData="H"
+											Value="{Binding CurrentHour}"
+											Style="{StaticResource SekerSlider}"
+											Minimum="0"
+											VerticalAlignment="Center" />
+
+									<Slider Grid.Column="2"
+											Maximum="59"
+											Grid.Row="1"
+											attProp:UIAttProperties.StringData="M"
+											Value="{Binding CurrentMinute}"
+											Style="{StaticResource SekerSlider}"
+											Minimum="0"
+											VerticalAlignment="Center" />
+
+									<Slider Grid.Column="2"
+											Maximum="59"
+											Grid.Row="2"
+											attProp:UIAttProperties.StringData="S"
+											Value="{Binding CurrentSecond}"
+											Style="{StaticResource SekerSlider}"
+											Minimum="0"
+											VerticalAlignment="Center" />
+									
+									<Slider Grid.Column="2"
+											Maximum="999"
+											Grid.Row="3"
+											attProp:UIAttProperties.StringData="F"
+											Value="{Binding CurrentMilliSecond}"
+											Style="{StaticResource SekerSlider}"
+											Minimum="0"
+											VerticalAlignment="Center" />
+
+								</Grid>
+
+								<!--AM & PM area-->
+								<StackPanel Grid.Row="2"
+											Orientation="Horizontal"
+											HorizontalAlignment="Center">
+									<ToggleButton Style="{StaticResource AmPmTgBtStyle}"
+												  IsChecked="{Binding CurrentTimeSession, Converter={StaticResource SekerTabIsCheckedConverter}, ConverterParameter=AM}"
+												  Cursor="Hand"
+												  FontWeight="Bold"
+												  Template="{StaticResource AMPMButtonTmpl}">
+										AM
+									</ToggleButton>
+
+									<ToggleButton Style="{StaticResource AmPmTgBtStyle}"
+												  IsChecked="{Binding CurrentTimeSession, Converter={StaticResource SekerTabIsCheckedConverter}, ConverterParameter=PM}"
+												  Cursor="Hand"
+												  FontWeight="Bold"
+												  Template="{StaticResource AMPMButtonTmpl}">
+										PM
+									</ToggleButton>
+								</StackPanel>
+
+							</Grid>
+							<Grid x:Name="PART_TimeSekerButton"
+								  Height="40"
+								  Background="{TemplateBinding Background}"
+								  Grid.Row="2">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="1.8*" />
+									<ColumnDefinition Width="1.1*" />
+								</Grid.ColumnDefinitions>
+
+
+								<Button x:Name="SEKER_NwBt"
+										BorderThickness="0"
+										Cursor="Hand"
+										Background="Transparent">
+									<Button.Template>
+
+										<ControlTemplate TargetType="{x:Type Button}">
+											<Border Background="{TemplateBinding Background}"
+													BorderThickness="{TemplateBinding BorderThickness}">
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="*" />
+														<ColumnDefinition Width="Auto" />
+														<ColumnDefinition Width="7*" />
+													</Grid.ColumnDefinitions>
+													<TextBlock Grid.Column="1"
+															   Foreground="White"
+															   FontWeight="Bold"
+															   HorizontalAlignment="Center"
+															   Text="Now"
+															   VerticalAlignment="Center" />
+
+													<Rectangle Stroke="Transparent"
+															   x:Name="HighlightRectangle"
+															   Fill="Transparent"
+															   Grid.ColumnSpan="3"
+															   StrokeThickness="1">
+
+													</Rectangle>
+
+												</Grid>
+
+											</Border>
+
+											<ControlTemplate.Triggers>
+												<Trigger Property="IsMouseOver"
+														 Value="True">
+													<Setter Property="Stroke"
+															Value="{StaticResource BorderbrushEffect_Level1}"
+															TargetName="HighlightRectangle" />
+												</Trigger>
+												<Trigger Property="IsPressed"
+														 Value="True">
+													<Setter Property="Fill"
+															Value="{StaticResource MouseOverFillEffect_Level1}"
+															TargetName="HighlightRectangle" />
+												</Trigger>
+											</ControlTemplate.Triggers>
+										</ControlTemplate>
+									</Button.Template>
+								</Button>
+
+								<Button x:Name="SEKER_DnBt"
+										BorderThickness="0"
+										Command="{Binding DoneButtonCommand}"
+										Grid.Column="1"
+										Cursor="Hand"
+										Background="{StaticResource ButtonBackground_Level1}">
+									<Button.Template>
+
+										<ControlTemplate TargetType="{x:Type Button}">
+											<Border Background="{TemplateBinding Background}"
+													BorderThickness="{TemplateBinding BorderThickness}">
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="0.5*" />
+														<ColumnDefinition Width="1.6*" />
+														<ColumnDefinition Width="Auto" />
+														<ColumnDefinition Width="2*" />
+													</Grid.ColumnDefinitions>
+													<Grid Grid.Column="1"
+														  Margin="3">
+														<Viewbox Stretch="Uniform">
+															<Path Data="M 6.645784,17.868164 C 4.873034,14.880577 2.672909,12.110333 0.775185,10.476312 0.151206,9.9390389 0,9.6891129 0,9.1950189 c 0,-0.474415 0.26437,-0.999279 0.739038,-1.467243 0.701314,-0.691407 1.506963,-0.96381 2.038,-0.689078 0.284883,0.147383 1.684108,1.586857 2.312857,2.379386 0.429037,0.540794 1.219204,1.6860131 1.65826,2.4033781 l 0.175479,0.286712 0.122671,-0.202045 c 0.06747,-0.111125 0.335018,-0.564835 0.594556,-1.008246 2.2477,-3.8401181 5.764685,-7.2504181 9.758139,-9.4621301 0.919558,-0.50928201 3.081693,-1.49486701 3.14359,-1.43296901 0.01755,0.01755 -0.30158,0.293411 -0.709175,0.613029 C 18.731933,1.4795469 15.850975,4.4096269 14.645812,5.8918649 11.636589,9.5929339 9.048776,13.884519 7.551774,17.656497 l -0.413443,1.041748 z"
+																  Fill="White"
+																  Stroke="White" />
+														</Viewbox>
+													</Grid>
+													<TextBlock Grid.Column="2"
+															   Foreground="White"
+															   FontWeight="Bold"
+															   HorizontalAlignment="Center"
+															   Text="Done     "
+															   VerticalAlignment="Center" />
+													<Rectangle Stroke="Transparent"
+															   x:Name="HighlightRectangle"
+															   Fill="Transparent"
+															   Grid.ColumnSpan="5"
+															   StrokeThickness="1">
+
+													</Rectangle>
+												</Grid>
+											</Border>
+											<ControlTemplate.Triggers>
+												<Trigger Property="IsMouseOver"
+														 Value="True">
+													<Setter Property="Stroke"
+															Value="{StaticResource BorderbrushEffect_Level1}"
+															TargetName="HighlightRectangle" />
+												</Trigger>
+												<Trigger Property="IsPressed"
+														 Value="True">
+													<Setter Property="Fill"
+															Value="{StaticResource MouseOverFillEffect_Level1}"
+															TargetName="HighlightRectangle" />
+												</Trigger>
+											</ControlTemplate.Triggers>
+										</ControlTemplate>
+									</Button.Template>
+								</Button>
+							</Grid>
+						</Grid>
+					</Border>
+
+					<ControlTemplate.Triggers>
+						<Trigger SourceName="SELECTOR_DteTgBt"
+								 Property="IsChecked"
+								 Value="True">
+							<Setter TargetName="PART_Calendar"
+									Property="Visibility"
+									Value="Visible" />
+							<Setter TargetName="PART_CalendarButton"
+									Property="Visibility"
+									Value="Visible" />
+							<Setter TargetName="PART_TimeSeker"
+									Property="Visibility"
+									Value="Hidden" />
+							<Setter TargetName="PART_TimeSekerButton"
+									Property="Visibility"
+									Value="Hidden" />
+						</Trigger>
+
+						<Trigger SourceName="SELECTOR_TmeTgBt"
+								 Property="IsChecked"
+								 Value="True">
+							<Setter TargetName="PART_Calendar"
+									Property="Visibility"
+									Value="Hidden" />
+							<Setter TargetName="PART_CalendarButton"
+									Property="Visibility"
+									Value="Hidden" />
+							<Setter TargetName="PART_TimeSeker"
+									Property="Visibility"
+									Value="Visible" />
+							<Setter TargetName="PART_TimeSekerButton"
+									Property="Visibility"
+									Value="Visible" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+</ResourceDictionary>
