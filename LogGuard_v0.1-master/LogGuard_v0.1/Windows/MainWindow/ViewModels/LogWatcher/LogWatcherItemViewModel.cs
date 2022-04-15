@@ -206,6 +206,15 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
             }
         }
 
+        [Bindable(true)]
+        public object LogDateTimeString
+        {
+            get
+            {
+                return _logInfo[LogInfo.KEY_DATE_TIME_S];
+            }
+        }
+
         public DateTime LogDateTime
         {
             get

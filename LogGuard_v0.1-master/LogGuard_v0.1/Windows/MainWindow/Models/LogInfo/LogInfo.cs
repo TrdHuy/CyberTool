@@ -37,6 +37,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.Models
         public const string KEY_DATE = "Date";
         public const string KEY_TIME = "Time";
         public const string KEY_DATE_TIME = "DateTime";
+        public const string KEY_DATE_TIME_S = "DateTimeStr";
         public const string KEY_PID = "Pid";
         public const string KEY_TID = "Tid";
         public const string KEY_PACKAGE = "Package";

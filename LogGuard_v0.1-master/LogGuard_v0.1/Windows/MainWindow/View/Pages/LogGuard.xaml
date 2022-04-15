@@ -170,7 +170,7 @@
 					<GridViewColumn DisplayMemberBinding="{Binding Level}">
 						<GridViewColumnHeader Content="Level" />
 					</GridViewColumn>
-					<GridViewColumn DisplayMemberBinding="{Binding LogDateTime}">
+					<GridViewColumn DisplayMemberBinding="{Binding LogDateTimeString}">
 						<GridViewColumnHeader Content="Time" />
 					</GridViewColumn>
 					<GridViewColumn>

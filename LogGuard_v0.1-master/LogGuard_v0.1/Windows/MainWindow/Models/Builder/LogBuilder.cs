@@ -116,6 +116,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.Models.Builder
             var time = _logInfo[LogInfo.KEY_TIME];
             var dateTime = date + "-" + _currentYear + " " + time;
 
+            _logInfo[LogInfo.KEY_DATE_TIME_S] = dateTime;
             _logInfo[LogInfo.KEY_DATE_TIME] = DateTime.ParseExact(dateTime
                 , "MM-dd-yyyy HH:mm:ss.fff"
                 , System.Globalization.CultureInfo.CurrentCulture);
