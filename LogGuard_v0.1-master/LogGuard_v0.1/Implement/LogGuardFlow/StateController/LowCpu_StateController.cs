@@ -118,7 +118,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
             RunningThread.Start();
         }
 
-        public static LowCpu_StateController Current
+        public new static LowCpu_StateController Current
         {
             get
             {

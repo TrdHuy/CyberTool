@@ -93,7 +93,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
             StopEvent.Reset();
         }
 
-        public static HighCpu_StateController Current
+        public static new HighCpu_StateController Current
         {
             get
             {
