@@ -18,6 +18,9 @@
 				<ResourceDictionary Source="AppResources/Controls/LogGListView/LoadingListView.xaml" />
 				<ResourceDictionary Source="AppResources/Controls/LogGCalendar/DateTimeSeker.xaml" />
 
+				<!--Animation resource-->
+				<ResourceDictionary Source="AppResources/Controls/Animations/Loading/LoadingAnimation.xaml" />
+
 			</ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -68,6 +68,7 @@
     <Compile Include="AppResources\AttachedProperties\TextBlockAttProperties.cs" />
     <Compile Include="AppResources\AttachedProperties\TextBoxAttProperties.cs" />
     <Compile Include="AppResources\AttachedProperties\UIAttProperties.cs" />
+    <Compile Include="AppResources\Controls\Animations\Loading\LoadingAnimation.cs" />
     <Compile Include="AppResources\Controls\LogGCalendar\DateTimeSeker.cs" />
     <Compile Include="AppResources\Controls\LogGListView\LoadingListView.cs" />
     <Compile Include="AppResources\Controls\LogGPages\LogGPage.cs" />
@@ -220,6 +221,10 @@
     <Compile Include="Windows\WaitingWindow\WaitingBox.xaml.cs">
       <DependentUpon>WaitingBox.xaml</DependentUpon>
     </Compile>
+    <Page Include="AppResources\Controls\Animations\Loading\LoadingAnimation.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="AppResources\Controls\LogGCalendar\DateTimeSeker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -28,6 +28,51 @@ namespace LogGuard_v0._1.AppResources.AttachedProperties
     }
     public class TextBoxAttProperties : UIElement
     {
+        #region IsSupportMultiFilterEngine
+        public static readonly DependencyProperty IsSupportMultiFilterEngineProperty =
+            DependencyProperty.RegisterAttached(
+            "IsSupportMultiFilterEngine",
+            typeof(bool),
+            typeof(TextBoxAttProperties),
+            new FrameworkPropertyMetadata(defaultValue: true,
+                flags: FrameworkPropertyMetadataOptions.AffectsRender));
+        public static bool GetIsSupportMultiFilterEngine(UIElement target) =>
+            (bool)target.GetValue(IsSupportMultiFilterEngineProperty);
+        public static void SetIsSupportMultiFilterEngine(UIElement target, bool value) =>
+            target.SetValue(IsSupportMultiFilterEngineProperty, value);
+
+        #endregion
+
+        #region IsBusy
+        public static readonly DependencyProperty IsBusyProperty =
+            DependencyProperty.RegisterAttached(
+            "IsBusy",
+            typeof(bool),
+            typeof(TextBoxAttProperties),
+            new FrameworkPropertyMetadata(defaultValue: true,
+                flags: FrameworkPropertyMetadataOptions.AffectsRender));
+        public static bool GetIsBusy(UIElement target) =>
+            (bool)target.GetValue(IsBusyProperty);
+        public static void SetIsBusy(UIElement target, bool value) =>
+            target.SetValue(IsBusyProperty, value);
+
+        #endregion
+
+        #region IsFilterTextBox
+        public static readonly DependencyProperty IsFilterTextBoxProperty =
+            DependencyProperty.RegisterAttached(
+            "IsFilterTextBox",
+            typeof(bool),
+            typeof(TextBoxAttProperties),
+            new FrameworkPropertyMetadata(defaultValue: true,
+                flags: FrameworkPropertyMetadataOptions.AffectsRender));
+        public static bool GetIsFilterTextBox(UIElement target) =>
+            (bool)target.GetValue(IsFilterTextBoxProperty);
+        public static void SetIsFilterTextBox(UIElement target, bool value) =>
+            target.SetValue(IsFilterTextBoxProperty, value);
+
+        #endregion
+
         #region IsFilterEnable
         public static readonly DependencyProperty IsFilterEnableProperty =
             DependencyProperty.RegisterAttached(
@@ -72,40 +117,76 @@ namespace LogGuard_v0._1.AppResources.AttachedProperties
             target.SetValue(PathDataProperty, value);
         #endregion
 
-        #region LeftDoubleClickCmd
-        public static readonly DependencyProperty LeftDoubleClickCommandProperty =
-            DependencyProperty.Register("LeftDoubleClickCommand",
+        #region EngineLeftDoubleClickCommand
+        public static readonly DependencyProperty EngineLeftDoubleClickCommandProperty =
+            DependencyProperty.Register("EngineLeftDoubleClickCommand",
                 typeof(ICommand),
                 typeof(TextBoxAttProperties),
                 new PropertyMetadata(default(ICommand)));
-        public static ICommand GetLeftDoubleClickCommand(UIElement target) =>
-           (ICommand)target.GetValue(LeftDoubleClickCommandProperty);
-        public static void SetLeftDoubleClickCommand(UIElement target, ICommand value) =>
-            target.SetValue(LeftDoubleClickCommandProperty, value);
+        public static ICommand GetEngineLeftDoubleClickCommand(UIElement target) =>
+           (ICommand)target.GetValue(EngineLeftDoubleClickCommandProperty);
+        public static void SetEngineLeftDoubleClickCommand(UIElement target, ICommand value) =>
+            target.SetValue(EngineLeftDoubleClickCommandProperty, value);
         #endregion
 
-        #region LeftClickCmd
-        public static readonly DependencyProperty LeftClickCommandProperty =
-            DependencyProperty.Register("LeftClickCommand",
+        #region EngineLeftClickCmd
+        public static readonly DependencyProperty EngineLeftClickCommandProperty =
+            DependencyProperty.Register("EngineLeftClickCommand",
                 typeof(ICommand),
                 typeof(TextBoxAttProperties),
                 new PropertyMetadata(default(ICommand)));
-        public static ICommand GetLeftClickCommand(UIElement target) =>
-           (ICommand)target.GetValue(LeftClickCommandProperty);
-        public static void SetLeftClickCommand(UIElement target, ICommand value) =>
-            target.SetValue(LeftClickCommandProperty, value);
+        public static ICommand GetEngineLeftClickCommand(UIElement target) =>
+           (ICommand)target.GetValue(EngineLeftClickCommandProperty);
+        public static void SetEngineLeftClickCommand(UIElement target, ICommand value) =>
+            target.SetValue(EngineLeftClickCommandProperty, value);
         #endregion
 
-        #region RightClickCmd
-        public static readonly DependencyProperty RightClickCommandProperty =
-            DependencyProperty.Register("RightClickCommand",
+        #region EngineRightClickCmd
+        public static readonly DependencyProperty EngineRightClickCommandProperty =
+            DependencyProperty.Register("EngineRightClickCommand",
                 typeof(ICommand),
                 typeof(TextBoxAttProperties),
                 new PropertyMetadata(default(ICommand)));
-        public static ICommand GetRightClickCommand(UIElement target) =>
-           (ICommand)target.GetValue(RightClickCommandProperty);
-        public static void SetRightClickCommand(UIElement target, ICommand value) =>
-            target.SetValue(RightClickCommandProperty, value);
+        public static ICommand GetEngineRightClickCommand(UIElement target) =>
+           (ICommand)target.GetValue(EngineRightClickCommandProperty);
+        public static void SetEngineRightClickCommand(UIElement target, ICommand value) =>
+            target.SetValue(EngineRightClickCommandProperty, value);
+        #endregion
+
+        #region FilterLeftDoubleClickCmd
+        public static readonly DependencyProperty FilterLeftDoubleClickCommandProperty =
+            DependencyProperty.Register("FilterLeftDoubleClickCommand",
+                typeof(ICommand),
+                typeof(TextBoxAttProperties),
+                new PropertyMetadata(default(ICommand)));
+        public static ICommand GetFilterLeftDoubleClickCommand(UIElement target) =>
+           (ICommand)target.GetValue(FilterLeftDoubleClickCommandProperty);
+        public static void SetFilterLeftDoubleClickCommand(UIElement target, ICommand value) =>
+            target.SetValue(FilterLeftDoubleClickCommandProperty, value);
+        #endregion
+
+        #region FilterLeftClickCmd
+        public static readonly DependencyProperty FilterLeftClickCommandProperty =
+            DependencyProperty.Register("FilterLeftClickCommand",
+                typeof(ICommand),
+                typeof(TextBoxAttProperties),
+                new PropertyMetadata(default(ICommand)));
+        public static ICommand GetFilterLeftClickCommand(UIElement target) =>
+           (ICommand)target.GetValue(FilterLeftClickCommandProperty);
+        public static void SetFilterLeftClickCommand(UIElement target, ICommand value) =>
+            target.SetValue(FilterLeftClickCommandProperty, value);
+        #endregion
+
+        #region FilterRightClickCmd
+        public static readonly DependencyProperty FilterRightClickCommandProperty =
+            DependencyProperty.Register("FilterRightClickCommand",
+                typeof(ICommand),
+                typeof(TextBoxAttProperties),
+                new PropertyMetadata(default(ICommand)));
+        public static ICommand GetFilterRightClickCommand(UIElement target) =>
+           (ICommand)target.GetValue(FilterRightClickCommandProperty);
+        public static void SetFilterRightClickCommand(UIElement target, ICommand value) =>
+            target.SetValue(FilterRightClickCommandProperty, value);
         #endregion
 
         #region FilterHelperContent
@@ -120,6 +201,20 @@ namespace LogGuard_v0._1.AppResources.AttachedProperties
             (string)target.GetValue(FilterHelperContentProperty);
         public static void SetFilterHelperContent(UIElement target, string value) =>
             target.SetValue(FilterHelperContentProperty, value);
+        #endregion
+
+        #region EngineHelperContent
+        public static readonly DependencyProperty EngineHelperContentProperty =
+            DependencyProperty.RegisterAttached(
+            "EngineHelperContent",
+            typeof(string),
+            typeof(TextBoxAttProperties),
+            new FrameworkPropertyMetadata(defaultValue: null,
+                flags: FrameworkPropertyMetadataOptions.AffectsRender));
+        public static string GetEngineHelperContent(UIElement target) =>
+            (string)target.GetValue(EngineHelperContentProperty);
+        public static void SetEngineHelperContent(UIElement target, string value) =>
+            target.SetValue(EngineHelperContentProperty, value);
         #endregion
 
         #region IsOpenCalendarPopup

@@ -15,9 +15,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 {
     public class MessageFilterUCViewModel : ChildOfAdvanceFilterUCViewModel
     {
-
-       
-
         protected override bool IsUseFilterEngine { get => true; }
 
         public MessageFilterUCViewModel(BaseViewModel parent) : base(parent)

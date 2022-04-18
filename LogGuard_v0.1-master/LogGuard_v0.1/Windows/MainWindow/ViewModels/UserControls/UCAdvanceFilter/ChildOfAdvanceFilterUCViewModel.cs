@@ -3,6 +3,7 @@ using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
+using LogGuard_v0._1.Implement.LogGuardFlow.SourceManager;
 using LogGuard_v0._1.Implement.UIEventHandler;
 using System.ComponentModel;
 using System.Threading;
@@ -11,6 +12,8 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 {
     public abstract class ChildOfAdvanceFilterUCViewModel : BaseViewModel, ISourceFilter
     {
+        private bool _isFilterBusy = false;
+
         protected IFilterEngine CurrentEngine { get; set; }
 
         [Bindable(true)]
@@ -19,6 +22,19 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
         [Bindable(true)]
         public CommandExecuterModel FilterRightClickCommand { get; set; }
 
+        [Bindable(true)]
+        public bool IsFilterBusy
+        {
+            get
+            {
+                return _isFilterBusy;
+            }
+            set
+            {
+                _isFilterBusy = value;
+                InvalidateOwn();
+            }
+        }
 
         [Bindable(true)]
         public FilterType CurrentFilterMode
@@ -47,7 +63,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 var oldVal = _isFilterEnable;
                 _isFilterEnable = value;
 
-                if(oldVal != value)
+                if (oldVal != value)
                 {
                     OnFilterEnableChanged(value);
                     UpdateHelperContent();
@@ -57,15 +73,29 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
         }
 
         [Bindable(true)]
-        public string HelperContent
+        public string EngineHelperContent
         {
             get
             {
-                return _helperContent;
+                return _engineHelperContent;
             }
             set
             {
-                _helperContent = value;
+                _engineHelperContent = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public string FilterHelperContent
+        {
+            get
+            {
+                return _filterHelperContent;
+            }
+            set
+            {
+                _filterHelperContent = value;
                 InvalidateOwn();
             }
         }
@@ -97,7 +127,8 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
         /// </summary>
         protected abstract bool IsUseFilterEngine { get; }
 
-        private string _helperContent = "";
+        private string _engineHelperContent = "";
+        private string _filterHelperContent = "";
         private string _filterContent = "";
         protected bool _isFilterEnable = false;
         private FilterType _currentFilterMode = FilterType.Simple;
@@ -114,7 +145,11 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             });
 
             UpdateEngine();
+
+            SourceManagerImpl.Current.SourceFilteredAndDisplayed -= OnSourceFilteredAndDisplayed;
+            SourceManagerImpl.Current.SourceFilteredAndDisplayed += OnSourceFilteredAndDisplayed;
         }
+
 
         /// <summary>
         /// Highlight các giá trị theo điều kiện, trả về kiểu bool
@@ -175,19 +210,35 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
         protected void UpdateHelperContent()
         {
             var turnHelper = IsFilterEnable ? "disable" : "enable";
-            var engineHelper = "";
             if (IsUseFilterEngine)
             {
-                engineHelper = "\nLeft click to change filter mode" +
+                EngineHelperContent = "Left click to change filter mode" +
                 "\nFilter mode: " + CurrentFilterMode.ToString();
             }
-            HelperContent = "Right click to " + turnHelper + " filter" + engineHelper;
+            FilterHelperContent = "Left click to " + turnHelper + " filter";
+
         }
 
-        protected void NotifyFilterContentChanged(string conditionChanged)
+        protected void NotifyFilterContentChanged(object conditionChanged)
         {
-            if (IsFilterEnable)
-                SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, conditionChanged);
+            switch (conditionChanged)
+            {
+                case string changed:
+                    if (IsFilterEnable)
+                    {
+                        IsFilterBusy = true;
+                        SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, changed);
+                    }
+                    break;
+                case bool changed:
+                    if (FilterContent != "")
+                    {
+                        IsFilterBusy = true;
+                        SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, changed);
+                    }
+                    break;
+            }
+
         }
 
         protected virtual void OnFilterContentChanged(string value)
@@ -198,7 +249,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 
         protected virtual void OnFilterEnableChanged(bool value)
         {
-            SourceFilterManagerImpl.Current.NotifyFilterPropertyChanged(this, value);
+            NotifyFilterContentChanged(value);
         }
 
         protected virtual bool DoHighlight(object obj)
@@ -210,8 +261,12 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
         {
 
         }
-        
 
+
+        private void OnSourceFilteredAndDisplayed(object sender)
+        {
+            IsFilterBusy = false;
+        }
 
     }
 }

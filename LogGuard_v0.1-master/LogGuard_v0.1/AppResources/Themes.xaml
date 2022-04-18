@@ -3,6 +3,7 @@
 					xmlns:logwatcher_ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control"
 					xmlns:sys="clr-namespace:System;assembly=mscorlib"
 					xmlns:attPTB="clr-namespace:LogGuard_v0._1.AppResources.AttachedProperties"
+					xmlns:loadingAnim="clr-namespace:LogGuard_v0._1.AppResources.Controls.Animations.Loading"
 					xmlns:hpss="clr-namespace:HPSolutionCCDevPackage.netFramework;assembly=HPSolutionCCDevPackage.netFramework">
 	<SolidColorBrush Color="#7f7f7f"
 					 x:Key="Foreground_Level1" />
@@ -25,20 +26,20 @@
 	<SolidColorBrush Color="#FF3D4048"
 					 x:Key="Background_Level7" />
 
-	<SolidColorBrush Color="#FFFFFFFF"
+	<SolidColorBrush Color="#FFEAEBEE"
 					 x:Key="InflectBackground_Level1" />
 	<SolidColorBrush Color="#FFC5C5C5"
 					 x:Key="InflectBackground_Level2" />
 	<SolidColorBrush Color="#FF4B4E59"
 					 x:Key="InflectBackground_Level10" />
-	
+
 	<SolidColorBrush Color="#19B8E7F9"
 					 x:Key="MouseOverFillEffect_Level1" />
 	<SolidColorBrush Color="#4CB8E7F9"
 					 x:Key="MouseOverFillEffect_Level2" />
 	<SolidColorBrush Color="#FFB8EAF9"
 					 x:Key="BorderbrushEffect_Level1" />
-	
+
 	<SolidColorBrush Color="#33ADFF55"
 					 x:Key="DebugLevelForeground_Level1" />
 	<SolidColorBrush Color="#33FFB855"
@@ -226,6 +227,10 @@
 	<sys:String x:Key="SuccessIcon">
 		M 99.216797 527.14453 A 52.444451 52.444451 0 0 0 46.773438 579.58789 A 52.444451 52.444451 0 0 0 99.216797 632.0332 A 52.444451 52.444451 0 0 0 151.66211 579.58789 A 52.444451 52.444451 0 0 0 99.216797 527.14453 z M 123.92969 554.80859 C 124.01529 554.80708 124.08238 554.82851 124.12891 554.875 L 132.28906 563.03516 C 132.53712 563.28324 132.07128 564.14945 131.24414 564.97656 L 97.416016 598.80273 L 90.300781 605.91797 L 89.255859 606.96289 C 89.111406 607.10765 88.870642 607.12101 88.611328 607.02539 C 88.503234 607.03635 88.416131 607.01769 88.361328 606.96289 L 88.056641 606.6582 L 80.201172 598.80273 C 80.201172 598.80273 80.199219 598.80273 80.199219 598.80273 L 67.404297 586.00781 C 66.987113 585.59055 66.851521 585.05496 67.099609 584.80664 L 75.259766 576.64648 C 75.507827 576.39821 76.043731 576.53414 76.460938 576.95117 L 88.808594 589.30078 L 122.18945 555.91992 C 122.86149 555.24788 123.55873 554.81237 123.92969 554.80859 z
 	</sys:String>
+	<sys:String x:Key="FilterEnableIcon">
+		m 169.56738,193.50722 c -0.15037,-0.0536 -0.6192,-0.49342 -2.04171,-1.91556 -1.0156,-1.01532 -1.87984,-1.91623 -1.92055,-2.00202 -0.0634,-0.13368 -0.074,-0.63595 -0.074,-3.51339 v -3.35741 l -3.41157,-3.41534 c -3.04096,-3.04433 -3.41527,-3.4358 -3.44563,-3.6037 -0.0725,-0.40113 0.0865,-0.81508 0.39041,-1.01621 l 0.19898,-0.13168 h 8.89082 8.89082 l 0.19899,0.13168 c 0.30391,0.20113 0.46294,0.61508 0.3904,1.01621 -0.0303,0.1679 -0.40467,0.55937 -3.44563,3.6037 l -3.41157,3.41534 v 5.08629 c 0,4.2371 -0.0115,5.11384 -0.069,5.25139 -0.0843,0.2017 -0.33391,0.39751 -0.59915,0.46995 -0.24934,0.0681 -0.3016,0.0663 -0.54161,-0.0192 z
+	</sys:String>
+
 	<CornerRadius x:Key="DefaultPanelCornerRadius"
 				  TopLeft="15"
 				  TopRight="15"
@@ -390,49 +395,49 @@
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
 
+	<!--		Search text box style
+	
+	This style for text box use search function
+	also support for multi engine of search
+	
+	==========================================================-->
 	<ControlTemplate TargetType="{x:Type TextBox}"
 					 x:Key="SearchTextBoxTmpl">
-		<ControlTemplate.Resources>
-			<Style TargetType="ToolTip"
-				   BasedOn="{StaticResource {x:Type ToolTip}}">
-				<Setter Property="Background"
-						Value="{StaticResource Background_Level5}" />
-				<Setter Property="Foreground"
-						Value="{StaticResource Foreground_Level1}" />
-				<Setter Property="BorderBrush"
-						Value="{StaticResource BorderbrushEffect_Level1}" />
-				<Setter Property="FontFamily"
-						Value="Calibri" />
-				<Setter Property="FontSize"
-						Value="8" />
-				<Setter Property="BorderThickness"
-						Value="1" />
-			</Style>
-		</ControlTemplate.Resources>
-		<Grid Name="Border"
-			  Background="{TemplateBinding Background}">
+		<Grid Name="Border">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" />
 				<ColumnDefinition Width="auto" />
+				<ColumnDefinition Width="auto" />
 			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" />
+				<RowDefinition Height="2" />
+				<RowDefinition Height="5" />
+			</Grid.RowDefinitions>
+
+			<Rectangle x:Name="BackgroundRec"
+					   Grid.Column="0"
+					   Grid.ColumnSpan="3"
+					   Fill="{TemplateBinding Background}"
+					   StrokeThickness="0" />
+
 			<ScrollViewer Margin="5,0,0,0"
 						  VerticalContentAlignment="Center"
 						  VerticalAlignment="Center"
 						  VerticalScrollBarVisibility="Disabled"
 						  HorizontalScrollBarVisibility="Disabled"
 						  x:Name="PART_ContentHost" />
-			<TextBox x:Name="TagTextBox"
-					 Margin="5,0,0,0"
-					 Text="{TemplateBinding Tag}"
-					 Background="Transparent"
-					 BorderThickness="0"
-					 VerticalAlignment="Center"
-					 IsReadOnly="True"
-					 IsHitTestVisible="False"
-					 Foreground="{StaticResource Foreground_Level1}"
-					 FontSize="{TemplateBinding FontSize}">
-				<TextBox.Style>
-					<Style TargetType="{x:Type TextBox}">
+
+			<TextBlock x:Name="TagTextBox"
+					   Margin="7,0,0,0"
+					   Text="{TemplateBinding Tag}"
+					   Background="Transparent"
+					   VerticalAlignment="Center"
+					   IsHitTestVisible="False"
+					   Foreground="{StaticResource Foreground_Level1}"
+					   FontSize="{TemplateBinding FontSize}">
+				<TextBlock.Style>
+					<Style TargetType="{x:Type TextBlock}">
 						<Setter Property="Visibility"
 								Value="Collapsed" />
 						<Style.Triggers>
@@ -443,8 +448,8 @@
 							</DataTrigger>
 						</Style.Triggers>
 					</Style>
-				</TextBox.Style>
-			</TextBox>
+				</TextBlock.Style>
+			</TextBlock>
 
 			<Path x:Name="CheckPath"
 				  Stretch="Uniform"
@@ -453,23 +458,34 @@
 				  IsHitTestVisible="False"
 				  Width="10"
 				  Fill="{StaticResource Foreground_Level2}" />
-			<Rectangle Grid.Column="1"
+
+			<Path x:Name="FilterPath"
+				  Stretch="Uniform"
+				  Grid.Column="2"
+				  Height="10"
+				  IsHitTestVisible="False"
+				  Data="{Binding Source={StaticResource FilterEnableIcon}}"
+				  Width="10"
+				  Fill="{StaticResource Foreground_Level2}" />
+
+			<Rectangle x:Name="FeedbackCheckPathRec"
+					   Grid.Column="1"
 					   Fill="Transparent"
 					   StrokeThickness="1"
 					   RadiusX="10"
 					   RadiusY="10"
 					   Width="20"
-					   ToolTip="{Binding Path=(attPTB:TextBoxAttProperties.FilterHelperContent),
+					   ToolTip="{Binding Path=(attPTB:TextBoxAttProperties.EngineHelperContent),
 									RelativeSource={RelativeSource TemplatedParent}}"
 					   Height="20">
 				<Rectangle.InputBindings>
-					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.LeftDoubleClickCommand),
+					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.EngineLeftDoubleClickCommand),
 									RelativeSource={RelativeSource TemplatedParent}}"
 								  MouseAction="LeftDoubleClick" />
-					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.LeftClickCommand),
+					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.EngineLeftClickCommand),
 									RelativeSource={RelativeSource TemplatedParent}}"
 								  MouseAction="LeftClick" />
-					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.RightClickCommand),
+					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.EngineRightClickCommand),
 									RelativeSource={RelativeSource TemplatedParent}}"
 								  MouseAction="RightClick" />
 				</Rectangle.InputBindings>
@@ -488,12 +504,54 @@
 				</Rectangle.Style>
 			</Rectangle>
 
+			<Rectangle x:Name="FeedbackFilterPathRec"
+					   Grid.Column="2"
+					   Fill="Transparent"
+					   StrokeThickness="1"
+					   RadiusX="10"
+					   RadiusY="10"
+					   Width="20"
+					   ToolTip="{Binding Path=(attPTB:TextBoxAttProperties.FilterHelperContent),
+									RelativeSource={RelativeSource TemplatedParent}}"
+					   Height="20">
+				<Rectangle.InputBindings>
+					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.FilterLeftDoubleClickCommand),
+									RelativeSource={RelativeSource TemplatedParent}}"
+								  MouseAction="LeftDoubleClick" />
+					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.FilterLeftClickCommand),
+									RelativeSource={RelativeSource TemplatedParent}}"
+								  MouseAction="LeftClick" />
+					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.FilterRightClickCommand),
+									RelativeSource={RelativeSource TemplatedParent}}"
+								  MouseAction="RightClick" />
+				</Rectangle.InputBindings>
+				<Rectangle.Style>
+					<Style>
+						<Style.Triggers>
+							<Trigger Property="Rectangle.IsMouseOver"
+									 Value="True">
+								<Setter Property="Rectangle.Fill"
+										Value="#19B8E7F9" />
+								<Setter Property="Rectangle.Stroke"
+										Value="{StaticResource BorderbrushEffect_Level1}" />
+							</Trigger>
+						</Style.Triggers>
+					</Style>
+				</Rectangle.Style>
+			</Rectangle>
+
+			<loadingAnim:LoadingAnimation Grid.Row="2"
+										  Grid.ColumnSpan="3"
+										  HorizontalAlignment="Left"
+										  IsBusy="{Binding Path=(attPTB:TextBoxAttProperties.IsBusy),
+														   RelativeSource={RelativeSource TemplatedParent}}" />
 		</Grid>
+
 		<ControlTemplate.Triggers>
 			<DataTrigger Binding="{Binding Path=(attPTB:TextBoxAttProperties.IsFilterEnable),
 									RelativeSource={RelativeSource Self}}"
 						 Value="true">
-				<Setter TargetName="CheckPath"
+				<Setter TargetName="FilterPath"
 						Property="Fill"
 						Value="{StaticResource ButtonBackground_Level1}" />
 			</DataTrigger>
@@ -521,52 +579,75 @@
 						Property="Data"
 						Value="{Binding Source={StaticResource AdvanceSearchIconPathGeomerty}}" />
 			</DataTrigger>
+
+			<DataTrigger Binding="{Binding Path=(attPTB:TextBoxAttProperties.IsSupportMultiFilterEngine),
+									RelativeSource={RelativeSource Self}}"
+						 Value="False">
+				<Setter TargetName="CheckPath"
+						Property="Visibility"
+						Value="Collapsed" />
+				<Setter TargetName="FeedbackCheckPathRec"
+						Property="Visibility"
+						Value="Collapsed" />
+
+			</DataTrigger>
+
+			<DataTrigger Binding="{Binding Path=(attPTB:TextBoxAttProperties.IsFilterTextBox),
+									RelativeSource={RelativeSource Self}}"
+						 Value="False">
+				<Setter TargetName="FilterPath"
+						Property="Visibility"
+						Value="Collapsed" />
+				<Setter TargetName="FeedbackFilterPathRec"
+						Property="Visibility"
+						Value="Collapsed" />
+
+			</DataTrigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
 
+
+	<!--		Calendar text box style
+	
+	This style for text box use to pick date time function
+	
+	==========================================================-->
 	<ControlTemplate TargetType="{x:Type TextBox}"
 					 x:Key="CalendarTextBoxTmpl">
-		<ControlTemplate.Resources>
-			<Style TargetType="ToolTip"
-				   BasedOn="{StaticResource {x:Type ToolTip}}">
-				<Setter Property="Background"
-						Value="{StaticResource Background_Level5}" />
-				<Setter Property="Foreground"
-						Value="{StaticResource Foreground_Level1}" />
-				<Setter Property="BorderBrush"
-						Value="{StaticResource BorderbrushEffect_Level1}" />
-				<Setter Property="FontFamily"
-						Value="Calibri" />
-				<Setter Property="FontSize"
-						Value="8" />
-				<Setter Property="BorderThickness"
-						Value="1" />
-			</Style>
-		</ControlTemplate.Resources>
-		<Grid Name="Border"
-			  Background="{TemplateBinding Background}">
+
+		<Grid Name="Border">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" />
 				<ColumnDefinition Width="auto" />
 			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" />
+				<RowDefinition Height="2" />
+				<RowDefinition Height="5" />
+			</Grid.RowDefinitions>
+			
+			<Rectangle x:Name="BackgroundRec"
+					   Grid.Column="0"
+					   Grid.ColumnSpan="2"
+					   Fill="{TemplateBinding Background}"
+					   StrokeThickness="0" />
+
 			<ScrollViewer Margin="5,0,0,0"
 						  VerticalContentAlignment="Center"
 						  VerticalAlignment="Center"
 						  VerticalScrollBarVisibility="Disabled"
 						  HorizontalScrollBarVisibility="Disabled"
 						  x:Name="PART_ContentHost" />
-			<TextBox x:Name="TagTextBox"
-					 Margin="5,0,0,0"
-					 Text="{TemplateBinding Tag}"
-					 Background="Transparent"
-					 BorderThickness="0"
-					 VerticalAlignment="Center"
-					 IsReadOnly="True"
-					 IsHitTestVisible="False"
-					 Foreground="{StaticResource Foreground_Level1}"
-					 FontSize="{TemplateBinding FontSize}">
-				<TextBox.Style>
-					<Style TargetType="{x:Type TextBox}">
+			<TextBlock x:Name="TagTextBox"
+					   Margin="7,0,0,0"
+					   Text="{TemplateBinding Tag}"
+					   Background="Transparent"
+					   VerticalAlignment="Center"
+					   IsHitTestVisible="False"
+					   Foreground="{StaticResource Foreground_Level1}"
+					   FontSize="{TemplateBinding FontSize}">
+				<TextBlock.Style>
+					<Style TargetType="{x:Type TextBlock}">
 						<Setter Property="Visibility"
 								Value="Collapsed" />
 						<Style.Triggers>
@@ -577,8 +658,8 @@
 							</DataTrigger>
 						</Style.Triggers>
 					</Style>
-				</TextBox.Style>
-			</TextBox>
+				</TextBlock.Style>
+			</TextBlock>
 
 			<Path x:Name="CheckPath"
 				  Stretch="Uniform"
@@ -588,7 +669,8 @@
 				  Width="10"
 				  Data="{Binding Source={StaticResource CalendarPathGeomerty}}"
 				  Fill="{StaticResource Foreground_Level2}" />
-			
+
+
 			<Rectangle Grid.Column="1"
 					   Fill="Transparent"
 					   StrokeThickness="1"
@@ -599,13 +681,13 @@
 									RelativeSource={RelativeSource TemplatedParent}}"
 					   Height="20">
 				<Rectangle.InputBindings>
-					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.LeftDoubleClickCommand),
+					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.FilterLeftDoubleClickCommand),
 									RelativeSource={RelativeSource TemplatedParent}}"
 								  MouseAction="LeftDoubleClick" />
-					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.LeftClickCommand),
+					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.FilterLeftClickCommand),
 									RelativeSource={RelativeSource TemplatedParent}}"
 								  MouseAction="LeftClick" />
-					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.RightClickCommand),
+					<MouseBinding Command="{Binding Path=(attPTB:TextBoxAttProperties.FilterRightClickCommand),
 									RelativeSource={RelativeSource TemplatedParent}}"
 								  MouseAction="RightClick" />
 				</Rectangle.InputBindings>
@@ -624,6 +706,12 @@
 				</Rectangle.Style>
 			</Rectangle>
 
+			<loadingAnim:LoadingAnimation Grid.Row="2"
+										  Grid.ColumnSpan="3"
+										  HorizontalAlignment="Left"
+										  IsBusy="{Binding Path=(attPTB:TextBoxAttProperties.IsBusy),
+														   RelativeSource={RelativeSource TemplatedParent}}" />
+			
 			<Popup x:Name="PART_Popup"
 				   Placement="MousePoint"
 				   StaysOpen="False"
@@ -643,7 +731,7 @@
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
 
-	
+
 	<ControlTemplate TargetType="ListView"
 					 x:Key="ListViewLV1Tmpl">
 		<ControlTemplate.Resources>

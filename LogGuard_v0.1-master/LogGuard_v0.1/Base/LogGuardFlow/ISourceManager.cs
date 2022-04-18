@@ -13,6 +13,7 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
     public interface ISourceManager
     {
         event SourceCollectionChangedHandler SourceCollectionChanged;
+        event SourceFilteredAndDisplayedHandler SourceFilteredAndDisplayed;
 
         List<ISourceHolder> SourceHolders { get;}
         RangeObservableCollection<LogWatcherItemViewModel> RawSource { get; }
@@ -41,4 +42,5 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
     }
 
     public delegate void SourceCollectionChangedHandler(object sender);
+    public delegate void SourceFilteredAndDisplayedHandler(object sender);
 }

@@ -37,6 +37,8 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         public RangeObservableCollection<string> RawLog { get => _rawLog; }
 
         public event SourceCollectionChangedHandler SourceCollectionChanged;
+        public event SourceFilteredAndDisplayedHandler SourceFilteredAndDisplayed;
+
         public ISourceFilterManager SourceFilterManager => _sourceFilter;
         public ISourceHighlightManager SourceHighlightManager => _sourceHighlighter;
         public static SourceManagerImpl Current
@@ -271,6 +273,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
                 lock (DisplaySource.ThreadSafeLock)
                 {
                     _displaySource.AddNewRange((IEnumerable<LogWatcherItemViewModel>)result.Result);
+                    SourceFilteredAndDisplayed?.Invoke(this);
                 }
             }
         }
