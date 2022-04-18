@@ -150,6 +150,11 @@
     <Compile Include="LogGuard\Control\HeaderLabel.cs" />
     <Compile Include="LogGuard\Control\RadialProgressBar.cs" />
     <Compile Include="LogGuard\Control\TrippleToggle.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Utils\CommonCommand.cs" />
     <Compile Include="Utils\Converters\StringToGeoPathConverter.cs" />
     <Compile Include="Utils\CustomAttachedProperties.cs" />
@@ -221,6 +226,7 @@
     <Compile Include="Windows\WaitingWindow\WaitingBox.xaml.cs">
       <DependentUpon>WaitingBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="_Config\RUNE.cs" />
     <Page Include="AppResources\Controls\Animations\Loading\LoadingAnimation.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -329,11 +335,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -342,6 +343,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -355,6 +357,8 @@
   <ItemGroup>
     <Resource Include="cyclone_weather_world_time_icon_194253.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="_Config\SecFloatingFeature.mk" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
