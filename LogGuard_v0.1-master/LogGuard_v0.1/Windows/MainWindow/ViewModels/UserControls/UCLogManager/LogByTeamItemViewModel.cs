@@ -62,8 +62,8 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCLogManager
 
         public string Title { get; set; }
         public ObservableCollection<LogByTeamItemViewModel> Items { get; set; }
-        public ICommand AddBtnCommand { get => addCmd; }
-        public ICommand RemoveBtnCommand { get => rmCmd; }
+        public BaseCommandImpl AddBtnCommand { get => addCmd; }
+        public BaseCommandImpl RemoveBtnCommand { get => rmCmd; }
         
         public void AddItem(LogByTeamItemViewModel item)
         {

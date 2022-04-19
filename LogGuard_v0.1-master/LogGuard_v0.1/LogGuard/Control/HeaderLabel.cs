@@ -34,15 +34,15 @@ namespace LogGuard_v0._1.LogGuard.Control
         #region MouseDoubleClickCommand
         public static readonly DependencyProperty MouseDoubleClickCommandProperty =
             DependencyProperty.Register("MouseDoubleClickCommand",
-                typeof(ICommand),
+                typeof(BaseCommandImpl),
                 typeof(HeaderLabel),
-                new PropertyMetadata(default(ICommand)));
+                new PropertyMetadata(default(BaseCommandImpl)));
 
-        public ICommand MouseDoubleClickCommand
+        public BaseCommandImpl MouseDoubleClickCommand
         {
             get
             {
-                return (ICommand)GetValue(MouseDoubleClickCommandProperty);
+                return (BaseCommandImpl)GetValue(MouseDoubleClickCommandProperty);
             }
             set
             {

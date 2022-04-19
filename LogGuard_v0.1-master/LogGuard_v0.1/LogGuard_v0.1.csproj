@@ -155,7 +155,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Utils\CommonCommand.cs" />
     <Compile Include="Utils\Converters\StringToGeoPathConverter.cs" />
     <Compile Include="Utils\CustomAttachedProperties.cs" />
     <Compile Include="Utils\Definitions\LogGuardDefinition.cs" />

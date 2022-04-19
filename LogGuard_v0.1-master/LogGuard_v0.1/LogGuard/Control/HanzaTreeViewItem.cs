@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogGuard_v0._1.Base.Command;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -148,9 +149,9 @@ namespace LogGuard_v0._1.LogGuard.Control
 
     public interface IHanzaTreeViewItem
     {
-        ICommand AddBtnCommand { get; }
+        BaseCommandImpl AddBtnCommand { get; }
 
-        ICommand RemoveBtnCommand { get; }
+        BaseCommandImpl RemoveBtnCommand { get; }
     }
 
 }

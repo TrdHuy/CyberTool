@@ -7,9 +7,8 @@ using System.Windows.Input;
 
 namespace LogGuard_v0._1.Base.Command
 {
-    public class BaseCommandImpl : ICommand
+    public class BaseCommandImpl
     {
-        public event EventHandler CanExecuteChanged;
         private Action<object, object> _act;
 
         public BaseCommandImpl(Action<object, object> a)
@@ -35,7 +34,7 @@ namespace LogGuard_v0._1.Base.Command
             }
             else
             {
-                _act?.Invoke(param, null);
+                _act?.Invoke(parameter, null);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using HPSolutionCCDevPackage.netFramework.Utils;
+using LogGuard_v0._1.Base.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -260,19 +261,19 @@ namespace LogGuard_v0._1.AppResources.Controls.LogGCalendar
         #region DoneButtonCommand
         public static readonly DependencyProperty DoneButtonCommandProperty =
             DependencyProperty.Register("DoneButtonCommand",
-                typeof(ICommand),
+                typeof(BaseCommandImpl),
                 typeof(DateTimeSeker),
-                new PropertyMetadata(default(ICommand), new PropertyChangedCallback(DoneButtonCommandPropertyChangedCallback)));
+                new PropertyMetadata(default(BaseCommandImpl), new PropertyChangedCallback(DoneButtonCommandPropertyChangedCallback)));
 
         private static void DoneButtonCommandPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
         }
 
-        public ICommand DoneButtonCommand
+        public BaseCommandImpl DoneButtonCommand
         {
             get
             {
-                return (ICommand)GetValue(DoneButtonCommandProperty);
+                return (BaseCommandImpl)GetValue(DoneButtonCommandProperty);
             }
             set
             {
