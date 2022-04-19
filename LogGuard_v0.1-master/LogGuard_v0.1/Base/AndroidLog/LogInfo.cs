@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LogGuard_v0._1.Windows.MainWindow.Models
+namespace LogGuard_v0._1.Base.AndroidLog
 {
     enum LogLevel
     {
@@ -26,6 +26,14 @@ namespace LogGuard_v0._1.Windows.MainWindow.Models
         public const string LEVEL_INFO = "I";
         public const string LEVEL_ERROR = "E";
         public const string LEVEL_WARNING = "W";
+
+        public const int LOG_LEVEL_COUNT = 6;
+        public const int LEVEL_VERBOSE_INDEX = 0;
+        public const int LEVEL_DEBUG_INDEX = 1;
+        public const int LEVEL_FATAL_INDEX = 2;
+        public const int LEVEL_INFO_INDEX = 3;
+        public const int LEVEL_ERROR_INDEX = 4;
+        public const int LEVEL_WARNING_INDEX = 5;
 
         public const string COLOR_VERBOSE = "#000000";
         public const string COLOR_DEBUG = "#0063B1";

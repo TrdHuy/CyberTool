@@ -13,11 +13,11 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 {
     public class AdvanceFilterUCViewModel : BaseViewModel
     {
-        private string _detailContent = "line(s)";
-        private string _extraContent = "Total: line(s)";
+        private string _logLevelCount = "0 line(s)";
+        private string _totalLogCount = "0 line(s)";
         private string _currentLogLevel = "Info log";
-        private string _currentLogLevelShorcutS = "I";
         private double _logCount;
+        private string _displayingLogCount = "0 line(s)";
         private double _logValuePercent;
         private bool _isInfoChecked;
         private bool _isErrorChecked;
@@ -65,6 +65,8 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             }
         }
 
+
+
         [Bindable(true)]
         public double LogValue
         {
@@ -79,34 +81,58 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 if (oldValue != _logValuePercent)
                 {
                     InvalidateOwn();
+                    Invalidate("RadialProgressValue");
                 }
             }
         }
 
         [Bindable(true)]
-        public string DetailContent
+        public string RadialProgressValue
         {
             get
             {
-                return _detailContent;
+                return _logValuePercent + "%";
+            }
+        }
+
+        [Bindable(true)]
+        public string LogLevelCount
+        {
+            get
+            {
+                return _logLevelCount;
             }
             set
             {
-                _detailContent = value;
+                _logLevelCount = value;
                 InvalidateOwn();
             }
         }
 
         [Bindable(true)]
-        public string ExtraContent
+        public string TotalLogCount
         {
             get
             {
-                return _extraContent;
+                return _totalLogCount;
             }
             set
             {
-                _extraContent = value;
+                _totalLogCount = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public string DisplayingLogCount
+        {
+            get
+            {
+                return _displayingLogCount;
+            }
+            set
+            {
+                _displayingLogCount = value;
                 InvalidateOwn();
             }
         }
@@ -360,8 +386,9 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             base.OnDestroy();
             LogCount = 0;
             LogValue = 0;
-            DetailContent = _currentLogLevelShorcutS + ": " + 0 + " line(s)";
-            ExtraContent = "Total: " + LogCount + " line(s)";
+            LogLevelCount = "0 line(s)";
+            TotalLogCount = "0 line(s)";
+            DisplayingLogCount = "0 line(s)";
             SourceManagerImpl.Current.SourceCollectionChanged -= OnLogSourceCollectionChanged;
         }
 
@@ -373,6 +400,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
         #region Log measure tool method
         private void UpdateChartcInfo()
         {
+            var displayingCount = (double)SourceManagerImpl.Current.DisplayItemsCount();
             LogCount = (double)SourceManagerImpl.Current.RawItemsCount();
             double per = 0d;
 
@@ -405,8 +433,9 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 
                 LogValue = Math.Round(per / LogCount * 100, 2);
             }
-            DetailContent = _currentLogLevelShorcutS + ": " + per + " line(s)";
-            ExtraContent = "Total: " + LogCount + " line(s)";
+            LogLevelCount = per + " line(s)";
+            TotalLogCount = LogCount + " line(s)";
+            DisplayingLogCount = displayingCount + " line(s)";
         }
         private void UpdateCurrentShowProcess(string level, bool show)
         {
@@ -416,7 +445,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                 {
                     case "V":
                         _currentLogLevel = "Verbose log";
-                        _currentLogLevelShorcutS = "V";
                         _isVerboseChecked = true;
                         _isDebugChecked = false;
                         _isErrorChecked = false;
@@ -426,7 +454,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                         break;
                     case "D":
                         _currentLogLevel = "Debug log";
-                        _currentLogLevelShorcutS = "D";
                         _isDebugChecked = true;
                         _isVerboseChecked = false;
                         _isErrorChecked = false;
@@ -436,7 +463,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                         break;
                     case "E":
                         _currentLogLevel = "Error log";
-                        _currentLogLevelShorcutS = "E";
                         _isDebugChecked = false;
                         _isVerboseChecked = false;
                         _isErrorChecked = true;
@@ -446,7 +472,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                         break;
                     case "I":
                         _currentLogLevel = "Info log";
-                        _currentLogLevelShorcutS = "I";
                         _isDebugChecked = false;
                         _isVerboseChecked = false;
                         _isErrorChecked = false;
@@ -456,7 +481,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                         break;
                     case "W":
                         _currentLogLevel = "Warning log";
-                        _currentLogLevelShorcutS = "W";
                         _isDebugChecked = false;
                         _isVerboseChecked = false;
                         _isErrorChecked = false;
@@ -466,7 +490,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
                         break;
                     case "F":
                         _currentLogLevel = "Fatal log";
-                        _currentLogLevelShorcutS = "F";
                         _isDebugChecked = false;
                         _isVerboseChecked = false;
                         _isErrorChecked = false;

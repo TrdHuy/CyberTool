@@ -22,6 +22,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager
         private ISourceFilter _logTidFilter;
         private ISourceFilter _logStartTimeFilter;
         private ISourceFilter _logEndTimeFilter;
+        private ISourceFilter _logLevelFilter;
 
         public ISourceFilter LogTagRemoveFilter { get => _logTagRemoveFilter; set => _logTagRemoveFilter = value; }
         public ISourceFilter LogTagFilter { get => _logTagFilter; set => _logTagFilter = value; }
@@ -30,19 +31,20 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager
         public ISourceFilter LogPidFilter { get => _logPidFilter; set => _logPidFilter = value; }
         public ISourceFilter LogStartTimeFilter { get => _logStartTimeFilter; set => _logStartTimeFilter = value; }
         public ISourceFilter LogEndTimeFilter { get => _logEndTimeFilter; set => _logEndTimeFilter = value; }
-
+        public ISourceFilter LogLevelFilter { get => _logLevelFilter; set => _logLevelFilter = value; }
 
         public event SourceFilterConditionChangedHandler FilterConditionChanged;
 
         public bool Filter(object obj)
         {
-            return _logTagFilter.Filter(obj)
-                && _logMessageFilter.Filter(obj)
-                && _logTagRemoveFilter.Filter(obj)
-                && _logTidFilter.Filter(obj)
-                && _logPidFilter.Filter(obj)
-                && _logStartTimeFilter.Filter(obj)
-                && _logEndTimeFilter.Filter(obj);
+            return LogLevelFilter.Filter(obj)
+                && LogTagFilter.Filter(obj)
+                && LogMessageFilter.Filter(obj)
+                && LogTagRemoveFilter.Filter(obj)
+                && LogTidFilter.Filter(obj)
+                && LogPidFilter.Filter(obj)
+                && LogStartTimeFilter.Filter(obj)
+                && LogEndTimeFilter.Filter(obj);
         }
 
         public void NotifyFilterPropertyChanged(ISourceFilter sender, object e)

@@ -14,7 +14,8 @@
 			 d:DesignWidth="110"
 			 FontFamily="Calibri">
 	<UserControl.DataContext>
-		<Binding Source="{vmh:VMManagerMarkup {x:Type vm:ListOfDeviceUCViewModel},
+		<Binding Source="{vmh:VMManagerMarkup 
+			{x:Type vm:ListOfDeviceUCViewModel},
 			{x:Type vmp:LogGuardPageViewModel}}" />
 	</UserControl.DataContext>
 	<UserControl.Resources>
@@ -30,11 +31,12 @@
 				<RowDefinition Height=" 0.3*" />
 			</Grid.RowDefinitions>
 
-			<Label Content="List of devices"
-				   FontSize="9"
-				   FontWeight="Bold"
-				   Margin="4,10,10,0"
-				   Foreground="{StaticResource Foreground_Level1}" />
+			<TextBlock Text="List of devices"
+					   VerticalAlignment="Center"
+					   FontSize="9"
+					   FontWeight="Bold"
+					   Margin="7,5,10,0"
+					   Foreground="{StaticResource Foreground_Level1}" />
 			<Button Grid.Row="2"
 					Content="Refresh"
 					Command="{Binding CommandViewModel.RefreshDeviceButtonCommand}"

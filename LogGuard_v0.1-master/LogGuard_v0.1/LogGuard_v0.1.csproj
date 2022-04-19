@@ -73,6 +73,7 @@
     <Compile Include="AppResources\Controls\LogGListView\LoadingListView.cs" />
     <Compile Include="AppResources\Controls\LogGPages\LogGPage.cs" />
     <Compile Include="AppResources\Controls\LogGWindows\LogGuardWindow.cs" />
+    <Compile Include="Base\AndroidLog\LogInfo.cs" />
     <Compile Include="Base\AndroidLog\LogParser\AbstractLogParser.cs" />
     <Compile Include="Base\AsyncTask\AsyncTask.cs" />
     <Compile Include="Base\AsyncTask\AsyncTaskResult.cs" />
@@ -176,7 +177,6 @@
     <Compile Include="Windows\MainWindow\Models\Builder\DeviceBuilder.cs" />
     <Compile Include="Windows\MainWindow\Models\Builder\LogBuilder.cs" />
     <Compile Include="Windows\MainWindow\Models\DeviceInfo\DeviceInfo.cs" />
-    <Compile Include="Windows\MainWindow\Models\LogInfo\LogInfo.cs" />
     <Compile Include="Windows\MainWindow\Utils\MSW_PageController.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Device\DeviceItemViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\LogWatcher\LogWatcherItemViewModel.cs" />
@@ -197,6 +197,7 @@
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TimeFilter\TimeFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCListOfDevice\ListOfDeviceUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCListOfDevice\MSW_UC_ListOfDeviceControlButtonCommand.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCLogLevelFilter\LogLevelFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCLogManager\LogByTeamItemViewModel.cs" />
     <Compile Include="Windows\MainWindow\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

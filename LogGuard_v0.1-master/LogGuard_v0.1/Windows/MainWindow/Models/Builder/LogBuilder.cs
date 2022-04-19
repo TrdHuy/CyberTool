@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LogGuard_v0._1.Base.AndroidLog;
+using System;
 
 namespace LogGuard_v0._1.Windows.MainWindow.Models.Builder
 {

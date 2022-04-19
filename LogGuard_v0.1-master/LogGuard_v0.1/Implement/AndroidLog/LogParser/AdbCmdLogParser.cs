@@ -1,7 +1,6 @@
-﻿using LogGuard_v0._1.Base.AndroidLog.LogParser;
-using LogGuard_v0._1.Windows.MainWindow.Models;
+﻿using LogGuard_v0._1.Base.AndroidLog;
+using LogGuard_v0._1.Base.AndroidLog.LogParser;
 using LogGuard_v0._1.Windows.MainWindow.Models.Builder;
-using System;
 using System.Text.RegularExpressions;
 
 namespace LogGuard_v0._1.Implement.AndroidLog.LogParser

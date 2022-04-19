@@ -143,7 +143,6 @@ namespace LogGuard_v0._1.LogGuard.Control
         private static void MaximumPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var rPB = d as RadialProgressBar;
-            rPB?.UpdatePercentCont();
         }
 
         public double Maximum
@@ -237,10 +236,8 @@ namespace LogGuard_v0._1.LogGuard.Control
         private Grid MainGrid;
         private Path BgPath;
         private Path CurValPath;
-        private Label MaxLabel;
-        private Label MinLabel;
-        private Label DetailContLabel;
-        private Label PercentContLabel;
+        private TextBlock MaxLabel;
+        private TextBlock MinLabel;
 
         private double CalculatedRadForPath = 0d;
 
@@ -251,13 +248,11 @@ namespace LogGuard_v0._1.LogGuard.Control
             MainGrid = GetTemplateChild(MainGridName) as Grid;
             BgPath = GetTemplateChild(BackgroundPathName) as Path;
             CurValPath = GetTemplateChild(ValuePathName) as Path;
-            MaxLabel = GetTemplateChild(MaxLabelName) as Label;
-            MinLabel = GetTemplateChild(MinLabelPathName) as Label;
-            DetailContLabel = GetTemplateChild(DetailContPathName) as Label;
-            PercentContLabel = GetTemplateChild(PercentContPathName) as Label;
+            MaxLabel = GetTemplateChild(MaxLabelName) as TextBlock;
+            MinLabel = GetTemplateChild(MinLabelPathName) as TextBlock;
 
             if (BgPath == null || CurValPath == null || MainGrid == null || RootBorder == null
-                || MaxLabel == null || MinLabel == null || DetailContLabel == null || PercentContLabel == null)
+                || MaxLabel == null || MinLabel == null)
             {
                 throw new InvalidOperationException("Not found some UI elements!");
             }
@@ -265,7 +260,6 @@ namespace LogGuard_v0._1.LogGuard.Control
 
             MainGrid.SizeChanged -= OnMainGridSizeChangedHandler;
             MainGrid.SizeChanged += OnMainGridSizeChangedHandler;
-            UpdatePercentCont();
         }
 
 
@@ -283,21 +277,7 @@ namespace LogGuard_v0._1.LogGuard.Control
             CreateBackgroundPathData(BgPath, radius, StrokeThickness);
             CreateValuePathData(CurValPath, radius, StrokeThickness, Value, Maximum);
         }
-
-
-
-        private void UpdatePercentCont()
-        {
-            if (!IsInitialized) return;
-            if (Maximum > 0)
-            {
-                PercentContLabel.Content = Math.Round(100 * Value / Maximum, 2) + "%";
-            }
-            else
-            {
-                PercentContLabel.Content = 0 + "%";
-            }
-        }
+      
         protected void OnValueChanged(double oldVal, double newVal)
         {
             if (!IsInitialized) return;
@@ -308,7 +288,6 @@ namespace LogGuard_v0._1.LogGuard.Control
             if (arg.Handled == true) return;
             var radius = MainGrid.ActualWidth / 2;
             CreateValuePathData(CurValPath, radius, StrokeThickness, Value, Maximum);
-            UpdatePercentCont();
         }
 
 

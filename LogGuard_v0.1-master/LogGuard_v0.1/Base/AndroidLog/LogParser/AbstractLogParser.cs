@@ -1,11 +1,5 @@
-﻿using LogGuard_v0._1.Windows.MainWindow.Models;
-using LogGuard_v0._1.Windows.MainWindow.Models.Builder;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using LogGuard_v0._1.Windows.MainWindow.Models.Builder;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Base.AndroidLog.LogParser
 {

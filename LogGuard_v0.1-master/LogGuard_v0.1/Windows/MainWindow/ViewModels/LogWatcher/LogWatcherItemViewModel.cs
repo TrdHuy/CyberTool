@@ -1,4 +1,5 @@
-﻿using LogGuard_v0._1.Base.ViewModel;
+﻿using LogGuard_v0._1.Base.AndroidLog;
+using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.LogGuard.Base;
 using LogGuard_v0._1.Windows.MainWindow.Models;
 using System;

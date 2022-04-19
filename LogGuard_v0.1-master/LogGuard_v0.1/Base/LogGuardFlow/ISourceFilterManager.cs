@@ -24,6 +24,7 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         ISourceFilter LogTagRemoveFilter { get; set; }
         ISourceFilter LogStartTimeFilter { get; set; }
         ISourceFilter LogEndTimeFilter { get; set; }
+        ISourceFilter LogLevelFilter { get; set; }
         void NotifyFilterPropertyChanged(ISourceFilter sender, object e);
     }
 

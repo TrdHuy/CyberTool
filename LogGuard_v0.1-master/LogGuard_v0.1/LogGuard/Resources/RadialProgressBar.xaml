@@ -45,66 +45,24 @@
 									  StrokeThickness="100" />
 							</Grid>
 
-							<Label x:Name="PART_MaximumLabel"
-								   Content="{Binding Maximum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							<TextBlock x:Name="PART_MaximumLabel"
+								   Text="{Binding Maximum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 								   Foreground="White"
 								   Grid.Row="2"
 								   Grid.Column="2"
 								   FontSize="10"
 								   Padding="0"
-								   HorizontalContentAlignment="Center"
 								   HorizontalAlignment="Right"
 								   VerticalAlignment="Top" />
-							<Label x:Name="PART_MiniumLabel"
-								   Content="0"
+							<TextBlock x:Name="PART_MiniumLabel"
+								   Text="0"
 								   Grid.Column="0"
 								   Grid.Row="2"
 								   Padding="5,0,0,0"
 								   FontSize="10"
 								   Foreground="White"
-								   HorizontalContentAlignment="Center"
 								   HorizontalAlignment="Left"
 								   VerticalAlignment="Top" />
-
-							<StackPanel Grid.Row="1"
-										Grid.Column="1"
-										Orientation="Vertical"
-										HorizontalAlignment="Center"
-										VerticalAlignment="Center">
-								<Label x:Name="PART_DetailContLabel"
-									   Content="{Binding DetailContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-									   FontSize="9"
-									   Grid.Row="0"
-									   Grid.Column="1"
-									   Padding="0"
-									   Foreground="{Binding PercentContForeground, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-									   FontWeight="Bold"
-									   HorizontalAlignment="Center"
-									   VerticalAlignment="Center"
-									   FontFamily="Calibri" />
-								<Label x:Name="PART_ExtraContLabel"
-									   Content="{Binding ExtraContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-									   FontSize="9"
-									   Grid.Row="0"
-									   Padding="0"
-									   Grid.Column="1"
-									   Foreground="White"
-									   FontWeight="Bold"
-									   HorizontalAlignment="Center"
-									   VerticalAlignment="Center"
-									   FontFamily="Calibri" />
-
-								<Label x:Name="PART_PercentContLabel"
-									   Content="55%"
-									   Grid.Row="0"
-									   Padding="0,3,0,0"
-									   Grid.Column="1"
-									   HorizontalAlignment="Center"
-									   VerticalAlignment="Center"
-									   Foreground="{Binding PercentContForeground, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-									   FontSize="13"
-									   FontFamily="Calibri" />
-							</StackPanel>
 
 						</Grid>
 

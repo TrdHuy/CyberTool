@@ -8,8 +8,6 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
 {
     public interface IRunThreadConfig
     {
-        string CurLogLevelFilter { get; set; }
-
         LogParserVO LogParserFormat { get; set; }
     }
 
