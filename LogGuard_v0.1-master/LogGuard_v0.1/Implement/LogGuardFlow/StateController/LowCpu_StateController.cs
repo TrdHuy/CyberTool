@@ -15,9 +15,11 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
 {
     public class LowCpu_StateController : StateControllerImpl
     {
-        private const int DELAY_RUNNING_THREAD_WHEN_READ_NO_LINE = 100;
+        private const int DELAY_RUNNING_THREAD_WHEN_READ_NO_LINE = 10;
         private static LowCpu_StateController _instance;
         private bool _isNeedGoToSleep;
+        private bool _isForceStop = false;
+
         public bool IsNeedGoToSleep { get => _isNeedGoToSleep; set => _isNeedGoToSleep = value; }
         private LowCpu_StateController() : base()
         {
@@ -25,12 +27,8 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
 
         protected override void OnRunning()
         {
-            var proc = DeviceCmdExecuterImpl.Current.CreateProcess(" logcat");
-
             try
             {
-                proc.Start();
-                ProcessManagement.GetInstance().AddNewProcessID(proc.Id);
 
                 if (PreviousState == LogGuardState.NONE
                    || PreviousState == LogGuardState.STOP)
@@ -47,30 +45,27 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
                 /// </summary>
 
                 while (CurrentState != LogGuardState.STOP
-                    && CurrentState != LogGuardState.NONE)
+                    && CurrentState != LogGuardState.NONE
+                    && !_isForceStop)
                 {
                     if (!String.IsNullOrWhiteSpace(line))
                     {
-                        LogInfo lif = LogInfoManagerImpl.Current.ParseLogInfos(line, false, false);
-                        if (lif != null)
-                        {
-                            LogWatcherItemViewModel livm = new LogWatcherItemViewModel(lif);
-                            LGSourceManager.AddItem(livm);
-                        }
+                        LGSourceManager.AddItem(line);
                     }
                     else if (String.IsNullOrEmpty(line))
                     {
                         IsNeedGoToSleep = true;
                     }
 
-                    while (String.IsNullOrEmpty(line = proc.StandardOutput.ReadLine())
+                    while (String.IsNullOrEmpty(line = CaptureProc.StandardOutput.ReadLine())
                         || CurrentState == LogGuardState.PAUSING)
                     {
                         lock (SynchronizeStateObject)
                         {
                             // If we've already been told to quit, we don't want to sleep!
                             if (!IsNeedGoToSleep
-                            && CurrentState == LogGuardState.RUNNING)
+                            && CurrentState == LogGuardState.RUNNING
+                            || _isForceStop)
                             {
                                 break;
                             }
@@ -78,7 +73,8 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
                                 , TimeSpan.FromMilliseconds(DELAY_RUNNING_THREAD_WHEN_READ_NO_LINE));
 
                             if (!IsNeedGoToSleep
-                            && CurrentState == LogGuardState.RUNNING)
+                            && CurrentState == LogGuardState.RUNNING
+                            || _isForceStop)
                             {
                                 break;
                             }
@@ -86,18 +82,13 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
                     }
                 }
                 #endregion
-
-                if (!proc.HasExited)
-                    proc.Kill();
+             
             }
             catch (Exception e)
             {
             }
             finally
             {
-                //StopAllActivities();
-                proc.Dispose();
-                proc.Close();
             }
         }
 
@@ -111,11 +102,12 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
 
         protected override void OnStop()
         {
+            _isForceStop = true;
         }
 
         protected override void OnStart()
         {
-            RunningThread.Start();
+            _isForceStop = false;
         }
 
         public new static LowCpu_StateController Current

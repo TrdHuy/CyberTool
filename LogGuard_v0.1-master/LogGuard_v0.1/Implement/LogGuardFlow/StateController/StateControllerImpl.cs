@@ -1,4 +1,5 @@
-﻿using LogGuard_v0._1.Base.Device;
+﻿using LogGuard_v0._1._Config;
+using LogGuard_v0._1.Base.Device;
 using LogGuard_v0._1.Base.Log;
 using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Implement.AndroidLog;
@@ -21,6 +22,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
         private LogGuardState _currentState;
         private LogGuardState _previousState;
         private object _syncObject;
+
         public LogGuardState CurrentState { get => _currentState; set => _currentState = value; }
         public LogGuardState PreviousState { get => _previousState; set => _previousState = value; }
         public object SynchronizeStateObject { get => _syncObject; set => _syncObject = value; }
@@ -204,7 +206,10 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
         {
             get
             {
-                return HighCpu_StateController.Current;
+                if (RUNE.IS_SUPPORT_HIGH_CPU_LOG_CAPTURE)
+                    return HighCpu_StateController.Current;
+                else
+                    return LowCpu_StateController.Current;
             }
         }
 
