@@ -1,6 +1,7 @@
 ﻿using HPSolutionCCDevPackage.netFramework.Atrributes;
 using HPSolutionCCDevPackage.netFramework.Utils;
 using LogGuard_v0._1.AppResources.Controls.LogGCalendar;
+using LogGuard_v0._1.Base.Command;
 using LogGuard_v0._1.Utils;
 using System;
 using System.Collections.Generic;
@@ -26,8 +27,67 @@ namespace LogGuard_v0._1.AppResources.AttachedProperties
         [StringValue("Advance")]
         Advance = 2
     }
+    /// <summary>
+    /// Cách search mà Text box sẽ hoạt động
+    /// None: TextBox sẽ không thực hiện bất kỳ chức năng nào khi người dùng thay đổi input
+    /// NormalSearch: thực hiện search và filter khi người dùng nhấn Enter
+    /// QuickSearch: thực hiện search và filter mỗi khi người dùng thay đổi giá trị input
+    /// </summary>
+    public enum SearchBehavior
+    {
+        None = -1,
+
+        NormalSearch = 0,
+
+        QuickSearch = 1
+    }
     public class TextBoxAttProperties : UIElement
     {
+        #region Search
+        public static readonly DependencyProperty SearchProperty =
+            DependencyProperty.RegisterAttached(
+            "Search",
+            typeof(SearchBehavior),
+            typeof(TextBoxAttProperties),
+            new FrameworkPropertyMetadata(defaultValue: SearchBehavior.None,
+                flags: FrameworkPropertyMetadataOptions.AffectsRender,
+                new PropertyChangedCallback(OnSearchTypeChangedCallback)));
+
+        private static void OnSearchTypeChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var textBox = d as TextBox;
+            var type = (SearchBehavior)e.NewValue;
+
+            if (type == SearchBehavior.NormalSearch && textBox != null)
+            {
+                textBox.KeyUp -= NormalSearchTypePreviewKeyDown;
+                textBox.KeyUp += NormalSearchTypePreviewKeyDown;
+
+            }
+            else if (type == SearchBehavior.QuickSearch && textBox != null)
+            {
+                textBox.KeyUp -= NormalSearchTypePreviewKeyDown;
+            }
+        }
+
+        private static void NormalSearchTypePreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            if(e.Key == Key.Enter)
+            {
+                FocusNavigationDirection focusDirection = FocusNavigationDirection.Next;
+                TraversalRequest request = new TraversalRequest(focusDirection);
+                textBox.MoveFocus(request);
+            }
+        }
+
+        public static SearchBehavior GetSearch(UIElement target) =>
+            (SearchBehavior)target.GetValue(SearchProperty);
+        public static void SetSearch(UIElement target, SearchBehavior value) =>
+            target.SetValue(SearchProperty, value);
+
+        #endregion
+
         #region IsSupportMultiFilterEngine
         public static readonly DependencyProperty IsSupportMultiFilterEngineProperty =
             DependencyProperty.RegisterAttached(
@@ -238,7 +298,7 @@ namespace LogGuard_v0._1.AppResources.AttachedProperties
                 {
                     popUp.Child = new DateTimeSeker()
                     {
-                        DoneButtonCommand = new CommonCommand((sender) =>
+                        DoneButtonCommand = new BaseCommandImpl((sender, parmam) =>
                         {
                             if (sender != null)
                             {

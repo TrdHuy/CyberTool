@@ -52,6 +52,7 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
+
 	</UserControl.Resources>
 	<Border Background="{StaticResource Background_Level2}"
 			CornerRadius="{StaticResource DefaultPanelCornerRadius}">
@@ -104,12 +105,14 @@
 					   VerticalAlignment="Center"
 					   FontWeight="Bold"
 					   Foreground="{StaticResource Foreground_Level1}" />
+				
+				<!--Tag show filter--> 
 				<TextBox Grid.Row="1"
 						 Margin="0,0,0,5"
 						 Tag="Tag show"
-						 Text="{Binding TagFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
 						 Grid.ColumnSpan="2"
+						 attPTB:TextBoxAttProperties.Search="{Binding TagFilterContent.Search}"
 						 attPTB:TextBoxAttProperties.IsBusy="{Binding TagFilterContent.IsFilterBusy}"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TagFilterContent.FilterHelperContent}"
 						 attPTB:TextBoxAttProperties.EngineHelperContent="{Binding TagFilterContent.EngineHelperContent}"
@@ -120,36 +123,70 @@
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
-						 Template="{StaticResource SearchTextBoxTmpl}" />
+						 Template="{StaticResource SearchTextBoxTmpl}">
+					<TextBox.Style>
+						<Style TargetType="TextBox">
+							<Style.Triggers>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="NormalSearch">
+									<Setter Property="Text"
+											Value="{Binding TagFilterContent.FilterContent, UpdateSourceTrigger=Default}" />
+								</Trigger>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="QuickSearch">
+									<Setter Property="Text"
+											Value="{Binding TagFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}" />
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</TextBox.Style>
+				</TextBox>
 
-
+				<!--Tag remove filter-->
 				<TextBox Grid.Row="2"
 						 Margin="0,0,0,5"
 						 Grid.ColumnSpan="2"
 						 Tag="Tag remove"
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
-						 attPTB:TextBoxAttProperties.IsBusy="False"
+						 attPTB:TextBoxAttProperties.Search="{Binding TagRemoveContent.Search}"
+						 attPTB:TextBoxAttProperties.IsBusy="{Binding TagRemoveContent.IsFilterBusy}"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TagRemoveContent.FilterHelperContent}"
 						 attPTB:TextBoxAttProperties.EngineHelperContent="{Binding TagRemoveContent.EngineHelperContent}"
 						 attPTB:TextBoxAttProperties.EngineLeftClickCommand="{Binding TagRemoveContent.FilterLeftClickCommand}"
 						 attPTB:TextBoxAttProperties.FilterLeftClickCommand="{Binding TagRemoveContent.FilterRightClickCommand}"
 						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding TagRemoveContent.IsFilterEnable}"
 						 attPTB:TextBoxAttProperties.Filter="{Binding TagRemoveContent.CurrentFilterMode}"
-						 Text="{Binding TagRemoveContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
-						 Template="{StaticResource SearchTextBoxTmpl}" />
+						 Template="{StaticResource SearchTextBoxTmpl}">
+					<TextBox.Style>
+						<Style TargetType="TextBox">
+							<Style.Triggers>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="NormalSearch">
+									<Setter Property="Text"
+											Value="{Binding TagRemoveContent.FilterContent, UpdateSourceTrigger=Default}" />
+								</Trigger>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="QuickSearch">
+									<Setter Property="Text"
+											Value="{Binding TagRemoveContent.FilterContent, UpdateSourceTrigger=PropertyChanged}" />
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</TextBox.Style>
+				</TextBox>
 
-
+				<!--Message filter-->
 				<TextBox Grid.Row="3"
 						 Margin="0,0,0,5"
 						 Grid.ColumnSpan="2"
 						 Tag="Message"
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
 						 Template="{StaticResource SearchTextBoxTmpl}"
-						 Text="{Binding MessageFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
-						 attPTB:TextBoxAttProperties.IsBusy="False"
+						 attPTB:TextBoxAttProperties.Search="{Binding MessageFilterContent.Search}"
+						 attPTB:TextBoxAttProperties.IsBusy="{Binding MessageFilterContent.IsFilterBusy}"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding MessageFilterContent.FilterHelperContent}"
 						 attPTB:TextBoxAttProperties.EngineHelperContent="{Binding MessageFilterContent.EngineHelperContent}"
 						 attPTB:TextBoxAttProperties.EngineLeftClickCommand="{Binding MessageFilterContent.FilterLeftClickCommand}"
@@ -158,28 +195,66 @@
 						 attPTB:TextBoxAttProperties.Filter="{Binding MessageFilterContent.CurrentFilterMode}"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
-						 Background="{StaticResource Background_Level3}" />
+						 Background="{StaticResource Background_Level3}">
+					<TextBox.Style>
+						<Style TargetType="TextBox">
+							<Style.Triggers>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="NormalSearch">
+									<Setter Property="Text"
+											Value="{Binding MessageFilterContent.FilterContent, UpdateSourceTrigger=Default}" />
+								</Trigger>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="QuickSearch">
+									<Setter Property="Text"
+											Value="{Binding MessageFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}" />
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</TextBox.Style>
+				</TextBox>
 
+				<!--PID filter-->
 				<TextBox Grid.Row="4"
 						 Margin="0,0,10,5"
 						 Tag="PID"
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
-						 attPTB:TextBoxAttProperties.IsBusy="False"
+						 attPTB:TextBoxAttProperties.Search="{Binding PidFilterContent.Search}"
+						 attPTB:TextBoxAttProperties.IsBusy="{Binding PidFilterContent.IsFilterBusy}"
 						 attPTB:TextBoxAttProperties.IsSupportMultiFilterEngine="False"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding PidFilterContent.FilterHelperContent}"
 						 attPTB:TextBoxAttProperties.FilterLeftClickCommand="{Binding PidFilterContent.FilterRightClickCommand}"
 						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding PidFilterContent.IsFilterEnable}"
-						 Text="{Binding PidFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
 						 attPTB:TextBoxAttProperties.PathData="{StaticResource SearchPathGeomerty}"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
-						 Template="{StaticResource SearchTextBoxTmpl}" />
+						 Template="{StaticResource SearchTextBoxTmpl}">
+					<TextBox.Style>
+						<Style TargetType="TextBox">
+							<Style.Triggers>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="NormalSearch">
+									<Setter Property="Text"
+											Value="{Binding PidFilterContent.FilterContent, UpdateSourceTrigger=Default}" />
+								</Trigger>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="QuickSearch">
+									<Setter Property="Text"
+											Value="{Binding PidFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}" />
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</TextBox.Style>
+				</TextBox>
+
+				<!--TID Filter-->
 				<TextBox Grid.Row="4"
 						 Grid.Column="1"
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
 						 Margin="10,0,0,5"
-						 attPTB:TextBoxAttProperties.IsBusy="False"
+						 attPTB:TextBoxAttProperties.Search="{Binding TidFilterContent.Search}"
+						 attPTB:TextBoxAttProperties.IsBusy="{Binding TidFilterContent.IsFilterBusy}"
 						 attPTB:TextBoxAttProperties.IsSupportMultiFilterEngine="False"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding TidFilterContent.FilterHelperContent}"
 						 attPTB:TextBoxAttProperties.FilterLeftClickCommand="{Binding TidFilterContent.FilterRightClickCommand}"
@@ -190,7 +265,25 @@
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
-						 Template="{StaticResource SearchTextBoxTmpl}" />
+						 Template="{StaticResource SearchTextBoxTmpl}">
+					<TextBox.Style>
+						<Style TargetType="TextBox">
+							<Style.Triggers>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="NormalSearch">
+									<Setter Property="Text"
+											Value="{Binding TidFilterContent.FilterContent, UpdateSourceTrigger=Default}" />
+								</Trigger>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="QuickSearch">
+									<Setter Property="Text"
+											Value="{Binding TidFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}" />
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</TextBox.Style>
+				</TextBox>
+				
 			</Grid>
 
 			<Grid Margin="10,0,10,0"
@@ -214,7 +307,7 @@
 				<TextBox Grid.Row="1"
 						 Margin="0,0,0,5"
 						 Tag="Start time"
-						 attPTB:TextBoxAttProperties.IsBusy="False"
+						 attPTB:TextBoxAttProperties.IsBusy="{Binding StartTimeFilterContent.IsFilterBusy}"
 						 attPTB:TextBoxAttProperties.IsTimeTextBox="True"
 						 attPTB:TextBoxAttProperties.IsOpenCalendarPopup="{Binding StartTimeFilterContent.IsCalendarOpen, UpdateSourceTrigger=PropertyChanged}"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding StartTimeFilterContent.FilterHelperContent}"
@@ -226,13 +319,14 @@
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
-						 Template="{StaticResource CalendarTextBoxTmpl}" />
+						 Template="{StaticResource CalendarTextBoxTmpl}">
+				</TextBox>
 
 				<TextBox Grid.Row="3"
 						 Margin="0,0,0,5"
 						 Grid.ColumnSpan="2"
 						 Tag="End time"
-						 attPTB:TextBoxAttProperties.IsBusy="False"
+						 attPTB:TextBoxAttProperties.IsBusy="{Binding EndTimeFilterContent.IsFilterBusy}"
 						 attPTB:TextBoxAttProperties.IsTimeTextBox="True"
 						 attPTB:TextBoxAttProperties.IsOpenCalendarPopup="{Binding EndTimeFilterContent.IsCalendarOpen}"
 						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding EndTimeFilterContent.FilterHelperContent}"
@@ -274,15 +368,33 @@
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
 						 Template="{StaticResource SearchTextBoxTmpl}"
-						 Text="{Binding MessageHighlightContent.FilterContent, UpdateSourceTrigger=PropertyChanged}"
-						 attPTB:TextBoxAttProperties.IsBusy="False"
+						 attPTB:TextBoxAttProperties.Search="{Binding MessageHighlightContent.Search}"
+						 attPTB:TextBoxAttProperties.IsBusy="{Binding MessageHighlightContent.IsFilterBusy}"
 						 attPTB:TextBoxAttProperties.IsFilterTextBox="False"
 						 attPTB:TextBoxAttProperties.EngineHelperContent="{Binding MessageHighlightContent.EngineHelperContent}"
 						 attPTB:TextBoxAttProperties.EngineLeftClickCommand="{Binding MessageHighlightContent.FilterLeftClickCommand}"
 						 attPTB:TextBoxAttProperties.EngineRightClickCommand="{Binding MessageHighlightContent.FilterRightClickCommand}"
 						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding MessageHighlightContent.IsFilterEnable}"
 						 attPTB:TextBoxAttProperties.Filter="{Binding MessageHighlightContent.CurrentFilterMode}"
-						 TextChanged="TextChangeEventToAvoidDotNetBindingBug" />
+						 TextChanged="TextChangeEventToAvoidDotNetBindingBug">
+					<TextBox.Style>
+						<Style TargetType="TextBox">
+							<Style.Triggers>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="NormalSearch">
+									<Setter Property="Text"
+											Value="{Binding MessageHighlightContent.FilterContent, UpdateSourceTrigger=Default}" />
+								</Trigger>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="QuickSearch">
+									<Setter Property="Text"
+											Value="{Binding MessageHighlightContent.FilterContent, UpdateSourceTrigger=PropertyChanged}" />
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</TextBox.Style>
+
+				</TextBox>
 
 			</Grid>
 

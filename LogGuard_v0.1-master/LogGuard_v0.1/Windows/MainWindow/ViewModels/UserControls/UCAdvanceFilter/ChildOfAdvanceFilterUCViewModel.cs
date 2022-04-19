@@ -1,4 +1,5 @@
-﻿using LogGuard_v0._1.AppResources.AttachedProperties;
+﻿using LogGuard_v0._1._Config;
+using LogGuard_v0._1.AppResources.AttachedProperties;
 using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines;
@@ -13,7 +14,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
     public abstract class ChildOfAdvanceFilterUCViewModel : BaseViewModel, ISourceFilter
     {
         private bool _isFilterBusy = false;
-
+        private SearchBehavior _searchType = SearchBehavior.None;
         protected IFilterEngine CurrentEngine { get; set; }
 
         [Bindable(true)]
@@ -21,6 +22,20 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 
         [Bindable(true)]
         public CommandExecuterModel FilterRightClickCommand { get; set; }
+
+        [Bindable(true)]
+        public SearchBehavior Search
+        {
+            get
+            {
+                return _searchType;
+            }
+            set
+            {
+                _searchType = value;
+                InvalidateOwn();
+            }
+        }
 
         [Bindable(true)]
         public bool IsFilterBusy
@@ -138,6 +153,15 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 
         public ChildOfAdvanceFilterUCViewModel(BaseViewModel parent) : base(parent)
         {
+            if (RUNE.IS_SUPPORT_QUICK_FILTER_TEXT_BOX)
+            {
+                Search = SearchBehavior.QuickSearch;
+            }
+            else
+            {
+                Search = SearchBehavior.NormalSearch;
+            }
+
             FilterRightClickCommand = new CommandExecuterModel((paramaters) =>
             {
                 IsFilterEnable = !IsFilterEnable;
