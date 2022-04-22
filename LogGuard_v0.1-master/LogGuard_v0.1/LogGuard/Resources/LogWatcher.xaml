@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:ctrl="clr-namespace:LogGuard_v0._1.LogGuard.Control"
+					xmlns:converter="clr-namespace:LogGuard_v0._1.Utils.Converters"
 					xmlns:sys="clr-namespace:System;assembly=mscorlib">
 	<sys:Double x:Key="GridViewWatcherHeaderHeight">30</sys:Double>
 
@@ -83,6 +84,7 @@
 		<Style.Resources>
 			<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">8.64</sys:Double>
 			<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
+			<converter:BooleanToVisibilityConverter x:Key="boolToVisibilityConverter" />
 
 			<SolidColorBrush Color="#292b2f"
 							 x:Key="FirstAlternationIndexBackground" />
@@ -90,7 +92,7 @@
 							 x:Key="SecondAlternationIndexBackground" />
 			<SolidColorBrush Color="#16171C"
 							 x:Key="HeaderBackground" />
-			<SolidColorBrush Color="#009a76"
+			<SolidColorBrush Color="#19009A76"
 							 x:Key="SelectedItemBackground" />
 
 			<SolidColorBrush Color="#019A75"
@@ -115,6 +117,21 @@
 			<SolidColorBrush Color="#1e2024"
 							 x:Key="SelectedRowIndicatorPanelBackground" />
 
+			<SolidColorBrush Color="#FF7E7D7E"
+							 x:Key="DefaultForeground_Level2" />
+			<SolidColorBrush Color="#ADFF55"
+							 x:Key="DebugLevelForeground_Level2" />
+			<SolidColorBrush Color="#FFB855"
+							 x:Key="WarningLevelForeground_Level2" />
+			<SolidColorBrush Color="#FF6255"
+							 x:Key="ErrorLevelForeground_Level2" />
+			<SolidColorBrush Color="#FFCAF1E1"
+							 x:Key="InfoLevelForeground_Level2" />
+			<SolidColorBrush Color="#FF52ABE8"
+							 x:Key="VerboseLevelForeground_Level2" />
+			<SolidColorBrush Color="#FFF0ADF1"
+							 x:Key="FatalLevelForeground_Level2" />
+			
 			<Style x:Key="{x:Type GridViewColumnHeader}"
 				   TargetType="GridViewColumnHeader"
 				   BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
@@ -141,9 +158,7 @@
 				Value="0" />
 		<Setter Property="ItemContainerStyle">
 			<Setter.Value>
-				<Style TargetType="ListViewItem">
-					<Setter Property="Height"
-							Value="30" />
+				<Style TargetType="ctrl:LogWatcherItem">
 					<Setter Property="FontSize"
 							Value="8" />
 					<Setter Property="BorderThickness"
@@ -152,11 +167,11 @@
 							Value="0" />
 					<Setter Property="Padding"
 							Value="0" />
-
 					<Setter Property="Template">
 						<Setter.Value>
-							<ControlTemplate TargetType="ListBoxItem">
-								<Border x:Name="Border"
+							<ControlTemplate TargetType="ctrl:LogWatcherItem">
+								<Border x:Name="PART_MainBorder"
+										Height="10"
 										SnapsToDevicePixels="true"
 										BorderThickness="0"
 										Background="{TemplateBinding Background}">
@@ -165,29 +180,102 @@
 											<ColumnDefinition Width="25" />
 											<ColumnDefinition Width="*" />
 										</Grid.ColumnDefinitions>
-										<Grid x:Name="FeedbackGrid"
-											  Visibility="Visible"
-											  Background="{DynamicResource SelectedRowIndicatorPanelBackground}">
-											<Path x:Name="IndicateSelectedArrow"
-												  Data="m0,187.51V0L93.76,93.76ZM10,24.14V163.37L79.61,93.76Z"
-												  Fill="#FFF0F0F0"
-												  Margin="13,10,1,10"
-												  Stretch="Uniform"
-												  Visibility="Hidden" />
-										</Grid>
+
+										<Rectangle x:Name="FeedbackRec"
+												   Fill="{DynamicResource SelectedRowIndicatorPanelBackground}" />
+
+										<Rectangle x:Name="ExpandRowBackground"
+												   Grid.Column="1"
+												   Visibility="Hidden"
+												   Fill="{DynamicResource SelectedRowIndicatorPanelBackground}" />
+
+										<Rectangle x:Name="ExpandRowLine"
+												   Grid.Column="1"
+												   Visibility="Hidden"
+												   Height="3"
+												   StrokeThickness="0"
+												   VerticalAlignment="Center"
+												   Fill="{DynamicResource Foreground_Level2}" />
+
+										<Path x:Name="Redo"
+											  IsHitTestVisible="False"
+											  Height="8"
+											  Width="8"
+											  VerticalAlignment="Center"
+											  HorizontalAlignment="Center"
+											  Data="{Binding Source={StaticResource AdvanceSearchIconPathGeomerty}}"
+											  Fill="#FFF0F0F0"
+											  Stretch="Uniform"
+											  Visibility="Hidden" />
+
+										<Rectangle x:Name="FeedBackRedo"
+												   IsHitTestVisible="False"
+												   Height="15"
+												   Width="15"
+												   RadiusX="10"
+												   RadiusY="10"
+												   VerticalAlignment="Center"
+												   HorizontalAlignment="Center"
+												   Fill="#19B8E7F9"
+												   Stroke="#FFB8EAF9"
+												   Visibility="{Binding Path=IsMouseOver,
+																		ElementName=FeedbackRec, 
+																		Converter={StaticResource boolToVisibilityConverter}}" />
+
+										<Path x:Name="IndicateSelectedArrow"
+											  Data="m0,187.51V0L93.76,93.76ZM10,24.14V163.37L79.61,93.76Z"
+											  Fill="#FFF0F0F0"
+											  Margin="13,10,1,10"
+											  Stretch="Uniform"
+											  Visibility="Hidden" />
+
 										<Rectangle x:Name="FeedbackBorder"
-												StrokeThickness="1"
-												Grid.Column="1"
-												Fill="#19B8E7F9"
-												Stroke="#FFB8EAF9"
-												Visibility="Hidden"
-												HorizontalAlignment="Stretch" />
-										<GridViewRowPresenter Grid.Column="1"
+												   StrokeThickness="1"
+												   Grid.Column="1"
+												   Fill="#19B8E7F9"
+												   Stroke="#FFB8EAF9"
+												   Visibility="Hidden"
+												   HorizontalAlignment="Stretch" />
+
+										<GridViewRowPresenter x:Name="PART_RowPresenter"
+															  Grid.Column="1"
 															  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
 
 									</Grid>
 								</Border>
 								<ControlTemplate.Triggers>
+									<DataTrigger Binding="{Binding Path=ViewType}"
+												 Value="0">
+										<Setter Property="Height"
+												TargetName="FeedBackRedo"
+												Value="0" />
+										<Setter Property="Width"
+												TargetName="FeedBackRedo"
+												Value="0" />
+									</DataTrigger>
+
+									<DataTrigger Binding="{Binding Path=ViewType}"
+												 Value="1">
+										<Setter Property="Visibility"
+												TargetName="ExpandRowBackground"
+												Value="Visible" />
+										<Setter Property="Visibility"
+												TargetName="ExpandRowLine"
+												Value="Visible" />
+										<Setter Property="Visibility"
+												TargetName="Redo"
+												Value="Visible" />
+										<Setter Property="Height"
+												TargetName="FeedbackBorder"
+												Value="0" />
+										<Setter Property="Width"
+												TargetName="FeedbackBorder"
+												Value="0" />
+										<Setter Property="Visibility"
+												TargetName="PART_RowPresenter"
+												Value="Collapsed" />
+									</DataTrigger>
+
 									<Trigger Property="IsMouseOver"
 											 Value="True">
 										<Setter Property="Visibility"
@@ -209,8 +297,8 @@
 										<Setter Property="StrokeThickness"
 												TargetName="FeedbackBorder"
 												Value="0" />
-										<Setter Property="Background"
-												TargetName="FeedbackGrid"
+										<Setter Property="Fill"
+												TargetName="FeedbackRec"
 												Value="{StaticResource Background_Level1}" />
 									</Trigger>
 								</ControlTemplate.Triggers>
@@ -218,6 +306,196 @@
 						</Setter.Value>
 					</Setter>
 					<Style.Triggers>
+						<!--Log view template-->
+						<DataTrigger Binding="{Binding Path=ViewType}"
+									 Value="0">
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="ctrl:LogWatcherItem">
+										<Border x:Name="PART_MainBorder"
+												Height="30"
+												SnapsToDevicePixels="true"
+												BorderThickness="0"
+												Background="{TemplateBinding Background}">
+											<Grid>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="25" />
+													<ColumnDefinition Width="*" />
+												</Grid.ColumnDefinitions>
+
+												<Rectangle x:Name="FeedbackRec"
+														   Fill="{DynamicResource SelectedRowIndicatorPanelBackground}" />
+
+												<Path x:Name="IndicateSelectedArrow"
+													  Data="m0,187.51V0L93.76,93.76ZM10,24.14V163.37L79.61,93.76Z"
+													  Fill="#FFF0F0F0"
+													  Margin="13,10,1,10"
+													  Stretch="Uniform"
+													  Visibility="Hidden" />
+
+												<Rectangle x:Name="FeedbackBorder"
+														   StrokeThickness="1"
+														   Grid.Column="1"
+														   Fill="#19B8E7F9"
+														   Stroke="#FFB8EAF9"
+														   Visibility="Hidden"
+														   HorizontalAlignment="Stretch" />
+
+												<GridViewRowPresenter x:Name="PART_RowPresenter"
+																	  Grid.Column="1"
+																	  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+
+											</Grid>
+										</Border>
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsMouseOver"
+													 Value="True">
+												<Setter Property="Visibility"
+														TargetName="FeedbackBorder"
+														Value="Visible" />
+											</Trigger>
+
+											<Trigger Property="IsSelected"
+													 Value="True">
+												<Setter Property="Visibility"
+														TargetName="FeedbackBorder"
+														Value="Visible" />
+												<Setter Property="Visibility"
+														TargetName="IndicateSelectedArrow"
+														Value="Visible" />
+												<Setter Property="Fill"
+														TargetName="FeedbackBorder"
+														Value="{DynamicResource SelectedItemBackground}" />
+												<Setter Property="StrokeThickness"
+														TargetName="FeedbackBorder"
+														Value="0" />
+												<Setter Property="Fill"
+														TargetName="FeedbackRec"
+														Value="{StaticResource Background_Level1}" />
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</DataTrigger>
+
+						<!--Expandable view template-->
+						<DataTrigger Binding="{Binding Path=ViewType}"
+									 Value="1">
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="ctrl:LogWatcherItem">
+										<Border x:Name="PART_MainBorder"
+												Height="17"
+												SnapsToDevicePixels="true"
+												BorderThickness="0">
+											<Grid>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="10" />
+													<ColumnDefinition Width="auto" />
+													<ColumnDefinition Width="5" />
+													<ColumnDefinition Width="auto" />
+													<ColumnDefinition Width="5" />
+													<ColumnDefinition Width="*" />
+												</Grid.ColumnDefinitions>
+												<Rectangle x:Name="ExpandRowBackground"
+														   Visibility="Visible"
+														   Fill="{DynamicResource SelectedRowIndicatorPanelBackground}" />
+
+												<Rectangle x:Name="ExpandRowLine"
+														   Grid.Column="5"
+														   Height="3"
+														   StrokeThickness="0"
+														   VerticalAlignment="Center"
+														   Fill="{DynamicResource Foreground_Level1}" />
+
+												<Rectangle x:Name="RedoRecBtn"
+														   Grid.Column="1"
+														   Height="15"
+														   Width="15"
+														   RadiusX="3"
+														   RadiusY="3"
+														   Fill="{StaticResource Background_Level7}">
+													<Rectangle.InputBindings>
+														<MouseBinding Command="{Binding ExpandButtonCommand}"
+																	  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ctrl:LogWatcherItem}}}"
+																	  MouseAction="LeftClick"/>
+													</Rectangle.InputBindings>
+												</Rectangle>
+
+												<Path x:Name="Redo"
+													  Grid.Column="1"
+													  IsHitTestVisible="False"
+													  Height="8"
+													  Width="8"
+													  VerticalAlignment="Center"
+													  HorizontalAlignment="Center"
+													  Data="{Binding Source={StaticResource RedoIcon}}"
+													  Fill="{StaticResource Foreground_Level3}"
+													  Stretch="Uniform" />
+
+												<Rectangle x:Name="FeedBackRedo"
+														   Grid.Column="1"
+														   IsHitTestVisible="False"
+														   Height="15"
+														   Width="15"
+														   RadiusX="3"
+														   RadiusY="3"
+														   VerticalAlignment="Center"
+														   HorizontalAlignment="Center"
+														   Fill="#19B8E7F9"
+														   Stroke="#FFB8EAF9"
+														   Visibility="{Binding Path=IsMouseOver,
+																		ElementName=RedoRecBtn, 
+																		Converter={StaticResource boolToVisibilityConverter}}" />
+
+
+												<Rectangle x:Name="DeleteRecBtn"
+														   Grid.Column="3"
+														   Height="15"
+														   Width="15"
+														   RadiusX="3"
+														   RadiusY="3"
+														   Fill="{StaticResource Background_Level7}">
+													<Rectangle.InputBindings>
+														<MouseBinding Command="{Binding DeleteButtonCommand}"
+																	  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ctrl:LogWatcherItem}}}"
+																	  MouseAction="LeftClick" />
+													</Rectangle.InputBindings>
+												</Rectangle>
+
+												<Path x:Name="Delete"
+													  Grid.Column="3"
+													  IsHitTestVisible="False"
+													  Height="8"
+													  Width="8"
+													  VerticalAlignment="Center"
+													  HorizontalAlignment="Center"
+													  Data="{Binding Source={StaticResource TrashIcon}}"
+													  Fill="{StaticResource Foreground_Level3}"
+													  Stretch="Uniform" />
+
+												<Rectangle x:Name="FeedBackDelete"
+														   Grid.Column="3"
+														   IsHitTestVisible="False"
+														   Height="15"
+														   Width="15"
+														   RadiusX="3"
+														   RadiusY="3"
+														   VerticalAlignment="Center"
+														   HorizontalAlignment="Center"
+														   Fill="#19B8E7F9"
+														   Stroke="#FFB8EAF9"
+														   Visibility="{Binding Path=IsMouseOver,
+																		ElementName=DeleteRecBtn, 
+																		Converter={StaticResource boolToVisibilityConverter}}" />
+											</Grid>
+										</Border>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</DataTrigger>
+
 						<Trigger Property="IsMouseOver"
 								 Value="True">
 							<Setter Property="Background"

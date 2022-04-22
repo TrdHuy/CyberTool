@@ -26,7 +26,13 @@
 			<ColumnDefinition Width="0.35*" />
 			<ColumnDefinition Width="0.35*" />
 			<ColumnDefinition Width="0.35*" />
-			<ColumnDefinition Width="2.34*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.24*" />
 			<ColumnDefinition Width="2.82*" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
@@ -50,9 +56,9 @@
 							 Grid.Row="1"
 							 Margin="0,0,15,15"
 							 Grid.RowSpan="2"
-							 Grid.ColumnSpan="5" />
+							 Grid.ColumnSpan="11" />
 
-		<uc:UC_LogManager Grid.Column="6"
+		<uc:UC_LogManager Grid.Column="13"
 						  Grid.Row="1"
 						  Margin="0,0,15,15"
 						  Grid.RowSpan="3" />
@@ -145,10 +151,24 @@
 				  Stretch="Uniform" />
 		</Button>
 
+		<Button  Grid.Row="3"
+				 x:Name="ClearButton"
+				 Command="{Binding CommandViewModel.ClearButtonCommand}"
+				 Grid.Column="5"
+				 Margin="0,0,0,15"
+				 Background="{StaticResource ButtonBackground_Level1}"
+				 HorizontalAlignment="Left"
+				 Template="{StaticResource CircleBtnTmpl}">
+			<Path Fill="#FFF0F0F0"
+				  Margin="5"
+				  Data="{Binding Source={StaticResource ClearButtonIcon}}"
+				  Stretch="Uniform" />
+		</Button>
+
 		<logguard:LogWatcher UseAutoScroll="{Binding UseAutoScroll}"
 							 Grid.Row="4"
 							 Grid.Column="0"
-							 Grid.ColumnSpan="7"
+							 Grid.ColumnSpan="13"
 							 LogWatcherItemsSource="{Binding ItemsSource}"
 							 ScrollViewer.HorizontalScrollBarVisibility="Visible"
 							 ScrollViewer.VerticalScrollBarVisibility="Visible"
@@ -224,6 +244,14 @@
 					</GridViewColumn>
 				</logguard:GridViewWatcher>
 			</logguard:LogWatcher.View>
+			
+			<logguard:LogWatcher.InputBindings>
+				<KeyBinding Gesture="Back"
+							Command="{Binding CommandViewModel.LWDeleteGestureCommand}" 
+							CommandParameter="{Binding ElementName=LogView}"/>
+				<KeyBinding Gesture="Ctrl+A"
+							Command="{Binding CommandViewModel.LWCtrlAGestureCommand}" />
+			</logguard:LogWatcher.InputBindings>
 		</logguard:LogWatcher>
 
 	</Grid>

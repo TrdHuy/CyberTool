@@ -18,72 +18,15 @@ using System.Windows.Shapes;
 
 namespace LogGuard_v0._1.Windows.MainWindow.View
 {
-    public class ViewModel : INotifyPropertyChanged, ILogWatcherElements
-    {
-        private static Random random = new Random();
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public ViewModel()
-        {
-            AutoGenerateContent();
-        }
-        public void OnChanged(string propName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-        }
-
-        public int Line { get; set; }
-        public string Level { get; set; }
-        public string Content1 { get; set; }
-        public string Content2 { get; set; }
-        public string Content3 { get; set; }
-
-        public void AutoGenerateContent()
-        {
-            Content1 = RandomString(random.Next(20, 1000));
-            Content2 = RandomString(random.Next(10, 15));
-            Content3 = RandomString(random.Next(8, 15));
-            Level = RandomString(1, "DVEFIW");
-        }
-
-        public static string RandomString(int length, string chars = "")
-        {
-            chars = string.IsNullOrEmpty(chars) ? "ABCDE FGHIJKLMNOPQRSTUVWXYZqwertyuiopasdfghjklmnbvcxz0123456789" : chars;
-            return new string(Enumerable.Repeat(chars, length)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
-    }
-
-    public class RangeObservableCollection<T> : ObservableCollection<T>
-    {
-        private object syncObject = new object();
-        public RangeObservableCollection()
-        {
-            BindingOperations.EnableCollectionSynchronization(this, syncObject);
-        }
-    }
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : LogGuardWindow
     {
-        public RangeObservableCollection<ViewModel> RawSource { get; set; }
-
         public MainWindow() : base()
         {
             InitializeComponent();
-
-            //int quantity = 1000;
-            //RawSource = new RangeObservableCollection<ViewModel>();
-            //for (int i = 0; i < quantity; i++)
-            //{
-            //    var x = new ViewModel() { Line = i };
-            //    RawSource.Add(x);
-            //}
-            //LogView.LogWatcherItemsSource = RawSource;
-            //mainFrame.Source = new Uri("/LogGuard_v0.1;component/Windows/MainWindow/View/Pages/LogGuard.xaml", UriKind.Relative);
         }
     }
 }

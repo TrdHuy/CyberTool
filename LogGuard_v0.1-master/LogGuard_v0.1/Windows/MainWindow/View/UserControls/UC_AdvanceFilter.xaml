@@ -345,7 +345,7 @@
 				  Grid.RowSpan="2"
 				  Grid.Row="0">
 				<Grid.RowDefinitions>
-					<RowDefinition Height="*" />
+					<RowDefinition Height="0.8*" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="*" />
@@ -398,7 +398,7 @@
 
 			</Grid>
 
-			<Grid Margin="10,10,10,10"
+			<Grid Margin="10,10,0,10"
 				  Grid.Column="3"
 				  x:Name="LogPercentGrid"
 				  ClipToBounds="True"
@@ -411,14 +411,70 @@
 					<RowDefinition Height="0.6*" />
 				</Grid.RowDefinitions>
 
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="auto	" />
+				</Grid.ColumnDefinitions>
 
-				<StackPanel Orientation="Horizontal">
-					<TextBlock Text="{Binding CurrentLogLevel}"
-							   FontSize=" 9"
-							   Width="60"
-							   VerticalAlignment="Center"
-							   FontWeight="Bold"
-							   Foreground="{StaticResource Foreground_Level1}" />
+				<TextBlock FontSize="9"
+						   Grid.ColumnSpan="2"
+						   VerticalAlignment="Center"
+						   HorizontalAlignment="Left">
+					<TextBlock.Inlines>
+						<Run Text="Log measure tool: "
+							 FontWeight="Bold"
+							 Foreground="{StaticResource Foreground_Level1}" />
+						<Run Text="{Binding CurrentLogLevel}">
+							<Run.Style>
+								<Style TargetType="Run">
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding ElementName=InfoRadialCheckBox, Path=IsChecked}"
+													 Value="True">
+											<Setter Property="Foreground"
+													Value="{StaticResource InfoLevelForeground_Level2}" />
+										</DataTrigger>
+
+										<DataTrigger Binding="{Binding ElementName=ErrorRadialCheckBox, Path=IsChecked}"
+													 Value="True">
+											<Setter Property="Foreground"
+													Value="{StaticResource ErrorLevelForeground_Level2}" />
+										</DataTrigger>
+
+										<DataTrigger Binding="{Binding ElementName=VerboseRadialCheckBox, Path=IsChecked}"
+													 Value="True">
+											<Setter Property="Foreground"
+													Value="{StaticResource VerboseLevelForeground_Level2}" />
+										</DataTrigger>
+
+										<DataTrigger Binding="{Binding ElementName=FatalRadialCheckBox, Path=IsChecked}"
+													 Value="True">
+											<Setter Property="Foreground"
+													Value="{StaticResource FatalLevelForeground_Level2}" />
+										</DataTrigger>
+
+										<DataTrigger Binding="{Binding ElementName=WarningRadialCheckBox, Path=IsChecked}"
+													 Value="True">
+											<Setter Property="Foreground"
+													Value="{StaticResource WarningLevelForeground_Level2}" />
+										</DataTrigger>
+
+										<DataTrigger Binding="{Binding ElementName=DebugRadialCheckBox, Path=IsChecked}"
+													 Value="True">
+											<Setter Property="Foreground"
+													Value="{StaticResource DebugLevelForeground_Level2}" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</Run.Style>
+						</Run>
+					</TextBlock.Inlines>
+				</TextBlock>
+
+				<StackPanel Orientation="Vertical"
+							Grid.Column="1"
+							Grid.Row="1"
+							VerticalAlignment="Center"
+							Margin="5,0,0,0">
 					<CheckBox x:Name="InfoRadialCheckBox"
 							  Template="{StaticResource ColorCheckBoxTmpl}"
 							  VerticalAlignment="Center"
@@ -428,7 +484,7 @@
 							  Width="8"
 							  Checked="RadialCheckBox_Checked"
 							  Height="8"
-							  Margin="10,0,0,0"
+							  Margin="0,0,0,0"
 							  Background="{StaticResource InfoLevelForeground_Level2}" />
 					<CheckBox x:Name="ErrorRadialCheckBox"
 							  Template="{StaticResource ColorCheckBoxTmpl}"
@@ -439,7 +495,7 @@
 							  BorderBrush="{StaticResource ErrorLevelForeground_Level2}"
 							  Width="8"
 							  Height="8"
-							  Margin="5,0,0,0"
+							  Margin="0,5,0,0"
 							  Background="{StaticResource ErrorLevelForeground_Level2}" />
 					<CheckBox x:Name="DebugRadialCheckBox"
 							  Template="{StaticResource ColorCheckBoxTmpl}"
@@ -450,7 +506,7 @@
 							  BorderBrush="{StaticResource DebugLevelForeground_Level2}"
 							  Width="8"
 							  Height="8"
-							  Margin="5,0,0,0"
+							  Margin="0,5,0,0"
 							  Background="{StaticResource DebugLevelForeground_Level2}" />
 					<CheckBox x:Name="WarningRadialCheckBox"
 							  Template="{StaticResource ColorCheckBoxTmpl}"
@@ -461,7 +517,7 @@
 							  BorderBrush="{StaticResource WarningLevelForeground_Level2}"
 							  Width="8"
 							  Height="8"
-							  Margin="5,0,0,0"
+							  Margin="0,5,0,0"
 							  Background="{StaticResource WarningLevelForeground_Level2}" />
 					<CheckBox x:Name="VerboseRadialCheckBox"
 							  Template="{StaticResource ColorCheckBoxTmpl}"
@@ -472,7 +528,7 @@
 							  BorderBrush="{StaticResource VerboseLevelForeground_Level2}"
 							  Width="8"
 							  Height="8"
-							  Margin="5,0,0,0"
+							  Margin="0,5,0,0"
 							  Background="{StaticResource VerboseLevelForeground_Level2}" />
 					<CheckBox x:Name="FatalRadialCheckBox"
 							  Template="{StaticResource ColorCheckBoxTmpl}"
@@ -483,7 +539,7 @@
 							  BorderBrush="{StaticResource FatalLevelForeground_Level2}"
 							  Width="8"
 							  Height="8"
-							  Margin="5,0,0,0"
+							  Margin="0,5,0,0"
 							  Background="{StaticResource FatalLevelForeground_Level2}" />
 				</StackPanel>
 
@@ -719,12 +775,10 @@
 				<ctrl:RadialProgressBar x:Name="LogLevelRadialPB"
 										Grid.Row="1"
 										Offset="12"
-										StrokeThickness="15"
+										StrokeThickness="12"
 										MaxWidth="220"
 										Value="{Binding LogValue}"
 										Maximum="100"
-										DetailContent="{Binding DetailContent}"
-										ExtraContent="{Binding ExtraContent}"
 										FontFamily="Calibri">
 
 					<ctrl:RadialProgressBar.BgPathBackground>

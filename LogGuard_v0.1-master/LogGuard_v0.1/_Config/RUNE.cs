@@ -19,6 +19,8 @@ namespace LogGuard_v0._1._Config
         public static bool IS_SUPPORT_HIGH_CPU_LOG_CAPTURE { get; }
            = FeaturesParser.FeatureOrders["HUY.TD1_LOGGUARD_IS_SUPPORT_HIGH_CPU_LOG_CAPTURE"];
 
+        public static bool IS_SUPPORT_DELETE_LOG_LINE { get; }
+           = FeaturesParser.FeatureOrders["HUY.TD1_LOGGUARD_IS_SUPPORT_DELETE_LOG_LINE"];
 
         private sealed class FeaturesParser
         {

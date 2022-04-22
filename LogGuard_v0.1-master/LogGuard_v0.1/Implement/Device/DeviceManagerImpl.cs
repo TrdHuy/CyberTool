@@ -33,7 +33,7 @@ namespace LogGuard_v0._1.Implement.Device
         public event SelectedDeviceChangedHandler SelectedDeviceChanged;
         public event SerialPortChangedHandler SerialPortChanged;
         public event SelectedDeviceUnplugedHandler SelectedDeviceUnpluged;
-        
+
         public RangeObservableCollection<DeviceItemViewModel> DeviceSource => _deviceSource;
         public List<IDeviceHolder> DeviceHolders => _deviceHolders;
         public DeviceItemViewModel SelectedDevice
@@ -67,7 +67,7 @@ namespace LogGuard_v0._1.Implement.Device
             var selectedDevice = SelectedDevice;
             DeviceSource.Clear();
             SerialPortChanged?.Invoke(this, e);
-            if(e.EventType == EventType.Removal)
+            if (e.EventType == EventType.Removal)
             {
                 UpdateListDevicesWhenSerialPortRemoved(selectedDevice);
             }
@@ -85,7 +85,7 @@ namespace LogGuard_v0._1.Implement.Device
                            {
                                var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
 
-                               var res = await Task.Run(StartScanDevice, token);
+                               var res = StartScanDevice();
                                if (token.IsCancellationRequested)
                                {
                                    result.MesResult = MessageAsyncTaskResult.Aborted;

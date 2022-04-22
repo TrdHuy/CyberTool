@@ -7,6 +7,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.Models.Builder
     {
         private static int _currentYear = DateTime.Now.Year;
         private LogInfo _logInfo;
+        private int _lineNumber;
 
         public LogInfo LogInfo
         {
@@ -15,6 +16,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.Models.Builder
 
         // A fresh builder instance should contain a blank log object, which
         // is used in further assembly.
+
         public LogBuilder()
         {
             _logInfo = new LogInfo();
@@ -27,7 +29,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.Models.Builder
 
 
         // All log val with the same log line instance.
-        public LogBuilder BuildLine(object val)
+        public LogBuilder BuildLine(int val)
         {
             _logInfo[LogInfo.KEY_LINE] = val;
             return this;

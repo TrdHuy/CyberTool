@@ -209,6 +209,8 @@ namespace LogGuard_v0._1.Base.AsyncTask
             }
         }
 
+        // TODO: Cần viết lại method này ngoài UI thread
+        // Có thể sử dụng Task.Run để đạt được
         public static async void AsyncExecute(AsyncTask asyncTask)
         {
             if (asyncTask == null)
@@ -259,6 +261,8 @@ namespace LogGuard_v0._1.Base.AsyncTask
             }
         }
 
+        // TODO: Cần viết lại method này ngoài UI thread
+        // Có thể sử dụng Task.Run để đạt được
         public static async void CancelableAsyncExecute(AsyncTask asyncTask)
         {
             if (asyncTask == null)
@@ -289,7 +293,7 @@ namespace LogGuard_v0._1.Base.AsyncTask
                     }
                     catch (Exception ex)
                     {
-                       asyncTask.IsCanceled = true;
+                        asyncTask.IsCanceled = true;
                     }
 
                     asynTaskExecuteWatcher.Stop();
@@ -328,24 +332,31 @@ namespace LogGuard_v0._1.Base.AsyncTask
             }
         }
 
-        public static async void ParamAsyncExecute(AsyncTask asyncTask, object param)
+
+        #region ParamAsyncExecute
+        public static async void ParamAsyncExecute(AsyncTask asyncTask, object param, bool isAsyncCallback = false)
         {
-            if (asyncTask == null)
-                return;
 
             var asyncTaskResult = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
 
             try
             {
                 var asynTaskExecuteWatcher = Stopwatch.StartNew();
-
                 var canExecute = asyncTask.CanExecute == null ? true : (bool)asyncTask.CanExecute?.Invoke();
 
                 if (canExecute)
                 {
                     try
                     {
-                        asyncTaskResult = await asyncTask.ParamExecute?.Invoke(param, asyncTask._cancellationTokenSource.Token);
+                        ///====================
+                        /// Execute task
+                        ///====================
+                        asyncTaskResult = await Task.Run(async () =>
+                        {
+                            var res = await asyncTask.ParamExecute?.Invoke(param, asyncTask._cancellationTokenSource.Token);
+                            return res;
+                        }, asyncTask._cancellationTokenSource.Token);
+
                         if (asyncTask._cancellationTokenSource.Token.IsCancellationRequested)
                         {
                             throw new OperationCanceledException();
@@ -359,6 +370,7 @@ namespace LogGuard_v0._1.Base.AsyncTask
                     catch (Exception ex)
                     {
                         asyncTask.IsCanceled = true;
+                        asyncTaskResult.MesResult = MessageAsyncTaskResult.Aborted;
                     }
 
                     asynTaskExecuteWatcher.Stop();
@@ -380,10 +392,20 @@ namespace LogGuard_v0._1.Base.AsyncTask
                     }
                     asyncTask.IsCompleted = true;
 
-                    //asynTaskExecuteWatcher = Stopwatch.StartNew();
-                    asyncTask.ParamExecuteCallbackHandler?.Invoke(param, asyncTaskResult);
-                    //asynTaskExecuteWatcher.Stop();
-                    //Console.WriteLine("Callback time = " + asynTaskExecuteWatcher.ElapsedMilliseconds + "(ms)");
+                    ///====================
+                    /// Callback method
+                    ///====================
+                    if (isAsyncCallback)
+                    {
+                        await Task.Run(() =>
+                        {
+                            asyncTask.ParamExecuteCallbackHandler?.Invoke(param, asyncTaskResult);
+                        });
+                    }
+                    else
+                    {
+                        asyncTask.ParamExecuteCallbackHandler?.Invoke(param, asyncTaskResult);
+                    }
 
                     asyncTask.IsCompletedCallback = true;
                 }
@@ -397,6 +419,7 @@ namespace LogGuard_v0._1.Base.AsyncTask
             }
         }
 
+        #endregion
 
         public static void CancelAsyncExecute(AsyncTask asyncTask)
         {

@@ -79,6 +79,7 @@
     <Compile Include="Base\AsyncTask\AsyncTaskResult.cs" />
     <Compile Include="Base\AsyncTask\IAsyncTask.cs" />
     <Compile Include="Base\Command\BaseCommandImpl.cs" />
+    <Compile Include="Base\Command\BaseDotNetCommandImpl.cs" />
     <Compile Include="Base\Device\IDeviceCmdExecuter.cs" />
     <Compile Include="Base\AndroidLog\ILogInfoManager.cs" />
     <Compile Include="Base\Device\IDeviceHolder.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="LogGuard\Control\HanzaTreeViewer.cs" />
     <Compile Include="LogGuard\Control\HanzaTreeViewItem.cs" />
     <Compile Include="LogGuard\Control\HeaderLabel.cs" />
+    <Compile Include="LogGuard\Control\LogWatcherItem.cs" />
     <Compile Include="LogGuard\Control\RadialProgressBar.cs" />
     <Compile Include="LogGuard\Control\TrippleToggle.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -156,6 +158,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Utils\Converters\StringToGeoPathConverter.cs" />
     <Compile Include="Utils\CustomAttachedProperties.cs" />
     <Compile Include="Utils\Definitions\LogGuardDefinition.cs" />
@@ -170,7 +173,10 @@
     <Compile Include="Windows\FloatinWindow\FloatingWindow.xaml.cs">
       <DependentUpon>FloatingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\MainWindow\Action\Gestures\MSW_LogWatcher_CtrlAGestureAction.cs" />
+    <Compile Include="Windows\MainWindow\Action\Gestures\MSW_LogWatcher_DeleteGestureAction.cs" />
     <Compile Include="Windows\MainWindow\Action\MSW_CommandExecuterBuilder.cs" />
+    <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_ClearButtonAction.cs" />
     <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_PlayButtonAction.cs" />
     <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_RefreshDeviceButtonAction.cs" />
     <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_StopButtonAction.cs" />

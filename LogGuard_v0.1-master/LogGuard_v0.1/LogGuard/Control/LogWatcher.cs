@@ -345,6 +345,7 @@ namespace LogGuard_v0._1.LogGuard.Control
             var I = Style.Resources["InfoLevelForeground_Level2"] as System.Windows.Media.SolidColorBrush;
             var W = Style.Resources["WarningLevelForeground_Level2"] as System.Windows.Media.SolidColorBrush;
             var E = Style.Resources["ErrorLevelForeground_Level2"] as System.Windows.Media.SolidColorBrush;
+            var def = Style.Resources["DefaultLevelForeground_Level2"] as System.Windows.Media.SolidColorBrush;
 
             DefaultMapperColors.Add("F", F == null ? Color.FromArgb(252, 133, 255) :
                 Color.FromArgb(F.Color.A,
@@ -377,6 +378,12 @@ namespace LogGuard_v0._1.LogGuard.Control
                 W.Color.B));
 
             DefaultMapperColors.Add("D", D == null ? Color.FromArgb(173, 255, 85) :
+                Color.FromArgb(D.Color.A,
+                D.Color.R,
+                D.Color.G,
+                D.Color.B));
+
+            DefaultMapperColors.Add("default", def == null ? Color.Gray :
                 Color.FromArgb(D.Color.A,
                 D.Color.R,
                 D.Color.G,
@@ -482,6 +489,26 @@ namespace LogGuard_v0._1.LogGuard.Control
             HandleDrawLogWatcherMap();
         }
 
+        protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
+        {
+            base.PrepareContainerForItemOverride(element, item);
+            switch (element)
+            {
+                case LogWatcherItem ele:
+                    var context = item as ILogWatcherElements;
+                    if(context != null)
+                    {
+                        ele.SetContext(context);
+                    }
+                    break;
+            }
+        }
+
+        protected override DependencyObject GetContainerForItemOverride()
+        {
+            return new LogWatcherItem();
+
+        }
         private void HandleLogWatcherItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             HandleAutoScrollDown();
@@ -598,7 +625,7 @@ namespace LogGuard_v0._1.LogGuard.Control
                 ILogWatcherElements lwe = null;
                 lwe = copiedItems[i] as ILogWatcherElements;
 
-                Brush br = new SolidBrush(DefaultMapperColors["I"]);
+                Brush br = new SolidBrush(DefaultMapperColors["default"]);
 
                 if (lwe != null)
                 {
@@ -606,11 +633,18 @@ namespace LogGuard_v0._1.LogGuard.Control
                     {
                         if (isErrorMap)
                         {
-                            br = new SolidBrush(DefaultMapperColors[lwe.Level == "E" ? "E" : "I"]);
+                            br = new SolidBrush(DefaultMapperColors[lwe.Level == "E" ? "E" : "default"]);
                         }
                         else
                         {
-                            br = new SolidBrush(DefaultMapperColors[lwe.Level]);
+                            try
+                            {
+                                br = new SolidBrush(DefaultMapperColors[lwe.Level]);
+                            }
+                            catch
+                            {
+                                br = new SolidBrush(DefaultMapperColors["default"]);
+                            }
                         }
                     }
                 }
@@ -620,8 +654,6 @@ namespace LogGuard_v0._1.LogGuard.Control
             }
         }
 
-
-        private Random ColorRandom = new Random();
 
         private void HandleAutoScrollDown()
         {

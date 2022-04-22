@@ -14,6 +14,10 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
     {
         public CommandExecuterModel PlayButtonCommand { get; set; }
         public CommandExecuterModel StopButtonCommand { get; set; }
+        public CommandExecuterModel ClearButtonCommand { get; set; }
+        public CommandExecuterModel LWCtrlAGestureCommand { get; set; }
+        public CommandExecuterModel LWDeleteGestureCommand { get; set; }
+        
 
         public MSW_LogWatcherControlButtonCommandVM(BaseViewModel parentsModel) : base(parentsModel)
         {
@@ -26,6 +30,24 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
             {
                 return OnKey(KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_STOP_FEATURE
                     , paramaters);
+            });
+
+            ClearButtonCommand = new CommandExecuterModel((paramaters) =>
+            {
+                return OnKey(KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_CLEAR_FEATURE
+                    , paramaters);
+            });
+
+            LWCtrlAGestureCommand = new CommandExecuterModel((paramaters) =>
+            {
+                return OnKey(KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_CTRLA_GESTURE_FEATURE
+                   , paramaters);
+            });
+
+            LWDeleteGestureCommand = new CommandExecuterModel((paramaters) =>
+            {
+                return OnKey(KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_DELETE_GESTURE_FEATURE
+                   , paramaters);
             });
         }
     }

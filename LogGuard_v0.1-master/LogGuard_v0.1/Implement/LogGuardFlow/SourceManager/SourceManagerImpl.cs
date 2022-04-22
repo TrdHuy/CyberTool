@@ -1,14 +1,17 @@
 ﻿
 using LogGuard_v0._1.Base.AsyncTask;
+using LogGuard_v0._1.Base.Command;
 using LogGuard_v0._1.Base.Log;
 using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Implement.AndroidLog;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceHighlightManager;
+using LogGuard_v0._1.LogGuard.Control;
 using LogGuard_v0._1.Utils;
 using LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -20,6 +23,8 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
 {
     public class SourceManagerImpl : ISourceManager
     {
+        private static Logger Logger { get; } = new Logger("SourceManagerImpl");
+
         private static SourceManagerImpl _instance;
         private RangeObservableCollection<LogWatcherItemViewModel> _rawSource;
         private RangeObservableCollection<LogWatcherItemViewModel> _displaySource;
@@ -71,8 +76,6 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
 
         }
 
-
-
         public void AddItem(string line)
         {
             _rawLog.Add(line);
@@ -83,6 +86,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
                 AddItem(livm);
             }
         }
+
         public void AddItem(LogWatcherItemViewModel model)
         {
             if (model == null)
@@ -106,11 +110,13 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
                     SourceHighlightManager.FilterHighlight(model);
                     SourceHighlightManager.Highlight(model);
 
+                    model.LineNumber = _displaySource.Count;
                     _displaySource.Add(model);
+
                 }
             }
 
-            
+
             SourceCollectionChanged?.Invoke(this);
         }
 
@@ -131,12 +137,12 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
 
         public int DisplayItemsCount()
         {
-            return DisplaySource.Count();
+            return DisplaySource.Count;
         }
 
         public int RawItemsCount()
         {
-            return RawSource.Count();
+            return RawSource.Count;
         }
 
         public void RemoveItem(LogWatcherItemViewModel model)
@@ -243,6 +249,9 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
             {
                 foreach (var item in RawSource)
                 {
+                    // Reset line number id (thứ tự của line hiển thị trên logwatcher)
+                    item.LineNumber = -1;
+
                     if (token.IsCancellationRequested)
                     {
                         token.ThrowIfCancellationRequested();
@@ -252,6 +261,8 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
                     {
                         SourceHighlightManager.FilterHighlight(item);
                         SourceHighlightManager.Highlight(item);
+
+                        item.LineNumber = filterLst.Count;
 
                         filterLst.Add(item);
                     }
@@ -280,7 +291,6 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
 
         #endregion
 
-
         #region Highlight area
         private CancellationTokenSource SourceHighlightCancellationTokenCache { get; set; }
         private AsyncTask HighlightTaskCache { get; set; }
@@ -306,7 +316,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
 
         private void OnFinishHighlightSource(AsyncTaskResult result)
         {
-           
+
         }
 
         private async Task<AsyncTaskResult> OnDoHighlight(CancellationToken token)
@@ -331,6 +341,425 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
             result.MesResult = MessageAsyncTaskResult.Done;
             return result;
         }
+        #endregion
+
+        /// <summary>
+        /// This area for method delete of
+        /// LogWatcher elements
+        /// Including:
+        ///     +) DeleteTaskCache: Task run for delete log view and expandable
+        ///     +) SourceDeleteCancellationTokenCache: Cancellation token for DeleteTaskCache
+        ///     +) SelectedItemNotifierCache: Notifier when source change
+        ///     
+        /// Instead of using Remove(element) method of a IList
+        /// this method will re-create the IList
+        /// this save more time when using Remove methods
+        /// After calculating: if use Remove: O(n^2)
+        /// but re-create only: O(n)
+        /// </summary>
+        #region Delete display log area
+        private CancellationTokenSource SourceDeleteCancellationTokenCache { get; set; }
+        private AsyncTask DeleteTaskCache { get; set; }
+        private INotifyCollectionChanged SelectedItemNotifierCache { get; set; }
+        public void DeleteSeletedLogLine(IEnumerable<LogWatcherItemViewModel> selectedItem, INotifyCollectionChanged selectedItemNotifier)
+        {
+            if (selectedItemNotifier == null)
+            {
+                return;
+            }
+            else
+            {
+                SelectedItemNotifierCache = selectedItemNotifier;
+                selectedItemNotifier.CollectionChanged -= OnSelectedItemChanged;
+                selectedItemNotifier.CollectionChanged += OnSelectedItemChanged;
+            }
+
+            if (DeleteTaskCache != null)
+            {
+                if (!DeleteTaskCache.IsCompleted)
+                {
+                    AsyncTask.CancelAsyncExecute(DeleteTaskCache);
+                }
+            }
+
+            SourceDeleteCancellationTokenCache = new CancellationTokenSource();
+            DeleteTaskCache = new AsyncTask(DeleteSelectedItems
+                   , null
+                   , OnFinishDeleteSource
+                   , 0
+                   , SourceDeleteCancellationTokenCache);
+            AsyncTask.ParamAsyncExecute(DeleteTaskCache
+                , param: selectedItem
+                , isAsyncCallback: true);
+
+        }
+
+        private void OnSelectedItemChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+#if DEBUG
+            Console.WriteLine("Selected collection changed!");
+#endif
+            if (DeleteTaskCache != null)
+            {
+                if (!DeleteTaskCache.IsCompleted)
+                {
+
+                    AsyncTask.CancelAsyncExecute(DeleteTaskCache);
+                    if (SelectedItemNotifierCache != null)
+                    {
+                        SelectedItemNotifierCache.CollectionChanged -= OnSelectedItemChanged;
+                        SelectedItemNotifierCache = null;
+                    }
+#if DEBUG
+                    Console.WriteLine("Selected collection changed during deleting, abort the process!");
+#endif
+                }
+            }
+
+            if (SelectedItemNotifierCache != null)
+            {
+                SelectedItemNotifierCache.CollectionChanged -= OnSelectedItemChanged;
+                SelectedItemNotifierCache = null;
+            }
+        }
+
+        private async Task<AsyncTaskResult> DeleteSelectedItems(object data, CancellationToken token)
+        {
+            var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
+            var selectedItem = data as IEnumerable<LogWatcherItemViewModel>;
+
+            var newDisplayList = GetNewExpandableList(selectedItem, token);
+            result.Result = newDisplayList;
+
+            result.MesResult = MessageAsyncTaskResult.Done;
+
+            return result;
+        }
+
+        private IEnumerable<LogWatcherItemViewModel> GetNewExpandableList(IEnumerable<LogWatcherItemViewModel> selectedItem
+            , CancellationToken token)
+        {
+#if DEBUG
+            var watch = Stopwatch.StartNew();
+#endif
+            var items = selectedItem;
+
+            lock (DisplaySource.ThreadSafeLock)
+            {
+                items = selectedItem
+                   .OrderBy((e) =>
+                   {
+                       return e.LineNumber;
+                   })
+                   .ToArray();
+            }
+
+#if DEBUG
+            watch.Stop();
+            Console.WriteLine("Order time = " + watch.ElapsedMilliseconds + "(ms)");
+            Logger.D("Order time = " + watch.ElapsedMilliseconds + "(ms)");
+#endif
+
+            LogWatcherItemViewModel cur = null;
+            var newExpandableLst = new List<LogWatcherItemViewModel>();
+            var preCount = 0;
+
+            var curExpandbleView = new LogWatcherItemViewModel();
+            curExpandbleView.ExpandButtonCommand = GetExpandButtonCommand(DisplaySource);
+            curExpandbleView.DeleteButtonCommand = GetDeleteButtonCommand(DisplaySource);
+#if DEBUG
+            watch = Stopwatch.StartNew();
+#endif
+
+            foreach (var item in items)
+            {
+                if (token.IsCancellationRequested)
+                {
+#if DEBUG
+                    watch.Stop();
+                    Console.WriteLine("Index process is aborted: time = " + watch.ElapsedMilliseconds + "(ms)");
+                    Logger.D("Index process is aborted: time = " + watch.ElapsedMilliseconds + "(ms)");
+#endif
+                    throw new OperationCanceledException();
+                }
+
+                if (cur == null)
+                {
+                    cur = item;
+                    curExpandbleView.Childs.Add(cur);
+                    curExpandbleView.LineNumber = cur.LineNumber;
+                }
+                else if (item.LineNumber == cur.LineNumber + 1)
+                {
+                    curExpandbleView.Childs.Add(item);
+                    cur = item;
+                }
+                else
+                {
+                    newExpandableLst.Add(curExpandbleView);
+
+                    preCount += curExpandbleView.Childs.Count - 1;
+
+                    curExpandbleView = new LogWatcherItemViewModel();
+                    curExpandbleView.ExpandButtonCommand = GetExpandButtonCommand(DisplaySource);
+                    curExpandbleView.DeleteButtonCommand = GetDeleteButtonCommand(DisplaySource);
+
+                    curExpandbleView.LineNumber = item.LineNumber - preCount;
+                    curExpandbleView.Childs.Add(item);
+                    cur = item;
+                }
+            }
+            newExpandableLst.Add(curExpandbleView);
+#if DEBUG
+            watch.Stop();
+            Console.WriteLine("Index time = " + watch.ElapsedMilliseconds + "(ms)");
+#endif
+
+#if DEBUG
+            watch = Stopwatch.StartNew();
+#endif
+            var newDisplayList = new List<LogWatcherItemViewModel>();
+            lock (DisplaySource.ThreadSafeLock)
+            {
+                int oldDisplaySourceCount = DisplaySource.Count;
+                int j = 0;
+                int expandViewCount = newExpandableLst.Count;
+                for (int i = 0; i < oldDisplaySourceCount; i++)
+                {
+                    if (j < expandViewCount
+                        && DisplaySource[i].LineNumber == newExpandableLst[j].LineNumber)
+                    {
+                        var newItem = newExpandableLst[j];
+                        newItem.LineNumber = newDisplayList.Count;
+
+                        newDisplayList.Add(newItem);
+                        i += newExpandableLst[j].Childs.Count - 1;
+                        j++;
+                    }
+                    else
+                    {
+                        var newItem = DisplaySource[i];
+                        newItem.LineNumber = newDisplayList.Count;
+
+                        newDisplayList.Add(newItem);
+                    }
+                }
+            }
+
+
+#if DEBUG
+            watch.Stop();
+            Console.WriteLine("Create new = " + watch.ElapsedMilliseconds + "(ms)");
+#endif
+            return newDisplayList;
+        }
+
+        private void OnFinishDeleteSource(object data, AsyncTaskResult obj)
+        {
+            if (obj.MesResult == MessageAsyncTaskResult.Done)
+            {
+                lock (DisplaySource.ThreadSafeLock)
+                {
+                    _displaySource.AddNewRange((IEnumerable<LogWatcherItemViewModel>)obj.Result);
+                }
+            }
+
+        }
+
+        private BaseDotNetCommandImpl GetExpandButtonCommand(RangeObservableCollection<LogWatcherItemViewModel> displaySource)
+        {
+            return new BaseDotNetCommandImpl((s) =>
+            {
+                var context = (s as LogWatcherItem)?.DataContext as LogWatcherItemViewModel;
+                if (context != null)
+                {
+                    RedoDeleteLogLine(context);
+                }
+            });
+        }
+
+        private BaseDotNetCommandImpl GetDeleteButtonCommand(RangeObservableCollection<LogWatcherItemViewModel> displaySource)
+        {
+            return new BaseDotNetCommandImpl((s) =>
+            {
+                var context = (s as LogWatcherItem)?.DataContext as LogWatcherItemViewModel;
+                if (context != null)
+                {
+                    CompletelyDeleteExpandableLogLine(context);
+                }
+            });
+        }
+
+        #endregion
+
+        /// <summary>
+        /// This area for redo method delete of
+        /// LogWatcher elements
+        /// Including:
+        ///     +) RedoDeleteTaskCache: Task run for re-add log view type from expandable parents view
+        ///     +) SourceRedoDeleteCancellationTokenCache: Cancellation token for RedoDeleteTaskCache
+        /// </summary>
+        #region Redo delete source
+        private CancellationTokenSource SourceRedoDeleteCancellationTokenCache { get; set; }
+        private AsyncTask RedoDeleteTaskCache { get; set; }
+
+        public void RedoDeleteLogLine(LogWatcherItemViewModel expandableViewModel)
+        {
+            if (expandableViewModel == null
+                || expandableViewModel.ViewType != LogGuard.Base.ElementViewType.ExpandableRowView)
+            {
+                return;
+            }
+
+            if (RedoDeleteTaskCache != null)
+            {
+                if (!RedoDeleteTaskCache.IsCompleted)
+                {
+                    AsyncTask.CancelAsyncExecute(RedoDeleteTaskCache);
+                }
+            }
+
+            SourceRedoDeleteCancellationTokenCache = new CancellationTokenSource();
+            RedoDeleteTaskCache = new AsyncTask(OnRedoDeleteSource
+                  , null
+                  , OnFinishRedoDeleteSource
+                  , 0
+                  , SourceRedoDeleteCancellationTokenCache);
+
+            AsyncTask.ParamAsyncExecute(RedoDeleteTaskCache
+                , param: expandableViewModel
+                , isAsyncCallback: true);
+
+        }
+
+        private void OnFinishRedoDeleteSource(object data, AsyncTaskResult obj)
+        {
+            if (obj.MesResult == MessageAsyncTaskResult.Done)
+            {
+                lock (DisplaySource.ThreadSafeLock)
+                {
+                    _displaySource.AddNewRange((IEnumerable<LogWatcherItemViewModel>)obj.Result);
+                }
+            }
+        }
+
+        private async Task<AsyncTaskResult> OnRedoDeleteSource(object data, CancellationToken token)
+        {
+            var vmodel = data as LogWatcherItemViewModel;
+            var newExpandedList = new List<LogWatcherItemViewModel>();
+            var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
+            lock (DisplaySource.ThreadSafeLock)
+            {
+                int oldDisplaySourceCount = DisplaySource.Count;
+                for (int i = 0; i < oldDisplaySourceCount; i++)
+                {
+                    if (DisplaySource[i].LineNumber == vmodel.LineNumber)
+                    {
+                        foreach (var child in vmodel.Childs)
+                        {
+                            var newItem = child as LogWatcherItemViewModel;
+                            newItem.LineNumber = newExpandedList.Count;
+
+                            newExpandedList.Add(newItem);
+                        }
+                    }
+                    else
+                    {
+                        var newItem = DisplaySource[i];
+                        newItem.LineNumber = newExpandedList.Count;
+
+                        newExpandedList.Add(newItem);
+                    }
+                }
+            }
+            result.MesResult = MessageAsyncTaskResult.Done;
+            result.Result = newExpandedList;
+
+            return result;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// This area for completely delete method of
+        /// LogWatcher elements
+        /// Including:
+        ///     +) CompletelyDeleteTaskCache: Task run for completely delete log expandable view from log watcher
+        ///     +) SourceCompletelyDeleteCancellationTokenCache: Cancellation token for CompletelyDeleteTaskCache
+        /// </summary>
+        #region Completely delete expandble log view
+        private CancellationTokenSource SourceCompletelyDeleteCancellationTokenCache { get; set; }
+        private AsyncTask CompletelyDeleteTaskCache { get; set; }
+
+        public void CompletelyDeleteExpandableLogLine(LogWatcherItemViewModel expandableViewModel)
+        {
+            if (expandableViewModel == null
+                || expandableViewModel.ViewType != LogGuard.Base.ElementViewType.ExpandableRowView)
+            {
+                return;
+            }
+
+            if (CompletelyDeleteTaskCache != null)
+            {
+                if (!CompletelyDeleteTaskCache.IsCompleted)
+                {
+                    AsyncTask.CancelAsyncExecute(CompletelyDeleteTaskCache);
+                }
+            }
+
+            SourceCompletelyDeleteCancellationTokenCache = new CancellationTokenSource();
+            CompletelyDeleteTaskCache = new AsyncTask(OnCompletelyDeleteSource
+                  , null
+                  , OnFinishCompletelyDeleteSource
+                  , 0
+                  , SourceCompletelyDeleteCancellationTokenCache);
+
+            AsyncTask.ParamAsyncExecute(CompletelyDeleteTaskCache
+                , param: expandableViewModel
+                , isAsyncCallback: true);
+
+        }
+
+        private void OnFinishCompletelyDeleteSource(object data, AsyncTaskResult obj)
+        {
+            if (obj.MesResult == MessageAsyncTaskResult.Done)
+            {
+                lock (DisplaySource.ThreadSafeLock)
+                {
+                    _displaySource.AddNewRange((IEnumerable<LogWatcherItemViewModel>)obj.Result);
+                }
+            }
+        }
+
+        private async Task<AsyncTaskResult> OnCompletelyDeleteSource(object data, CancellationToken token)
+        {
+            var vmodel = data as LogWatcherItemViewModel;
+            var newExpandedList = new List<LogWatcherItemViewModel>();
+            var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
+            lock (DisplaySource.ThreadSafeLock)
+            {
+                int oldDisplaySourceCount = DisplaySource.Count;
+                for (int i = 0; i < oldDisplaySourceCount; i++)
+                {
+                    if (DisplaySource[i].LineNumber == vmodel.LineNumber)
+                    {
+
+                    }
+                    else
+                    {
+                        var newItem = DisplaySource[i];
+                        newItem.LineNumber = newExpandedList.Count;
+
+                        newExpandedList.Add(newItem);
+                    }
+                }
+            }
+            result.MesResult = MessageAsyncTaskResult.Done;
+            result.Result = newExpandedList;
+
+            return result;
+        }
+
         #endregion
     }
 }
