@@ -249,6 +249,9 @@
 				<KeyBinding Gesture="Back"
 							Command="{Binding CommandViewModel.LWDeleteGestureCommand}" 
 							CommandParameter="{Binding ElementName=LogView}"/>
+				<KeyBinding Gesture="Delete"
+							Command="{Binding CommandViewModel.LWDeleteGestureCommand}"
+							CommandParameter="{Binding ElementName=LogView}" />
 				<KeyBinding Gesture="Ctrl+A"
 							Command="{Binding CommandViewModel.LWCtrlAGestureCommand}" />
 			</logguard:LogWatcher.InputBindings>

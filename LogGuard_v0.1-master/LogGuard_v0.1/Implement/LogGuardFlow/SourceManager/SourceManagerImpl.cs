@@ -24,6 +24,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
     public class SourceManagerImpl : ISourceManager
     {
         private static Logger Logger { get; } = new Logger("SourceManagerImpl");
+        private object stateLockObject = new Object();
 
         private static SourceManagerImpl _instance;
         private RangeObservableCollection<LogWatcherItemViewModel> _rawSource;
@@ -33,6 +34,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         private RangeObservableCollection<string> _rawLog;
         private SourceFilterManagerImpl _sourceFilter;
         private SourceHighlightManagerImpl _sourceHighlighter;
+
 
 
         public List<ISourceHolder> SourceHolders { get => _sourceHolder; }
@@ -97,42 +99,45 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
             {
                 _logLevelCountMap[model.Level]++;
             }
-
-            lock (RawSource.ThreadSafeLock)
+            lock (stateLockObject)
             {
-                _rawSource.Add(model);
-            }
-
-            lock (DisplaySource.ThreadSafeLock)
-            {
-                if (SourceFilterManager.Filter(model))
+                lock (RawSource.ThreadSafeLock)
                 {
-                    SourceHighlightManager.FilterHighlight(model);
-                    SourceHighlightManager.Highlight(model);
-
-                    model.LineNumber = _displaySource.Count;
-                    _displaySource.Add(model);
-
+                    _rawSource.Add(model);
                 }
+
+                lock (DisplaySource.ThreadSafeLock)
+                {
+                    if (SourceFilterManager.Filter(model))
+                    {
+                        SourceHighlightManager.FilterHighlight(model);
+                        SourceHighlightManager.Highlight(model);
+
+                        model.LineNumber = _displaySource.Count;
+                        _displaySource.Add(model);
+
+                    }
+                }
+                SourceCollectionChanged?.Invoke(this);
             }
 
-
-            SourceCollectionChanged?.Invoke(this);
         }
 
         public void ClearSource()
         {
-            LogInfoManager.ResetLogInfos();
-            RawLog.Clear();
-            ResetLogLevelCountMap();
-            RawSource.Clear();
-            DisplaySource.Clear();
-            foreach (var holder in SourceHolders)
+            lock (stateLockObject)
             {
-                holder.ItemCount = 0;
+                LogInfoManager.ResetLogInfos();
+                RawLog.Clear();
+                ResetLogLevelCountMap();
+                RawSource.Clear();
+                DisplaySource.Clear();
+                foreach (var holder in SourceHolders)
+                {
+                    holder.ItemCount = 0;
+                }
+                SourceCollectionChanged?.Invoke(this);
             }
-
-            SourceCollectionChanged?.Invoke(this);
         }
 
         public int DisplayItemsCount()
@@ -561,9 +566,9 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
                 lock (DisplaySource.ThreadSafeLock)
                 {
                     _displaySource.AddNewRange((IEnumerable<LogWatcherItemViewModel>)obj.Result);
+                    SourceCollectionChanged?.Invoke(this);
                 }
             }
-
         }
 
         private BaseDotNetCommandImpl GetExpandButtonCommand(RangeObservableCollection<LogWatcherItemViewModel> displaySource)
@@ -639,6 +644,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
                 lock (DisplaySource.ThreadSafeLock)
                 {
                     _displaySource.AddNewRange((IEnumerable<LogWatcherItemViewModel>)obj.Result);
+                    SourceCollectionChanged?.Invoke(this);
                 }
             }
         }
@@ -727,6 +733,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
                 lock (DisplaySource.ThreadSafeLock)
                 {
                     _displaySource.AddNewRange((IEnumerable<LogWatcherItemViewModel>)obj.Result);
+                    SourceCollectionChanged?.Invoke(this);
                 }
             }
         }

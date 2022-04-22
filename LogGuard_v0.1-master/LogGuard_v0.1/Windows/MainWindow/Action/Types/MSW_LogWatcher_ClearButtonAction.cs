@@ -24,6 +24,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action.Types
         protected override void ExecuteCommand()
         {
             base.ExecuteCommand();
+            SourceManagerImpl.Current.ClearSource();
         }
     }
 }
