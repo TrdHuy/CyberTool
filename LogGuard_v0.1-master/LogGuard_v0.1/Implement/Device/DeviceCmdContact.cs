@@ -56,14 +56,14 @@ namespace LogGuard_v0._1.Implement.Device
             {
                 Cmd = " logcat -v threadtime"
             ,
-                FormatContact = LogParserFormatContact.TIME_ADB_COMMAND
+                FormatContact = LogParserFormatContact.NORMAL_ADB_COMMAND
             });
 
             CMD_CONTACT_USER_INTERFACE_LIST.Add(new LogParserVO()
             {
                 Cmd = " logcat -v threadtime -b all"
             ,
-                FormatContact = LogParserFormatContact.TIME_ADB_COMMAND
+                FormatContact = LogParserFormatContact.NORMAL_ADB_COMMAND
             });
             CMD_CONTACT_USER_INTERFACE_LIST.Add(new LogParserVO()
             {
