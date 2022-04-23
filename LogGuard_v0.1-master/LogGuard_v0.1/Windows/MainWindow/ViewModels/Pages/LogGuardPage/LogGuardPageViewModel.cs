@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
 {
-    public class LogGuardPageViewModel : BaseViewModel, ISourceHolder, IPageViewModel
+    public class LogGuardPageViewModel : MSW_BasePageViewModel, ISourceHolder
     {
 
         private RangeObservableCollection<LogWatcherItemViewModel> _logItemVMs;
@@ -157,25 +157,19 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
             SelectedCmdIndex = 0;
         }
 
-        public bool OnUnloaded()
+        public override bool OnUnloaded()
         {
             // Stop before clear
             StateControllerImpl.Current.Stop();
             SourceManagerImpl.Current.ClearSource();
             SourceManagerImpl.Current.RemoveSourceHolder(this);
-            foreach (var child in ChildModels)
-            {
-                child.OnDestroy();
-            }
-            return true;
+            
+            return base.OnUnloaded();
         }
 
-        public void OnLoaded()
+        public override void OnLoaded()
         {
-            foreach (var child in ChildModels)
-            {
-                child.OnBegin();
-            }
+            base.OnLoaded();
             StateControllerImpl.Current.StateChanged -= OnLogGuardStateChanged;
             StateControllerImpl.Current.StateChanged += OnLogGuardStateChanged;
         }

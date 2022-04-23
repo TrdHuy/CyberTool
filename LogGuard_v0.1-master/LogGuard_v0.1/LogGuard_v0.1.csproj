@@ -190,8 +190,9 @@
     <Compile Include="Windows\MainWindow\ViewModels\LogWatcher\LogWatcherItemViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\MSW_ButtonCommandViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\MSW_LogWatcherControlButtonCommandVM.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPageViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\MSW_LogWatcherControlButtonCommandVM.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\LogGuardPageViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\MSW_BasePageViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\AdvanceFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\ChildOfAdvanceFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TimeFilter\EndTimeFilterUCViewModel.cs" />
