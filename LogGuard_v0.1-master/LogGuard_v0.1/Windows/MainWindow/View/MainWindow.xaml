@@ -132,6 +132,7 @@
 		
 		<Frame Grid.Column="1"
 			   Grid.RowSpan="3"
+			   Margin="0,20,0,0"
 			   NavigationUIVisibility="Hidden"
 			   x:Name="mainFrame"
 			   Source="{Binding CurrentPageSource}" />

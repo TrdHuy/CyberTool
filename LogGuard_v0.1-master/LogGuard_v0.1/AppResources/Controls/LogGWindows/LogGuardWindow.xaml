@@ -274,7 +274,7 @@
 								  Grid.Row="0"
 								  Height="30"
 								  VerticalAlignment="Stretch"
-								  Background="Transparent"
+								  Background="#20FFFFFF"
 								  WindowChrome.IsHitTestVisibleInChrome="False">
 
 								<Grid.ColumnDefinitions>
