@@ -83,14 +83,11 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
 
             if (CaptureProc != null)
             {
-                lock (CaptureProc)
-                {
-                    if (!CaptureProc.HasExited)
-                        CaptureProc.Kill();
-                    CaptureProc.Dispose();
-                    CaptureProc.Close();
-                    CaptureProc = null;
-                }
+                if (!CaptureProc.HasExited)
+                    CaptureProc.Kill();
+                CaptureProc.Dispose();
+                CaptureProc.Close();
+                CaptureProc = null;
             }
 
             bool isNeedNotifyStateChange = CurrentState != LogGuardState.STOP;
