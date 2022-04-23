@@ -159,6 +159,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils\Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Utils\Converters\MultiBindingConverter.cs" />
     <Compile Include="Utils\Converters\StringToGeoPathConverter.cs" />
     <Compile Include="Utils\CustomAttachedProperties.cs" />
     <Compile Include="Utils\Definitions\LogGuardDefinition.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_PlayButtonAction.cs" />
     <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_RefreshDeviceButtonAction.cs" />
     <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_StopButtonAction.cs" />
+    <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_ZoomButtonAction.cs" />
     <Compile Include="Windows\MainWindow\Models\Builder\DeviceBuilder.cs" />
     <Compile Include="Windows\MainWindow\Models\Builder\LogBuilder.cs" />
     <Compile Include="Windows\MainWindow\Models\DeviceInfo\DeviceInfo.cs" />
@@ -366,5 +368,6 @@
   <ItemGroup>
     <Content Include="_Config\SecFloatingFeature.mk" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

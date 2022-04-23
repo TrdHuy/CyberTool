@@ -8,6 +8,7 @@
 				  xmlns:hpss="clr-namespace:HPSolutionCCDevPackage.netFramework;assembly=HPSolutionCCDevPackage.netFramework"
 				  xmlns:local="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.Pages"
 				  xmlns:appCtrl="clr-namespace:LogGuard_v0._1.AppResources.Controls.LogGPages"
+				  xmlns:converter="clr-namespace:LogGuard_v0._1.Utils.Converters"
 				  xmlns:uc="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.UserControls"
 				  xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages"
 				  xmlns:vmh="clr-namespace:LogGuard_v0._1.Base.ViewModel.ViewModelHelper"
@@ -16,6 +17,9 @@
 				  d:DesignHeight="820"
 				  d:DesignWidth="883.714"
 				  Title="LogGuard">
+	<Page.Resources>
+		<converter:MultiBindingConverter x:Key="MultiBinding" />
+	</Page.Resources>
 	<Page.DataContext>
 		<Binding Source="{vmh:VMManagerMarkup {x:Type vm:LogGuardPageViewModel}}" />
 	</Page.DataContext>
@@ -165,97 +169,125 @@
 				  Stretch="Uniform" />
 		</Button>
 
-		<logguard:LogWatcher UseAutoScroll="{Binding UseAutoScroll}"
-							 Grid.Row="4"
-							 Grid.Column="0"
-							 Grid.ColumnSpan="13"
-							 LogWatcherItemsSource="{Binding ItemsSource}"
-							 ScrollViewer.HorizontalScrollBarVisibility="Visible"
-							 ScrollViewer.VerticalScrollBarVisibility="Visible"
-							 VirtualizingPanel.CacheLength="1"
-							 VirtualizingPanel.CacheLengthUnit="Pixel"
-							 VirtualizingPanel.IsContainerVirtualizable="True"
-							 VirtualizingPanel.IsVirtualizing="True"
-							 VirtualizingPanel.VirtualizationMode="Recycling"
-							 VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-							 logguard:LogMappingBorder.MagnifierRadius="50"
-							 AlternationCount="2"
-							 x:Name="LogView"
-							 FontFamily="Calibri">
-			<logguard:LogWatcher.View>
-				<logguard:GridViewWatcher>
-					<GridViewColumn DisplayMemberBinding="{Binding Line}">
-						<GridViewColumnHeader Content="Line" />
-					</GridViewColumn>
-					<GridViewColumn DisplayMemberBinding="{Binding Level}">
-						<GridViewColumnHeader Content="Level" />
-					</GridViewColumn>
-					<GridViewColumn DisplayMemberBinding="{Binding LogDateTimeString}">
-						<GridViewColumnHeader Content="Time" />
-					</GridViewColumn>
-					<GridViewColumn>
-						<GridViewColumnHeader Content="PID" />
-						<GridViewColumn.CellTemplate>
-							<DataTemplate>
-								<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightPidSource, UpdateSourceTrigger=PropertyChanged}"
-										   attProp:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
-										   attProp:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
-										   attProp:TextBlockAttProperties.RawText="{Binding Pid}"
-										   Text="{Binding Pid}" />
-							</DataTemplate>
-						</GridViewColumn.CellTemplate>
-					</GridViewColumn>
-					<GridViewColumn>
-						<GridViewColumnHeader Content="TID" />
-						<GridViewColumn.CellTemplate>
-							<DataTemplate>
-								<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightTidSource, UpdateSourceTrigger=PropertyChanged}"
-										   attProp:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
-										   attProp:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
-										   attProp:TextBlockAttProperties.RawText="{Binding Tid}"
-										   Text="{Binding Tid}" />
-							</DataTemplate>
-						</GridViewColumn.CellTemplate>
-					</GridViewColumn>
-					<GridViewColumn>
-						<GridViewColumnHeader Content="Tag" />
-						<GridViewColumn.CellTemplate>
-							<DataTemplate>
-								<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightTagSource, UpdateSourceTrigger=PropertyChanged}"
-										   attProp:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
-										   attProp:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
-										   attProp:TextBlockAttProperties.RawText="{Binding Tag}"
-										   Text="{Binding Tag}" />
-							</DataTemplate>
-						</GridViewColumn.CellTemplate>
-					</GridViewColumn>
-					<GridViewColumn>
-						<GridViewColumnHeader Content="Message" />
-						<GridViewColumn.CellTemplate>
-							<DataTemplate>
-								<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightMessageSource, UpdateSourceTrigger=PropertyChanged}"
-										   attProp:TextBlockAttProperties.ExtraHighlightSource="{Binding ExtraHighlightMessageSource, UpdateSourceTrigger=PropertyChanged}"
-										   attProp:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
-										   attProp:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
-										   attProp:TextBlockAttProperties.RawText="{Binding Message}"
-										   Text="{Binding Message}" />
-							</DataTemplate>
-						</GridViewColumn.CellTemplate>
-					</GridViewColumn>
-				</logguard:GridViewWatcher>
-			</logguard:LogWatcher.View>
-			
-			<logguard:LogWatcher.InputBindings>
-				<KeyBinding Gesture="Back"
-							Command="{Binding CommandViewModel.LWDeleteGestureCommand}" 
-							CommandParameter="{Binding ElementName=LogView}"/>
-				<KeyBinding Gesture="Delete"
-							Command="{Binding CommandViewModel.LWDeleteGestureCommand}"
-							CommandParameter="{Binding ElementName=LogView}" />
-				<KeyBinding Gesture="Ctrl+A"
-							Command="{Binding CommandViewModel.LWCtrlAGestureCommand}" />
-			</logguard:LogWatcher.InputBindings>
-		</logguard:LogWatcher>
+		<Button  Grid.Row="3"
+				 x:Name="ZoomButton"
+				 Command="{Binding CommandViewModel.ZoomButtonCommand}"
+				 Grid.Column="6"
+				 Margin="0,0,0,15"
+				 Background="{StaticResource ButtonBackground_Level1}"
+				 HorizontalAlignment="Left"
+				 Template="{StaticResource CircleBtnTmpl}">
+			<Button.CommandParameter>
+				<MultiBinding Converter="{StaticResource MultiBinding}">
+					<Binding ElementName="LogWatcherCC" />
+					<Binding ElementName="ZoomButton" />
+				</MultiBinding>
+			</Button.CommandParameter>
+			<Path Fill="#FFF0F0F0"
+				  Margin="5"
+				  Data="{Binding Source={StaticResource ZoomLogGuardBtnPathGeomerty}}"
+				  Stretch="Uniform" />
+		</Button>
+
+		<ContentControl x:Name="LogWatcherCC"
+						Grid.Row="4"
+						Grid.Column="0"
+						Grid.ColumnSpan="13">
+			<ContentControl.LayoutTransform>
+				<ScaleTransform x:Name="CC_ScaleTransform"
+								ScaleX="1"
+								ScaleY="1" />
+			</ContentControl.LayoutTransform>
+			<logguard:LogWatcher UseAutoScroll="{Binding UseAutoScroll}"
+								 LogWatcherItemsSource="{Binding ItemsSource}"
+								 ScrollViewer.HorizontalScrollBarVisibility="Visible"
+								 ScrollViewer.VerticalScrollBarVisibility="Visible"
+								 VirtualizingPanel.CacheLength="1"
+								 VirtualizingPanel.CacheLengthUnit="Pixel"
+								 VirtualizingPanel.IsContainerVirtualizable="True"
+								 VirtualizingPanel.IsVirtualizing="True"
+								 VirtualizingPanel.VirtualizationMode="Recycling"
+								 VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+								 logguard:LogMappingBorder.MagnifierRadius="50"
+								 AlternationCount="2"
+								 x:Name="LogView"
+								 FontFamily="Calibri">
+				<logguard:LogWatcher.View>
+					<logguard:GridViewWatcher>
+						<GridViewColumn DisplayMemberBinding="{Binding Line}">
+							<GridViewColumnHeader Content="Line" />
+						</GridViewColumn>
+						<GridViewColumn DisplayMemberBinding="{Binding Level}">
+							<GridViewColumnHeader Content="Level" />
+						</GridViewColumn>
+						<GridViewColumn DisplayMemberBinding="{Binding LogDateTimeString}">
+							<GridViewColumnHeader Content="Time" />
+						</GridViewColumn>
+						<GridViewColumn>
+							<GridViewColumnHeader Content="PID" />
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightPidSource, UpdateSourceTrigger=PropertyChanged}"
+											   attProp:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
+											   attProp:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
+											   attProp:TextBlockAttProperties.RawText="{Binding Pid}"
+											   Text="{Binding Pid}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>
+						<GridViewColumn>
+							<GridViewColumnHeader Content="TID" />
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightTidSource, UpdateSourceTrigger=PropertyChanged}"
+											   attProp:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
+											   attProp:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
+											   attProp:TextBlockAttProperties.RawText="{Binding Tid}"
+											   Text="{Binding Tid}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>
+						<GridViewColumn>
+							<GridViewColumnHeader Content="Tag" />
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightTagSource, UpdateSourceTrigger=PropertyChanged}"
+											   attProp:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
+											   attProp:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
+											   attProp:TextBlockAttProperties.RawText="{Binding Tag}"
+											   Text="{Binding Tag}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>
+						<GridViewColumn>
+							<GridViewColumnHeader Content="Message" />
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightMessageSource, UpdateSourceTrigger=PropertyChanged}"
+											   attProp:TextBlockAttProperties.ExtraHighlightSource="{Binding ExtraHighlightMessageSource, UpdateSourceTrigger=PropertyChanged}"
+											   attProp:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
+											   attProp:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
+											   attProp:TextBlockAttProperties.RawText="{Binding Message}"
+											   Text="{Binding Message}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>
+					</logguard:GridViewWatcher>
+				</logguard:LogWatcher.View>
+
+				<logguard:LogWatcher.InputBindings>
+					<KeyBinding Gesture="Back"
+								Command="{Binding CommandViewModel.LWDeleteGestureCommand}"
+								CommandParameter="{Binding ElementName=LogView}" />
+					<KeyBinding Gesture="Delete"
+								Command="{Binding CommandViewModel.LWDeleteGestureCommand}"
+								CommandParameter="{Binding ElementName=LogView}" />
+					<KeyBinding Gesture="Ctrl+A"
+								Command="{Binding CommandViewModel.LWCtrlAGestureCommand}" />
+				</logguard:LogWatcher.InputBindings>
+			</logguard:LogWatcher>
+
+		</ContentControl>
 
 	</Grid>
 </appCtrl:LogGPage>

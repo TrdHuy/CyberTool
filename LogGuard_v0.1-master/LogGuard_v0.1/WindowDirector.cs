@@ -5,6 +5,7 @@ using LogGuard_v0._1.Windows.MainWindow.View;
 using LogGuard_v0._1.Windows.MessageWindow;
 using LogGuard_v0._1.Windows.WaitingWindow;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,13 +16,6 @@ using System.Windows.Media.Animation;
 
 namespace LogGuard_v0._1
 {
-    public enum WindowDisplayStatus
-    {
-        OnMainScreen = 1,
-        OnPopupCustomControl = 2,
-        AppExit = 10
-    }
-
     public enum OwnerWindow
     {
         Default = 0,
@@ -29,9 +23,9 @@ namespace LogGuard_v0._1
     }
     public class WindowDirector
     {
+        private Dictionary<ContentControl, FloatingWindow> _floatingWindowMap;
         private MainWindow _mainScreenWindow;
         private FloatingWindow _floatingWindow;
-        private WindowDisplayStatus _displayStatus = WindowDisplayStatus.OnMainScreen;
 
         public MainWindow MainScreenWindow
         {
@@ -52,6 +46,7 @@ namespace LogGuard_v0._1
         public WindowDirector()
         {
             MainScreenWindow.Closing += MainScreenWindow_Closing;
+            _floatingWindowMap = new Dictionary<ContentControl, FloatingWindow>();
         }
 
         private void MainScreenWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -62,7 +57,6 @@ namespace LogGuard_v0._1
         public void ShowMainWindow()
         {
             MainScreenWindow.Show();
-            _displayStatus = WindowDisplayStatus.OnMainScreen;
         }
 
         public LogGuardMesBoxResult ShowErrorBox(string error)
@@ -126,10 +120,18 @@ namespace LogGuard_v0._1
             return newWaitingBox.Show();
         }
 
-        public void ShowPopupCustomControlWindow(ContentControl cc, UIElement opener, OwnerWindow ownerWindow = OwnerWindow.Default, double width = 500, double height = 400)
+        public void ShowPopupCustomControlWindow(ContentControl cc
+            , UIElement opener
+            , OwnerWindow ownerWindow = OwnerWindow.Default
+            , double width = 500
+            , double height = 400
+            , object dataContext = null
+            , Action<object> windowShowedCallback = null
+            , string title = "Floating window")
         {
-            if (_displayStatus == WindowDisplayStatus.OnPopupCustomControl)
+            if (_floatingWindowMap.ContainsKey(cc))
             {
+                _floatingWindow = _floatingWindowMap[cc];
                 if (_floatingWindow != null && _floatingWindow.WindowState == WindowState.Minimized)
                 {
                     _floatingWindow.WindowState = WindowState.Normal;
@@ -141,15 +143,21 @@ namespace LogGuard_v0._1
             {
                 case OwnerWindow.Default:
                     _floatingWindow = new FloatingWindow(opener, null, width, height);
+                    _floatingWindow.DataContext = dataContext;
+                    _floatingWindow.Title = title;
                     break;
                 case OwnerWindow.MainScreen:
                     _floatingWindow = new FloatingWindow(opener, MainScreenWindow, 0, 0);
+                    _floatingWindow.DataContext = dataContext;
+                    _floatingWindow.Title = title;
                     break;
             }
             _floatingWindow.Height = height;
             _floatingWindow.Width = width;
 
-            StartDispandCCAnim(cc, _floatingWindow, 200);
+            _floatingWindowMap.Add(cc, _floatingWindow);
+
+            StartDispandCCAnim(cc, _floatingWindow, 200, windowShowedCallback);
 
         }
 
@@ -163,7 +171,10 @@ namespace LogGuard_v0._1
             saveFileDialog1.ShowDialog();
             return saveFileDialog1.FileName;
         }
-        private void StartDispandCCAnim(ContentControl cc, FloatingWindow floatWindow, int animTime)
+        private void StartDispandCCAnim(ContentControl cc
+            , FloatingWindow floatWindow
+            , int animTime
+            , Action<object> windowShowedCallback = null)
         {
             Storyboard dispand = new Storyboard();
             DoubleAnimation scaleXAnim = new DoubleAnimation();
@@ -191,10 +202,11 @@ namespace LogGuard_v0._1
                 {
                     cc.Content = content;
                     StartExpandCCAnim(cc, animTime);
-                    _displayStatus = WindowDisplayStatus.OnMainScreen;
+                    _floatingWindowMap.Remove(cc);
                 };
-                _displayStatus = WindowDisplayStatus.OnPopupCustomControl;
                 floatWindow.Show();
+
+                windowShowedCallback?.Invoke(floatWindow);
             };
 
             dispand.Begin(cc);

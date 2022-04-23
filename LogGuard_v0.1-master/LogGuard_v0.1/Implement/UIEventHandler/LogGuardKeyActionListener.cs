@@ -56,7 +56,7 @@ namespace LogGuard_v0._1.Implement.UIEventHandler
         protected override IAction GetKeyActionAndLockFactory(string windowTag, string keytag, bool isLock = false, BuilderStatus status = BuilderStatus.Default, BaseViewModel viewModel = null, ILogger logger = null)
         {
             var action = GetAction(keytag, windowTag, viewModel, logger);
-            _commandExecuterFactory.LockBuilder(windowTag, isLock, status);
+            _commandExecuterFactory.LockBuilder(builderID: windowTag, isLock, status);
 
             return action;
         }

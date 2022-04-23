@@ -49,9 +49,16 @@ namespace LogGuard_v0._1
             _windowDirector.MainScreenWindow.Closing += OnMainScreenWindowClosing;
         }
 
-        public void ShowPopupCControl(ContentControl cc, UIElement opener, OwnerWindow ownerWindow = OwnerWindow.Default, double width = 500, double height = 400)
+        public void ShowPopupCControl(ContentControl cc
+            , UIElement opener
+            , OwnerWindow ownerWindow = OwnerWindow.Default
+            , double width = 500
+            , double height = 400
+            , object dataContext = null
+            , Action<object> windowShowedCallback = null
+            , string title = "Floating window")
         {
-            _windowDirector.ShowPopupCustomControlWindow(cc, opener, ownerWindow, width, height);
+            _windowDirector.ShowPopupCustomControlWindow(cc, opener, ownerWindow, width, height, dataContext, windowShowedCallback, title);
         }
 
         public Windows.MessageWindow.LogGuardMesBoxResult ShowEscapeCaptureLogWarningBox()
