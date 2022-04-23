@@ -432,31 +432,31 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
         {
             var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
             var selectedItem = data as IEnumerable<LogWatcherItemViewModel>;
-
-            var newDisplayList = GetNewExpandableList(selectedItem, token);
-            result.Result = newDisplayList;
-
-            result.MesResult = MessageAsyncTaskResult.Done;
+            GetNewExpandableList(selectedItem, token, result);
 
             return result;
         }
 
-        private IEnumerable<LogWatcherItemViewModel> GetNewExpandableList(IEnumerable<LogWatcherItemViewModel> selectedItem
-            , CancellationToken token)
+        private void GetNewExpandableList(
+            IEnumerable<LogWatcherItemViewModel> selectedItem
+            , CancellationToken token
+            , AsyncTaskResult result)
         {
 #if DEBUG
             var watch = Stopwatch.StartNew();
 #endif
             var items = selectedItem;
-
+            var itemsCount = 0;
             lock (DisplaySource.ThreadSafeLock)
             {
                 items = selectedItem
                    .OrderBy((e) =>
                    {
+                       itemsCount++;
                        return e.LineNumber;
                    })
                    .ToArray();
+
             }
 
 #if DEBUG
@@ -472,10 +472,39 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
             var curExpandbleView = new LogWatcherItemViewModel();
             curExpandbleView.ExpandButtonCommand = GetExpandButtonCommand(DisplaySource);
             curExpandbleView.DeleteButtonCommand = GetDeleteButtonCommand(DisplaySource);
+
+            // In case user selected only one item, don't need to re-create all the
+            // display source, only need to replace deleted item with expandable view
+            if (itemsCount == 1)
+            {
+#if DEBUG
+                watch = Stopwatch.StartNew();
+#endif
+
+                cur = items.ElementAt(0);
+                curExpandbleView.Childs.Add(cur);
+                curExpandbleView.LineNumber = cur.LineNumber;
+                lock (DisplaySource.ThreadSafeLock)
+                {
+                    DisplaySource[cur.LineNumber] = curExpandbleView;
+                }
+                result.MesResult = MessageAsyncTaskResult.Finished;
+                result.Result = null;
+#if DEBUG
+                watch.Stop();
+                Console.WriteLine("Delete one item time = " + watch.ElapsedMilliseconds + "(ms)");
+                Logger.D("Delete one item time = " + watch.ElapsedMilliseconds + "(ms)");
+#endif
+                return;
+            }
+
+
+
 #if DEBUG
             watch = Stopwatch.StartNew();
 #endif
 
+            var isShouldRecreatDisplaySource = true;
             foreach (var item in items)
             {
                 if (token.IsCancellationRequested)
@@ -498,6 +527,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
                 {
                     curExpandbleView.Childs.Add(item);
                     cur = item;
+                    isShouldRecreatDisplaySource = false;
                 }
                 else
                 {
@@ -519,6 +549,29 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
             watch.Stop();
             Console.WriteLine("Index time = " + watch.ElapsedMilliseconds + "(ms)");
 #endif
+
+            // In case user selected many item, but those items not adjacent
+            // For example: 2 items A & B
+            //      A [index = 0] & B [index = 1]
+            //          => Should recreate display source due to A is adjacent with B
+            //
+            //      A [index = 0] & B [index = 2]
+            //          => Should not recreate display source due to A is not adjacent with B
+            if (isShouldRecreatDisplaySource &&
+                itemsCount > 1)
+            {
+                lock (DisplaySource.ThreadSafeLock)
+                {
+                    foreach (var item in newExpandableLst)
+                    {
+                        DisplaySource[item.LineNumber] = item;
+                    }
+                }
+
+                result.MesResult = MessageAsyncTaskResult.Finished;
+                result.Result = null;
+                return;
+            }
 
 #if DEBUG
             watch = Stopwatch.StartNew();
@@ -556,7 +609,8 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
             watch.Stop();
             Console.WriteLine("Create new = " + watch.ElapsedMilliseconds + "(ms)");
 #endif
-            return newDisplayList;
+            result.Result = newDisplayList;
+            result.MesResult = MessageAsyncTaskResult.Done;
         }
 
         private void OnFinishDeleteSource(object data, AsyncTaskResult obj)
