@@ -2,13 +2,9 @@
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
 using LogGuard_v0._1.Implement.UIEventHandler;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFilter
+namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserControls.UCAdvanceFilter.TimeFilter
 {
     public abstract class TimeFilterUCViewModel : ChildOfAdvanceFilterUCViewModel
     {

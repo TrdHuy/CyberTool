@@ -7,7 +7,7 @@
 			 xmlns:attPTB="clr-namespace:LogGuard_v0._1.AppResources.AttachedProperties"
 			 mc:Ignorable="d"
 			 xmlns:vmh="clr-namespace:LogGuard_v0._1.Base.ViewModel.ViewModelHelper"
-			 xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFilter"
+			 xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserControls.UCAdvanceFilter"
 			 xmlns:vmp="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages"
 			 d:DesignHeight="309"
 			 d:DesignWidth="427"

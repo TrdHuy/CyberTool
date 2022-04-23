@@ -1,6 +1,6 @@
 ﻿using LogGuard_v0._1.Base.Command;
 using LogGuard_v0._1.LogGuard.Control;
-using LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCLogManager;
+using LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserControls.UCLogManager;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

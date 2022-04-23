@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCLogLevelFilter
+namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserControls.UCLogLevelFilter
 {
     public class LogLevelFilterUCViewModel : BaseViewModel, ISourceFilter
     {

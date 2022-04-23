@@ -1,4 +1,5 @@
 ﻿using LogGuard_v0._1.AppResources.AttachedProperties;
+using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
 using LogGuard_v0._1.Implement.UIEventHandler;
@@ -6,17 +7,19 @@ using LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFilter
+namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserControls.UCAdvanceFilter
 {
-    public class TagRemoveFilterUCViewModel : ChildOfAdvanceFilterUCViewModel
+    public class TagShowFilterUCViewModel : ChildOfAdvanceFilterUCViewModel
     {
         protected new bool _isFilterEnable = true;
 
-        public TagRemoveFilterUCViewModel(BaseViewModel parent) : base(parent)
+        public TagShowFilterUCViewModel(BaseViewModel parent) : base(parent)
         {
             FilterLeftClickCommand = new CommandExecuterModel((paramaters) =>
             {
@@ -41,14 +44,16 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
             var itemVM = obj as LogWatcherItemViewModel;
             if (itemVM != null)
             {
-                return TagRemove(itemVM);
+                return TagShow(itemVM);
             }
             return true;
         }
+
         protected override bool IsUseFilterEngine => true;
 
-        private bool TagRemove(LogWatcherItemViewModel data)
+        private bool TagShow(LogWatcherItemViewModel data)
         {
+            data.HighlightTagSource = null;
             if (!CurrentEngine.IsVaild())
             {
                 CurrentEngine.Refresh();
@@ -57,13 +62,31 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFil
 
             if (IsFilterEnable && data.Tag != null)
             {
-                if (CurrentEngine.ContainIgnoreCase(data.Tag.ToString()))
-                {
-                    return false;
-                }
-                return true;
+                return CurrentEngine.ContainIgnoreCase(data.Tag.ToString());
             }
             return true;
+        }
+
+        protected override bool DoHighlight(object obj)
+        {
+            var data = obj as LogWatcherItemViewModel;
+            if (data != null)
+            {
+                data.HighlightTagSource = CurrentEngine
+                            .GetMatchWords()
+                            .OrderBy(o => o.StartIndex)
+                            .ToArray();
+            }
+            return true;
+        }
+
+        protected override void DoCleanHighlightSource(object obj)
+        {
+            var data = obj as LogWatcherItemViewModel;
+            if (data != null)
+            {
+                data.HighlightTagSource = null;
+            }
         }
     }
 }

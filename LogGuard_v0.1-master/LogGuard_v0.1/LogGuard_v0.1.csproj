@@ -192,22 +192,22 @@
     <Compile Include="Windows\MainWindow\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\MSW_LogWatcherControlButtonCommandVM.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\LogGuardPageViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\AdvanceFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\ChildOfAdvanceFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\MessageFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\MessageHighlightUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\PidFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TagRemoveFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TagShowFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TidFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TimeFilter\EndTimeFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TimeFilter\StartTimeFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TimeFilter\TimeFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCListOfDevice\ListOfDeviceUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCListOfDevice\MSW_UC_ListOfDeviceControlButtonCommand.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogLevelFilter\LogLevelFilterUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogManager\LogByTeamItemViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\MSW_BasePageViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\AdvanceFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\ChildOfAdvanceFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TimeFilter\EndTimeFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\MessageFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\MessageHighlightUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\PidFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TimeFilter\StartTimeFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TidFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TagRemoveFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TagShowFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCAdvanceFilter\TimeFilter\TimeFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCListOfDevice\ListOfDeviceUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCListOfDevice\MSW_UC_ListOfDeviceControlButtonCommand.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCLogLevelFilter\LogLevelFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\UserControls\UCLogManager\LogByTeamItemViewModel.cs" />
     <Compile Include="Windows\MainWindow\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>

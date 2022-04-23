@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using LogGuard_v0._1.Base.Command;
 
-namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCLogManager
+namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserControls.UCLogManager
 {
     public class LogByTeamItemViewModel : BaseViewModel, IHanzaTreeViewItem
     {

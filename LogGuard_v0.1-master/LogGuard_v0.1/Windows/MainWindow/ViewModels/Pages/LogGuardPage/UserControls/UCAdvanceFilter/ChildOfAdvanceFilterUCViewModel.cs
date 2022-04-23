@@ -9,7 +9,7 @@ using LogGuard_v0._1.Implement.UIEventHandler;
 using System.ComponentModel;
 using System.Threading;
 
-namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCAdvanceFilter
+namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserControls.UCAdvanceFilter
 {
     public abstract class ChildOfAdvanceFilterUCViewModel : BaseViewModel, ISourceFilter
     {

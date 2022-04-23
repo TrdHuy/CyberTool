@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.UserControls.UCListOfDevice
+namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserControls.UCListOfDevice
 {
     public class MSW_UC_ListOfDeviceControlButtonCommand : MSW_ButtonCommandViewModel
     {
