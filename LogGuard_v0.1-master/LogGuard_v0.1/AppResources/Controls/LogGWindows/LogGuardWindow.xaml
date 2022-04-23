@@ -3,6 +3,8 @@
 					xmlns:local="clr-namespace:LogGuard_v0._1.AppResources.Controls.LogGWindows">
 	<Style TargetType="{x:Type local:LogGuardWindow}"
 		   x:Key="DefaultLogGuardStyle">
+		<Setter Property="ChromeBackground" 
+				Value="#20FFFFFF"/>
 		<Setter Property="AllowsTransparency"
 				Value="True" />
 		<Setter Property="Background"
@@ -246,7 +248,8 @@
 					<Border x:Name="MainBorderContainer"
 							CornerRadius="30"
 							Width="{TemplateBinding Width}"
-							Height="{TemplateBinding Height}">
+							Height="{TemplateBinding Height}"
+							DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:LogGuardWindow, Mode=FindAncestor}}">
 
 						<Border.LayoutTransform>
 							<ScaleTransform x:Name="MainBorderCtn_ScaleTransform"
@@ -274,7 +277,7 @@
 								  Grid.Row="0"
 								  Height="30"
 								  VerticalAlignment="Stretch"
-								  Background="#20FFFFFF"
+								  Background="{Binding ChromeBackground}"
 								  WindowChrome.IsHitTestVisibleInChrome="False">
 
 								<Grid.ColumnDefinitions>

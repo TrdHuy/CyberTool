@@ -5,11 +5,30 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace LogGuard_v0._1.AppResources.Controls.LogGWindows
 {
     public class LogGuardWindow : Window
     {
+        #region ChromeBackground
+        public static readonly DependencyProperty ChromeBackgroundProperty = DependencyProperty.RegisterAttached(
+               "ChromeBackground",
+               typeof(Brush),
+               typeof(LogGuardWindow),
+               new PropertyMetadata(Brushes.Transparent));
+
+        public static Brush GetChromeBackground(UIElement obj)
+        {
+            return (Brush)obj.GetValue(ChromeBackgroundProperty);
+        }
+
+        public static void SetChromeBackground(UIElement obj, Brush value)
+        {
+            obj.SetValue(ChromeBackgroundProperty, value);
+        }
+        #endregion
+
         private const string MinimizeButtonName = "MinimizeButton";
         private const string SmallmizeButtonName = "SmallmizeButton";
         private const string CloseButtonName = "CloseButton";

@@ -12,7 +12,8 @@
 						 Title="Please wait!"
 						 Padding="0"
 						 SizeToContent="WidthAndHeight"
-						 FontFamily="Calibri">
+						 FontFamily="Calibri"
+						 ChromeBackground="Transparent">
 	
 	<Grid Background="{StaticResource Background_Level3}"
 		  Width="auto"
