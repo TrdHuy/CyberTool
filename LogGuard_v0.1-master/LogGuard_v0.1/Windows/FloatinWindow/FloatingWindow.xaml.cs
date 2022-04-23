@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogGuard_v0._1.AppResources.Controls.LogGWindows;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace LogGuard_v0._1.Windows.FloatinWindow
     /// <summary>
     /// Interaction logic for FloatingWindow.xaml
     /// </summary>
-    public partial class FloatingWindow : Window
+    public partial class FloatingWindow : LogGuardWindow
     {
         private const string MinimizeButtonName = "MinimizeButton";
         private const string SmallmizeButtonName = "SmallmizeButton";
