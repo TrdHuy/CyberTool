@@ -86,6 +86,11 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
             }
             catch (Exception e)
             {
+                if (!CaptureProc.HasExited)
+                    CaptureProc.Kill();
+                CaptureProc.Dispose();
+                CaptureProc.Close();
+                CaptureProc = null;
             }
             finally
             {
