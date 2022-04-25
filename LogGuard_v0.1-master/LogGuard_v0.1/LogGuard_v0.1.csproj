@@ -252,6 +252,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="AppResources\MenuThemes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LogGuard\Resources\HanzaTreeViewer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

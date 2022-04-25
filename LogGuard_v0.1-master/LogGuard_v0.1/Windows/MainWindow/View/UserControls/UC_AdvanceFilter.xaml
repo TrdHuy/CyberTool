@@ -19,41 +19,7 @@
 			{x:Type vmp:LogGuardPageViewModel}}" />
 	</UserControl.DataContext>
 
-	<UserControl.Resources>
-		<Style x:Key="{x:Type ToolTip}"
-			   TargetType="ToolTip">
-			<Setter Property="OverridesDefaultStyle"
-					Value="true" />
-			<Setter Property="Background"
-					Value="{StaticResource InflectBackground_Level1}" />
-			<Setter Property="Foreground"
-					Value="{StaticResource Background_Level2}" />
-			<Setter Property="FontFamily"
-					Value="Calibri" />
-			<Setter Property="FontSize"
-					Value="8" />
-			<Setter Property="FontWeight"
-					Value="Bold" />
-			<Setter Property="BorderThickness"
-					Value="0" />
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="ToolTip">
-						<Border Name="Border"
-								CornerRadius="4"
-								MinWidth="80"
-								Background="{TemplateBinding Background}"
-								BorderThickness="{TemplateBinding BorderThickness}">
-							<ContentPresenter Margin="15,10"
-											  HorizontalAlignment="Left"
-											  VerticalAlignment="Center" />
-						</Border>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-
-	</UserControl.Resources>
+	
 	<Border Background="{StaticResource Background_Level2}"
 			CornerRadius="{StaticResource DefaultPanelCornerRadius}">
 		<Grid>
