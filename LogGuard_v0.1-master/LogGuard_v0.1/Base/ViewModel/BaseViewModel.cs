@@ -73,10 +73,18 @@ namespace LogGuard_v0._1.Base.ViewModel
 
         public virtual void OnDestroy()
         {
+            foreach (var child in ChildModels)
+            {
+                child.OnDestroy();
+            }
         }
 
         public virtual void OnBegin()
         {
+            foreach(var child in ChildModels)
+            {
+                child.OnBegin();
+            }
         }
     }
 }
