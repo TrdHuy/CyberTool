@@ -164,6 +164,7 @@
     <Compile Include="Utils\CustomAttachedProperties.cs" />
     <Compile Include="Utils\Definitions\LogGuardDefinition.cs" />
     <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Utils\NativeMethods.cs" />
     <Compile Include="Utils\ProcessManagement.cs" />
     <Compile Include="Utils\RangeObservableCollection.cs" />
     <Compile Include="WindowDirector.cs" />

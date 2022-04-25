@@ -12,7 +12,8 @@
 		<Setter Property="WindowStyle"
 				Value="None" />
 		<Setter Property="ResizeMode"
-				Value="CanResize" />
+				Value="CanResizeWithGrip" />
+		
 		<Setter Property="WindowChrome.WindowChrome">
 			<Setter.Value>
 				<WindowChrome CaptionHeight="30" />
