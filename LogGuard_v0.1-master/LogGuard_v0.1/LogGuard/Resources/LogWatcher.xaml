@@ -167,144 +167,6 @@
 							Value="0" />
 					<Setter Property="Padding"
 							Value="0" />
-					<Setter Property="Template">
-						<Setter.Value>
-							<ControlTemplate TargetType="ctrl:LogWatcherItem">
-								<Border x:Name="PART_MainBorder"
-										Height="10"
-										SnapsToDevicePixels="true"
-										BorderThickness="0"
-										Background="{TemplateBinding Background}">
-									<Grid>
-										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="25" />
-											<ColumnDefinition Width="*" />
-										</Grid.ColumnDefinitions>
-
-										<Rectangle x:Name="FeedbackRec"
-												   Fill="{DynamicResource SelectedRowIndicatorPanelBackground}" />
-
-										<Rectangle x:Name="ExpandRowBackground"
-												   Grid.Column="1"
-												   Visibility="Hidden"
-												   Fill="{DynamicResource SelectedRowIndicatorPanelBackground}" />
-
-										<Rectangle x:Name="ExpandRowLine"
-												   Grid.Column="1"
-												   Visibility="Hidden"
-												   Height="3"
-												   StrokeThickness="0"
-												   VerticalAlignment="Center"
-												   Fill="{DynamicResource Foreground_Level2}" />
-
-										<Path x:Name="Redo"
-											  IsHitTestVisible="False"
-											  Height="8"
-											  Width="8"
-											  VerticalAlignment="Center"
-											  HorizontalAlignment="Center"
-											  Data="{Binding Source={StaticResource AdvanceSearchIconPathGeomerty}}"
-											  Fill="#FFF0F0F0"
-											  Stretch="Uniform"
-											  Visibility="Hidden" />
-
-										<Rectangle x:Name="FeedBackRedo"
-												   IsHitTestVisible="False"
-												   Height="15"
-												   Width="15"
-												   RadiusX="10"
-												   RadiusY="10"
-												   VerticalAlignment="Center"
-												   HorizontalAlignment="Center"
-												   Fill="#19B8E7F9"
-												   Stroke="#FFB8EAF9"
-												   Visibility="{Binding Path=IsMouseOver,
-																		ElementName=FeedbackRec, 
-																		Converter={StaticResource boolToVisibilityConverter}}" />
-
-										<Path x:Name="IndicateSelectedArrow"
-											  Data="m0,187.51V0L93.76,93.76ZM10,24.14V163.37L79.61,93.76Z"
-											  Fill="#FFF0F0F0"
-											  Margin="13,10,1,10"
-											  Stretch="Uniform"
-											  Visibility="Hidden" />
-
-										<Rectangle x:Name="FeedbackBorder"
-												   StrokeThickness="1"
-												   Grid.Column="1"
-												   Fill="#19B8E7F9"
-												   Stroke="#FFB8EAF9"
-												   Visibility="Hidden"
-												   HorizontalAlignment="Stretch" />
-
-										<GridViewRowPresenter x:Name="PART_RowPresenter"
-															  Grid.Column="1"
-															  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-
-									</Grid>
-								</Border>
-								<ControlTemplate.Triggers>
-									<DataTrigger Binding="{Binding Path=ViewType}"
-												 Value="0">
-										<Setter Property="Height"
-												TargetName="FeedBackRedo"
-												Value="0" />
-										<Setter Property="Width"
-												TargetName="FeedBackRedo"
-												Value="0" />
-									</DataTrigger>
-
-									<DataTrigger Binding="{Binding Path=ViewType}"
-												 Value="1">
-										<Setter Property="Visibility"
-												TargetName="ExpandRowBackground"
-												Value="Visible" />
-										<Setter Property="Visibility"
-												TargetName="ExpandRowLine"
-												Value="Visible" />
-										<Setter Property="Visibility"
-												TargetName="Redo"
-												Value="Visible" />
-										<Setter Property="Height"
-												TargetName="FeedbackBorder"
-												Value="0" />
-										<Setter Property="Width"
-												TargetName="FeedbackBorder"
-												Value="0" />
-										<Setter Property="Visibility"
-												TargetName="PART_RowPresenter"
-												Value="Collapsed" />
-									</DataTrigger>
-
-									<Trigger Property="IsMouseOver"
-											 Value="True">
-										<Setter Property="Visibility"
-												TargetName="FeedbackBorder"
-												Value="Visible" />
-									</Trigger>
-
-									<Trigger Property="IsSelected"
-											 Value="True">
-										<Setter Property="Visibility"
-												TargetName="FeedbackBorder"
-												Value="Visible" />
-										<Setter Property="Visibility"
-												TargetName="IndicateSelectedArrow"
-												Value="Visible" />
-										<Setter Property="Fill"
-												TargetName="FeedbackBorder"
-												Value="{DynamicResource SelectedItemBackground}" />
-										<Setter Property="StrokeThickness"
-												TargetName="FeedbackBorder"
-												Value="0" />
-										<Setter Property="Fill"
-												TargetName="FeedbackRec"
-												Value="{StaticResource Background_Level1}" />
-									</Trigger>
-								</ControlTemplate.Triggers>
-							</ControlTemplate>
-						</Setter.Value>
-					</Setter>
 					<Style.Triggers>
 						<!--Log view template-->
 						<DataTrigger Binding="{Binding Path=ViewType}"
@@ -371,12 +233,44 @@
 														Value="0" />
 												<Setter Property="Fill"
 														TargetName="FeedbackRec"
-														Value="{StaticResource Background_Level1}" />
+														Value="{DynamicResource Background_Level1}" />
 											</Trigger>
+
+											<DataTrigger Binding="{Binding Path=Level}"
+														 Value="D">
+												<Setter Property="Foreground"
+														Value="{DynamicResource DebugLevelForeground_Level2}" />
+											</DataTrigger>
+											<DataTrigger Binding="{Binding Path=Level}"
+														 Value="E">
+												<Setter Property="Foreground"
+														Value="{DynamicResource ErrorLevelForeground_Level2}" />
+											</DataTrigger>
+											<DataTrigger Binding="{Binding Path=Level}"
+														 Value="W">
+												<Setter Property="Foreground"
+														Value="{DynamicResource WarningLevelForeground_Level2}" />
+											</DataTrigger>
+											<DataTrigger Binding="{Binding Path=Level}"
+														 Value="V">
+												<Setter Property="Foreground"
+														Value="{DynamicResource VerboseLevelForeground_Level2}" />
+											</DataTrigger>
+											<DataTrigger Binding="{Binding Path=Level}"
+														 Value="F">
+												<Setter Property="Foreground"
+														Value="{DynamicResource FatalLevelForeground_Level2}" />
+											</DataTrigger>
+											<DataTrigger Binding="{Binding Path=Level}"
+														 Value="I">
+												<Setter Property="Foreground"
+														Value="{DynamicResource InfoLevelForeground_Level2}" />
+											</DataTrigger>
 										</ControlTemplate.Triggers>
 									</ControlTemplate>
 								</Setter.Value>
 							</Setter>
+							
 						</DataTrigger>
 
 						<!--Expandable view template-->
@@ -491,6 +385,7 @@
 																		Converter={StaticResource boolToVisibilityConverter}}" />
 											</Grid>
 										</Border>
+
 									</ControlTemplate>
 								</Setter.Value>
 							</Setter>
@@ -516,36 +411,6 @@
 							<Setter Property="Background"
 									Value="{DynamicResource SecondAlternationIndexBackground}" />
 						</Trigger>
-						<DataTrigger Binding="{Binding Path=Level}"
-									 Value="D">
-							<Setter Property="Foreground"
-									Value="{StaticResource DebugLevelForeground_Level2}" />
-						</DataTrigger>
-						<DataTrigger Binding="{Binding Path=Level}"
-									 Value="E">
-							<Setter Property="Foreground"
-									Value="{StaticResource ErrorLevelForeground_Level2}" />
-						</DataTrigger>
-						<DataTrigger Binding="{Binding Path=Level}"
-									 Value="W">
-							<Setter Property="Foreground"
-									Value="{StaticResource WarningLevelForeground_Level2}" />
-						</DataTrigger>
-						<DataTrigger Binding="{Binding Path=Level}"
-									 Value="V">
-							<Setter Property="Foreground"
-									Value="{StaticResource VerboseLevelForeground_Level2}" />
-						</DataTrigger>
-						<DataTrigger Binding="{Binding Path=Level}"
-									 Value="F">
-							<Setter Property="Foreground"
-									Value="{StaticResource FatalLevelForeground_Level2}" />
-						</DataTrigger>
-						<DataTrigger Binding="{Binding Path=Level}"
-									 Value="I">
-							<Setter Property="Foreground"
-									Value="{StaticResource InfoLevelForeground_Level2}" />
-						</DataTrigger>
 					</Style.Triggers>
 				</Style>
 
