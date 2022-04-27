@@ -69,14 +69,13 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.RunThreadConfig
 
         public void Init()
         {
-
-#if DEBUG
             var watch = Stopwatch.StartNew();
-#endif
+
             _config.Init();
 
-#if DEBUG
             watch.Stop();
+
+#if DEBUG
             Console.WriteLine("Total load config from file time = " + watch.ElapsedMilliseconds + "(ms)");
 #endif
             logger.I("Total load config from file time = " + watch.ElapsedMilliseconds + "(ms)");
