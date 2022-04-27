@@ -47,7 +47,10 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action.Gestures
                 {
                     if(tagItems.Count < RUNE.MAXIMUM_TAG_ITEM)
                     {
-                        tagItems.Add(new TagItemViewModel(tagManagerVM, new LogTagVO(tag)));
+                        var tagItemVM = new TagItemViewModel(tagManagerVM, new LogTagVO(tag));
+                        tagItemVM.DeleteTagItemCommand = ViewModelHelper.Current.LogManagerUCViewModel.CommandViewModel.DeleteTagItemButtonCommand;
+                        tagItemVM.EditTagItemCommand = ViewModelHelper.Current.LogManagerUCViewModel.CommandViewModel.EditTagItemButtonCommand;
+                        tagItems.Add(tagItemVM);
                     }
                     else
                     {

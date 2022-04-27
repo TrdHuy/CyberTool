@@ -24,12 +24,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
             tagVO = vo;
             ViewModelHelper.Current.LogManagerUCViewModelGenerated -= LMUCViewModelGenerated;
             ViewModelHelper.Current.LogManagerUCViewModelGenerated += LMUCViewModelGenerated;
-        }
-
-        private void LMUCViewModelGenerated(object sender, LogManagerUCViewModel vm)
-        {
-            EditTagItemCommand = vm.CommandViewModel.EditTagItemButtonCommand;
-            DeleteTagItemCommand = vm.CommandViewModel.DeleteTagItemButtonCommand;
             ShowTagItemCommand = new BaseDotNetCommandImpl((s) =>
             {
                 Stat = DotStatus.DotOn;
@@ -42,6 +36,13 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
             {
                 Stat = DotStatus.DotNormal;
             });
+        }
+
+        private void LMUCViewModelGenerated(object sender, LogManagerUCViewModel vm)
+        {
+            EditTagItemCommand = vm.CommandViewModel.EditTagItemButtonCommand;
+            DeleteTagItemCommand = vm.CommandViewModel.DeleteTagItemButtonCommand;
+            
             ViewModelHelper.Current.LogManagerUCViewModelGenerated -= LMUCViewModelGenerated;
         }
 
