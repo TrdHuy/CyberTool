@@ -38,7 +38,7 @@ namespace LogGuard_v0._1.Utils
         }
 
         private const string TAG = "LogGuard_v0.1";
-        private const int OLD_LOG_FILES_CAPACITY = 1;
+        private const int OLD_LOG_FILES_CAPACITY = 10;
         private static readonly SemaphoreSlim Mutex = new SemaphoreSlim(1);
 
         private static ObservableQueue<Task<bool>> TaskQueue { get; set; }
