@@ -118,7 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="SecFloatingFeature" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_Config\SecFloatingFeature.mk;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="BoolSecFloatingFeature" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_Config\BoolSecFloatingFeature.mk;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IntSecFloatingFeature" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_Config\IntSecFloatingFeature.mk;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

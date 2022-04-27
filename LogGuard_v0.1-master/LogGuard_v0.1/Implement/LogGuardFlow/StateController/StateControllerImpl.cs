@@ -26,7 +26,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
         public LogGuardState CurrentState { get => _currentState; set => _currentState = value; }
         public LogGuardState PreviousState { get => _previousState; set => _previousState = value; }
         public object SynchronizeStateObject { get => _syncObject; set => _syncObject = value; }
-        public IRunThreadConfig RunThreadConfig => RunThreadConfigImpl.Current;
+        public RunThreadConfigManager RTCManager => RunThreadConfigManager.Current;
 
         public bool IsRunning { get; private set; }
         public bool IsPausing { get; private set; }
@@ -114,7 +114,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
                 }
                 var cmd = DeviceCmdExecuterImpl
                     .Current
-                    .CreateCommandADB(command: RunThreadConfig.LogParserFormat.Cmd
+                    .CreateCommandADB(command: RTCManager.CurrentParser.Cmd
                         , type: DeviceCmdContact.ADB_NONE_SHELL_COMMAND_TYPE
                         , asroot: false
                         , multiDevice: true
@@ -124,8 +124,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
                     .Current
                     .CreateProcess(cmd);
 
-
-                LGSourceManager.UpdateLogParser(RunThreadConfig);
+                LGSourceManager.UpdateLogParser(RTCManager.CurrentConfig);
                 RunningThread = new Thread(Running);
                 DeviceManager.SelectedDeviceUnpluged -= OnSelectedDeviceUnpluged;
                 DeviceManager.SelectedDeviceUnpluged += OnSelectedDeviceUnpluged;

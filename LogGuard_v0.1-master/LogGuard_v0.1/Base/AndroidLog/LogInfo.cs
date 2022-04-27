@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,17 @@ namespace LogGuard_v0._1.Base.AndroidLog
 
     public class LogInfo
     {
+        static LogInfo()
+        {
+            COLOR_VERBOSE = ColorTranslator.FromHtml("#AA52ABE8");
+            COLOR_DEBUG = ColorTranslator.FromHtml("#AAADFF55");
+            COLOR_WARN = ColorTranslator.FromHtml("#AAFFB855");
+            COLOR_ERROR = ColorTranslator.FromHtml("#AAFF6255");
+            COLOR_INFO = ColorTranslator.FromHtml("#AACAF1E1");
+            COLOR_FATAL = ColorTranslator.FromHtml("#AAF0ADF1");
+            COLOR_DEFAULT = ColorTranslator.FromHtml("#AA7E7D7E");
+        }
+
         public const string LEVEL_ALL = "VDFIEW";
         public const string LEVEL_VERBOSE = "V";
         public const string LEVEL_DEBUG = "D";
@@ -35,12 +47,13 @@ namespace LogGuard_v0._1.Base.AndroidLog
         public const int LEVEL_ERROR_INDEX = 4;
         public const int LEVEL_WARNING_INDEX = 5;
 
-        public const string COLOR_VERBOSE = "#000000";
-        public const string COLOR_DEBUG = "#0063B1";
-        public const string COLOR_INFO = "#00B294";
-        public const string COLOR_WARN = "#FF8C00";
-        public const string COLOR_ERROR = "#E81123";
-        public const string COLOR_FATAL = "#D13438";
+        public static Color COLOR_VERBOSE;
+        public static Color COLOR_DEBUG;
+        public static Color COLOR_INFO;
+        public static Color COLOR_WARN;
+        public static Color COLOR_ERROR;
+        public static Color COLOR_FATAL;
+        public static Color COLOR_DEFAULT;
 
         public const string KEY_DATE = "Date";
         public const string KEY_TIME = "Time";

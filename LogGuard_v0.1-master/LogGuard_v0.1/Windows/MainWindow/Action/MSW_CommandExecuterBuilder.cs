@@ -7,6 +7,7 @@ using LogGuard_v0._1.Implement.UIEventHandler;
 using LogGuard_v0._1.Utils;
 using LogGuard_v0._1.Windows.MainWindow.Action.Gestures;
 using LogGuard_v0._1.Windows.MainWindow.Action.Types;
+using LogGuard_v0._1.Windows.MainWindow.Action.Types.LogManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +61,15 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action
                     break;
                 case KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_ZOOM_FEATURE:
                     viewModelCommandExecuter = new MSW_LogWatcher_ZoomButtonAction(keyTag, WindowTag.WINDOW_TAG_MAIN_SCREEN, viewModel, logger);
+                    break;
+                case KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_TAG_DOUBLE_CLICK_GESTURE_FEATURE:
+                    viewModelCommandExecuter = new MSW_LWI_LogWatcher_TagDoubleClickAction(keyTag, WindowTag.WINDOW_TAG_MAIN_SCREEN, viewModel, logger);
+                    break;
+                case KeyFeatureTag.KEY_TAG_MSW_LOGMANAGER_EDIT_TAG_ITEM_FEATURE:
+                    viewModelCommandExecuter = new MSW_LMUC_EditTagItemAction(keyTag, WindowTag.WINDOW_TAG_MAIN_SCREEN, viewModel, logger);
+                    break;
+                case KeyFeatureTag.KEY_TAG_MSW_LOGMANAGER_DELETE_TAG_ITEM_FEATURE:
+                    viewModelCommandExecuter = new MSW_LMUC_DeleteTagItemAction(keyTag, WindowTag.WINDOW_TAG_MAIN_SCREEN, viewModel, logger);
                     break;
                 default:
                     break;

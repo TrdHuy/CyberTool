@@ -1,5 +1,6 @@
 ﻿using LogGuard_v0._1.Base.Device;
 using LogGuard_v0._1.Base.Log;
+using LogGuard_v0._1.Implement.LogGuardFlow.RunThreadConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         void Resume();
         void Pause();
         ISourceManager LGSourceManager { get; }
-        IRunThreadConfig RunThreadConfig { get; }
+        RunThreadConfigManager RTCManager { get; }
         IDeviceManager DeviceManager { get; }
         LogGuardState CurrentState { get; set; }
         LogGuardState PreviousState { get; set; }

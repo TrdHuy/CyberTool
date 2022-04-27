@@ -37,7 +37,12 @@ namespace LogGuard_v0._1.Utils
 
             foreach (T item in list)
                 Items.Add(item);
-            SendNotifications(Items.Count);
+            SendNotifications();
+        }
+
+        public void AddWithoutNotify(T item)
+        {
+            Items.Add(item);
         }
 
         public void InsertRange(IEnumerable<T> list, int index)
@@ -47,7 +52,7 @@ namespace LogGuard_v0._1.Utils
 
             foreach (T item in list)
                 Items.Insert(++index, item);
-            SendNotifications(Items.Count);
+            SendNotifications();
         }
 
         public void AddNewRange(IEnumerable<T> list)
@@ -57,7 +62,7 @@ namespace LogGuard_v0._1.Utils
             Items.Clear();
             foreach (T item in list)
                 Items.Add(item);
-            SendNotifications(Items.Count);
+            SendNotifications();
         }
 
         public void RemoveRange(IEnumerable<T> list)
@@ -67,12 +72,12 @@ namespace LogGuard_v0._1.Utils
 
             foreach (T item in list)
                 Items.Remove(item);
-            SendNotifications(Items.Count);
+            SendNotifications();
         }
 
-        public void SendNotifications(int count)
+        public void SendNotifications()
         {
-            OnCollectionChanged(new RangeObservableCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset, count));
+            OnCollectionChanged(new RangeObservableCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset, Items.Count));
             OnPropertyChanged(new PropertyChangedEventArgs("Count"));
             OnPropertyChanged(new PropertyChangedEventArgs("Items"));
         }

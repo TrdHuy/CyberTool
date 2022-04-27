@@ -1,6 +1,7 @@
 ﻿using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Base.ViewModel.ViewModelHelper;
 using LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages;
+using LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserControls.UCLogManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,10 @@ namespace LogGuard_v0._1.Implement.ViewModels
     public class ViewModelHelper
     {
         private static ViewModelHelper _instance;
-        public BaseViewModel LogGuardPageViewModel { get; private set; }
+        public event OnLogGuardPageViewModelGeneratedHandler LogGuardPageViewModelGenerated;
+        public event OnLogManagerUCViewModelGeneratedHandler LogManagerUCViewModelGenerated;
+        public LogGuardPageViewModel LogGuardPageViewModel { get; private set; }
+        public LogManagerUCViewModel LogManagerUCViewModel { get; private set; }
 
         public void Init()
         {
@@ -26,6 +30,11 @@ namespace LogGuard_v0._1.Implement.ViewModels
             {
                 case LogGuardPageViewModel vm:
                     LogGuardPageViewModel = vm;
+                    LogGuardPageViewModelGenerated?.Invoke(this, vm);
+                    break;
+                case LogManagerUCViewModel vm:
+                    LogManagerUCViewModel = vm;
+                    LogManagerUCViewModelGenerated?.Invoke(this, vm);
                     break;
             }
         }
@@ -43,4 +52,7 @@ namespace LogGuard_v0._1.Implement.ViewModels
         }
 
     }
+
+    public delegate void OnLogManagerUCViewModelGeneratedHandler(object sender, LogManagerUCViewModel vm);
+    public delegate void OnLogGuardPageViewModelGeneratedHandler(object sender, LogGuardPageViewModel vm);
 }

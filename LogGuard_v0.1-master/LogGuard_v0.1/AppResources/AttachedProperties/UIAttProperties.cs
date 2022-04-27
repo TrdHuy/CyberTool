@@ -22,5 +22,19 @@ namespace LogGuard_v0._1.AppResources.AttachedProperties
         public static void SetStringData(UIElement target, string value) =>
             target.SetValue(StringDataProperty, value);
         #endregion
+
+        #region ProxyObject
+        public static readonly DependencyProperty ProxyObjectProperty =
+            DependencyProperty.RegisterAttached(
+            "ProxyObject",
+            typeof(object),
+            typeof(UIAttProperties),
+            new FrameworkPropertyMetadata(defaultValue: default(Object),
+                flags: FrameworkPropertyMetadataOptions.AffectsRender));
+        public static object GetProxyObject(UIElement target) =>
+            target.GetValue(ProxyObjectProperty);
+        public static void SetProxyObject(UIElement target, object value) =>
+            target.SetValue(ProxyObjectProperty, value);
+        #endregion
     }
 }

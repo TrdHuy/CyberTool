@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogGuard_v0._1.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,28 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
     public interface IRunThreadConfig
     {
         LogParserVO LogParserFormat { get; set; }
+
+        List<LogTagVO> LogTags { get; set; }
+    }
+
+    public class LogTagVO
+    {
+        public string Tag { get; set; }
+        public Status Stat { get; set; }
+
+        public LogTagVO(string tag)
+        {
+            Tag = tag;
+            Stat = Status.None;
+        }
+
+        public enum Status
+        {
+            None = 0,
+            Show = 1,
+            Remove = 2
+        }
+
     }
 
     public class LogParserVO

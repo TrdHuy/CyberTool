@@ -23,14 +23,7 @@ namespace LogGuard_v0._1.Base.ViewModel
         public BaseViewModel(BaseViewModel parent)
         {
             ParentsModel = parent;
-        }
-
-        public void AddChild(BaseViewModel child)
-        {
-            if (child != null)
-            {
-                ChildModels.Add(child);
-            }
+            parent.AddChild(this);
         }
 
         public void OnChanged(object viewModel, string propertyName)
@@ -84,6 +77,14 @@ namespace LogGuard_v0._1.Base.ViewModel
             foreach(var child in ChildModels)
             {
                 child.OnBegin();
+            }
+        }
+
+        private void AddChild(BaseViewModel child)
+        {
+            if (child != null)
+            {
+                ChildModels.Add(child);
             }
         }
     }

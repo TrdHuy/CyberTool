@@ -6,6 +6,7 @@ using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Implement.AndroidLog;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceHighlightManager;
+using LogGuard_v0._1.Implement.ViewModels;
 using LogGuard_v0._1.LogGuard.Control;
 using LogGuard_v0._1.Utils;
 using LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher;
@@ -84,21 +85,26 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
             var item = LogInfoManager.ParseLogInfos(line, false, false);
             if (item != null)
             {
-                LogWatcherItemViewModel livm = new LogWatcherItemViewModel(item);
+                LWI_ParseableViewModel livm = new LWI_ParseableViewModel(
+                    ViewModelHelper.Current.LogGuardPageViewModel
+                    , item);
                 AddItem(livm);
             }
         }
 
         public void AddItem(LogWatcherItemViewModel model)
         {
+
             if (model == null)
             {
                 return;
             }
-            if (model.Level != null)
+
+            if (model is LWI_ParseableViewModel)
             {
-                _logLevelCountMap[model.Level]++;
+                _logLevelCountMap[(model as LWI_ParseableViewModel).Level]++;
             }
+
             lock (stateLockObject)
             {
                 lock (RawSource.ThreadSafeLock)
@@ -466,10 +472,11 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
 #endif
 
             LogWatcherItemViewModel cur = null;
-            var newExpandableLst = new List<LogWatcherItemViewModel>();
+            var newExpandableLst = new List<LWI_ExpandableViewModel>();
             var preCount = 0;
 
-            var curExpandbleView = new LogWatcherItemViewModel();
+            var curExpandbleView = new LWI_ExpandableViewModel(
+                ViewModelHelper.Current.LogGuardPageViewModel);
             curExpandbleView.ExpandButtonCommand = GetExpandButtonCommand(DisplaySource);
             curExpandbleView.DeleteButtonCommand = GetDeleteButtonCommand(DisplaySource);
 
@@ -535,7 +542,8 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
 
                     preCount += curExpandbleView.Childs.Count - 1;
 
-                    curExpandbleView = new LogWatcherItemViewModel();
+                    curExpandbleView = new LWI_ExpandableViewModel(
+                        ViewModelHelper.Current.LogGuardPageViewModel);
                     curExpandbleView.ExpandButtonCommand = GetExpandButtonCommand(DisplaySource);
                     curExpandbleView.DeleteButtonCommand = GetDeleteButtonCommand(DisplaySource);
 
@@ -705,7 +713,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
 
         private async Task<AsyncTaskResult> OnRedoDeleteSource(object data, CancellationToken token)
         {
-            var vmodel = data as LogWatcherItemViewModel;
+            var vmodel = data as LWI_ExpandableViewModel;
             var newExpandedList = new List<LogWatcherItemViewModel>();
             var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
             lock (DisplaySource.ThreadSafeLock)

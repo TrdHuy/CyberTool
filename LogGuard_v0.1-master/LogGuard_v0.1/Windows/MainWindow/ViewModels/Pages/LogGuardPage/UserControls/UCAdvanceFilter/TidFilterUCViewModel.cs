@@ -30,7 +30,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
                 return true;
             }
 
-            var data = obj as LogWatcherItemViewModel;
+            var data = obj as LWI_ParseableViewModel;
             data.HighlightTidSource = null;
 
             if (IsFilterEnable && data?.Tid != null)

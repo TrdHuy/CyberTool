@@ -40,7 +40,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
         public override bool Filter(object obj)
         {
-            var data = obj as LogWatcherItemViewModel;
+            var data = obj as LWI_ParseableViewModel;
             if (!CurrentEngine.IsVaild())
             {
                 CurrentEngine.Refresh();
@@ -60,7 +60,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
         protected override bool DoHighlight(object obj)
         {
-            var data = obj as LogWatcherItemViewModel;
+            var data = obj as LWI_ParseableViewModel;
             if (data != null)
             {
                 data.HighlightMessageSource = CurrentEngine
@@ -75,7 +75,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
         protected override void DoCleanHighlightSource(object obj)
         {
-            var data = obj as LogWatcherItemViewModel;
+            var data = obj as LWI_ParseableViewModel;
             if (data != null)
             {
                 data.HighlightMessageSource = null;

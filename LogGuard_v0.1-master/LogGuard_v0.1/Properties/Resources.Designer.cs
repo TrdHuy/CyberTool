@@ -65,13 +65,34 @@ namespace LogGuard_v0._1.Properties {
         ///############################################################
         ///#Hỗ trợ filter nhanh khi gõ vào ô tìm kiếm 
         ///#Không cần nhấn Enter để thực hiện filter
-        ///HUY.TD1_IS_SUPPORT_LOGGUARD_QUICK_FILTER_TEXT_BOX=TRUE
+        ///HUY.TD1_LOGGUARD_IS_SUPPORT_QUICK_FILTER_TEXT_BOX=FALSE
         ///
-        ///############################################################.
+        ///############################################################
+        ///
+        ///
+        ///HUY.TD1_LOGGUARD_IS_SUPPORT_HIGH_CPU_LOG_CAPTURE=TRUE
+        ///
+        ///HUY.TD1_LOGGUARD_IS_SUPPORT_DELETE_LOG_LINE=TRUE.
         /// </summary>
-        internal static string SecFloatingFeature {
+        internal static string BoolSecFloatingFeature {
             get {
-                return ResourceManager.GetString("SecFloatingFeature", resourceCulture);
+                return ResourceManager.GetString("BoolSecFloatingFeature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///############################################################
+        ///#Số lượng tag item tối đa trong tag manager
+        ///
+        ///HUY.TD1_MAXIMUM_TAG_ITEMS_OF_TAG_MANAGER=100
+        ///
+        ///############################################################
+        ///.
+        /// </summary>
+        internal static string IntSecFloatingFeature {
+            get {
+                return ResourceManager.GetString("IntSecFloatingFeature", resourceCulture);
             }
         }
     }

@@ -41,7 +41,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
         public override bool Filter(object obj)
         {
-            var itemVM = obj as LogWatcherItemViewModel;
+            var itemVM = obj as LWI_ParseableViewModel;
             if (itemVM != null)
             {
                 return TagShow(itemVM);
@@ -51,7 +51,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
         protected override bool IsUseFilterEngine => true;
 
-        private bool TagShow(LogWatcherItemViewModel data)
+        private bool TagShow(LWI_ParseableViewModel data)
         {
             data.HighlightTagSource = null;
             if (!CurrentEngine.IsVaild())
@@ -69,7 +69,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
         protected override bool DoHighlight(object obj)
         {
-            var data = obj as LogWatcherItemViewModel;
+            var data = obj as LWI_ParseableViewModel;
             if (data != null)
             {
                 data.HighlightTagSource = CurrentEngine
@@ -82,7 +82,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
         protected override void DoCleanHighlightSource(object obj)
         {
-            var data = obj as LogWatcherItemViewModel;
+            var data = obj as LWI_ParseableViewModel;
             if (data != null)
             {
                 data.HighlightTagSource = null;

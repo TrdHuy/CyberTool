@@ -1,5 +1,6 @@
 ﻿using LogGuard_v0._1._Config;
 using LogGuard_v0._1.Base.AsyncTask;
+using LogGuard_v0._1.Implement.ViewModels;
 using LogGuard_v0._1.Windows.WaitingWindow;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,10 @@ namespace LogGuard_v0._1
         private App() : base()
         {
             _instance = this;
+
+            // Modules need to be inited before lauch app
             RUNE.Init();
+            ViewModelHelper.Current.Init();
         }
 
         protected override void OnStartup(StartupEventArgs e)

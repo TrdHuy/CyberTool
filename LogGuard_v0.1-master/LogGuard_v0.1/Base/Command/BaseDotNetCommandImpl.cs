@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace LogGuard_v0._1.Base.Command
 {
-    internal class BaseDotNetCommandImpl : ICommand
+    public class BaseDotNetCommandImpl : ICommand
     {
         public event EventHandler CanExecuteChanged;
         private Action<object> _act;

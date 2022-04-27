@@ -16,6 +16,9 @@ namespace LogGuard_v0._1.Implement.AndroidLog.LogParser
             PidGroup = @"(?<Pid>\w+)" + @"[)]:";
             MessageGroup = @"(?<Message>.*)";
             Pattern = DateGroup + TimeGroup + LevelGroup + TagGroup + PidGroup + MessageGroup;
+
+            // Web pattern version:
+            //(? P<Date>[0 - 1]\d -[0 - 3]\d)\s + (? P<Time>[0 - 2]\d:[0 - 6]\d:[0 - 6]\d.\d +)\s + (? P<Level>[VDIWEF])\/ (? P < Tag >\S +)[(]\s * (? P < Pid >\w +)[)]:(? P<Message>.*)
         }
 
         public override LogInfo ParseLogInfos(string line, int lineNumber)
@@ -36,20 +39,9 @@ namespace LogGuard_v0._1.Implement.AndroidLog.LogParser
                         .BuildMessage(match.Groups[LogInfo.KEY_MESSAGE].ToString())
                         .BuildLine(lineNumber)
                         .BuildRawText(line);
-
+                return builder.Build();
             }
-            else
-            {
-                builder.Reset();
-                builder.BuildDate("-")
-                         .BuildTime("-")
-                         .BuildDateTime()
-                         .BuildColorByLevel("-")
-                         .BuildTag("-")
-                         .BuildMessage(line);
-            }
-
-            return builder.Build();
+            return null;
         }
     }
 }

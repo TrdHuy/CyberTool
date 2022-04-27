@@ -162,7 +162,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
         public bool Filter(object obj)
         {
-            var data = obj as LogWatcherItemViewModel;
+            var data = obj as LWI_ParseableViewModel;
             if (data != null)
             {
                 switch (data.Level)

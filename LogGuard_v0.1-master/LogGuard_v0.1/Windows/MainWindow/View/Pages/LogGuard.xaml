@@ -251,11 +251,27 @@
 							<GridViewColumnHeader Content="Tag" />
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightTagSource, UpdateSourceTrigger=PropertyChanged}"
+									<TextBlock x:Name="mainContent"
+											   attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightTagSource, UpdateSourceTrigger=PropertyChanged}"
 											   attProp:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
 											   attProp:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
 											   attProp:TextBlockAttProperties.RawText="{Binding Tag}"
-											   Text="{Binding Tag}" />
+											   Text="{Binding Tag}">
+										<TextBlock.InputBindings>
+											<MouseBinding Command="{Binding TagLeftDoubleClickCommand}"
+														  CommandParameter="{Binding .}"
+														  MouseAction="LeftDoubleClick" />
+										</TextBlock.InputBindings>
+
+									</TextBlock>
+									<DataTemplate.Triggers>
+										<Trigger Property="IsMouseOver"
+												 Value="True">
+											<Setter Property="TextDecorations"
+													TargetName="mainContent"
+													Value="Underline" />
+										</Trigger>
+									</DataTemplate.Triggers>
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</GridViewColumn>

@@ -38,7 +38,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
         public override bool Filter(object obj)
         {
-            var itemVM = obj as LogWatcherItemViewModel;
+            var itemVM = obj as LWI_ParseableViewModel;
             if (itemVM != null)
             {
                 return TagRemove(itemVM);
@@ -47,7 +47,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
         }
         protected override bool IsUseFilterEngine => true;
 
-        private bool TagRemove(LogWatcherItemViewModel data)
+        private bool TagRemove(LWI_ParseableViewModel data)
         {
             if (!CurrentEngine.IsVaild())
             {

@@ -496,7 +496,7 @@ namespace LogGuard_v0._1.LogGuard.Control
             {
                 case LogWatcherItem ele:
                     var context = item as ILogWatcherElements;
-                    if(context != null)
+                    if (context != null)
                     {
                         ele.SetContext(context);
                     }
@@ -622,29 +622,25 @@ namespace LogGuard_v0._1.LogGuard.Control
             float yOffset = 0f;
             for (int i = 0; i < count; i++)
             {
-                ILogWatcherElements lwe = null;
-                lwe = copiedItems[i] as ILogWatcherElements;
+                var lwe = copiedItems[i] as ILogWatcherElements;
 
                 Brush br = new SolidBrush(DefaultMapperColors["default"]);
 
                 if (lwe != null)
                 {
-                    if (!string.IsNullOrEmpty(lwe.Level))
+                    if (isErrorMap)
                     {
-                        if (isErrorMap)
+                        br = new SolidBrush(lwe.ErrorColor ?? DefaultMapperColors["default"]);
+                    }
+                    else
+                    {
+                        try
                         {
-                            br = new SolidBrush(DefaultMapperColors[lwe.Level == "E" ? "E" : "default"]);
+                            br = new SolidBrush(lwe.TrackColor ?? DefaultMapperColors["default"]);
                         }
-                        else
+                        catch
                         {
-                            try
-                            {
-                                br = new SolidBrush(DefaultMapperColors[lwe.Level]);
-                            }
-                            catch
-                            {
-                                br = new SolidBrush(DefaultMapperColors["default"]);
-                            }
+                            br = new SolidBrush(DefaultMapperColors["default"]);
                         }
                     }
                 }

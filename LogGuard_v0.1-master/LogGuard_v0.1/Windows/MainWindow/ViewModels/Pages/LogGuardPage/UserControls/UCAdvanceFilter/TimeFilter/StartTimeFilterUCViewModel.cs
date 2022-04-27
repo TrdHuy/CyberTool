@@ -18,7 +18,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
         public override bool Filter(object obj)
         {
-            var data = obj as LogWatcherItemViewModel;
+            var data = obj as LWI_ParseableViewModel;
             if (!IsFilterEnable || FilterContent == "")
             {
                 return true;

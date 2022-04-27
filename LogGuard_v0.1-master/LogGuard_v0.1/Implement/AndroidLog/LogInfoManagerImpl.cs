@@ -29,7 +29,7 @@ namespace LogGuard_v0._1.Implement.AndroidLog
 
             LogInfo logInfo = _logParser.ParseLogInfos(line, _logCounter);
 
-            if (_logParser.IsMatch(line))
+            if (logInfo != null)
             {
                 _logCounter++;
                 return logInfo;

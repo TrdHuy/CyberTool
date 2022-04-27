@@ -47,8 +47,8 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels
                 {
                     _selectedPageIndex = value;
                     _pageHost.UpdateCurrentPageSource(_lstItemPageSourceMap[value]);
-                    InvalidateOwn();
                 }
+                InvalidateOwn();
             }
         }
 

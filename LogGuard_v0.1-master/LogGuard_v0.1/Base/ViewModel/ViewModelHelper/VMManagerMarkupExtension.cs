@@ -64,7 +64,6 @@ namespace LogGuard_v0._1.Base.ViewModel.ViewModelHelper
                 var childContext = Activator.CreateInstance(DataContextType, parentInCache);
 
                 var parentVM = parentInCache as BaseViewModel;
-                parentVM?.AddChild(childContext as BaseViewModel);
                 if (DataContextCache.ContainsKey(DataContextType))
                 {
                     DataContextCache.Remove(DataContextType);
