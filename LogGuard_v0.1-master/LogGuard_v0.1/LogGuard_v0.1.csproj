@@ -1,379 +1,380 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DFE957F8-6693-4542-BA23-5D9781E12DC2}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>LogGuard_v0._1</RootNamespace>
-    <AssemblyName>LogGuard_v0.1</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>cyclone_weather_world_time_icon_194253.ico</ApplicationIcon>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="HPSolutionCCDevPackage.netFramework, Version=1.2.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\HPSolutionCCDevPackage.netFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="AppResources\AttachedProperties\TextBlockAttProperties.cs" />
-    <Compile Include="AppResources\AttachedProperties\TextBoxAttProperties.cs" />
-    <Compile Include="AppResources\AttachedProperties\UIAttProperties.cs" />
-    <Compile Include="AppResources\Controls\Animations\Loading\LoadingAnimation.cs" />
-    <Compile Include="AppResources\Controls\LogGCalendar\DateTimeSeker.cs" />
-    <Compile Include="AppResources\Controls\LogGListView\LoadingListView.cs" />
-    <Compile Include="AppResources\Controls\LogGPages\LogGPage.cs" />
-    <Compile Include="AppResources\Controls\LogGWindows\LogGuardWindow.cs" />
-    <Compile Include="Base\AndroidLog\LogInfo.cs" />
-    <Compile Include="Base\AndroidLog\LogParser\AbstractLogParser.cs" />
-    <Compile Include="Base\AsyncTask\AsyncTask.cs" />
-    <Compile Include="Base\AsyncTask\AsyncTaskResult.cs" />
-    <Compile Include="Base\AsyncTask\IAsyncTask.cs" />
-    <Compile Include="Base\Command\BaseCommandImpl.cs" />
-    <Compile Include="Base\Command\BaseDotNetCommandImpl.cs" />
-    <Compile Include="Base\Device\IDeviceCmdExecuter.cs" />
-    <Compile Include="Base\AndroidLog\ILogInfoManager.cs" />
-    <Compile Include="Base\Device\IDeviceHolder.cs" />
-    <Compile Include="Base\Device\IDeviceManager.cs" />
-    <Compile Include="Base\FileHelper\IFileHelper.cs" />
-    <Compile Include="Base\LogGuardFlow\IFilterEngine.cs" />
-    <Compile Include="Base\LogGuardFlow\IRunThreadConfig.cs" />
-    <Compile Include="Base\LogGuardFlow\ISourceFilter.cs" />
-    <Compile Include="Base\LogGuardFlow\ISourceFilterManager.cs" />
-    <Compile Include="Base\LogGuardFlow\ISourceHighlightManager.cs" />
-    <Compile Include="Base\LogGuardFlow\ISourceHighlightor.cs" />
-    <Compile Include="Base\LogGuardFlow\ISourceHolder.cs" />
-    <Compile Include="Base\LogGuardFlow\ISourceManager.cs" />
-    <Compile Include="Base\LogGuardFlow\IStateController.cs" />
-    <Compile Include="Base\Observable\BaseObservable.cs" />
-    <Compile Include="Base\Observable\IObservable.cs" />
-    <Compile Include="Base\Observable\IObserver.cs" />
-    <Compile Include="Base\UIEventHandler\Action\Builder\AbstractActionBuilder.cs" />
-    <Compile Include="Base\UIEventHandler\Action\Builder\AbstractCommandExecuterBuilder.cs" />
-    <Compile Include="Base\UIEventHandler\Action\Builder\IActionBuilder.cs" />
-    <Compile Include="Base\UIEventHandler\Action\Builder\ICommandExecuterBuilder.cs" />
-    <Compile Include="Base\UIEventHandler\Action\Executer\AbstractCommandExecuter.cs" />
-    <Compile Include="Base\UIEventHandler\Action\Executer\AbstractViewModelCommandExecuter.cs" />
-    <Compile Include="Base\UIEventHandler\Action\Executer\ICommandExecuter.cs" />
-    <Compile Include="Base\UIEventHandler\Action\Executer\IViewModelCommandExecuter.cs" />
-    <Compile Include="Base\UIEventHandler\Action\Factory\AbstractActionFactory.cs" />
-    <Compile Include="Base\UIEventHandler\Action\Factory\BaseActionFactory.cs" />
-    <Compile Include="Base\UIEventHandler\Action\Factory\BaseCommandExecuterFactory.cs" />
-    <Compile Include="Base\UIEventHandler\Action\Factory\IActionFactory.cs" />
-    <Compile Include="Base\UIEventHandler\Action\IAction.cs" />
-    <Compile Include="Base\UIEventHandler\Litstener\ActionExecuteHelper.cs" />
-    <Compile Include="Base\UIEventHandler\Litstener\IActionListener.cs" />
-    <Compile Include="Base\UIEventHandler\Litstener\BaseKeyActionListener.cs" />
-    <Compile Include="Base\Utils\IBeginable.cs" />
-    <Compile Include="Base\Utils\ICancelable.cs" />
-    <Compile Include="Base\Utils\IDestroyable.cs" />
-    <Compile Include="Base\Utils\ILogger.cs" />
-    <Compile Include="Base\ViewModel\BaseButtonCommandViewModel.cs" />
-    <Compile Include="Base\ViewModel\BaseViewModel.cs" />
-    <Compile Include="Base\ViewModel\IPageViewModel.cs" />
-    <Compile Include="Base\ViewModel\ViewModelHelper\VMManagerMarkupExtension.cs" />
-    <Compile Include="Implement\AndroidLog\LogInfoManagerImpl.cs" />
-    <Compile Include="Implement\AndroidLog\LogParser\AdbCmdLogParser.cs" />
-    <Compile Include="Implement\AndroidLog\LogParser\TimeAdbCmdLogParser.cs" />
-    <Compile Include="Implement\Device\DeviceCmdContact.cs" />
-    <Compile Include="Implement\Device\DeviceCmdExecuterImpl.cs" />
-    <Compile Include="Implement\Device\DeviceManagerImpl.cs" />
-    <Compile Include="Implement\FileHelper\FileHelperImpl.cs" />
-    <Compile Include="Implement\LogGuardFlow\FilterEngines\AdvanceFilterEngine.cs" />
-    <Compile Include="Implement\LogGuardFlow\FilterEngines\NormalFilterEngine.cs" />
-    <Compile Include="Implement\LogGuardFlow\FilterEngines\SyntaxFilterEngine.cs" />
-    <Compile Include="Implement\LogGuardFlow\RunThreadConfig\RunThreadConfigImpl.cs" />
-    <Compile Include="Implement\LogGuardFlow\SourceFilterManager\SourceFilterManagerImpl.cs" />
-    <Compile Include="Implement\LogGuardFlow\SourceHighlightManager\SourceHighlightManagerImpl.cs" />
-    <Compile Include="Implement\LogGuardFlow\SourceManager\SourceManagerImpl.cs" />
-    <Compile Include="Implement\LogGuardFlow\StateController\HighCpu_StateController.cs" />
-    <Compile Include="Implement\LogGuardFlow\StateController\LowCpu_StateController.cs" />
-    <Compile Include="Implement\LogGuardFlow\StateController\StateControllerImpl.cs" />
-    <Compile Include="Implement\UIEventHandler\BaseViewModelCommandExecuter.cs" />
-    <Compile Include="Implement\UIEventHandler\CommandExecuterModel.cs" />
-    <Compile Include="Implement\UIEventHandler\ICanelable.cs" />
-    <Compile Include="Implement\UIEventHandler\KeyFeatureTag.cs" />
-    <Compile Include="Implement\UIEventHandler\LogGuardCommandExecuterFactory.cs" />
-    <Compile Include="Implement\UIEventHandler\LogGuardKeyActionListener.cs" />
-    <Compile Include="Implement\UIEventHandler\WindowTag.cs" />
-    <Compile Include="Implement\ViewModels\ButtonCommandViewModel.cs" />
-    <Compile Include="LogGuard\Control\CCContentControl.cs" />
-    <Compile Include="LogGuard\Control\HanzaTreeViewer.cs" />
-    <Compile Include="LogGuard\Control\HanzaTreeViewItem.cs" />
-    <Compile Include="LogGuard\Control\HeaderLabel.cs" />
-    <Compile Include="LogGuard\Control\LogWatcherItem.cs" />
-    <Compile Include="LogGuard\Control\RadialProgressBar.cs" />
-    <Compile Include="LogGuard\Control\TrippleToggle.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Utils\Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Utils\Converters\MultiBindingConverter.cs" />
-    <Compile Include="Utils\Converters\StringToGeoPathConverter.cs" />
-    <Compile Include="Utils\CustomAttachedProperties.cs" />
-    <Compile Include="Utils\Definitions\LogGuardDefinition.cs" />
-    <Compile Include="Utils\Logger.cs" />
-    <Compile Include="Utils\NativeMethods.cs" />
-    <Compile Include="Utils\ProcessManagement.cs" />
-    <Compile Include="Utils\RangeObservableCollection.cs" />
-    <Compile Include="WindowDirector.cs" />
-    <Compile Include="Windows\BaseWindow\Models\PageVO.cs" />
-    <Compile Include="Windows\BaseWindow\Utils\BasePageController.cs" />
-    <Compile Include="Windows\BaseWindow\Utils\PageSource.cs" />
-    <Compile Include="Windows\BaseWindow\Utils\PageSourceWatcher.cs" />
-    <Compile Include="Windows\FloatinWindow\FloatingWindow.xaml.cs">
-      <DependentUpon>FloatingWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\MainWindow\Action\Gestures\MSW_LogWatcher_CtrlAGestureAction.cs" />
-    <Compile Include="Windows\MainWindow\Action\Gestures\MSW_LogWatcher_DeleteGestureAction.cs" />
-    <Compile Include="Windows\MainWindow\Action\MSW_CommandExecuterBuilder.cs" />
-    <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_ClearButtonAction.cs" />
-    <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_PlayButtonAction.cs" />
-    <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_RefreshDeviceButtonAction.cs" />
-    <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_StopButtonAction.cs" />
-    <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_ZoomButtonAction.cs" />
-    <Compile Include="Windows\MainWindow\Models\Builder\DeviceBuilder.cs" />
-    <Compile Include="Windows\MainWindow\Models\Builder\LogBuilder.cs" />
-    <Compile Include="Windows\MainWindow\Models\DeviceInfo\DeviceInfo.cs" />
-    <Compile Include="Windows\MainWindow\Utils\MSW_PageController.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Device\DeviceItemViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\LogWatcher\LogWatcherItemViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\MSW_ButtonCommandViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\MSW_LogWatcherControlButtonCommandVM.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\LogGuardPageViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\AdvanceFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\ChildOfAdvanceFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\MessageFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\MessageHighlightUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\PidFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TagRemoveFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TagShowFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TidFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TimeFilter\EndTimeFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TimeFilter\StartTimeFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TimeFilter\TimeFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCListOfDevice\ListOfDeviceUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCListOfDevice\MSW_UC_ListOfDeviceControlButtonCommand.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogLevelFilter\LogLevelFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogManager\LogByTeamItemViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\MSW_BasePageViewModel.cs" />
-    <Compile Include="Windows\MainWindow\View\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\MainWindow\View\Pages\LogGuard.xaml.cs">
-      <DependentUpon>LogGuard.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\MainWindow\View\Pages\UndercontrucstionPage.xaml.cs">
-      <DependentUpon>UndercontrucstionPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\MainWindow\View\UserControls\UC_AdvanceFilter.xaml.cs">
-      <DependentUpon>UC_AdvanceFilter.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\MainWindow\View\UserControls\UC_ListOfDevice.xaml.cs">
-      <DependentUpon>UC_ListOfDevice.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\MainWindow\View\UserControls\UC_LogLevelFilter.xaml.cs">
-      <DependentUpon>UC_LogLevelFilter.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\MainWindow\View\UserControls\UC_LogManager.xaml.cs">
-      <DependentUpon>UC_LogManager.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\MessageWindow\MessageBox.xaml.cs">
-      <DependentUpon>MessageBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\WaitingWindow\WaitingBox.xaml.cs">
-      <DependentUpon>WaitingBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="_Config\RUNE.cs" />
-    <Page Include="AppResources\Controls\Animations\Loading\LoadingAnimation.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="AppResources\Controls\LogGCalendar\DateTimeSeker.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="AppResources\Controls\LogGListView\LoadingListView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="AppResources\Controls\LogGWindows\LogGuardWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="AppResources\MenuThemes.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LogGuard\Resources\HanzaTreeViewer.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="LogGuard\Resources\HanzaTreeViewItem.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="LogGuard\Resources\HeaderLabel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LogGuard\Resources\LogMappingBorder.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LogGuard\Resources\LogWatcher.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LogGuard\Resources\RadialProgressBar.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="LogGuard\Resources\ScrollViewWatcher.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LogGuard\Resources\TrippleToggle.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="LogGuard\Base\ILogWatcherElements.cs" />
-    <Compile Include="LogGuard\Base\LogGuardExtension.cs" />
-    <Compile Include="LogGuard\Control\LogGuardStatic.cs" />
-    <Compile Include="LogGuard\Control\GridViewWatcher.cs" />
-    <Compile Include="LogGuard\Control\LogMappingBorder.cs" />
-    <Compile Include="LogGuard\Control\LogWatcher.cs" />
-    <Compile Include="LogGuard\Control\ScrollViewWatcher.cs" />
-    <Page Include="AppResources\Themes.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\FloatinWindow\FloatingWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\MainWindow\View\MainWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\MainWindow\View\Pages\LogGuard.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\MainWindow\View\Pages\UndercontrucstionPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\MainWindow\View\UserControls\UC_AdvanceFilter.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\MainWindow\View\UserControls\UC_ListOfDevice.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\MainWindow\View\UserControls\UC_LogLevelFilter.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\MainWindow\View\UserControls\UC_LogManager.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\MessageWindow\MessageBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\WaitingWindow\WaitingBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="cyclone_weather_world_time_icon_194253.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="_Config\SecFloatingFeature.mk" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+	<Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+	<PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+		<ProjectGuid>{DFE957F8-6693-4542-BA23-5D9781E12DC2}</ProjectGuid>
+		<OutputType>WinExe</OutputType>
+		<RootNamespace>LogGuard_v0._1</RootNamespace>
+		<AssemblyName>LogGuard_v0.1</AssemblyName>
+		<TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+		<FileAlignment>512</FileAlignment>
+		<ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+		<WarningLevel>4</WarningLevel>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<Deterministic>true</Deterministic>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>false</Optimize>
+		<OutputPath>bin\Debug\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<DebugType>pdbonly</DebugType>
+		<Optimize>true</Optimize>
+		<OutputPath>bin\Release\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup>
+		<ApplicationIcon>cyclone_weather_world_time_icon_194253.ico</ApplicationIcon>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="HPSolutionCCDevPackage.netFramework, Version=1.2.0.5, Culture=neutral, processorArchitecture=MSIL">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>..\packages\HPSolutionCCDevPackage.netFramework.dll</HintPath>
+		</Reference>
+		<Reference Include="System" />
+		<Reference Include="System.Data" />
+		<Reference Include="System.Drawing" />
+		<Reference Include="System.Management" />
+		<Reference Include="System.Windows.Forms" />
+		<Reference Include="System.Xml" />
+		<Reference Include="Microsoft.CSharp" />
+		<Reference Include="System.Core" />
+		<Reference Include="System.Xml.Linq" />
+		<Reference Include="System.Data.DataSetExtensions" />
+		<Reference Include="System.Net.Http" />
+		<Reference Include="System.Xaml">
+			<RequiredTargetFramework>4.0</RequiredTargetFramework>
+		</Reference>
+		<Reference Include="WindowsBase" />
+		<Reference Include="PresentationCore" />
+		<Reference Include="PresentationFramework" />
+	</ItemGroup>
+	<ItemGroup>
+		<ApplicationDefinition Include="App.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</ApplicationDefinition>
+		<Compile Include="AppResources\AttachedProperties\TextBlockAttProperties.cs" />
+		<Compile Include="AppResources\AttachedProperties\TextBoxAttProperties.cs" />
+		<Compile Include="AppResources\AttachedProperties\UIAttProperties.cs" />
+		<Compile Include="AppResources\Controls\Animations\Loading\LoadingAnimation.cs" />
+		<Compile Include="AppResources\Controls\LogGCalendar\DateTimeSeker.cs" />
+		<Compile Include="AppResources\Controls\LogGListView\LoadingListView.cs" />
+		<Compile Include="AppResources\Controls\LogGPages\LogGPage.cs" />
+		<Compile Include="AppResources\Controls\LogGWindows\LogGuardWindow.cs" />
+		<Compile Include="Base\AndroidLog\LogInfo.cs" />
+		<Compile Include="Base\AndroidLog\LogParser\AbstractLogParser.cs" />
+		<Compile Include="Base\AsyncTask\AsyncTask.cs" />
+		<Compile Include="Base\AsyncTask\AsyncTaskResult.cs" />
+		<Compile Include="Base\AsyncTask\IAsyncTask.cs" />
+		<Compile Include="Base\Command\BaseCommandImpl.cs" />
+		<Compile Include="Base\Command\BaseDotNetCommandImpl.cs" />
+		<Compile Include="Base\Device\IDeviceCmdExecuter.cs" />
+		<Compile Include="Base\AndroidLog\ILogInfoManager.cs" />
+		<Compile Include="Base\Device\IDeviceHolder.cs" />
+		<Compile Include="Base\Device\IDeviceManager.cs" />
+		<Compile Include="Base\FileHelper\IFileHelper.cs" />
+		<Compile Include="Base\LogGuardFlow\IFilterEngine.cs" />
+		<Compile Include="Base\LogGuardFlow\IRunThreadConfig.cs" />
+		<Compile Include="Base\LogGuardFlow\ISourceFilter.cs" />
+		<Compile Include="Base\LogGuardFlow\ISourceFilterManager.cs" />
+		<Compile Include="Base\LogGuardFlow\ISourceHighlightManager.cs" />
+		<Compile Include="Base\LogGuardFlow\ISourceHighlightor.cs" />
+		<Compile Include="Base\LogGuardFlow\ISourceHolder.cs" />
+		<Compile Include="Base\LogGuardFlow\ISourceManager.cs" />
+		<Compile Include="Base\LogGuardFlow\IStateController.cs" />
+		<Compile Include="Base\Observable\BaseObservable.cs" />
+		<Compile Include="Base\Observable\IObservable.cs" />
+		<Compile Include="Base\Observable\IObserver.cs" />
+		<Compile Include="Base\UIEventHandler\Action\Builder\AbstractActionBuilder.cs" />
+		<Compile Include="Base\UIEventHandler\Action\Builder\AbstractCommandExecuterBuilder.cs" />
+		<Compile Include="Base\UIEventHandler\Action\Builder\IActionBuilder.cs" />
+		<Compile Include="Base\UIEventHandler\Action\Builder\ICommandExecuterBuilder.cs" />
+		<Compile Include="Base\UIEventHandler\Action\Executer\AbstractCommandExecuter.cs" />
+		<Compile Include="Base\UIEventHandler\Action\Executer\AbstractViewModelCommandExecuter.cs" />
+		<Compile Include="Base\UIEventHandler\Action\Executer\ICommandExecuter.cs" />
+		<Compile Include="Base\UIEventHandler\Action\Executer\IViewModelCommandExecuter.cs" />
+		<Compile Include="Base\UIEventHandler\Action\Factory\AbstractActionFactory.cs" />
+		<Compile Include="Base\UIEventHandler\Action\Factory\BaseActionFactory.cs" />
+		<Compile Include="Base\UIEventHandler\Action\Factory\BaseCommandExecuterFactory.cs" />
+		<Compile Include="Base\UIEventHandler\Action\Factory\IActionFactory.cs" />
+		<Compile Include="Base\UIEventHandler\Action\IAction.cs" />
+		<Compile Include="Base\UIEventHandler\Litstener\ActionExecuteHelper.cs" />
+		<Compile Include="Base\UIEventHandler\Litstener\IActionListener.cs" />
+		<Compile Include="Base\UIEventHandler\Litstener\BaseKeyActionListener.cs" />
+		<Compile Include="Base\Utils\IBeginable.cs" />
+		<Compile Include="Base\Utils\ICancelable.cs" />
+		<Compile Include="Base\Utils\IDestroyable.cs" />
+		<Compile Include="Base\Utils\ILogger.cs" />
+		<Compile Include="Base\ViewModel\BaseButtonCommandViewModel.cs" />
+		<Compile Include="Base\ViewModel\BaseViewModel.cs" />
+		<Compile Include="Base\ViewModel\IPageViewModel.cs" />
+		<Compile Include="Base\ViewModel\ViewModelHelper\VMManagerMarkupExtension.cs" />
+		<Compile Include="Implement\AndroidLog\LogInfoManagerImpl.cs" />
+		<Compile Include="Implement\AndroidLog\LogParser\AdbCmdLogParser.cs" />
+		<Compile Include="Implement\AndroidLog\LogParser\TimeAdbCmdLogParser.cs" />
+		<Compile Include="Implement\Device\DeviceCmdContact.cs" />
+		<Compile Include="Implement\Device\DeviceCmdExecuterImpl.cs" />
+		<Compile Include="Implement\Device\DeviceManagerImpl.cs" />
+		<Compile Include="Implement\FileHelper\FileHelperImpl.cs" />
+		<Compile Include="Implement\LogGuardFlow\FilterEngines\AdvanceFilterEngine.cs" />
+		<Compile Include="Implement\LogGuardFlow\FilterEngines\NormalFilterEngine.cs" />
+		<Compile Include="Implement\LogGuardFlow\FilterEngines\SyntaxFilterEngine.cs" />
+		<Compile Include="Implement\LogGuardFlow\RunThreadConfig\RunThreadConfigImpl.cs" />
+		<Compile Include="Implement\LogGuardFlow\SourceFilterManager\SourceFilterManagerImpl.cs" />
+		<Compile Include="Implement\LogGuardFlow\SourceHighlightManager\SourceHighlightManagerImpl.cs" />
+		<Compile Include="Implement\LogGuardFlow\SourceManager\SourceManagerImpl.cs" />
+		<Compile Include="Implement\LogGuardFlow\StateController\HighCpu_StateController.cs" />
+		<Compile Include="Implement\LogGuardFlow\StateController\LowCpu_StateController.cs" />
+		<Compile Include="Implement\LogGuardFlow\StateController\StateControllerImpl.cs" />
+		<Compile Include="Implement\UIEventHandler\BaseViewModelCommandExecuter.cs" />
+		<Compile Include="Implement\UIEventHandler\CommandExecuterModel.cs" />
+		<Compile Include="Implement\UIEventHandler\ICanelable.cs" />
+		<Compile Include="Implement\UIEventHandler\KeyFeatureTag.cs" />
+		<Compile Include="Implement\UIEventHandler\LogGuardCommandExecuterFactory.cs" />
+		<Compile Include="Implement\UIEventHandler\LogGuardKeyActionListener.cs" />
+		<Compile Include="Implement\UIEventHandler\WindowTag.cs" />
+		<Compile Include="Implement\ViewModels\ButtonCommandViewModel.cs" />
+		<Compile Include="Implement\ViewModels\ViewModelHelper.cs" />
+		<Compile Include="LogGuard\Control\CCContentControl.cs" />
+		<Compile Include="LogGuard\Control\HanzaTreeViewer.cs" />
+		<Compile Include="LogGuard\Control\HanzaTreeViewItem.cs" />
+		<Compile Include="LogGuard\Control\HeaderLabel.cs" />
+		<Compile Include="LogGuard\Control\LogWatcherItem.cs" />
+		<Compile Include="LogGuard\Control\RadialProgressBar.cs" />
+		<Compile Include="LogGuard\Control\TrippleToggle.cs" />
+		<Compile Include="Properties\Resources.Designer.cs">
+			<AutoGen>True</AutoGen>
+			<DesignTime>True</DesignTime>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+		<Compile Include="Utils\Converters\BoolToVisibilityConverter.cs" />
+		<Compile Include="Utils\Converters\MultiBindingConverter.cs" />
+		<Compile Include="Utils\Converters\StringToGeoPathConverter.cs" />
+		<Compile Include="Utils\CustomAttachedProperties.cs" />
+		<Compile Include="Utils\Definitions\LogGuardDefinition.cs" />
+		<Compile Include="Utils\Logger.cs" />
+		<Compile Include="Utils\NativeMethods.cs" />
+		<Compile Include="Utils\ProcessManagement.cs" />
+		<Compile Include="Utils\RangeObservableCollection.cs" />
+		<Compile Include="WindowDirector.cs" />
+		<Compile Include="Windows\BaseWindow\Models\PageVO.cs" />
+		<Compile Include="Windows\BaseWindow\Utils\BasePageController.cs" />
+		<Compile Include="Windows\BaseWindow\Utils\PageSource.cs" />
+		<Compile Include="Windows\BaseWindow\Utils\PageSourceWatcher.cs" />
+		<Compile Include="Windows\FloatinWindow\FloatingWindow.xaml.cs">
+			<DependentUpon>FloatingWindow.xaml</DependentUpon>
+		</Compile>
+		<Compile Include="Windows\MainWindow\Action\Gestures\MSW_LogWatcher_CtrlAGestureAction.cs" />
+		<Compile Include="Windows\MainWindow\Action\Gestures\MSW_LogWatcher_DeleteGestureAction.cs" />
+		<Compile Include="Windows\MainWindow\Action\MSW_CommandExecuterBuilder.cs" />
+		<Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_ClearButtonAction.cs" />
+		<Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_PlayButtonAction.cs" />
+		<Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_RefreshDeviceButtonAction.cs" />
+		<Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_StopButtonAction.cs" />
+		<Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_ZoomButtonAction.cs" />
+		<Compile Include="Windows\MainWindow\Models\Builder\DeviceBuilder.cs" />
+		<Compile Include="Windows\MainWindow\Models\Builder\LogBuilder.cs" />
+		<Compile Include="Windows\MainWindow\Models\DeviceInfo\DeviceInfo.cs" />
+		<Compile Include="Windows\MainWindow\Utils\MSW_PageController.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Device\DeviceItemViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\LogWatcher\LogWatcherItemViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\MSW_ButtonCommandViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\MainWindowViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\MSW_LogWatcherControlButtonCommandVM.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\LogGuardPageViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\AdvanceFilterUCViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\ChildOfAdvanceFilterUCViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\MessageFilterUCViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\MessageHighlightUCViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\PidFilterUCViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TagRemoveFilterUCViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TagShowFilterUCViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TidFilterUCViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TimeFilter\EndTimeFilterUCViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TimeFilter\StartTimeFilterUCViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TimeFilter\TimeFilterUCViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCListOfDevice\ListOfDeviceUCViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCListOfDevice\MSW_UC_ListOfDeviceControlButtonCommand.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogLevelFilter\LogLevelFilterUCViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogManager\LogByTeamItemViewModel.cs" />
+		<Compile Include="Windows\MainWindow\ViewModels\Pages\MSW_BasePageViewModel.cs" />
+		<Compile Include="Windows\MainWindow\View\MainWindow.xaml.cs">
+			<DependentUpon>MainWindow.xaml</DependentUpon>
+		</Compile>
+		<Compile Include="Windows\MainWindow\View\Pages\LogGuard.xaml.cs">
+			<DependentUpon>LogGuard.xaml</DependentUpon>
+		</Compile>
+		<Compile Include="Windows\MainWindow\View\Pages\UndercontrucstionPage.xaml.cs">
+			<DependentUpon>UndercontrucstionPage.xaml</DependentUpon>
+		</Compile>
+		<Compile Include="Windows\MainWindow\View\UserControls\UC_AdvanceFilter.xaml.cs">
+			<DependentUpon>UC_AdvanceFilter.xaml</DependentUpon>
+		</Compile>
+		<Compile Include="Windows\MainWindow\View\UserControls\UC_ListOfDevice.xaml.cs">
+			<DependentUpon>UC_ListOfDevice.xaml</DependentUpon>
+		</Compile>
+		<Compile Include="Windows\MainWindow\View\UserControls\UC_LogLevelFilter.xaml.cs">
+			<DependentUpon>UC_LogLevelFilter.xaml</DependentUpon>
+		</Compile>
+		<Compile Include="Windows\MainWindow\View\UserControls\UC_LogManager.xaml.cs">
+			<DependentUpon>UC_LogManager.xaml</DependentUpon>
+		</Compile>
+		<Compile Include="Windows\MessageWindow\MessageBox.xaml.cs">
+			<DependentUpon>MessageBox.xaml</DependentUpon>
+		</Compile>
+		<Compile Include="Windows\WaitingWindow\WaitingBox.xaml.cs">
+			<DependentUpon>WaitingBox.xaml</DependentUpon>
+		</Compile>
+		<Compile Include="_Config\RUNE.cs" />
+		<Page Include="AppResources\Controls\Animations\Loading\LoadingAnimation.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="AppResources\Controls\LogGCalendar\DateTimeSeker.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="AppResources\Controls\LogGListView\LoadingListView.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="AppResources\Controls\LogGWindows\LogGuardWindow.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="AppResources\MenuThemes.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="LogGuard\Resources\HanzaTreeViewer.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="LogGuard\Resources\HanzaTreeViewItem.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="LogGuard\Resources\HeaderLabel.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="LogGuard\Resources\LogMappingBorder.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="LogGuard\Resources\LogWatcher.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="LogGuard\Resources\RadialProgressBar.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="LogGuard\Resources\ScrollViewWatcher.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="LogGuard\Resources\TrippleToggle.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Compile Include="App.xaml.cs">
+			<DependentUpon>App.xaml</DependentUpon>
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Include="LogGuard\Base\ILogWatcherElements.cs" />
+		<Compile Include="LogGuard\Base\LogGuardExtension.cs" />
+		<Compile Include="LogGuard\Control\LogGuardStatic.cs" />
+		<Compile Include="LogGuard\Control\GridViewWatcher.cs" />
+		<Compile Include="LogGuard\Control\LogMappingBorder.cs" />
+		<Compile Include="LogGuard\Control\LogWatcher.cs" />
+		<Compile Include="LogGuard\Control\ScrollViewWatcher.cs" />
+		<Page Include="AppResources\Themes.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="Windows\FloatinWindow\FloatingWindow.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="Windows\MainWindow\View\MainWindow.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="Windows\MainWindow\View\Pages\LogGuard.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="Windows\MainWindow\View\Pages\UndercontrucstionPage.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="Windows\MainWindow\View\UserControls\UC_AdvanceFilter.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="Windows\MainWindow\View\UserControls\UC_ListOfDevice.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="Windows\MainWindow\View\UserControls\UC_LogLevelFilter.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="Windows\MainWindow\View\UserControls\UC_LogManager.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="Windows\MessageWindow\MessageBox.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="Windows\WaitingWindow\WaitingBox.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Include="Properties\AssemblyInfo.cs">
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Include="Properties\Settings.Designer.cs">
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Settings.settings</DependentUpon>
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+		</Compile>
+		<EmbeddedResource Include="Properties\Resources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+		<None Include="packages.config" />
+		<None Include="Properties\Settings.settings">
+			<Generator>SettingsSingleFileGenerator</Generator>
+			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="App.config" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="cyclone_weather_world_time_icon_194253.ico" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="_Config\SecFloatingFeature.mk" />
+	</ItemGroup>
+	<ItemGroup />
+	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

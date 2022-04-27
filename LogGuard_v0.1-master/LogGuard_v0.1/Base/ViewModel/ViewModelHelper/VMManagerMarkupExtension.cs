@@ -13,6 +13,9 @@ namespace LogGuard_v0._1.Base.ViewModel.ViewModelHelper
     {
         private static Dictionary<Type, object> DataContextCache;
 
+        public static event OnDataContextGeneratedHandler DataContextGenerated;
+
+
         [ConstructorArgument("dataContextType")]
         public Type DataContextType { get; set; }
 
@@ -47,6 +50,7 @@ namespace LogGuard_v0._1.Base.ViewModel.ViewModelHelper
                     DataContextCache.Remove(DataContextType);
                 }
                 DataContextCache.Add(DataContextType, dataContext);
+                DataContextGenerated?.Invoke(this, new DataContextGeneratedArgs(dataContext));
                 return dataContext;
             }
             else
@@ -66,6 +70,8 @@ namespace LogGuard_v0._1.Base.ViewModel.ViewModelHelper
                     DataContextCache.Remove(DataContextType);
                 }
                 DataContextCache.Add(DataContextType, childContext);
+                DataContextGenerated?.Invoke(this, new DataContextGeneratedArgs(childContext));
+
                 return childContext;
             }
         }
@@ -93,6 +99,18 @@ namespace LogGuard_v0._1.Base.ViewModel.ViewModelHelper
                 }
             }
             DataContextCache.Remove(dataContextType);
+        }
+    }
+
+    public delegate void OnDataContextGeneratedHandler(object sender, DataContextGeneratedArgs e);
+
+    public class DataContextGeneratedArgs : EventArgs
+    {
+        public object DataContext { get; }
+
+        public DataContextGeneratedArgs(object dataContext)
+        {
+            DataContext = dataContext;
         }
     }
 }
