@@ -13,22 +13,27 @@ namespace LogGuard_v0._1._Config
         {
         }
 
-        public static bool IS_SUPPORT_QUICK_FILTER_TEXT_BOX { get; } 
-            = FeaturesParser.FeatureOrders["HUY.TD1_LOGGUARD_IS_SUPPORT_QUICK_FILTER_TEXT_BOX"];
+        public static bool IS_SUPPORT_QUICK_FILTER_TEXT_BOX { get; }
+            = FeaturesParser.BoolFeatureOrders["HUY.TD1_LOGGUARD_IS_SUPPORT_QUICK_FILTER_TEXT_BOX"];
 
         public static bool IS_SUPPORT_HIGH_CPU_LOG_CAPTURE { get; }
-           = FeaturesParser.FeatureOrders["HUY.TD1_LOGGUARD_IS_SUPPORT_HIGH_CPU_LOG_CAPTURE"];
+           = FeaturesParser.BoolFeatureOrders["HUY.TD1_LOGGUARD_IS_SUPPORT_HIGH_CPU_LOG_CAPTURE"];
 
         public static bool IS_SUPPORT_DELETE_LOG_LINE { get; }
-           = FeaturesParser.FeatureOrders["HUY.TD1_LOGGUARD_IS_SUPPORT_DELETE_LOG_LINE"];
+           = FeaturesParser.BoolFeatureOrders["HUY.TD1_LOGGUARD_IS_SUPPORT_DELETE_LOG_LINE"];
+
+        public static int MAXIMUM_TAG_ITEM { get; }
+           = FeaturesParser.IntFeatureOrders["HUY.TD1_MAXIMUM_TAG_ITEMS_OF_TAG_MANAGER"];
 
         private sealed class FeaturesParser
         {
             private static string _titleGroup = @"(?<Title>\S+)";
-            private static string _valueGroup = @"(?<Value>TRUE|FALSE)";
+            private static string _boolValueGroup = @"(?<Value>TRUE|FALSE)";
+            private static string _intValueGroup = @"(?<Value>\d+)";
             private static string _pattern;
 
-            public static Dictionary<string, bool> FeatureOrders = new Dictionary<string, bool>();
+            public static Dictionary<string, bool> BoolFeatureOrders = new Dictionary<string, bool>();
+            public static Dictionary<string, int> IntFeatureOrders = new Dictionary<string, int>();
 
             static FeaturesParser()
             {
@@ -37,9 +42,9 @@ namespace LogGuard_v0._1._Config
 
             public static void FileParsing()
             {
-                _pattern = _titleGroup + "=" + _valueGroup;
-
-                string t = Properties.Resources.SecFloatingFeature;
+                //Bool sec feature parser
+                _pattern = _titleGroup + "=" + _boolValueGroup;
+                string t = Properties.Resources.BoolSecFloatingFeature;
                 string[] t2 = t.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
                     .Where(line => !line.StartsWith("#")).ToArray();
                 for (int i = 0; i < t2.Length; i++)
@@ -47,11 +52,27 @@ namespace LogGuard_v0._1._Config
                     Match match = Regex.Match(t2[i], _pattern);
                     if (match.Success)
                     {
-                        FeatureOrders.Add(match.Groups["Title"].ToString(),
-                            Convert.ToBoolean(match.Groups["Value"].ToString()));
+                        BoolFeatureOrders.Add(match.Groups["Title"].ToString(),
+                                Convert.ToBoolean(match.Groups["Value"].ToString()));
                     }
+
                 }
 
+                //Int sec feature parser
+                _pattern = _titleGroup + "=" + _intValueGroup;
+                t = Properties.Resources.IntSecFloatingFeature;
+                t2 = t.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+                    .Where(line => !line.StartsWith("#")).ToArray();
+                for (int i = 0; i < t2.Length; i++)
+                {
+                    Match match = Regex.Match(t2[i], _pattern);
+                    if (match.Success)
+                    {
+                        IntFeatureOrders.Add(match.Groups["Title"].ToString(),
+                                Convert.ToInt32(match.Groups["Value"].ToString()));
+                    }
+
+                }
             }
         }
     }

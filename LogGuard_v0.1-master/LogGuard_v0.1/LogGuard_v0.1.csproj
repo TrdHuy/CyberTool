@@ -373,7 +373,8 @@
 		<Resource Include="cyclone_weather_world_time_icon_194253.ico" />
 	</ItemGroup>
 	<ItemGroup>
-		<Content Include="_Config\SecFloatingFeature.mk" />
+		<Content Include="_Config\BoolSecFloatingFeature.mk" />
+		<Content Include="_Config\IntSecFloatingFeature.mk" />
 	</ItemGroup>
 	<ItemGroup />
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
