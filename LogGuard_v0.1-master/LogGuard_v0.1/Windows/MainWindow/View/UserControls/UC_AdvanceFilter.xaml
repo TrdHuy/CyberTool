@@ -19,7 +19,7 @@
 			{x:Type vmp:LogGuardPageViewModel}}" />
 	</UserControl.DataContext>
 
-	
+
 	<Border Background="{StaticResource Background_Level2}"
 			CornerRadius="{StaticResource DefaultPanelCornerRadius}">
 		<Grid>
@@ -30,52 +30,92 @@
 				<ColumnDefinition Width="2.02*" />
 				<ColumnDefinition Width="0.115*" />
 			</Grid.ColumnDefinitions>
+
 			<Grid.RowDefinitions>
-				<RowDefinition Height="0.925*" />
-				<RowDefinition Height="0.925*" />
-				<RowDefinition Height="1" />
-				<RowDefinition Height="1.11*" />
-				<RowDefinition Height="0.12*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
-			<Rectangle Grid.Row="2"
-					   Grid.Column="1"
-					   Fill="{StaticResource HorizontalFench1pixel_Background}" />
 
 			<Rectangle Grid.Row="0"
-					   Grid.RowSpan="2"
 					   Grid.Column="2"
 					   Fill="{StaticResource VerticalFench1pixel_Background}" />
 
-			<Rectangle Grid.Row="3"
+			<Rectangle Grid.Row="1"
 					   Grid.Column="2"
 					   Fill="{StaticResource VerticalFench1pixel_Background}" />
 
-
-			<Grid Margin="10,0,10,0"
-				  Grid.Column="1"
-				  Grid.RowSpan="2">
+			<Grid Grid.Column="1"
+				  Margin="10,5,10,5"
+				  Grid.RowSpan="2"
+				  Grid.Row="0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
-					<RowDefinition Height="0.8*" />
+					<RowDefinition Height="0.5*" />
+					<RowDefinition Height="*" />
+					<RowDefinition Height="0.5*" />
+					<RowDefinition Height="*" />
+					<RowDefinition Height="0.5*" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*" />
-					<ColumnDefinition Width="*" />
-				</Grid.ColumnDefinitions>
 
-				<TextBlock Text="Content filter"
+				<TextBlock Text="Content highlight"
 						   FontSize=" 9"
+						   VerticalAlignment="Center"
+						   FontWeight="Bold"
+						   Foreground="{StaticResource Foreground_Level1}" />
+				<TextBox Grid.Row="1"
+						 Margin="0,0,0,2"
+						 Tag="Enter whatever you want"
+						 Grid.ColumnSpan="2"
+						 Foreground="{StaticResource Foreground_Level3}"
+						 BorderThickness="0"
+						 Background="{StaticResource Background_Level3}"
+						 Template="{StaticResource SearchTextBoxTmpl}"
+						 attPTB:TextBoxAttProperties.Search="{Binding MessageHighlightContent.Search}"
+						 attPTB:TextBoxAttProperties.IsBusy="{Binding MessageHighlightContent.IsFilterBusy}"
+						 attPTB:TextBoxAttProperties.IsFilterTextBox="False"
+						 attPTB:TextBoxAttProperties.EngineHelperContent="{Binding MessageHighlightContent.EngineHelperContent}"
+						 attPTB:TextBoxAttProperties.EngineLeftClickCommand="{Binding MessageHighlightContent.FilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.EngineRightClickCommand="{Binding MessageHighlightContent.FilterRightClickCommand}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding MessageHighlightContent.IsFilterEnable}"
+						 attPTB:TextBoxAttProperties.Filter="{Binding MessageHighlightContent.CurrentFilterMode}"
+						 TextChanged="TextChangeEventToAvoidDotNetBindingBug">
+					<TextBox.Style>
+						<Style TargetType="TextBox">
+							<Style.Triggers>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="NormalSearch">
+									<Setter Property="Text"
+											Value="{Binding MessageHighlightContent.FilterContent, UpdateSourceTrigger=Default}" />
+								</Trigger>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="QuickSearch">
+									<Setter Property="Text"
+											Value="{Binding MessageHighlightContent.FilterContent, UpdateSourceTrigger=PropertyChanged}" />
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</TextBox.Style>
+
+				</TextBox>
+
+				<TextBlock Text="Tag &amp; message filter"
+						   FontSize=" 9"
+						   Grid.Row="4"
 						   VerticalAlignment="Center"
 						   FontWeight="Bold"
 						   Foreground="{StaticResource Foreground_Level1}" />
 
 				<!--Tag show filter-->
-				<TextBox Grid.Row="1"
-						 Margin="0,0,0,5"
+				<TextBox Grid.Row="5"
 						 Tag="Tag show"
+						 Margin="0,0,0,2"
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
 						 Grid.ColumnSpan="2"
 						 attPTB:TextBoxAttProperties.Search="{Binding TagFilterContent.Search}"
@@ -110,9 +150,9 @@
 				</TextBox>
 
 				<!--Tag remove filter-->
-				<TextBox Grid.Row="2"
-						 Margin="0,0,0,5"
+				<TextBox Grid.Row="6"
 						 Grid.ColumnSpan="2"
+						 Margin="0,0,0,2"
 						 Tag="Tag remove"
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
 						 attPTB:TextBoxAttProperties.Search="{Binding TagRemoveContent.Search}"
@@ -147,10 +187,10 @@
 				</TextBox>
 
 				<!--Message filter-->
-				<TextBox Grid.Row="3"
-						 Margin="0,0,0,5"
+				<TextBox Grid.Row="7"
 						 Grid.ColumnSpan="2"
-						 Tag="Message"
+						 Margin="0,0,0,2"
+						 Tag="Message show"
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
 						 Template="{StaticResource SearchTextBoxTmpl}"
 						 attPTB:TextBoxAttProperties.FilterConditionHelperContent="{Binding MessageFilterContent.FilterConditionHelperContent}"
@@ -183,9 +223,53 @@
 					</TextBox.Style>
 				</TextBox>
 
+				<!--Message remove filter-->
+				<TextBox Grid.Row="8"
+						 Margin="0,0,0,2"
+						 Grid.ColumnSpan="2"
+						 Tag="Message remove"
+						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
+						 Template="{StaticResource SearchTextBoxTmpl}"
+						 attPTB:TextBoxAttProperties.FilterConditionHelperContent="{Binding MessageRemoveFilterContent.FilterConditionHelperContent}"
+						 attPTB:TextBoxAttProperties.Search="{Binding MessageRemoveFilterContent.Search}"
+						 attPTB:TextBoxAttProperties.IsBusy="{Binding MessageRemoveFilterContent.IsFilterBusy}"
+						 attPTB:TextBoxAttProperties.FilterHelperContent="{Binding MessageRemoveFilterContent.FilterHelperContent}"
+						 attPTB:TextBoxAttProperties.EngineHelperContent="{Binding MessageRemoveFilterContent.EngineHelperContent}"
+						 attPTB:TextBoxAttProperties.EngineLeftClickCommand="{Binding MessageRemoveFilterContent.FilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.FilterLeftClickCommand="{Binding MessageRemoveFilterContent.FilterRightClickCommand}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding MessageRemoveFilterContent.IsFilterEnable}"
+						 attPTB:TextBoxAttProperties.Filter="{Binding MessageRemoveFilterContent.CurrentFilterMode}"
+						 Foreground="{StaticResource Foreground_Level3}"
+						 BorderThickness="0"
+						 Background="{StaticResource Background_Level3}">
+					<TextBox.Style>
+						<Style TargetType="TextBox">
+							<Style.Triggers>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="NormalSearch">
+									<Setter Property="Text"
+											Value="{Binding MessageRemoveFilterContent.FilterContent, UpdateSourceTrigger=Default}" />
+								</Trigger>
+								<Trigger Property="attPTB:TextBoxAttProperties.Search"
+										 Value="QuickSearch">
+									<Setter Property="Text"
+											Value="{Binding MessageRemoveFilterContent.FilterContent, UpdateSourceTrigger=PropertyChanged}" />
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</TextBox.Style>
+				</TextBox>
+
+				<TextBlock Text="Process &amp; thread filter"
+						   FontSize=" 9"
+						   Grid.Row="2"
+						   VerticalAlignment="Center"
+						   FontWeight="Bold"
+						   Foreground="{StaticResource Foreground_Level1}" />
+				
 				<!--PID filter-->
-				<TextBox Grid.Row="4"
-						 Margin="0,0,10,5"
+				<TextBox Grid.Row="3"
+						 Margin="0,0,10,2"
 						 Tag="PID"
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
 						 attPTB:TextBoxAttProperties.Search="{Binding PidFilterContent.Search}"
@@ -218,10 +302,10 @@
 				</TextBox>
 
 				<!--TID Filter-->
-				<TextBox Grid.Row="4"
+				<TextBox Grid.Row="3"
 						 Grid.Column="1"
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug"
-						 Margin="10,0,0,5"
+						 Margin="10,0,0,2"
 						 attPTB:TextBoxAttProperties.Search="{Binding TidFilterContent.Search}"
 						 attPTB:TextBoxAttProperties.IsBusy="{Binding TidFilterContent.IsFilterBusy}"
 						 attPTB:TextBoxAttProperties.IsSupportMultiFilterEngine="False"
@@ -255,26 +339,31 @@
 
 			</Grid>
 
-			<Grid Margin="10,0,10,0"
-				  Grid.Column="1"
-				  Grid.Row="3">
+			<Grid Margin="10,5,0,5"
+				  Grid.Column="3"
+				  Grid.RowSpan="2"
+				  Grid.Row="0">
 				<Grid.RowDefinitions>
+					<RowDefinition Height="0.5*" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="*" />
-					<RowDefinition Height="*" />
+					<RowDefinition Height="0.5*" />
+					<RowDefinition Height="4.5*" />
 				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*" />
-					<ColumnDefinition Width="*" />
-				</Grid.ColumnDefinitions>
+
+				<Rectangle Grid.Row="3"
+						   Height="1"
+						   Fill="{StaticResource HorizontalFench1pixel_Background}" />
+
 				<TextBlock Text="Date time filter"
 						   Grid.Row="0"
 						   FontSize=" 9"
 						   VerticalAlignment="Center"
 						   FontWeight="Bold"
 						   Foreground="{StaticResource Foreground_Level1}" />
+
 				<TextBox Grid.Row="1"
-						 Margin="0,0,0,5"
+						 Margin="0,0,0,2"
 						 Tag="Start time"
 						 attPTB:TextBoxAttProperties.IsBusy="{Binding StartTimeFilterContent.IsFilterBusy}"
 						 attPTB:TextBoxAttProperties.IsTimeTextBox="True"
@@ -291,8 +380,8 @@
 						 Template="{StaticResource CalendarTextBoxTmpl}">
 				</TextBox>
 
-				<TextBox Grid.Row="3"
-						 Margin="0,0,0,5"
+				<TextBox Grid.Row="2"
+						 Margin="0,0,0,2"
 						 Grid.ColumnSpan="2"
 						 Tag="End time"
 						 attPTB:TextBoxAttProperties.IsBusy="{Binding EndTimeFilterContent.IsFilterBusy}"
@@ -307,318 +396,333 @@
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
 						 Template="{StaticResource CalendarTextBoxTmpl}" />
-			</Grid>
 
-			<Grid Margin="10,0,10,0"
-				  Grid.Column="3"
-				  Grid.RowSpan="2"
-				  Grid.Row="0">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="0.8*" />
-					<RowDefinition Height="*" />
-					<RowDefinition Height="*" />
-					<RowDefinition Height="*" />
-					<RowDefinition Height="*" />
-				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*" />
-					<ColumnDefinition Width="*" />
-				</Grid.ColumnDefinitions>
-				<TextBlock Text="Content highlight"
-						   FontSize=" 9"
-						   VerticalAlignment="Center"
-						   FontWeight="Bold"
-						   Foreground="{StaticResource Foreground_Level1}" />
-				<TextBox Grid.Row="1"
-						 Margin="0,0,0,5"
-						 Tag="Message"
-						 Grid.ColumnSpan="2"
-						 Foreground="{StaticResource Foreground_Level3}"
-						 BorderThickness="0"
-						 Background="{StaticResource Background_Level3}"
-						 Template="{StaticResource SearchTextBoxTmpl}"
-						 attPTB:TextBoxAttProperties.Search="{Binding MessageHighlightContent.Search}"
-						 attPTB:TextBoxAttProperties.IsBusy="{Binding MessageHighlightContent.IsFilterBusy}"
-						 attPTB:TextBoxAttProperties.IsFilterTextBox="False"
-						 attPTB:TextBoxAttProperties.EngineHelperContent="{Binding MessageHighlightContent.EngineHelperContent}"
-						 attPTB:TextBoxAttProperties.EngineLeftClickCommand="{Binding MessageHighlightContent.FilterLeftClickCommand}"
-						 attPTB:TextBoxAttProperties.EngineRightClickCommand="{Binding MessageHighlightContent.FilterRightClickCommand}"
-						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding MessageHighlightContent.IsFilterEnable}"
-						 attPTB:TextBoxAttProperties.Filter="{Binding MessageHighlightContent.CurrentFilterMode}"
-						 TextChanged="TextChangeEventToAvoidDotNetBindingBug">
-					<TextBox.Style>
-						<Style TargetType="TextBox">
-							<Style.Triggers>
-								<Trigger Property="attPTB:TextBoxAttProperties.Search"
-										 Value="NormalSearch">
-									<Setter Property="Text"
-											Value="{Binding MessageHighlightContent.FilterContent, UpdateSourceTrigger=Default}" />
-								</Trigger>
-								<Trigger Property="attPTB:TextBoxAttProperties.Search"
-										 Value="QuickSearch">
-									<Setter Property="Text"
-											Value="{Binding MessageHighlightContent.FilterContent, UpdateSourceTrigger=PropertyChanged}" />
-								</Trigger>
-							</Style.Triggers>
-						</Style>
-					</TextBox.Style>
+				<Grid x:Name="LogPercentGrid"
+					  ClipToBounds="True"
+					  Grid.Row="4">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="0.5*" />
+						<RowDefinition Height="auto" />
+						<RowDefinition Height="0.4*" />
+						<RowDefinition Height="0.6*" />
+					</Grid.RowDefinitions>
 
-				</TextBox>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="auto" />
+					</Grid.ColumnDefinitions>
 
-			</Grid>
+					<TextBlock FontSize="9"
+							   Grid.ColumnSpan="2"
+							   VerticalAlignment="Center"
+							   HorizontalAlignment="Left">
+						<TextBlock.Inlines>
+							<Run Text="Log measure tool: "
+								 FontWeight="Bold"
+								 Foreground="{StaticResource Foreground_Level1}" />
+							<Run Text="{Binding CurrentLogLevel}">
+								<Run.Style>
+									<Style TargetType="Run">
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding ElementName=InfoRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Foreground"
+														Value="{StaticResource InfoLevelForeground_Level2}" />
+											</DataTrigger>
 
-			<Grid Margin="10,10,0,10"
-				  Grid.Column="3"
-				  x:Name="LogPercentGrid"
-				  ClipToBounds="True"
-				  Grid.RowSpan="4"
-				  Grid.Row="1">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="0.5*" />
-					<RowDefinition Height="auto" />
-					<RowDefinition Height="0.4*" />
-					<RowDefinition Height="0.6*" />
-				</Grid.RowDefinitions>
+											<DataTrigger Binding="{Binding ElementName=ErrorRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Foreground"
+														Value="{StaticResource ErrorLevelForeground_Level2}" />
+											</DataTrigger>
 
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*" />
-					<ColumnDefinition Width="auto" />
-				</Grid.ColumnDefinitions>
+											<DataTrigger Binding="{Binding ElementName=VerboseRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Foreground"
+														Value="{StaticResource VerboseLevelForeground_Level2}" />
+											</DataTrigger>
 
-				<TextBlock FontSize="9"
-						   Grid.ColumnSpan="2"
-						   VerticalAlignment="Center"
-						   HorizontalAlignment="Left">
-					<TextBlock.Inlines>
-						<Run Text="Log measure tool: "
-							 FontWeight="Bold"
-							 Foreground="{StaticResource Foreground_Level1}" />
-						<Run Text="{Binding CurrentLogLevel}">
-							<Run.Style>
-								<Style TargetType="Run">
+											<DataTrigger Binding="{Binding ElementName=FatalRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Foreground"
+														Value="{StaticResource FatalLevelForeground_Level2}" />
+											</DataTrigger>
+
+											<DataTrigger Binding="{Binding ElementName=WarningRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Foreground"
+														Value="{StaticResource WarningLevelForeground_Level2}" />
+											</DataTrigger>
+
+											<DataTrigger Binding="{Binding ElementName=DebugRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Foreground"
+														Value="{StaticResource DebugLevelForeground_Level2}" />
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</Run.Style>
+							</Run>
+						</TextBlock.Inlines>
+					</TextBlock>
+
+					<StackPanel Orientation="Vertical"
+								Grid.Column="1"
+								Grid.Row="1"
+								VerticalAlignment="Center"
+								Margin="5,0,0,0">
+						<CheckBox x:Name="InfoRadialCheckBox"
+								  Template="{StaticResource ColorCheckBoxTmpl}"
+								  VerticalAlignment="Center"
+								  IsChecked="{Binding IsInfoChecked}"
+								  HorizontalAlignment="Center"
+								  BorderBrush="{StaticResource InfoLevelForeground_Level2}"
+								  Width="8"
+								  Checked="RadialCheckBox_Checked"
+								  Height="8"
+								  Margin="0,0,0,0"
+								  Background="{StaticResource InfoLevelForeground_Level2}" />
+						<CheckBox x:Name="ErrorRadialCheckBox"
+								  Template="{StaticResource ColorCheckBoxTmpl}"
+								  VerticalAlignment="Center"
+								  HorizontalAlignment="Center"
+								  IsChecked="{Binding IsErrorChecked}"
+								  Checked="RadialCheckBox_Checked"
+								  BorderBrush="{StaticResource ErrorLevelForeground_Level2}"
+								  Width="8"
+								  Height="8"
+								  Margin="0,5,0,0"
+								  Background="{StaticResource ErrorLevelForeground_Level2}" />
+						<CheckBox x:Name="DebugRadialCheckBox"
+								  Template="{StaticResource ColorCheckBoxTmpl}"
+								  VerticalAlignment="Center"
+								  IsChecked="{Binding IsDebugChecked}"
+								  HorizontalAlignment="Center"
+								  Checked="RadialCheckBox_Checked"
+								  BorderBrush="{StaticResource DebugLevelForeground_Level2}"
+								  Width="8"
+								  Height="8"
+								  Margin="0,5,0,0"
+								  Background="{StaticResource DebugLevelForeground_Level2}" />
+						<CheckBox x:Name="WarningRadialCheckBox"
+								  Template="{StaticResource ColorCheckBoxTmpl}"
+								  VerticalAlignment="Center"
+								  IsChecked="{Binding IsWarningChecked}"
+								  HorizontalAlignment="Center"
+								  Checked="RadialCheckBox_Checked"
+								  BorderBrush="{StaticResource WarningLevelForeground_Level2}"
+								  Width="8"
+								  Height="8"
+								  Margin="0,5,0,0"
+								  Background="{StaticResource WarningLevelForeground_Level2}" />
+						<CheckBox x:Name="VerboseRadialCheckBox"
+								  Template="{StaticResource ColorCheckBoxTmpl}"
+								  VerticalAlignment="Center"
+								  IsChecked="{Binding IsVerboseChecked}"
+								  HorizontalAlignment="Center"
+								  Checked="RadialCheckBox_Checked"
+								  BorderBrush="{StaticResource VerboseLevelForeground_Level2}"
+								  Width="8"
+								  Height="8"
+								  Margin="0,5,0,0"
+								  Background="{StaticResource VerboseLevelForeground_Level2}" />
+						<CheckBox x:Name="FatalRadialCheckBox"
+								  Template="{StaticResource ColorCheckBoxTmpl}"
+								  VerticalAlignment="Center"
+								  HorizontalAlignment="Center"
+								  IsChecked="{Binding IsFatalChecked}"
+								  Checked="RadialCheckBox_Checked"
+								  BorderBrush="{StaticResource FatalLevelForeground_Level2}"
+								  Width="8"
+								  Height="8"
+								  Margin="0,5,0,0"
+								  Background="{StaticResource FatalLevelForeground_Level2}" />
+					</StackPanel>
+
+					<StackPanel Grid.Row="1"
+								Margin="0,40,0,0"
+								Orientation="Vertical"
+								VerticalAlignment="Center"
+								HorizontalAlignment="Center">
+						<StackPanel Orientation="Horizontal">
+							<StackPanel.Style>
+								<Style TargetType="StackPanel">
 									<Style.Triggers>
 										<DataTrigger Binding="{Binding ElementName=InfoRadialCheckBox, Path=IsChecked}"
 													 Value="True">
-											<Setter Property="Foreground"
-													Value="{StaticResource InfoLevelForeground_Level2}" />
+											<Setter Property="ToolTip"
+													Value="Info log line count" />
 										</DataTrigger>
 
 										<DataTrigger Binding="{Binding ElementName=ErrorRadialCheckBox, Path=IsChecked}"
 													 Value="True">
-											<Setter Property="Foreground"
-													Value="{StaticResource ErrorLevelForeground_Level2}" />
+											<Setter Property="ToolTip"
+													Value="Error log line count" />
 										</DataTrigger>
 
 										<DataTrigger Binding="{Binding ElementName=VerboseRadialCheckBox, Path=IsChecked}"
 													 Value="True">
-											<Setter Property="Foreground"
-													Value="{StaticResource VerboseLevelForeground_Level2}" />
+											<Setter Property="ToolTip"
+													Value="Verbose log line count" />
 										</DataTrigger>
 
 										<DataTrigger Binding="{Binding ElementName=FatalRadialCheckBox, Path=IsChecked}"
 													 Value="True">
-											<Setter Property="Foreground"
-													Value="{StaticResource FatalLevelForeground_Level2}" />
+											<Setter Property="ToolTip"
+													Value="Fatal log line count" />
 										</DataTrigger>
 
 										<DataTrigger Binding="{Binding ElementName=WarningRadialCheckBox, Path=IsChecked}"
 													 Value="True">
-											<Setter Property="Foreground"
-													Value="{StaticResource WarningLevelForeground_Level2}" />
+											<Setter Property="ToolTip"
+													Value="Warning log line count" />
 										</DataTrigger>
 
 										<DataTrigger Binding="{Binding ElementName=DebugRadialCheckBox, Path=IsChecked}"
 													 Value="True">
-											<Setter Property="Foreground"
-													Value="{StaticResource DebugLevelForeground_Level2}" />
+											<Setter Property="ToolTip"
+													Value="Debug log line count" />
 										</DataTrigger>
 									</Style.Triggers>
 								</Style>
-							</Run.Style>
-						</Run>
-					</TextBlock.Inlines>
-				</TextBlock>
+							</StackPanel.Style>
+							<Path Height="17"
+								  Margin="0,0,4,0"
+								  Stretch="Uniform"
+								  Width="15">
+								<Path.Style>
+									<Style TargetType="Path">
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding ElementName=InfoRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Fill"
+														Value="{StaticResource InfoLevelForeground_Level2}" />
+												<Setter Property="Data"
+														Value="{Binding Source={StaticResource InfoIcon}}" />
+											</DataTrigger>
 
-				<StackPanel Orientation="Vertical"
-							Grid.Column="1"
-							Grid.Row="1"
-							VerticalAlignment="Center"
-							Margin="5,0,0,0">
-					<CheckBox x:Name="InfoRadialCheckBox"
-							  Template="{StaticResource ColorCheckBoxTmpl}"
-							  VerticalAlignment="Center"
-							  IsChecked="{Binding IsInfoChecked}"
-							  HorizontalAlignment="Center"
-							  BorderBrush="{StaticResource InfoLevelForeground_Level2}"
-							  Width="8"
-							  Checked="RadialCheckBox_Checked"
-							  Height="8"
-							  Margin="0,0,0,0"
-							  Background="{StaticResource InfoLevelForeground_Level2}" />
-					<CheckBox x:Name="ErrorRadialCheckBox"
-							  Template="{StaticResource ColorCheckBoxTmpl}"
-							  VerticalAlignment="Center"
-							  HorizontalAlignment="Center"
-							  IsChecked="{Binding IsErrorChecked}"
-							  Checked="RadialCheckBox_Checked"
-							  BorderBrush="{StaticResource ErrorLevelForeground_Level2}"
-							  Width="8"
-							  Height="8"
-							  Margin="0,5,0,0"
-							  Background="{StaticResource ErrorLevelForeground_Level2}" />
-					<CheckBox x:Name="DebugRadialCheckBox"
-							  Template="{StaticResource ColorCheckBoxTmpl}"
-							  VerticalAlignment="Center"
-							  IsChecked="{Binding IsDebugChecked}"
-							  HorizontalAlignment="Center"
-							  Checked="RadialCheckBox_Checked"
-							  BorderBrush="{StaticResource DebugLevelForeground_Level2}"
-							  Width="8"
-							  Height="8"
-							  Margin="0,5,0,0"
-							  Background="{StaticResource DebugLevelForeground_Level2}" />
-					<CheckBox x:Name="WarningRadialCheckBox"
-							  Template="{StaticResource ColorCheckBoxTmpl}"
-							  VerticalAlignment="Center"
-							  IsChecked="{Binding IsWarningChecked}"
-							  HorizontalAlignment="Center"
-							  Checked="RadialCheckBox_Checked"
-							  BorderBrush="{StaticResource WarningLevelForeground_Level2}"
-							  Width="8"
-							  Height="8"
-							  Margin="0,5,0,0"
-							  Background="{StaticResource WarningLevelForeground_Level2}" />
-					<CheckBox x:Name="VerboseRadialCheckBox"
-							  Template="{StaticResource ColorCheckBoxTmpl}"
-							  VerticalAlignment="Center"
-							  IsChecked="{Binding IsVerboseChecked}"
-							  HorizontalAlignment="Center"
-							  Checked="RadialCheckBox_Checked"
-							  BorderBrush="{StaticResource VerboseLevelForeground_Level2}"
-							  Width="8"
-							  Height="8"
-							  Margin="0,5,0,0"
-							  Background="{StaticResource VerboseLevelForeground_Level2}" />
-					<CheckBox x:Name="FatalRadialCheckBox"
-							  Template="{StaticResource ColorCheckBoxTmpl}"
-							  VerticalAlignment="Center"
-							  HorizontalAlignment="Center"
-							  IsChecked="{Binding IsFatalChecked}"
-							  Checked="RadialCheckBox_Checked"
-							  BorderBrush="{StaticResource FatalLevelForeground_Level2}"
-							  Width="8"
-							  Height="8"
-							  Margin="0,5,0,0"
-							  Background="{StaticResource FatalLevelForeground_Level2}" />
-				</StackPanel>
+											<DataTrigger Binding="{Binding ElementName=ErrorRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Fill"
+														Value="{StaticResource ErrorLevelForeground_Level2}" />
+												<Setter Property="Data"
+														Value="{Binding Source={StaticResource ErrorIcon}}" />
+											</DataTrigger>
 
-				<StackPanel Grid.Row="1"
-							Margin="0,40,0,0"
-							Orientation="Vertical"
-							VerticalAlignment="Center"
-							HorizontalAlignment="Center">
-					<StackPanel Orientation="Horizontal">
-						<StackPanel.Style>
-							<Style TargetType="StackPanel">
-								<Style.Triggers>
-									<DataTrigger Binding="{Binding ElementName=InfoRadialCheckBox, Path=IsChecked}"
-												 Value="True">
-										<Setter Property="ToolTip"
-												Value="Info log line count" />
-									</DataTrigger>
+											<DataTrigger Binding="{Binding ElementName=VerboseRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Fill"
+														Value="{StaticResource VerboseLevelForeground_Level2}" />
+												<Setter Property="Data"
+														Value="{Binding Source={StaticResource VerboseIcon}}" />
+											</DataTrigger>
 
-									<DataTrigger Binding="{Binding ElementName=ErrorRadialCheckBox, Path=IsChecked}"
-												 Value="True">
-										<Setter Property="ToolTip"
-												Value="Error log line count" />
-									</DataTrigger>
+											<DataTrigger Binding="{Binding ElementName=FatalRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Fill"
+														Value="{StaticResource FatalLevelForeground_Level2}" />
+												<Setter Property="Data"
+														Value="{Binding Source={StaticResource FatalIcon}}" />
+											</DataTrigger>
 
-									<DataTrigger Binding="{Binding ElementName=VerboseRadialCheckBox, Path=IsChecked}"
-												 Value="True">
-										<Setter Property="ToolTip"
-												Value="Verbose log line count" />
-									</DataTrigger>
+											<DataTrigger Binding="{Binding ElementName=WarningRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Fill"
+														Value="{StaticResource WarningLevelForeground_Level2}" />
+												<Setter Property="Data"
+														Value="{Binding Source={StaticResource WarningIcon}}" />
+											</DataTrigger>
 
-									<DataTrigger Binding="{Binding ElementName=FatalRadialCheckBox, Path=IsChecked}"
-												 Value="True">
-										<Setter Property="ToolTip"
-												Value="Fatal log line count" />
-									</DataTrigger>
+											<DataTrigger Binding="{Binding ElementName=DebugRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Fill"
+														Value="{StaticResource DebugLevelForeground_Level2}" />
+												<Setter Property="Data"
+														Value="{Binding Source={StaticResource DebugIcon}}" />
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</Path.Style>
+							</Path>
+							<TextBlock Text="{Binding LogLevelCount}"
+									   FontSize="9"
+									   VerticalAlignment="Center"
+									   FontWeight="Bold">
+								<TextBlock.Style>
+									<Style TargetType="TextBlock">
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding ElementName=InfoRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Foreground"
+														Value="{StaticResource InfoLevelForeground_Level2}" />
+											</DataTrigger>
 
-									<DataTrigger Binding="{Binding ElementName=WarningRadialCheckBox, Path=IsChecked}"
-												 Value="True">
-										<Setter Property="ToolTip"
-												Value="Warning log line count" />
-									</DataTrigger>
+											<DataTrigger Binding="{Binding ElementName=ErrorRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Foreground"
+														Value="{StaticResource ErrorLevelForeground_Level2}" />
+											</DataTrigger>
 
-									<DataTrigger Binding="{Binding ElementName=DebugRadialCheckBox, Path=IsChecked}"
-												 Value="True">
-										<Setter Property="ToolTip"
-												Value="Debug log line count" />
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</StackPanel.Style>
-						<Path Height="17"
-							  Margin="0,0,4,0"
-							  Stretch="Uniform"
-							  Width="15">
-							<Path.Style>
-								<Style TargetType="Path">
-									<Style.Triggers>
-										<DataTrigger Binding="{Binding ElementName=InfoRadialCheckBox, Path=IsChecked}"
-													 Value="True">
-											<Setter Property="Fill"
-													Value="{StaticResource InfoLevelForeground_Level2}" />
-											<Setter Property="Data"
-													Value="{Binding Source={StaticResource InfoIcon}}" />
-										</DataTrigger>
+											<DataTrigger Binding="{Binding ElementName=VerboseRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Foreground"
+														Value="{StaticResource VerboseLevelForeground_Level2}" />
+											</DataTrigger>
 
-										<DataTrigger Binding="{Binding ElementName=ErrorRadialCheckBox, Path=IsChecked}"
-													 Value="True">
-											<Setter Property="Fill"
-													Value="{StaticResource ErrorLevelForeground_Level2}" />
-											<Setter Property="Data"
-													Value="{Binding Source={StaticResource ErrorIcon}}" />
-										</DataTrigger>
+											<DataTrigger Binding="{Binding ElementName=FatalRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Foreground"
+														Value="{StaticResource FatalLevelForeground_Level2}" />
+											</DataTrigger>
 
-										<DataTrigger Binding="{Binding ElementName=VerboseRadialCheckBox, Path=IsChecked}"
-													 Value="True">
-											<Setter Property="Fill"
-													Value="{StaticResource VerboseLevelForeground_Level2}" />
-											<Setter Property="Data"
-													Value="{Binding Source={StaticResource VerboseIcon}}" />
-										</DataTrigger>
+											<DataTrigger Binding="{Binding ElementName=WarningRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Foreground"
+														Value="{StaticResource WarningLevelForeground_Level2}" />
+											</DataTrigger>
 
-										<DataTrigger Binding="{Binding ElementName=FatalRadialCheckBox, Path=IsChecked}"
-													 Value="True">
-											<Setter Property="Fill"
-													Value="{StaticResource FatalLevelForeground_Level2}" />
-											<Setter Property="Data"
-													Value="{Binding Source={StaticResource FatalIcon}}" />
-										</DataTrigger>
+											<DataTrigger Binding="{Binding ElementName=DebugRadialCheckBox, Path=IsChecked}"
+														 Value="True">
+												<Setter Property="Foreground"
+														Value="{StaticResource DebugLevelForeground_Level2}" />
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</TextBlock.Style>
+							</TextBlock>
+						</StackPanel>
+						<StackPanel Orientation="Horizontal"
+									ToolTip="Total log line count">
+							<Path Data="{Binding Source={StaticResource TotalIcon}}"
+								  Fill="{StaticResource Foreground_Level2}"
+								  Height="17"
+								  Margin="0,0,4,0"
+								  Stretch="Uniform"
+								  Width="15" />
+							<TextBlock Text="{Binding TotalLogCount}"
+									   FontSize="9"
+									   VerticalAlignment="Center"
+									   FontWeight="Bold"
+									   Foreground="{StaticResource Foreground_Level3}" />
+						</StackPanel>
+						<StackPanel Orientation="Horizontal"
+									ToolTip="Displaying log line count">
+							<Path Data="{Binding Source={StaticResource DisplayingIcon}}"
+								  Fill="{StaticResource Foreground_Level2}"
+								  Height="17"
+								  Margin="0,0,4,0"
+								  Stretch="Uniform"
+								  Width="15" />
+							<TextBlock Text="{Binding DisplayingLogCount}"
+									   FontSize="9"
+									   VerticalAlignment="Center"
+									   FontWeight="Bold"
+									   Foreground="{StaticResource Foreground_Level3}" />
+						</StackPanel>
 
-										<DataTrigger Binding="{Binding ElementName=WarningRadialCheckBox, Path=IsChecked}"
-													 Value="True">
-											<Setter Property="Fill"
-													Value="{StaticResource WarningLevelForeground_Level2}" />
-											<Setter Property="Data"
-													Value="{Binding Source={StaticResource WarningIcon}}" />
-										</DataTrigger>
-
-										<DataTrigger Binding="{Binding ElementName=DebugRadialCheckBox, Path=IsChecked}"
-													 Value="True">
-											<Setter Property="Fill"
-													Value="{StaticResource DebugLevelForeground_Level2}" />
-											<Setter Property="Data"
-													Value="{Binding Source={StaticResource DebugIcon}}" />
-										</DataTrigger>
-									</Style.Triggers>
-								</Style>
-							</Path.Style>
-						</Path>
-						<TextBlock Text="{Binding LogLevelCount}"
-								   FontSize="9"
+						<TextBlock Text="{Binding RadialProgressValue}"
+								   FontSize="13"
+								   HorizontalAlignment="Center"
 								   VerticalAlignment="Center"
 								   FontWeight="Bold">
 							<TextBlock.Style>
@@ -664,125 +768,51 @@
 							</TextBlock.Style>
 						</TextBlock>
 					</StackPanel>
+					<ctrl:RadialProgressBar x:Name="LogLevelRadialPB"
+											Grid.Row="1"
+											Offset="12"
+											StrokeThickness="12"
+											MaxWidth="220"
+											Value="{Binding LogValue}"
+											Maximum="100"
+											FontFamily="Calibri">
+
+						<ctrl:RadialProgressBar.BgPathBackground>
+							<SolidColorBrush x:Name="RadialPBBrush"
+											 Color="#33CAF1E1" />
+						</ctrl:RadialProgressBar.BgPathBackground>
+						<ctrl:RadialProgressBar.PercentContForeground>
+							<SolidColorBrush x:Name="RadialPBPercentContForegroundBrush"
+											 Color="#FFCAF1E1" />
+						</ctrl:RadialProgressBar.PercentContForeground>
+						<ctrl:RadialProgressBar.ValPathBackground>
+							<SolidColorBrush x:Name="RadialPBValPathBackgroundBrush"
+											 Color="#FFCAF1E1" />
+						</ctrl:RadialProgressBar.ValPathBackground>
+
+						<ctrl:RadialProgressBar.RenderTransform>
+							<TranslateTransform x:Name="RadialPBTranslateTransform"
+												X="0" />
+						</ctrl:RadialProgressBar.RenderTransform>
+					</ctrl:RadialProgressBar>
+
 					<StackPanel Orientation="Horizontal"
-								ToolTip="Total log line count">
-						<Path Data="{Binding Source={StaticResource TotalIcon}}"
-							  Fill="{StaticResource Foreground_Level2}"
-							  Height="17"
-							  Margin="0,0,4,0"
-							  Stretch="Uniform"
-							  Width="15" />
-						<TextBlock Text="{Binding TotalLogCount}"
-								   FontSize="9"
+								Grid.Row="2">
+						<TextBlock Text="Auto scroll"
+								   FontSize="8"
+								   Margin="10,0,10,0"
+								   FontFamily="Calibri"
 								   VerticalAlignment="Center"
-								   FontWeight="Bold"
-								   Foreground="{StaticResource Foreground_Level3}" />
+								   Foreground="{StaticResource Foreground_Level2}" />
+						<CheckBox Template="{StaticResource RoundCheckBoxTmpl}"
+								  VerticalAlignment="Center"
+								  IsChecked="{Binding ParentsModel.UseAutoScroll}"
+								  Background="{StaticResource ButtonBackground_Level1}" />
 					</StackPanel>
-					<StackPanel Orientation="Horizontal"
-								ToolTip="Displaying log line count">
-						<Path Data="{Binding Source={StaticResource DisplayingIcon}}"
-							  Fill="{StaticResource Foreground_Level2}"
-							  Height="17"
-							  Margin="0,0,4,0"
-							  Stretch="Uniform"
-							  Width="15" />
-						<TextBlock Text="{Binding DisplayingLogCount}"
-								   FontSize="9"
-								   VerticalAlignment="Center"
-								   FontWeight="Bold"
-								   Foreground="{StaticResource Foreground_Level3}" />
-					</StackPanel>
-
-					<TextBlock Text="{Binding RadialProgressValue}"
-							   FontSize="13"
-							   HorizontalAlignment="Center"
-							   VerticalAlignment="Center"
-							   FontWeight="Bold">
-						<TextBlock.Style>
-							<Style TargetType="TextBlock">
-								<Style.Triggers>
-									<DataTrigger Binding="{Binding ElementName=InfoRadialCheckBox, Path=IsChecked}"
-												 Value="True">
-										<Setter Property="Foreground"
-												Value="{StaticResource InfoLevelForeground_Level2}" />
-									</DataTrigger>
-
-									<DataTrigger Binding="{Binding ElementName=ErrorRadialCheckBox, Path=IsChecked}"
-												 Value="True">
-										<Setter Property="Foreground"
-												Value="{StaticResource ErrorLevelForeground_Level2}" />
-									</DataTrigger>
-
-									<DataTrigger Binding="{Binding ElementName=VerboseRadialCheckBox, Path=IsChecked}"
-												 Value="True">
-										<Setter Property="Foreground"
-												Value="{StaticResource VerboseLevelForeground_Level2}" />
-									</DataTrigger>
-
-									<DataTrigger Binding="{Binding ElementName=FatalRadialCheckBox, Path=IsChecked}"
-												 Value="True">
-										<Setter Property="Foreground"
-												Value="{StaticResource FatalLevelForeground_Level2}" />
-									</DataTrigger>
-
-									<DataTrigger Binding="{Binding ElementName=WarningRadialCheckBox, Path=IsChecked}"
-												 Value="True">
-										<Setter Property="Foreground"
-												Value="{StaticResource WarningLevelForeground_Level2}" />
-									</DataTrigger>
-
-									<DataTrigger Binding="{Binding ElementName=DebugRadialCheckBox, Path=IsChecked}"
-												 Value="True">
-										<Setter Property="Foreground"
-												Value="{StaticResource DebugLevelForeground_Level2}" />
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</TextBlock.Style>
-					</TextBlock>
-				</StackPanel>
-				<ctrl:RadialProgressBar x:Name="LogLevelRadialPB"
-										Grid.Row="1"
-										Offset="12"
-										StrokeThickness="12"
-										MaxWidth="220"
-										Value="{Binding LogValue}"
-										Maximum="100"
-										FontFamily="Calibri">
-
-					<ctrl:RadialProgressBar.BgPathBackground>
-						<SolidColorBrush x:Name="RadialPBBrush"
-										 Color="#33CAF1E1" />
-					</ctrl:RadialProgressBar.BgPathBackground>
-					<ctrl:RadialProgressBar.PercentContForeground>
-						<SolidColorBrush x:Name="RadialPBPercentContForegroundBrush"
-										 Color="#FFCAF1E1" />
-					</ctrl:RadialProgressBar.PercentContForeground>
-					<ctrl:RadialProgressBar.ValPathBackground>
-						<SolidColorBrush x:Name="RadialPBValPathBackgroundBrush"
-										 Color="#FFCAF1E1" />
-					</ctrl:RadialProgressBar.ValPathBackground>
-
-					<ctrl:RadialProgressBar.RenderTransform>
-						<TranslateTransform x:Name="RadialPBTranslateTransform"
-											X="0" />
-					</ctrl:RadialProgressBar.RenderTransform>
-				</ctrl:RadialProgressBar>
-
-				<StackPanel Orientation="Horizontal"
-							Grid.Row="2">
-					<TextBlock Text="Auto scroll"
-							   FontSize="8"
-							   Margin="10,0,10,0"
-							   FontFamily="Calibri"
-							   VerticalAlignment="Center"
-							   Foreground="{StaticResource Foreground_Level2}" />
-					<CheckBox Template="{StaticResource RoundCheckBoxTmpl}"
-							  VerticalAlignment="Center"
-							  IsChecked="{Binding ParentsModel.UseAutoScroll}"
-							  Background="{StaticResource ButtonBackground_Level1}" />
-				</StackPanel>
+				</Grid>
 			</Grid>
+
+
 
 		</Grid>
 	</Border>

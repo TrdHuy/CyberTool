@@ -310,7 +310,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
         }
 
-
         private void OnSourceFilteredAndDisplayed(object sender)
         {
             IsFilterBusy = false;

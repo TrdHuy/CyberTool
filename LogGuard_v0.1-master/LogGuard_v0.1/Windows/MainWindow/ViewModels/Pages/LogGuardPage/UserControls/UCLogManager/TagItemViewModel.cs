@@ -165,8 +165,11 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
                         tagVO.Stat = LogTagVO.Status.None;
                         break;
                 }
-                OnTagItemStatChanged(oldValue, tagVO.Stat);
-                InvalidateOwn();
+                if(oldValue != tagVO.Stat)
+                {
+                    OnTagItemStatChanged(oldValue, tagVO.Stat);
+                    InvalidateOwn();
+                }
             }
         }
 

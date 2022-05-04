@@ -20,6 +20,7 @@ namespace LogGuard_v0._1.Base.LogGuardFlow.SourceFilter
 
         IMechanicalSourceFilter LogTagFilter { get; set; }
         IMechanicalSourceFilter LogMessageFilter { get; set; }
+        IMechanicalSourceFilter LogMessageRemoveFilter { get; set; }
         IMechanicalSourceFilter LogPidFilter { get; set; }
         IMechanicalSourceFilter LogTidFilter { get; set; }
         IMechanicalSourceFilter LogTagRemoveFilter { get; set; }
