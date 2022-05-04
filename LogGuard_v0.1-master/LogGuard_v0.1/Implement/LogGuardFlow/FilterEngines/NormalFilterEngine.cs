@@ -21,6 +21,8 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
             MatchedWords = new List<MatchedWord>();
         }
 
+        public event OnComparableSourceUpdatedHandler ComparableSourceUpdated;
+
         public virtual bool Contain(string input)
         {
             IsMatchLstEmpty = true;
@@ -57,7 +59,13 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
             return !string.IsNullOrEmpty(ComparableSource);
         }
 
-        public virtual void UpdateComparableSource(string source)
+        public void UpdateComparableSource(string source)
+        {
+            UpdatingSource(source);
+            ComparableSourceUpdated?.Invoke(this, source);
+        }
+
+        protected virtual void UpdatingSource(string source)
         {
             ComparableSource = source;
             if (string.IsNullOrEmpty(ComparableSource))

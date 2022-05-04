@@ -94,7 +94,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
             return true;
         }
 
-        public override void UpdateComparableSource(string source)
+        protected override void UpdatingSource(string source)
         {
             ComparableSource = source;
             var partSourceArr =

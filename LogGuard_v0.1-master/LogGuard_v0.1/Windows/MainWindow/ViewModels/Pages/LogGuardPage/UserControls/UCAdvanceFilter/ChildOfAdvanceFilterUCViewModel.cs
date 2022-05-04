@@ -185,29 +185,13 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
             _syntaxEngine.PartsCollectionChanged -= OnSourcePartsCollectionChanged;
             _syntaxEngine.PartsCollectionChanged += OnSourcePartsCollectionChanged;
-        }
 
-        protected virtual void OnSourcePartsCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
-        {
-            var newFilterContent = "";
-            int i = 0;
-            foreach (var part in _syntaxEngine.SourceParts)
-            {
-                if (i == _syntaxEngine.SourceParts.Count - 1)
-                {
-                    newFilterContent += part;
-                }
-                else
-                {
-                    newFilterContent += part + " | ";
-                }
-                i++;
-            }
-            _filterContent = newFilterContent;
-            UpdateFilterConditionHelperContent();
-            NotifyFilterContentChanged(_filterContent);
-            Invalidate("FilterContent");
-
+            _normalEngine.ComparableSourceUpdated -= OnComparableSourceUpdated;
+            _normalEngine.ComparableSourceUpdated += OnComparableSourceUpdated;
+            _syntaxEngine.ComparableSourceUpdated -= OnComparableSourceUpdated;
+            _syntaxEngine.ComparableSourceUpdated += OnComparableSourceUpdated;
+            _advanceSyntaxEngine.ComparableSourceUpdated -= OnComparableSourceUpdated;
+            _advanceSyntaxEngine.ComparableSourceUpdated += OnComparableSourceUpdated;
         }
 
         public bool Highlight(object obj)
@@ -281,7 +265,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
             {
                 FilterConditionHelperContent = "Type a few words for helpful hints!";
             }
-            
         }
 
 
@@ -310,8 +293,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
         protected virtual void OnFilterContentChanged(string value)
         {
             UpdateEngingeComparableSource(value);
-            UpdateFilterConditionHelperContent();
-            NotifyFilterContentChanged(value);
         }
 
         protected virtual void OnFilterEnableChanged(bool value)
@@ -333,6 +314,35 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
         private void OnSourceFilteredAndDisplayed(object sender)
         {
             IsFilterBusy = false;
+        }
+
+        private void OnComparableSourceUpdated(object sender, object args)
+        {
+            UpdateFilterConditionHelperContent();
+            NotifyFilterContentChanged(args);
+        }
+
+        private void OnSourcePartsCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            var newFilterContent = "";
+            int i = 0;
+            foreach (var part in _syntaxEngine.SourceParts)
+            {
+                if (i == _syntaxEngine.SourceParts.Count - 1)
+                {
+                    newFilterContent += part;
+                }
+                else
+                {
+                    newFilterContent += part + " | ";
+                }
+                i++;
+            }
+            _filterContent = newFilterContent;
+            UpdateFilterConditionHelperContent();
+            NotifyFilterContentChanged(_filterContent);
+            Invalidate("FilterContent");
+
         }
 
     }

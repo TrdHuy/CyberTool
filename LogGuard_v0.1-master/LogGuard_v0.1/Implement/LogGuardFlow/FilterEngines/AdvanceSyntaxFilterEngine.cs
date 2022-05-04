@@ -38,7 +38,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
             return _isVailCache && !string.IsNullOrEmpty(ComparableSource);
         }
 
-        public override void UpdateComparableSource(string source)
+        protected override void UpdatingSource(string source)
         {
             lock (PostFix)
             {
@@ -50,7 +50,6 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
                     PostFix = ConvertToPostFix(PartsSource);
                 }
             }
-
         }
 
         private bool IsValid(string[] input, string rawInput)

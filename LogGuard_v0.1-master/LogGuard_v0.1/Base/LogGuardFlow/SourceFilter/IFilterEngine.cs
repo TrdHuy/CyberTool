@@ -26,7 +26,11 @@ namespace LogGuard_v0._1.Base.LogGuardFlow.SourceFilter
         string ComparableSource { get; }
 
         string HelperContent { get; }
+
+        event OnComparableSourceUpdatedHandler ComparableSourceUpdated;
     }
+
+    public delegate void OnComparableSourceUpdatedHandler (object sender, object args);
 
     public class MatchedWord : IHighlightable
     {
