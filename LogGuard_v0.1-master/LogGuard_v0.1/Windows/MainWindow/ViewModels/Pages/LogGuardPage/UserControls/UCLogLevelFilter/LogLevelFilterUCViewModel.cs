@@ -1,5 +1,7 @@
-﻿using LogGuard_v0._1.Base.AndroidLog;
+﻿using LogGuard_v0._1.AppResources.AttachedProperties;
+using LogGuard_v0._1.Base.AndroidLog;
 using LogGuard_v0._1.Base.LogGuardFlow;
+using LogGuard_v0._1.Base.LogGuardFlow.SourceFilter;
 using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceManager;

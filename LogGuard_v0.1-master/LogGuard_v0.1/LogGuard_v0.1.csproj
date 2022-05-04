@@ -88,10 +88,12 @@
     <Compile Include="Base\Device\IDeviceHolder.cs" />
     <Compile Include="Base\Device\IDeviceManager.cs" />
     <Compile Include="Base\FileHelper\IFileHelper.cs" />
-    <Compile Include="Base\LogGuardFlow\IFilterEngine.cs" />
+    <Compile Include="Base\LogGuardFlow\SourceFilter\IFilterEngine.cs" />
+    <Compile Include="Base\LogGuardFlow\SourceFilter\IMechanicalSourceFilter.cs" />
     <Compile Include="Base\LogGuardFlow\IRunThreadConfig.cs" />
-    <Compile Include="Base\LogGuardFlow\ISourceFilter.cs" />
-    <Compile Include="Base\LogGuardFlow\ISourceFilterManager.cs" />
+    <Compile Include="Base\LogGuardFlow\SourceFilter\ISeparableSourceFilterEngine.cs" />
+    <Compile Include="Base\LogGuardFlow\SourceFilter\ISourceFilter.cs" />
+    <Compile Include="Base\LogGuardFlow\SourceFilter\ISourceFilterManager.cs" />
     <Compile Include="Base\LogGuardFlow\ISourceHighlightManager.cs" />
     <Compile Include="Base\LogGuardFlow\ISourceHighlightor.cs" />
     <Compile Include="Base\LogGuardFlow\ISourceHolder.cs" />
@@ -131,7 +133,7 @@
     <Compile Include="Implement\Device\DeviceCmdExecuterImpl.cs" />
     <Compile Include="Implement\Device\DeviceManagerImpl.cs" />
     <Compile Include="Implement\FileHelper\FileHelperImpl.cs" />
-    <Compile Include="Implement\LogGuardFlow\FilterEngines\AdvanceFilterEngine.cs" />
+    <Compile Include="Implement\LogGuardFlow\FilterEngines\AdvanceSyntaxFilterEngine.cs" />
     <Compile Include="Implement\LogGuardFlow\FilterEngines\NormalFilterEngine.cs" />
     <Compile Include="Implement\LogGuardFlow\FilterEngines\SyntaxFilterEngine.cs" />
     <Compile Include="Implement\LogGuardFlow\RunThreadConfig\RunThreadConfigManager.cs" />

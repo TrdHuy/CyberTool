@@ -191,6 +191,8 @@
 					   StrokeThickness="0" />
 
 			<ScrollViewer Margin="5,0,0,0"
+						  ToolTip="{Binding Path=(attPTB:TextBoxAttProperties.FilterConditionHelperContent),
+									RelativeSource={RelativeSource TemplatedParent}}"
 						  VerticalContentAlignment="Center"
 						  VerticalAlignment="Center"
 						  VerticalScrollBarVisibility="Disabled"

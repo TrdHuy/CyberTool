@@ -15,7 +15,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 {
     public class MessageFilterUCViewModel : ChildOfAdvanceFilterUCViewModel
     {
-        protected override bool IsUseFilterEngine { get => true; }
+        public override bool IsUseFilterEngine { get => true; }
 
         public MessageFilterUCViewModel(BaseViewModel parent) : base(parent)
         {
@@ -79,6 +79,26 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
             if (data != null)
             {
                 data.HighlightMessageSource = null;
+            }
+        }
+
+        protected override void UpdateFilterConditionHelperContent()
+        {
+            if (string.IsNullOrEmpty(CurrentEngine.HelperContent))
+            {
+                FilterConditionHelperContent = "Type a few words for helpful hints!";
+            }
+            else
+            {
+                switch (CurrentFilterMode)
+                {
+                    case FilterType.Simple:
+                        FilterConditionHelperContent = "Show log lines which message ignore lower/upper case containing: " + CurrentEngine.HelperContent;
+                        break;
+                    case FilterType.Syntax:
+                        FilterConditionHelperContent = "Show log lines which message ignore lower/upper case containing:\n" + CurrentEngine.HelperContent;
+                        break;
+                }
             }
         }
     }

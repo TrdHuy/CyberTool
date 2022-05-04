@@ -263,6 +263,20 @@ namespace LogGuard_v0._1.AppResources.AttachedProperties
             target.SetValue(FilterHelperContentProperty, value);
         #endregion
 
+        #region FilterConditionHelperContent
+        public static readonly DependencyProperty FilterConditionHelperContentProperty =
+            DependencyProperty.RegisterAttached(
+            "FilterConditionHelperContent",
+            typeof(string),
+            typeof(TextBoxAttProperties),
+            new FrameworkPropertyMetadata(defaultValue: null,
+                flags: FrameworkPropertyMetadataOptions.AffectsRender));
+        public static string GetFilterConditionHelperContent(UIElement target) =>
+            (string)target.GetValue(FilterConditionHelperContentProperty);
+        public static void SetFilterConditionHelperContent(UIElement target, string value) =>
+            target.SetValue(FilterConditionHelperContentProperty, value);
+        #endregion
+
         #region EngineHelperContent
         public static readonly DependencyProperty EngineHelperContentProperty =
             DependencyProperty.RegisterAttached(

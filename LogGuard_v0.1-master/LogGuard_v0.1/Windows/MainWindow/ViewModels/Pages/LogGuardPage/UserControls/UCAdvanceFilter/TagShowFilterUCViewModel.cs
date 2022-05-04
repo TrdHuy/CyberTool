@@ -49,7 +49,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
             return true;
         }
 
-        protected override bool IsUseFilterEngine => true;
+        public override bool IsUseFilterEngine => true;
 
         private bool TagShow(LWI_ParseableViewModel data)
         {
@@ -88,5 +88,28 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
                 data.HighlightTagSource = null;
             }
         }
+
+        protected override void UpdateFilterConditionHelperContent()
+        {
+            if (string.IsNullOrEmpty(CurrentEngine.HelperContent))
+            {
+                FilterConditionHelperContent = "Type a few words for helpful hints!";
+            }
+            else
+            {
+                switch (CurrentFilterMode)
+                {
+                    case FilterType.Simple:
+                        FilterConditionHelperContent = "Shows log lines which tag ignore lower/upper case containing: " + CurrentEngine.HelperContent;
+                        break;
+                    case FilterType.Syntax:
+                        FilterConditionHelperContent = "Shows log lines which tag ignore lower/upper case containing:\n" + CurrentEngine.HelperContent;
+                        break;
+                }
+            }
+
+            
+        }
+
     }
 }

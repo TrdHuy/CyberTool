@@ -3,6 +3,7 @@ using LogGuard_v0._1.Base.AsyncTask;
 using LogGuard_v0._1.Base.Command;
 using LogGuard_v0._1.Base.Log;
 using LogGuard_v0._1.Base.LogGuardFlow;
+using LogGuard_v0._1.Base.LogGuardFlow.SourceFilter;
 using LogGuard_v0._1.Implement.AndroidLog;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceHighlightManager;

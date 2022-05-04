@@ -1,21 +1,23 @@
 ﻿using LogGuard_v0._1._Config;
 using LogGuard_v0._1.AppResources.AttachedProperties;
-using LogGuard_v0._1.Base.LogGuardFlow;
+using LogGuard_v0._1.Base.LogGuardFlow.SourceFilter;
 using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceFilterManager;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceManager;
 using LogGuard_v0._1.Implement.UIEventHandler;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Threading;
 
 namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserControls.UCAdvanceFilter
 {
-    public abstract class ChildOfAdvanceFilterUCViewModel : BaseViewModel, ISourceFilter
+    public abstract class ChildOfAdvanceFilterUCViewModel : BaseViewModel, IMechanicalSourceFilter
     {
         private bool _isFilterBusy = false;
         private SearchBehavior _searchType = SearchBehavior.None;
-        protected IFilterEngine CurrentEngine { get; set; }
+
+        public IFilterEngine CurrentEngine { get; protected set; }
 
         [Bindable(true)]
         public CommandExecuterModel FilterLeftClickCommand { get; set; }
@@ -88,6 +90,20 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
         }
 
         [Bindable(true)]
+        public string FilterConditionHelperContent
+        {
+            get
+            {
+                return _filterConditionHelperContent;
+            }
+            set
+            {
+                _filterConditionHelperContent = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
         public string EngineHelperContent
         {
             get
@@ -130,24 +146,18 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
             }
         }
 
-        /// <summary>
-        /// Lọc các giá trị theo điều kiện, trả về kiểu bool
-        /// </summary>
-        /// <param name="obj">đối tượng cần kiểm tra điều kiện để lọc</param>
-        /// <returns></returns>
         public abstract bool Filter(object obj);
 
-        /// <summary>
-        /// Dùng để kiểm tra bộ lọc hiện tại có sử dụng engine để lọc không
-        /// </summary>
-        protected abstract bool IsUseFilterEngine { get; }
+        public abstract bool IsUseFilterEngine { get; }
 
         private string _engineHelperContent = "";
+        private string _filterConditionHelperContent = "";
         private string _filterHelperContent = "";
         private string _filterContent = "";
         protected bool _isFilterEnable = false;
         private FilterType _currentFilterMode = FilterType.Simple;
         private NormalFilterEngine _normalEngine = new NormalFilterEngine();
+        private AdvanceSyntaxFilterEngine _advanceSyntaxEngine = new AdvanceSyntaxFilterEngine();
         private SyntaxFilterEngine _syntaxEngine = new SyntaxFilterEngine();
         private Thread _notifyFilterEngineChangedMessage;
 
@@ -172,15 +182,34 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
             SourceManagerImpl.Current.SourceFilteredAndDisplayed -= OnSourceFilteredAndDisplayed;
             SourceManagerImpl.Current.SourceFilteredAndDisplayed += OnSourceFilteredAndDisplayed;
+
+            _syntaxEngine.PartsCollectionChanged -= OnSourcePartsCollectionChanged;
+            _syntaxEngine.PartsCollectionChanged += OnSourcePartsCollectionChanged;
         }
 
+        protected virtual void OnSourcePartsCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            var newFilterContent = "";
+            int i = 0;
+            foreach (var part in _syntaxEngine.SourceParts)
+            {
+                if (i == _syntaxEngine.SourceParts.Count - 1)
+                {
+                    newFilterContent += part;
+                }
+                else
+                {
+                    newFilterContent += part + " | ";
+                }
+                i++;
+            }
+            _filterContent = newFilterContent;
+            UpdateFilterConditionHelperContent();
+            NotifyFilterContentChanged(_filterContent);
+            Invalidate("FilterContent");
 
-        /// <summary>
-        /// Highlight các giá trị theo điều kiện, trả về kiểu bool
-        /// </summary>
-        /// <param name="obj">đối tượng cần highlight</param>
-        /// <returns>true: nếu có chuỗi đã được highlight</returns>
-        /// <returns>false: nếu không có chuỗi nào được highlight</returns>
+        }
+
         public bool Highlight(object obj)
         {
             return DoHighlight(obj);
@@ -203,11 +232,14 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
                     CurrentEngine = _normalEngine;
                     break;
                 case FilterType.Advance:
+                    CurrentEngine = _advanceSyntaxEngine;
+                    break;
                 case FilterType.Syntax:
                     CurrentEngine = _syntaxEngine;
                     break;
             }
             UpdateHelperContent();
+            UpdateFilterConditionHelperContent();
         }
 
         protected void UpdateEngingeComparableSource(string source)
@@ -243,6 +275,16 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
         }
 
+        protected virtual void UpdateFilterConditionHelperContent()
+        {
+            if (CurrentEngine.HelperContent == "")
+            {
+                FilterConditionHelperContent = "Type a few words for helpful hints!";
+            }
+            
+        }
+
+
         protected void NotifyFilterContentChanged(object conditionChanged)
         {
             switch (conditionChanged)
@@ -268,6 +310,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
         protected virtual void OnFilterContentChanged(string value)
         {
             UpdateEngingeComparableSource(value);
+            UpdateFilterConditionHelperContent();
             NotifyFilterContentChanged(value);
         }
 

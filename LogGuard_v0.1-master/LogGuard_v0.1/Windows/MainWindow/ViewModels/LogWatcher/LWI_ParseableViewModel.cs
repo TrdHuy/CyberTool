@@ -1,5 +1,6 @@
 ﻿using LogGuard_v0._1.Base.AndroidLog;
 using LogGuard_v0._1.Base.Command;
+using LogGuard_v0._1.Base.LogGuardFlow.SourceFilter;
 using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Implement.UIEventHandler;
 using LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages;
@@ -19,11 +20,11 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
         private ICommand _tagLeftDoubleClickCommand;
         private LogInfo _logInfo;
 
-        private IEnumerable<Base.LogGuardFlow.MatchedWord> _pidSource;
-        private IEnumerable<Base.LogGuardFlow.MatchedWord> _tidSource;
-        private IEnumerable<Base.LogGuardFlow.MatchedWord> _tagSource;
-        private IEnumerable<Base.LogGuardFlow.MatchedWord> _mesSource;
-        private IEnumerable<Base.LogGuardFlow.MatchedWord> _extraMesSource;
+        private IEnumerable<MatchedWord> _pidSource;
+        private IEnumerable<MatchedWord> _tidSource;
+        private IEnumerable<MatchedWord> _tagSource;
+        private IEnumerable<MatchedWord> _mesSource;
+        private IEnumerable<MatchedWord> _extraMesSource;
 
         public ICommand TagLeftDoubleClickCommand { get => _tagLeftDoubleClickCommand; set => _tagLeftDoubleClickCommand = value; }
 
@@ -36,7 +37,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
             }
             set
             {
-                _tidSource = (IEnumerable<Base.LogGuardFlow.MatchedWord>)value;
+                _tidSource = (IEnumerable<MatchedWord>)value;
                 InvalidateOwn();
             }
         }
@@ -50,7 +51,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
             }
             set
             {
-                _pidSource = (IEnumerable<Base.LogGuardFlow.MatchedWord>)value;
+                _pidSource = (IEnumerable<MatchedWord>)value;
                 InvalidateOwn();
             }
         }
@@ -64,7 +65,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
             }
             set
             {
-                _mesSource = (IEnumerable<Base.LogGuardFlow.MatchedWord>)value;
+                _mesSource = (IEnumerable<MatchedWord>)value;
                 InvalidateOwn();
             }
         }
@@ -78,7 +79,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
             }
             set
             {
-                _extraMesSource = (IEnumerable<Base.LogGuardFlow.MatchedWord>)value;
+                _extraMesSource = (IEnumerable<MatchedWord>)value;
                 InvalidateOwn();
             }
         }
@@ -92,7 +93,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
             }
             set
             {
-                _tagSource = (IEnumerable<Base.LogGuardFlow.MatchedWord>)value;
+                _tagSource = (IEnumerable<MatchedWord>)value;
                 InvalidateOwn();
             }
         }

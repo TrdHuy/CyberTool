@@ -19,12 +19,13 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
             }
             set
             {
+
                 _isCalendarOpen = value;
                 InvalidateOwn();
             }
         }
 
-        protected override bool IsUseFilterEngine => false;
+        public override bool IsUseFilterEngine => false;
 
         protected DateTime CurrentFilterTime { get; set; }
         public TimeFilterUCViewModel(BaseViewModel parent) : base(parent)

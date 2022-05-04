@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LogGuard_v0._1.Base.LogGuardFlow
+namespace LogGuard_v0._1.Base.LogGuardFlow.SourceFilter
 {
     public interface IFilterEngine
     {
@@ -22,6 +22,10 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         List<MatchedWord> GetMatchWords();
 
         bool IsMatchLstEmpty { get; }
+
+        string ComparableSource { get; }
+
+        string HelperContent { get; }
     }
 
     public class MatchedWord : IHighlightable

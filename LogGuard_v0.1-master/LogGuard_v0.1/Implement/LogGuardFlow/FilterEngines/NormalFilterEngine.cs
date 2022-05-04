@@ -1,4 +1,4 @@
-﻿using LogGuard_v0._1.Base.LogGuardFlow;
+﻿using LogGuard_v0._1.Base.LogGuardFlow.SourceFilter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +9,12 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
 {
     public class NormalFilterEngine : IFilterEngine
     {
-        protected string ComparableSource { get; set; }
+        public string ComparableSource { get; protected set; }
         protected List<MatchedWord> MatchedWords { get; set; }
 
         public bool IsMatchLstEmpty { get; protected set; }
+
+        public string HelperContent { get; protected set; }
 
         public NormalFilterEngine()
         {
@@ -58,6 +60,14 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.FilterEngines
         public virtual void UpdateComparableSource(string source)
         {
             ComparableSource = source;
+            if (string.IsNullOrEmpty(ComparableSource))
+            {
+                HelperContent = "";
+            }
+            else
+            {
+                HelperContent = "\"" + ComparableSource + "\"";
+            }
         }
 
         public void Refresh()

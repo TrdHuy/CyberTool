@@ -16,8 +16,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
     {
         protected new bool _isFilterEnable = true;
 
-      
-        protected override bool IsUseFilterEngine { get => true; }
+        public override bool IsUseFilterEngine { get => true; }
 
         public MessageHighlightUCViewModel(BaseViewModel parent) : base(parent)
         {

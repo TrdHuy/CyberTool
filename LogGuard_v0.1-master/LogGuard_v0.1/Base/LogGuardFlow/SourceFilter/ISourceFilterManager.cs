@@ -1,10 +1,11 @@
-﻿using System;
+﻿using LogGuard_v0._1.Base.LogGuardFlow.SourceFilter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LogGuard_v0._1.Base.LogGuardFlow
+namespace LogGuard_v0._1.Base.LogGuardFlow.SourceFilter
 {
     public interface ISourceFilterManager
     {
@@ -17,13 +18,13 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         /// <returns></returns>
         bool Filter(object obj);
 
-        ISourceFilter LogTagFilter { get; set; }
-        ISourceFilter LogMessageFilter { get; set; }
-        ISourceFilter LogPidFilter { get; set; }
-        ISourceFilter LogTidFilter { get; set; }
-        ISourceFilter LogTagRemoveFilter { get; set; }
-        ISourceFilter LogStartTimeFilter { get; set; }
-        ISourceFilter LogEndTimeFilter { get; set; }
+        IMechanicalSourceFilter LogTagFilter { get; set; }
+        IMechanicalSourceFilter LogMessageFilter { get; set; }
+        IMechanicalSourceFilter LogPidFilter { get; set; }
+        IMechanicalSourceFilter LogTidFilter { get; set; }
+        IMechanicalSourceFilter LogTagRemoveFilter { get; set; }
+        IMechanicalSourceFilter LogStartTimeFilter { get; set; }
+        IMechanicalSourceFilter LogEndTimeFilter { get; set; }
         ISourceFilter LogLevelFilter { get; set; }
         void NotifyFilterPropertyChanged(ISourceFilter sender, object e);
     }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LogGuard_v0._1.Base.LogGuardFlow
+namespace LogGuard_v0._1.Base.LogGuardFlow.SourceFilter
 {
     public interface ISourceFilter : ISourceHighlightor
     {

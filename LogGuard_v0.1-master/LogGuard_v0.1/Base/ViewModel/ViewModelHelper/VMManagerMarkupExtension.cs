@@ -14,6 +14,7 @@ namespace LogGuard_v0._1.Base.ViewModel.ViewModelHelper
         private static Dictionary<Type, object> DataContextCache;
 
         public static event OnDataContextGeneratedHandler DataContextGenerated;
+        public static event OnDataContextDestroyedHandler DataContextDestroyed;
 
 
         [ConstructorArgument("dataContextType")]
@@ -94,10 +95,24 @@ namespace LogGuard_v0._1.Base.ViewModel.ViewModelHelper
                 var baseVM = parentInCache as BaseViewModel;
                 foreach (var child in baseVM.ChildModels)
                 {
-                    DataContextCache.Remove(child.GetType());
+                    try
+                    {
+                        var data = DataContextCache[child.GetType()];
+                        DataContextCache.Remove(child.GetType());
+                        DataContextDestroyed(DataContextCache
+                            , new DataContextDestroyedArgs(data));
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+
                 }
             }
+            var data2 = DataContextCache[dataContextType];
             DataContextCache.Remove(dataContextType);
+            DataContextDestroyed(DataContextCache
+                , new DataContextDestroyedArgs(data2));
         }
     }
 
@@ -108,6 +123,18 @@ namespace LogGuard_v0._1.Base.ViewModel.ViewModelHelper
         public object DataContext { get; }
 
         public DataContextGeneratedArgs(object dataContext)
+        {
+            DataContext = dataContext;
+        }
+    }
+
+    public delegate void OnDataContextDestroyedHandler(object sender, DataContextDestroyedArgs e);
+
+    public class DataContextDestroyedArgs : EventArgs
+    {
+        public object DataContext { get; }
+
+        public DataContextDestroyedArgs(object dataContext)
         {
             DataContext = dataContext;
         }

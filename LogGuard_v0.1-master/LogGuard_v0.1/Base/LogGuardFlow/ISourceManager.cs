@@ -1,4 +1,5 @@
 ﻿using LogGuard_v0._1.Base.Log;
+using LogGuard_v0._1.Base.LogGuardFlow.SourceFilter;
 using LogGuard_v0._1.Utils;
 using LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher;
 using System;
