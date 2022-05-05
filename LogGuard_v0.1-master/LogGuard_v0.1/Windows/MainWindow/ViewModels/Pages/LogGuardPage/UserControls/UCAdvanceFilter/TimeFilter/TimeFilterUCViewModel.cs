@@ -39,9 +39,17 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
         protected override void OnFilterContentChanged(string value)
         {
-            CurrentFilterTime = DateTime.ParseExact(FilterContent
-               , "dd-MM-yyyy HH:mm:ss:ffffff"
-               , System.Globalization.CultureInfo.CurrentCulture);
+            try
+            {
+                CurrentFilterTime = DateTime.ParseExact(FilterContent
+                               , "dd-MM-yyyy HH:mm:ss:ffffff"
+                               , System.Globalization.CultureInfo.CurrentCulture);
+            }
+            catch
+            {
+
+            }
+
             NotifyFilterContentChanged(value);
         }
 
