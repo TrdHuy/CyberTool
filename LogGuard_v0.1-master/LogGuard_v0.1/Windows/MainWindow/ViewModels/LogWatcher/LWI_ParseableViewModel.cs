@@ -18,6 +18,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
     public class LWI_ParseableViewModel : LogWatcherItemViewModel
     {
         private ICommand _tagLeftDoubleClickCommand;
+        private ICommand _mesLeftDoubleClickCommand;
         private LogInfo _logInfo;
 
         private IEnumerable<MatchedWord> _pidSource;
@@ -27,6 +28,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
         private IEnumerable<MatchedWord> _extraMesSource;
 
         public ICommand TagLeftDoubleClickCommand { get => _tagLeftDoubleClickCommand; set => _tagLeftDoubleClickCommand = value; }
+        public ICommand MessageLeftDoubleClickCommand { get => _mesLeftDoubleClickCommand; set => _mesLeftDoubleClickCommand = value; }
 
         [Bindable(true)]
         public object HighlightTidSource
@@ -232,9 +234,12 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
             ViewType = LogGuard.Base.ElementViewType.LogView;
 
             var lgVM = parent as LogGuardPageViewModel;
+
             if(parent != null)
             {
                 _tagLeftDoubleClickCommand = lgVM.GestureViewModel.LogTagDoubleClickCommand;
+                _mesLeftDoubleClickCommand = lgVM.GestureViewModel.LogMessageDoubleClickCommand;
+
             }
 
             switch (logInfo[LogInfo.KEY_LEVEL])

@@ -13,6 +13,8 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
         public CommandExecuterModel DeleteTagItemButtonCommand { get; set; }
         public CommandExecuterModel EditTagItemButtonCommand { get; set; }
 
+        public CommandExecuterModel DeleteMessageItemButtonCommand { get; set; }
+        public CommandExecuterModel EditMessageItemButtonCommand { get; set; }
 
         public MSW_LMUC_ControlButtonCommandVM(BaseViewModel parentsModel) : base(parentsModel)
         {
@@ -25,6 +27,18 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
             EditTagItemButtonCommand = new CommandExecuterModel((paramaters) =>
             {
                 return OnKey(KeyFeatureTag.KEY_TAG_MSW_LOGMANAGER_EDIT_TAG_ITEM_FEATURE
+                    , paramaters);
+            });
+
+            DeleteMessageItemButtonCommand = new CommandExecuterModel((paramaters) =>
+            {
+                return OnKey(KeyFeatureTag.KEY_TAG_MSW_LOGMANAGER_DELETE_MESSAGE_ITEM_FEATURE
+                    , paramaters);
+            });
+
+            EditMessageItemButtonCommand = new CommandExecuterModel((paramaters) =>
+            {
+                return OnKey(KeyFeatureTag.KEY_TAG_MSW_LOGMANAGER_EDIT_MESSAGE_ITEM_FEATURE
                     , paramaters);
             });
         }

@@ -279,12 +279,28 @@
 							<GridViewColumnHeader Content="Message" />
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<TextBlock attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightMessageSource, UpdateSourceTrigger=PropertyChanged}"
+									<TextBlock x:Name="mainContent"
+											   attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightMessageSource, UpdateSourceTrigger=PropertyChanged}"
 											   attProp:TextBlockAttProperties.ExtraHighlightSource="{Binding ExtraHighlightMessageSource, UpdateSourceTrigger=PropertyChanged}"
 											   attProp:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
 											   attProp:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
 											   attProp:TextBlockAttProperties.RawText="{Binding Message}"
-											   Text="{Binding Message}" />
+											   Text="{Binding Message}">
+										<TextBlock.InputBindings>
+											<MouseBinding Command="{Binding MessageLeftDoubleClickCommand}"
+														  CommandParameter="{Binding .}"
+														  MouseAction="LeftDoubleClick" />
+										</TextBlock.InputBindings>
+
+									</TextBlock>
+									<DataTemplate.Triggers>
+										<Trigger Property="IsMouseOver"
+												 Value="True">
+											<Setter Property="TextDecorations"
+													TargetName="mainContent"
+													Value="Underline" />
+										</Trigger>
+									</DataTemplate.Triggers>
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</GridViewColumn>

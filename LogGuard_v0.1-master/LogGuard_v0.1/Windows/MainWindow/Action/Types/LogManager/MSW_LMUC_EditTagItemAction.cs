@@ -41,13 +41,13 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action.Types.LogManager
         {
             base.ExecuteCommand();
 
-            var tagItemVM = DataTransfer[0] as TagItemViewModel;
+            var tagItemVM = DataTransfer[0] as TrippleToggleItemViewModel;
             var editTagBox = DataTransfer[1] as TextBox;
 
             if (tagItemVM != null && editTagBox != null)
             {
 
-                oldText = tagItemVM.Tag.ToString();
+                oldText = tagItemVM.Content.ToString();
 
                 tagItemVM.IsEditMode = true;
                 editTagBox.Focus();
@@ -56,23 +56,23 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action.Types.LogManager
                 RoutedEventHandler lostFocus = (s, e) =>
                 {
                     tagItemVM.IsEditMode = false;
-                    var newTag = tagItemVM.Tag;
+                    var newTag = tagItemVM.Content;
                     if (newTag == "")
                     {
-                        tagItemVM.Tag = oldText;
+                        tagItemVM.Content = oldText;
                         return;
                     }
 
-                    var contain = LMUCViewModel.TagManagerContent.TagItems.FirstOrDefault(item => item.Tag == newTag && item != tagItemVM);
+                    var contain = LMUCViewModel.TagManagerContent.TagItems.FirstOrDefault(item => item.Content == newTag && item != tagItemVM);
                     if (contain == null)
                     {
-                        oldText = tagItemVM.Tag.ToString();
+                        oldText = tagItemVM.Content.ToString();
                         return;
                     }
                     else
                     {
                         App.Current.ShowWaringBox("This item already exists in tag manager!");
-                        tagItemVM.Tag = oldText;
+                        tagItemVM.Content = oldText;
                         return;
                     }
                 };

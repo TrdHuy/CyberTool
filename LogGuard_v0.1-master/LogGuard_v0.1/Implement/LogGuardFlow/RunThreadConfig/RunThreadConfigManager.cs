@@ -18,7 +18,6 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.RunThreadConfig
         private RunThreadConfigImpl _config;
 
         public event OnConfigChangedHandler ConfigChanged;
-        public event OnTagsCollectionChangedHandler TagsCollectionChanged;
 
         public static RunThreadConfigManager Current
         {
@@ -46,7 +45,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.RunThreadConfig
             }
         }
 
-        public List<LogTagVO> TagEmployees
+        public List<TrippleToggleItemVO> TagEmployees
         {
             get
             {
@@ -59,8 +58,23 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.RunThreadConfig
                 ConfigChanged?.Invoke(this, new OnConfigChangedArgs(oldValue, value));
             }
         }
-        public IRunThreadConfig CurrentConfig { get => _config; }
 
+        public List<TrippleToggleItemVO> MessageEmployees
+        {
+            get
+            {
+                return _config.LogMessages;
+            }
+            set
+            {
+                var oldValue = _config.LogMessages;
+                _config.LogMessages = value;
+                ConfigChanged?.Invoke(this, new OnConfigChangedArgs(oldValue, value));
+            }
+        }
+
+
+        public IRunThreadConfig CurrentConfig { get => _config; }
 
         private RunThreadConfigManager()
         {
@@ -81,7 +95,12 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.RunThreadConfig
             logger.I("Total load config from file time = " + watch.ElapsedMilliseconds + "(ms)");
             if (_config.LogTags == null)
             {
-                TagEmployees = new List<LogTagVO>();
+                TagEmployees = new List<TrippleToggleItemVO>();
+            }
+
+            if (_config.LogMessages == null)
+            {
+                MessageEmployees = new List<TrippleToggleItemVO>();
             }
         }
 
@@ -92,17 +111,14 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.RunThreadConfig
         }
 
 
-        private void OnTagEmployeesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            TagsCollectionChanged?.Invoke(sender, e);
-        }
-
         private class RunThreadConfigImpl : IRunThreadConfig
         {
             private const string _configPath = @"\config.json";
             private LogParserVO _logParserFormat;
-            private List<LogTagVO> _tags;
-            public List<LogTagVO> LogTags { get => _tags; set => _tags = value; }
+            private List<TrippleToggleItemVO> _tags;
+            private List<TrippleToggleItemVO> _messages;
+            public List<TrippleToggleItemVO> LogTags { get => _tags; set => _tags = value; }
+            public List<TrippleToggleItemVO> LogMessages { get => _messages; set => _messages = value; }
             public LogParserVO LogParserFormat { get => _logParserFormat; set => _logParserFormat = value; }
 
             public RunThreadConfigImpl()
@@ -112,10 +128,13 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.RunThreadConfig
             public void Init()
             {
                 var config = FileIOManager.Current.LoadJsonFromDataFile<RunThreadConfigImpl>(_configPath);
-                LogTags = new List<LogTagVO>();
+                LogTags = new List<TrippleToggleItemVO>();
+                LogMessages = new List<TrippleToggleItemVO>();
+
                 if (config != null)
                 {
                     LogTags = config.LogTags;
+                    LogMessages = config.LogMessages;
                     LogParserFormat = config.LogParserFormat;
                 }
 
@@ -125,7 +144,6 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.RunThreadConfig
     }
 
     public delegate void OnConfigChangedHandler(object sender, OnConfigChangedArgs args);
-    public delegate void OnTagsCollectionChangedHandler(object sender, NotifyCollectionChangedEventArgs args);
 
     public class OnConfigChangedArgs : EventArgs
     {

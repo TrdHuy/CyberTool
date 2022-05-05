@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Windows.MainWindow.Action.Types.LogManager
 {
-    internal class MSW_LMUC_DeleteTagItemAction : BaseViewModelCommandExecuter
+    public class MSW_LMUC_DeleteMessageItemAction : BaseViewModelCommandExecuter
     {
         protected LogManagerUCViewModel LMUCViewModel
         {
@@ -20,7 +20,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action.Types.LogManager
             }
         }
 
-        public MSW_LMUC_DeleteTagItemAction(string actionID, string builderID, BaseViewModel viewModel, ILogger logger) : base(actionID, builderID, viewModel, logger) { }
+        public MSW_LMUC_DeleteMessageItemAction(string actionID, string builderID, BaseViewModel viewModel, ILogger logger) : base(actionID, builderID, viewModel, logger) { }
 
         protected override void ExecuteCommand()
         {
@@ -28,7 +28,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action.Types.LogManager
             var item = DataTransfer[0] as TrippleToggleItemViewModel;
             if (item != null)
             {
-                LMUCViewModel.TagManagerContent.TagItems.Remove(item);
+                LMUCViewModel.MessageManagerContent.Messagetems.Remove(item);
             }
         }
     }

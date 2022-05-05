@@ -38,288 +38,621 @@
 				<ColumnDefinition Width="*" />
 				<ColumnDefinition Width="15" />
 			</Grid.ColumnDefinitions>
-			<Grid Grid.Column="1"
-				  Grid.Row="1">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="0.25*" />
-					<RowDefinition Height="*" />
-				</Grid.RowDefinitions>
+			<TabControl Grid.Column="1"
+						BorderThickness="0"
+						Background="{StaticResource Background_Level2}"
+						Grid.Row="1">
+				<TabControl.Resources>
+					<Style TargetType="{x:Type TabItem}">
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="{x:Type TabItem}">
+									<Grid>
+										<Border Name="Border"
+												CornerRadius="5,5,0,0"
+												BorderThickness="1,1,1,0"
+												BorderBrush="Transparent"
+												Background="Transparent">
+											<TextBlock x:Name="TextContent"
+													   VerticalAlignment="Center"
+													   HorizontalAlignment="Center"
+													   FontSize="9"
+													   FontFamily="Calibri"
+													   Foreground="{StaticResource Foreground_Level1}"
+													   Text="{TemplateBinding Header}"
+													   Margin="7,3,7,2">
+											</TextBlock>
+										</Border>
+									</Grid>
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsSelected"
+												 Value="True">
+											<Setter TargetName="Border"
+													Property="Background"
+													Value="{StaticResource ButtonBackground_Level1}" />
+											<Setter TargetName="TextContent"
+													Property="FontWeight"
+													Value="Bold" />
+											<Setter TargetName="TextContent"
+													Property="Foreground"
+													Value="{StaticResource Foreground_Level3}" />
 
+										</Trigger>
+										<MultiTrigger>
+											<MultiTrigger.Conditions>
+												<Condition Property="IsMouseOver"
+														   Value="True" />
+												<Condition Property="IsSelected"
+														   Value="False" />
+											</MultiTrigger.Conditions>
 
-				<Label Content="Tag manager"
-					   FontSize="9"
-					   Grid.Row="0"
-					   Foreground="{StaticResource Foreground_Level1}" />
-				<ListView Grid.Row="1"
-						  ItemsSource="{Binding TagManagerContent.TagItems}"
-						  Background="{StaticResource Background_Level3}"
-						  Template="{StaticResource ListViewLV2Tmpl}">
-					<ListView.ContextMenu>
+											<Setter TargetName="Border"
+													Property="BorderBrush"
+													Value="{StaticResource BorderbrushEffect_Level1}" />
+											<Setter TargetName="Border"
+													Property="CornerRadius"
+													Value="0" />
+										</MultiTrigger>
+
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</TabControl.Resources>
+				<TabItem Header="Tags manager">
+					<TabItem.ContextMenu>
 						<ContextMenu>
-							<MenuItem Header="Add">
-								<MenuItem.Icon>
-									<Path Width="12"
-										  Height="12"
-										  Fill="{StaticResource Background_Level2}"
-										  Data="{Binding Source={StaticResource EditIcon}}"
-										  Stretch="Uniform" />
-								</MenuItem.Icon>
-							</MenuItem>
-							<MenuItem Header="Clear">
-								<MenuItem.Icon>
-									<Path Width="12"
-										  Height="12"
-										  Fill="{StaticResource Background_Level2}"
-										  Data="{Binding Source={StaticResource EditIcon}}"
-										  Stretch="Uniform" />
-								</MenuItem.Icon>
-							</MenuItem>
+							<MenuItem Header="Add" />
+							<MenuItem Header="Clear" />
+							<MenuItem Header="Explore" />
 						</ContextMenu>
-					</ListView.ContextMenu>
-					<ListView.ItemContainerStyle>
-						<Style TargetType="{x:Type ListViewItem}">
-							<Setter Property="Height"
-									Value="30" />
-							<Setter Property="Template">
-								<Setter.Value>
-									<ControlTemplate>
-										<Grid x:Name="MainGrid"
-											  Grid.Row="1"
-											  attProp:UIAttProperties.ProxyObject="{Binding ElementName=EditTagBox}"
-											  Background="{StaticResource Background_Level3}">
-											<Grid.ContextMenu>
-												<ContextMenu>
-													<MenuItem Header="Delete"
-															  CommandParameter="{Binding .}"
-															  Command="{Binding DeleteTagItemCommand}">
-														<MenuItem.Icon>
-															<Path Width="12"
-																  Height="12"
-																  Fill="{StaticResource Background_Level2}"
-																  Data="{Binding Source={StaticResource TrashIcon}}"
-																  Stretch="Uniform" />
-														</MenuItem.Icon>
-													</MenuItem>
-													<MenuItem Header="Edit"
-															  Command="{Binding EditTagItemCommand}">
-														<MenuItem.CommandParameter>
-															<MultiBinding Converter="{StaticResource MultiBinding}">
-																<Binding Path="." />
-																<Binding Path="PlacementTarget.(attProp:UIAttProperties.ProxyObject)"
-																		 RelativeSource="{RelativeSource AncestorType=ContextMenu,Mode=FindAncestor}" />
-															</MultiBinding>
-														</MenuItem.CommandParameter>
-														<MenuItem.Icon>
-															<Path Width="12"
-																  Height="12"
-																  Fill="{StaticResource Background_Level2}"
-																  Data="{Binding Source={StaticResource EditIcon}}"
-																  Stretch="Uniform" />
-														</MenuItem.Icon>
-													</MenuItem>
-													<MenuItem Header="Show tag"
-															  Command="{Binding ShowTagItemCommand}">
-														<MenuItem.Icon>
-															<Path Width="12"
-																  Height="12"
-																  Fill="{StaticResource ButtonBackground_Level1}"
-																  Data="{Binding Source={StaticResource TagIcon}}"
-																  Stretch="Uniform" />
-														</MenuItem.Icon>
-													</MenuItem>
-													<MenuItem Header="Remove tag"
-															  Command="{Binding RemoveTagItemCommand}">
-														<MenuItem.Icon>
-															<Path Width="12"
-																  Height="12"
-																  Fill="{StaticResource ButtonBackground_Level2}"
-																  Data="{Binding Source={StaticResource TagIcon}}"
-																  Stretch="Uniform" />
-														</MenuItem.Icon>
-													</MenuItem>
-													<MenuItem Header="Off tag"
-															  Command="{Binding OffTagItemCommand}">
-														<MenuItem.Icon>
-															<Path Width="12"
-																  Height="12"
-																  Fill="{StaticResource Foreground_Level1}"
-																  Data="{Binding Source={StaticResource TagIcon}}"
-																  Stretch="Uniform" />
-														</MenuItem.Icon>
-													</MenuItem>
-												</ContextMenu>
-											</Grid.ContextMenu>
-											<Grid.ColumnDefinitions>
-												<ColumnDefinition Width="10" />
-												<ColumnDefinition Width="35" />
-												<ColumnDefinition Width="10" />
-												<ColumnDefinition Width="*" />
-												<ColumnDefinition Width="auto" />
-												<ColumnDefinition Width="auto" />
-											</Grid.ColumnDefinitions>
-											<Rectangle	Grid.ColumnSpan="6"
-														StrokeThickness="1"
-														Fill="#19B8E7F9"
-														Stroke="#FFB8EAF9"
-														x:Name="FeedBackRec"
-														Visibility="Hidden" />
-											<TextBox x:Name="EditTagBox"
-													 Text="{Binding Tag}"
-													 Grid.Column="3"
-													 IsHitTestVisible="False"
-													 Background="Transparent"
-													 Focusable="True"
-													 FontWeight="Bold"
-													 FontSize="8"
-													 CaretBrush="White"
-													 VerticalAlignment="Center"
-													 Template="{StaticResource NonfocusableTextBox}"
-													 FontFamily="Calibri">
-
-												<TextBox.Style>
-													<Style TargetType="TextBox">
-														<Style.Triggers>
-															<DataTrigger Binding="{Binding Path=Status,ElementName=TgSwitch}"
-																		 Value="2">
-																<Setter Property="Foreground"
-																		Value="{StaticResource ButtonBackground_Level1}" />
-															</DataTrigger>
-															<DataTrigger Binding="{Binding Path=Status,ElementName=TgSwitch}"
-																		 Value="0">
-																<Setter Property="Foreground"
-																		Value="{StaticResource ButtonBackground_Level2}" />
-															</DataTrigger>
-															<DataTrigger Binding="{Binding Path=Status,ElementName=TgSwitch}"
-																		 Value="1">
-																<Setter Property="Foreground"
-																		Value="{StaticResource Foreground_Level2}" />
-															</DataTrigger>
-															<DataTrigger Binding="{Binding Path=IsEditMode}"
-																		 Value="True">
-																<Setter Property="BorderThickness"
-																		Value="1" />
-															</DataTrigger>
-															<DataTrigger Binding="{Binding Path=IsEditMode}"
-																		 Value="False">
-																<Setter Property="BorderThickness"
-																		Value="0" />
-															</DataTrigger>
-														</Style.Triggers>
-													</Style>
-												</TextBox.Style>
-											</TextBox>
-											<ctrl:TrippleToggle x:Name="TgSwitch"
-																DotNormalFill="White"
-																Grid.Column="1"
-																Status="{Binding Stat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-																DotOnFill="{StaticResource ButtonColor_Level1}"
-																DotOffFill="{StaticResource ButtonColor_Level2}" />
-
-											<Rectangle Grid.Column="4"
-													   Width="12"
-													   Height="12"
-													   Margin="2,0"
-													   RadiusX="1"
-													   RadiusY="1">
-												<Rectangle.Style>
-													<Style TargetType="Rectangle">
-														<Style.Triggers>
-															<Trigger Property="IsMouseOver"
-																	 Value="True">
-																<Setter Property="Stroke"
-																		Value="#FFB8EAF9" />
-																<Setter Property="Fill"
-																		Value="#19B8E7F9" />
-															</Trigger>
-															<Trigger Property="IsMouseOver"
-																	 Value="False">
-																<Setter Property="Stroke"
-																		Value="Transparent" />
-																<Setter Property="Fill"
-																		Value="Transparent" />
-															</Trigger>
-														</Style.Triggers>
-													</Style>
-												</Rectangle.Style>
-
-												<Rectangle.InputBindings>
-													<MouseBinding MouseAction="LeftClick"
-																  Command="{Binding EditTagItemCommand}">
-														<MouseBinding.CommandParameter>
-															<MultiBinding Converter="{StaticResource MultiBinding}">
-																<Binding Path="." />
-																<Binding ElementName="EditTagBox" />
-															</MultiBinding>
-														</MouseBinding.CommandParameter>
-													</MouseBinding>
-												</Rectangle.InputBindings>
-											</Rectangle>
-											<Path Grid.Column="4"
-												  Width="9"
-												  Height="9"
-												  IsHitTestVisible="False"
-												  Fill="{StaticResource Foreground_Level3}"
-												  Data="{Binding Source={StaticResource EditIcon}}"
-												  Stretch="Uniform" />
-
-											<Rectangle Grid.Column="5"
-													   Width="12"
-													   Margin="2,0"
-													   Height="12"
-													   RadiusX="1"
-													   RadiusY="1">
-												<Rectangle.Style>
-													<Style TargetType="Rectangle">
-														<Style.Triggers>
-															<Trigger Property="IsMouseOver"
-																	 Value="True">
-																<Setter Property="Stroke"
-																		Value="#FFB8EAF9" />
-																<Setter Property="Fill"
-																		Value="#19B8E7F9" />
-															</Trigger>
-															<Trigger Property="IsMouseOver"
-																	 Value="False">
-																<Setter Property="Stroke"
-																		Value="Transparent" />
-																<Setter Property="Fill"
-																		Value="Transparent" />
-															</Trigger>
-														</Style.Triggers>
-													</Style>
-												</Rectangle.Style>
-
-												<Rectangle.InputBindings>
-													<MouseBinding MouseAction="LeftClick"
+					</TabItem.ContextMenu>
+					<ListView Grid.Row="1"
+							  ItemsSource="{Binding TagManagerContent.TagItems}"
+							  Background="{StaticResource Background_Level3}"
+							  Template="{StaticResource ListViewLV2Tmpl}">
+						<ListView.ContextMenu>
+							<ContextMenu>
+								<MenuItem Header="Add">
+									<MenuItem.Icon>
+										<Path Width="12"
+											  Height="12"
+											  Fill="{StaticResource Background_Level2}"
+											  Data="{Binding Source={StaticResource EditIcon}}"
+											  Stretch="Uniform" />
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Clear">
+									<MenuItem.Icon>
+										<Path Width="12"
+											  Height="12"
+											  Fill="{StaticResource Background_Level2}"
+											  Data="{Binding Source={StaticResource EditIcon}}"
+											  Stretch="Uniform" />
+									</MenuItem.Icon>
+								</MenuItem>
+							</ContextMenu>
+						</ListView.ContextMenu>
+						<ListView.ItemContainerStyle>
+							<Style TargetType="{x:Type ListViewItem}">
+								<Setter Property="Height"
+										Value="30" />
+								<Setter Property="Template">
+									<Setter.Value>
+										<ControlTemplate>
+											<Grid x:Name="MainGrid"
+												  Grid.Row="1"
+												  Width="{Binding RelativeSource={RelativeSource AncestorType=ItemsPresenter, Mode=FindAncestor}, Path=ActualWidth}"
+												  attProp:UIAttProperties.ProxyObject="{Binding ElementName=EditTagBox}"
+												  Background="{StaticResource Background_Level3}">
+												<Grid.ContextMenu>
+													<ContextMenu>
+														<MenuItem Header="Delete"
 																  CommandParameter="{Binding .}"
-																  Command="{Binding DeleteTagItemCommand}" />
-												</Rectangle.InputBindings>
-											</Rectangle>
+																  Command="{Binding DeleteContentItemCommand}">
+															<MenuItem.Icon>
+																<Path Width="12"
+																	  Height="12"
+																	  Fill="{StaticResource Background_Level2}"
+																	  Data="{Binding Source={StaticResource TrashIcon}}"
+																	  Stretch="Uniform" />
+															</MenuItem.Icon>
+														</MenuItem>
+														<MenuItem Header="Edit"
+																  Command="{Binding EditContentItemCommand}">
+															<MenuItem.CommandParameter>
+																<MultiBinding Converter="{StaticResource MultiBinding}">
+																	<Binding Path="." />
+																	<Binding Path="PlacementTarget.(attProp:UIAttProperties.ProxyObject)"
+																			 RelativeSource="{RelativeSource AncestorType=ContextMenu,Mode=FindAncestor}" />
+																</MultiBinding>
+															</MenuItem.CommandParameter>
+															<MenuItem.Icon>
+																<Path Width="12"
+																	  Height="12"
+																	  Fill="{StaticResource Background_Level2}"
+																	  Data="{Binding Source={StaticResource EditIcon}}"
+																	  Stretch="Uniform" />
+															</MenuItem.Icon>
+														</MenuItem>
+														<MenuItem Header="Show tag"
+																  Command="{Binding ShowContentItemCommand}">
+															<MenuItem.Icon>
+																<Path Width="12"
+																	  Height="12"
+																	  Fill="{StaticResource ButtonBackground_Level1}"
+																	  Data="{Binding Source={StaticResource TagIcon}}"
+																	  Stretch="Uniform" />
+															</MenuItem.Icon>
+														</MenuItem>
+														<MenuItem Header="Remove tag"
+																  Command="{Binding RemoveContentItemCommand}">
+															<MenuItem.Icon>
+																<Path Width="12"
+																	  Height="12"
+																	  Fill="{StaticResource ButtonBackground_Level2}"
+																	  Data="{Binding Source={StaticResource TagIcon}}"
+																	  Stretch="Uniform" />
+															</MenuItem.Icon>
+														</MenuItem>
+														<MenuItem Header="Off tag"
+																  Command="{Binding OffContentItemCommand}">
+															<MenuItem.Icon>
+																<Path Width="12"
+																	  Height="12"
+																	  Fill="{StaticResource Foreground_Level1}"
+																	  Data="{Binding Source={StaticResource TagIcon}}"
+																	  Stretch="Uniform" />
+															</MenuItem.Icon>
+														</MenuItem>
+													</ContextMenu>
+												</Grid.ContextMenu>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="10" />
+													<ColumnDefinition Width="35" />
+													<ColumnDefinition Width="10" />
+													<ColumnDefinition Width="*" />
+													<ColumnDefinition Width="auto" />
+													<ColumnDefinition Width="auto" />
+												</Grid.ColumnDefinitions>
+												<Rectangle	Grid.ColumnSpan="6"
+															StrokeThickness="1"
+															Fill="#19B8E7F9"
+															Stroke="#FFB8EAF9"
+															x:Name="FeedBackRec"
+															Visibility="Hidden" />
+												<TextBox x:Name="EditTagBox"
+														 Text="{Binding Content}"
+														 Grid.Column="3"
+														 IsHitTestVisible="False"
+														 Background="Transparent"
+														 Focusable="True"
+														 FontWeight="Bold"
+														 FontSize="8"
+														 CaretBrush="White"
+														 VerticalAlignment="Center"
+														 Template="{StaticResource NonfocusableTextBox}"
+														 FontFamily="Calibri">
 
-											<Path Grid.Column="5"
-												  Width="9"
-												  Height="9"
-												  IsHitTestVisible="False"
-												  Fill="{StaticResource Foreground_Level3}"
-												  Data="{Binding Source={StaticResource TrashIcon}}"
-												  Stretch="Uniform" />
-										</Grid>
-										<ControlTemplate.Triggers>
-											<Trigger Property="IsMouseOver"
-													 Value="True">
-												<Setter Property="Visibility"
-														TargetName="FeedBackRec"
-														Value="Visible" />
-											</Trigger>
-										</ControlTemplate.Triggers>
-									</ControlTemplate>
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</ListView.ItemContainerStyle>
-				</ListView>
+													<TextBox.Style>
+														<Style TargetType="TextBox">
+															<Style.Triggers>
+																<DataTrigger Binding="{Binding Path=Status,ElementName=TgSwitch}"
+																			 Value="2">
+																	<Setter Property="Foreground"
+																			Value="{StaticResource ButtonBackground_Level1}" />
+																</DataTrigger>
+																<DataTrigger Binding="{Binding Path=Status,ElementName=TgSwitch}"
+																			 Value="0">
+																	<Setter Property="Foreground"
+																			Value="{StaticResource ButtonBackground_Level2}" />
+																</DataTrigger>
+																<DataTrigger Binding="{Binding Path=Status,ElementName=TgSwitch}"
+																			 Value="1">
+																	<Setter Property="Foreground"
+																			Value="{StaticResource Foreground_Level2}" />
+																</DataTrigger>
+																<DataTrigger Binding="{Binding Path=IsEditMode}"
+																			 Value="True">
+																	<Setter Property="BorderThickness"
+																			Value="1" />
+																</DataTrigger>
+																<DataTrigger Binding="{Binding Path=IsEditMode}"
+																			 Value="False">
+																	<Setter Property="BorderThickness"
+																			Value="0" />
+																</DataTrigger>
+															</Style.Triggers>
+														</Style>
+													</TextBox.Style>
+												</TextBox>
+												<ctrl:TrippleToggle x:Name="TgSwitch"
+																	DotNormalFill="White"
+																	Grid.Column="1"
+																	Status="{Binding Stat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+																	DotOnFill="{StaticResource ButtonColor_Level1}"
+																	DotOffFill="{StaticResource ButtonColor_Level2}" />
 
-			</Grid>
+												<Rectangle Grid.Column="4"
+														   Width="12"
+														   Height="12"
+														   Margin="5,0,0,0"
+														   RadiusX="1"
+														   RadiusY="1">
+													<Rectangle.Style>
+														<Style TargetType="Rectangle">
+															<Style.Triggers>
+																<Trigger Property="IsMouseOver"
+																		 Value="True">
+																	<Setter Property="Stroke"
+																			Value="#FFB8EAF9" />
+																	<Setter Property="Fill"
+																			Value="#19B8E7F9" />
+																</Trigger>
+																<Trigger Property="IsMouseOver"
+																		 Value="False">
+																	<Setter Property="Stroke"
+																			Value="Transparent" />
+																	<Setter Property="Fill"
+																			Value="Transparent" />
+																</Trigger>
+															</Style.Triggers>
+														</Style>
+													</Rectangle.Style>
+
+													<Rectangle.InputBindings>
+														<MouseBinding MouseAction="LeftClick"
+																	  Command="{Binding EditContentItemCommand}">
+															<MouseBinding.CommandParameter>
+																<MultiBinding Converter="{StaticResource MultiBinding}">
+																	<Binding Path="." />
+																	<Binding ElementName="EditTagBox" />
+																</MultiBinding>
+															</MouseBinding.CommandParameter>
+														</MouseBinding>
+													</Rectangle.InputBindings>
+												</Rectangle>
+												<Path Grid.Column="4"
+													  Width="9"
+													  Margin="5,0,0,0"
+													  Height="9"
+													  IsHitTestVisible="False"
+													  Fill="{StaticResource Foreground_Level3}"
+													  Data="{Binding Source={StaticResource EditIcon}}"
+													  Stretch="Uniform" />
+
+												<Rectangle Grid.Column="5"
+														   Width="12"
+														   Margin="2,0,5,0"
+														   Height="12"
+														   RadiusX="1"
+														   RadiusY="1">
+													<Rectangle.Style>
+														<Style TargetType="Rectangle">
+															<Style.Triggers>
+																<Trigger Property="IsMouseOver"
+																		 Value="True">
+																	<Setter Property="Stroke"
+																			Value="#FFB8EAF9" />
+																	<Setter Property="Fill"
+																			Value="#19B8E7F9" />
+																</Trigger>
+																<Trigger Property="IsMouseOver"
+																		 Value="False">
+																	<Setter Property="Stroke"
+																			Value="Transparent" />
+																	<Setter Property="Fill"
+																			Value="Transparent" />
+																</Trigger>
+															</Style.Triggers>
+														</Style>
+													</Rectangle.Style>
+
+													<Rectangle.InputBindings>
+														<MouseBinding MouseAction="LeftClick"
+																	  CommandParameter="{Binding .}"
+																	  Command="{Binding DeleteContentItemCommand}" />
+													</Rectangle.InputBindings>
+												</Rectangle>
+
+												<Path Grid.Column="5"
+													  Width="9"
+													  Margin="2,0,5,0"
+													  Height="9"
+													  IsHitTestVisible="False"
+													  Fill="{StaticResource Foreground_Level3}"
+													  Data="{Binding Source={StaticResource TrashIcon}}"
+													  Stretch="Uniform" />
+											</Grid>
+											<ControlTemplate.Triggers>
+												<Trigger Property="IsMouseOver"
+														 Value="True">
+													<Setter Property="Visibility"
+															TargetName="FeedBackRec"
+															Value="Visible" />
+												</Trigger>
+											</ControlTemplate.Triggers>
+										</ControlTemplate>
+									</Setter.Value>
+								</Setter>
+							</Style>
+						</ListView.ItemContainerStyle>
+					</ListView>
+				</TabItem>
+
+				<TabItem Header="Messages manager">
+					<ListView ItemsSource="{Binding MessageManagerContent.Messagetems}"
+							  Background="{StaticResource Background_Level3}"
+							  Template="{StaticResource ListViewLV2Tmpl}">
+						<ListView.ContextMenu>
+							<ContextMenu>
+								<MenuItem Header="Add">
+									<MenuItem.Icon>
+										<Path Width="12"
+											  Height="12"
+											  Fill="{StaticResource Background_Level2}"
+											  Data="{Binding Source={StaticResource EditIcon}}"
+											  Stretch="Uniform" />
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Clear">
+									<MenuItem.Icon>
+										<Path Width="12"
+											  Height="12"
+											  Fill="{StaticResource Background_Level2}"
+											  Data="{Binding Source={StaticResource EditIcon}}"
+											  Stretch="Uniform" />
+									</MenuItem.Icon>
+								</MenuItem>
+							</ContextMenu>
+						</ListView.ContextMenu>
+						<ListView.ItemContainerStyle>
+							<Style TargetType="{x:Type ListViewItem}">
+								<Setter Property="Height"
+										Value="30" />
+								<Setter Property="Template">
+									<Setter.Value>
+										<ControlTemplate>
+											<Grid x:Name="MainGrid"
+												  Grid.Row="1"
+												  Width="{Binding RelativeSource={RelativeSource AncestorType=ItemsPresenter, Mode=FindAncestor}, Path=ActualWidth}"
+												  attProp:UIAttProperties.ProxyObject="{Binding ElementName=EditMessageBox}"
+												  Background="{StaticResource Background_Level3}">
+												<Grid.ContextMenu>
+													<ContextMenu>
+														<MenuItem Header="Delete"
+																  CommandParameter="{Binding .}"
+																  Command="{Binding DeleteContentItemCommand}">
+															<MenuItem.Icon>
+																<Path Width="12"
+																	  Height="12"
+																	  Fill="{StaticResource Background_Level2}"
+																	  Data="{Binding Source={StaticResource TrashIcon}}"
+																	  Stretch="Uniform" />
+															</MenuItem.Icon>
+														</MenuItem>
+														<MenuItem Header="Edit"
+																  Command="{Binding EditContentItemCommand}">
+															<MenuItem.CommandParameter>
+																<MultiBinding Converter="{StaticResource MultiBinding}">
+																	<Binding Path="." />
+																	<Binding Path="PlacementTarget.(attProp:UIAttProperties.ProxyObject)"
+																			 RelativeSource="{RelativeSource AncestorType=ContextMenu,Mode=FindAncestor}" />
+																</MultiBinding>
+															</MenuItem.CommandParameter>
+															<MenuItem.Icon>
+																<Path Width="12"
+																	  Height="12"
+																	  Fill="{StaticResource Background_Level2}"
+																	  Data="{Binding Source={StaticResource EditIcon}}"
+																	  Stretch="Uniform" />
+															</MenuItem.Icon>
+														</MenuItem>
+														<MenuItem Header="Show tag"
+																  Command="{Binding ShowContentItemCommand}">
+															<MenuItem.Icon>
+																<Path Width="12"
+																	  Height="12"
+																	  Fill="{StaticResource ButtonBackground_Level1}"
+																	  Data="{Binding Source={StaticResource TagIcon}}"
+																	  Stretch="Uniform" />
+															</MenuItem.Icon>
+														</MenuItem>
+														<MenuItem Header="Remove tag"
+																  Command="{Binding RemoveContentItemCommand}">
+															<MenuItem.Icon>
+																<Path Width="12"
+																	  Height="12"
+																	  Fill="{StaticResource ButtonBackground_Level2}"
+																	  Data="{Binding Source={StaticResource TagIcon}}"
+																	  Stretch="Uniform" />
+															</MenuItem.Icon>
+														</MenuItem>
+														<MenuItem Header="Off tag"
+																  Command="{Binding OffContentItemCommand}">
+															<MenuItem.Icon>
+																<Path Width="12"
+																	  Height="12"
+																	  Fill="{StaticResource Foreground_Level1}"
+																	  Data="{Binding Source={StaticResource TagIcon}}"
+																	  Stretch="Uniform" />
+															</MenuItem.Icon>
+														</MenuItem>
+													</ContextMenu>
+												</Grid.ContextMenu>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="10" />
+													<ColumnDefinition Width="35" />
+													<ColumnDefinition Width="10" />
+													<ColumnDefinition Width="*" />
+													<ColumnDefinition Width="auto" />
+													<ColumnDefinition Width="auto" />
+												</Grid.ColumnDefinitions>
+												<Rectangle	Grid.ColumnSpan="6"
+															StrokeThickness="1"
+															Fill="#19B8E7F9"
+															Stroke="#FFB8EAF9"
+															x:Name="FeedBackRec"
+															Visibility="Hidden" />
+												<TextBox x:Name="EditMessageBox"
+														 Text="{Binding Content}"
+														 Grid.Column="3"
+														 IsHitTestVisible="False"
+														 Background="Transparent"
+														 Focusable="True"
+														 FontWeight="Bold"
+														 FontSize="8"
+														 CaretBrush="White"
+														 VerticalAlignment="Center"
+														 Template="{StaticResource NonfocusableTextBox}"
+														 FontFamily="Calibri">
+
+													<TextBox.Style>
+														<Style TargetType="TextBox">
+															<Style.Triggers>
+																<DataTrigger Binding="{Binding Path=Status,ElementName=TgSwitch}"
+																			 Value="2">
+																	<Setter Property="Foreground"
+																			Value="{StaticResource ButtonBackground_Level1}" />
+																</DataTrigger>
+																<DataTrigger Binding="{Binding Path=Status,ElementName=TgSwitch}"
+																			 Value="0">
+																	<Setter Property="Foreground"
+																			Value="{StaticResource ButtonBackground_Level2}" />
+																</DataTrigger>
+																<DataTrigger Binding="{Binding Path=Status,ElementName=TgSwitch}"
+																			 Value="1">
+																	<Setter Property="Foreground"
+																			Value="{StaticResource Foreground_Level2}" />
+																</DataTrigger>
+																<DataTrigger Binding="{Binding Path=IsEditMode}"
+																			 Value="True">
+																	<Setter Property="BorderThickness"
+																			Value="1" />
+																</DataTrigger>
+																<DataTrigger Binding="{Binding Path=IsEditMode}"
+																			 Value="False">
+																	<Setter Property="BorderThickness"
+																			Value="0" />
+																</DataTrigger>
+															</Style.Triggers>
+														</Style>
+													</TextBox.Style>
+												</TextBox>
+												<ctrl:TrippleToggle x:Name="TgSwitch"
+																	DotNormalFill="White"
+																	Grid.Column="1"
+																	Status="{Binding Stat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+																	DotOnFill="{StaticResource ButtonColor_Level1}"
+																	DotOffFill="{StaticResource ButtonColor_Level2}" />
+
+												<Rectangle Grid.Column="4"
+														   Width="12"
+														   Height="12"
+														   Margin="5,0,0,0"
+														   RadiusX="1"
+														   RadiusY="1">
+													<Rectangle.Style>
+														<Style TargetType="Rectangle">
+															<Style.Triggers>
+																<Trigger Property="IsMouseOver"
+																		 Value="True">
+																	<Setter Property="Stroke"
+																			Value="#FFB8EAF9" />
+																	<Setter Property="Fill"
+																			Value="#19B8E7F9" />
+																</Trigger>
+																<Trigger Property="IsMouseOver"
+																		 Value="False">
+																	<Setter Property="Stroke"
+																			Value="Transparent" />
+																	<Setter Property="Fill"
+																			Value="Transparent" />
+																</Trigger>
+															</Style.Triggers>
+														</Style>
+													</Rectangle.Style>
+
+													<Rectangle.InputBindings>
+														<MouseBinding MouseAction="LeftClick"
+																	  Command="{Binding EditContentItemCommand}">
+															<MouseBinding.CommandParameter>
+																<MultiBinding Converter="{StaticResource MultiBinding}">
+																	<Binding Path="." />
+																	<Binding ElementName="EditMessageBox" />
+																</MultiBinding>
+															</MouseBinding.CommandParameter>
+														</MouseBinding>
+													</Rectangle.InputBindings>
+												</Rectangle>
+												<Path Grid.Column="4"
+													  Width="9"
+													  Margin="5,0,0,0"
+													  Height="9"
+													  IsHitTestVisible="False"
+													  Fill="{StaticResource Foreground_Level3}"
+													  Data="{Binding Source={StaticResource EditIcon}}"
+													  Stretch="Uniform" />
+
+												<Rectangle Grid.Column="5"
+														   Width="12"
+														   Margin="2,0,5,0"
+														   Height="12"
+														   RadiusX="1"
+														   RadiusY="1">
+													<Rectangle.Style>
+														<Style TargetType="Rectangle">
+															<Style.Triggers>
+																<Trigger Property="IsMouseOver"
+																		 Value="True">
+																	<Setter Property="Stroke"
+																			Value="#FFB8EAF9" />
+																	<Setter Property="Fill"
+																			Value="#19B8E7F9" />
+																</Trigger>
+																<Trigger Property="IsMouseOver"
+																		 Value="False">
+																	<Setter Property="Stroke"
+																			Value="Transparent" />
+																	<Setter Property="Fill"
+																			Value="Transparent" />
+																</Trigger>
+															</Style.Triggers>
+														</Style>
+													</Rectangle.Style>
+
+													<Rectangle.InputBindings>
+														<MouseBinding MouseAction="LeftClick"
+																	  CommandParameter="{Binding .}"
+																	  Command="{Binding DeleteContentItemCommand}" />
+													</Rectangle.InputBindings>
+												</Rectangle>
+												<Path Grid.Column="5"
+													  Width="9"
+													  Margin="2,0,5,0"
+													  Height="9"
+													  IsHitTestVisible="False"
+													  Fill="{StaticResource Foreground_Level3}"
+													  Data="{Binding Source={StaticResource TrashIcon}}"
+													  Stretch="Uniform" />
+											</Grid>
+											<ControlTemplate.Triggers>
+												<Trigger Property="IsMouseOver"
+														 Value="True">
+													<Setter Property="Visibility"
+															TargetName="FeedBackRec"
+															Value="Visible" />
+												</Trigger>
+											</ControlTemplate.Triggers>
+										</ControlTemplate>
+									</Setter.Value>
+								</Setter>
+							</Style>
+						</ListView.ItemContainerStyle>
+					</ListView>
+				</TabItem>
+			</TabControl>
 
 			<Grid Grid.Column="1"
 				  Grid.Row="3">

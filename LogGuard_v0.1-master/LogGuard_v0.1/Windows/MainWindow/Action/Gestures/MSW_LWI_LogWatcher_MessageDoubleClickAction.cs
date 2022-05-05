@@ -2,7 +2,6 @@
 using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Base.Utils;
 using LogGuard_v0._1.Base.ViewModel;
-using LogGuard_v0._1.Implement.LogGuardFlow.RunThreadConfig;
 using LogGuard_v0._1.Implement.UIEventHandler;
 using LogGuard_v0._1.Implement.ViewModels;
 using LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher;
@@ -16,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Windows.MainWindow.Action.Gestures
 {
-    public class MSW_LWI_LogWatcher_TagDoubleClickAction : BaseViewModelCommandExecuter
+    public class MSW_LWI_LogWatcher_MessageDoubleClickAction : BaseViewModelCommandExecuter
     {
         protected LogGuardPageViewModel LGPViewModel
         {
@@ -26,7 +25,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action.Gestures
             }
         }
 
-        public MSW_LWI_LogWatcher_TagDoubleClickAction(string actionID
+        public MSW_LWI_LogWatcher_MessageDoubleClickAction(string actionID
             , string builderID
             , BaseViewModel viewModel
             , ILogger logger)
@@ -38,26 +37,26 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action.Gestures
             var vm = DataTransfer[0] as LWI_ParseableViewModel;
             if (vm != null)
             {
-                var tag = vm.Tag.ToString();
-                var tagManagerVM = ViewModelHelper.Current.LogManagerUCViewModel.TagManagerContent;
-                var tagItems = tagManagerVM.TagItems;
-                var contain = tagItems
-                    .FirstOrDefault((item)=> item.Content == tag);
-                if(contain == null)
+                var message = vm.Message.ToString();
+                var messageManagerVM = ViewModelHelper.Current.LogManagerUCViewModel.MessageManagerContent;
+                var messItems = messageManagerVM.Messagetems;
+                var contain = messItems
+                    .FirstOrDefault((item) => item.Content == message);
+                if (contain == null)
                 {
-                    if(tagItems.Count < RUNE.MAXIMUM_TAG_ITEM)
+                    if (messItems.Count < RUNE.MAXIMUM_MESSAGE_ITEM)
                     {
-                        var tagItemVM = new TagManagerItemViewModel(tagManagerVM, new TrippleToggleItemVO(tag));
-                        tagItems.Add(tagItemVM);
+                        var messItemVM = new MessageManagerItemViewModel(messageManagerVM, new TrippleToggleItemVO(message));
+                        messItems.Add(messItemVM);
                     }
                     else
                     {
-                        App.Current.ShowWaringBox("Tag items have reached the maximum!");
+                        App.Current.ShowWaringBox("Message items have reached the maximum!");
                     }
                 }
                 else
                 {
-                    App.Current.ShowWaringBox("This item already exists in tag manager!");
+                    App.Current.ShowWaringBox("This item already exists in message manager!");
                 }
             }
         }

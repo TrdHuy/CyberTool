@@ -186,9 +186,12 @@
     </Compile>
     <Compile Include="Windows\MainWindow\Action\Gestures\MSW_LogWatcher_CtrlAGestureAction.cs" />
     <Compile Include="Windows\MainWindow\Action\Gestures\MSW_LogWatcher_DeleteGestureAction.cs" />
+    <Compile Include="Windows\MainWindow\Action\Gestures\MSW_LWI_LogWatcher_MessageDoubleClickAction.cs" />
     <Compile Include="Windows\MainWindow\Action\Gestures\MSW_LWI_LogWatcher_TagDoubleClickAction.cs" />
     <Compile Include="Windows\MainWindow\Action\MSW_CommandExecuterBuilder.cs" />
+    <Compile Include="Windows\MainWindow\Action\Types\LogManager\MSW_LMUC_DeleteMessageItemAction.cs" />
     <Compile Include="Windows\MainWindow\Action\Types\LogManager\MSW_LMUC_DeleteTagItemAction.cs" />
+    <Compile Include="Windows\MainWindow\Action\Types\LogManager\MSW_LMUC_EditMessageItemAction.cs" />
     <Compile Include="Windows\MainWindow\Action\Types\LogManager\MSW_LMUC_EditTagItemAction.cs" />
     <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_ClearButtonAction.cs" />
     <Compile Include="Windows\MainWindow\Action\Types\MSW_LogWatcher_PlayButtonAction.cs" />
@@ -225,8 +228,11 @@
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogLevelFilter\LogLevelFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogManager\LogByTeamItemViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogManager\LogManagerUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogManager\MessageManagerItemViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogManager\MessageManagerUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogManager\MSW_LMUC_ControlButtonCommandVM.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogManager\TagItemViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogManager\TagManagerItemViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogManager\TrippleToggleItemViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCLogManager\TagManagerUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\MSW_BasePageViewModel.cs" />
     <Compile Include="Windows\MainWindow\View\MainWindow.xaml.cs">

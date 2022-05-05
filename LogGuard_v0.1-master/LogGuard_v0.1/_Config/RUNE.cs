@@ -25,6 +25,9 @@ namespace LogGuard_v0._1._Config
         public static int MAXIMUM_TAG_ITEM { get; }
            = FeaturesParser.IntFeatureOrders["HUY.TD1_MAXIMUM_TAG_ITEMS_OF_TAG_MANAGER"];
 
+        public static int MAXIMUM_MESSAGE_ITEM { get; }
+          = FeaturesParser.IntFeatureOrders["HUY.TD1_MAXIMUM_TAG_ITEMS_OF_MESSAGE_MANAGER"];
+
         private sealed class FeaturesParser
         {
             private static string _titleGroup = @"(?<Title>\S+)";

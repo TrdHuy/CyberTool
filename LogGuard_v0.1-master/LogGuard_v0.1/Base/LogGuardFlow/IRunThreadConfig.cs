@@ -10,18 +10,19 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
     public interface IRunThreadConfig
     {
         LogParserVO LogParserFormat { get; set; }
-
-        List<LogTagVO> LogTags { get; set; }
+        List<TrippleToggleItemVO> LogTags { get; set; }
+        List<TrippleToggleItemVO> LogMessages { get; set; }
     }
 
-    public class LogTagVO
+
+    public class TrippleToggleItemVO
     {
-        public string Tag { get; set; }
+        public string Content { get; set; }
         public Status Stat { get; set; }
 
-        public LogTagVO(string tag)
+        public TrippleToggleItemVO(string content)
         {
-            Tag = tag;
+            Content = content;
             Stat = Status.None;
         }
 

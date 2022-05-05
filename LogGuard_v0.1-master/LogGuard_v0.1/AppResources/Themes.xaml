@@ -539,6 +539,7 @@
 			<logwatcher_ctrl:ScrollViewWatcher Background="Transparent"
 											   ScrollHeaderHeight="0"
 											   Style="{StaticResource HanzaScrollViewWatcherStyle}"
+											   HorizontalScrollBarVisibility="Disabled"
 											   ThumbBackground="{StaticResource ButtonBackground_Level1}"
 											   ScrollBarBackground="Transparent">
 				<ItemsPresenter />
