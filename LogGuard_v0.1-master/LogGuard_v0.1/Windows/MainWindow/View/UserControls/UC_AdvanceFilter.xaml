@@ -64,27 +64,27 @@
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 
-				<TextBlock Text="Content highlight"
+				<TextBlock Text="Log finder"
 						   FontSize=" 9"
 						   VerticalAlignment="Center"
 						   FontWeight="Bold"
 						   Foreground="{StaticResource Foreground_Level1}" />
 				<TextBox Grid.Row="1"
 						 Margin="0,0,0,2"
-						 Tag="Enter whatever you want"
+						 Tag="Enter tag or message"
 						 Grid.ColumnSpan="2"
 						 Foreground="{StaticResource Foreground_Level3}"
 						 BorderThickness="0"
 						 Background="{StaticResource Background_Level3}"
 						 Template="{StaticResource SearchTextBoxTmpl}"
-						 attPTB:TextBoxAttProperties.Search="{Binding MessageHighlightContent.Search}"
-						 attPTB:TextBoxAttProperties.IsBusy="{Binding MessageHighlightContent.IsFilterBusy}"
+						 attPTB:TextBoxAttProperties.Search="{Binding FinderContent.Search}"
+						 attPTB:TextBoxAttProperties.IsBusy="{Binding FinderContent.IsFilterBusy}"
 						 attPTB:TextBoxAttProperties.IsFilterTextBox="False"
-						 attPTB:TextBoxAttProperties.EngineHelperContent="{Binding MessageHighlightContent.EngineHelperContent}"
-						 attPTB:TextBoxAttProperties.EngineLeftClickCommand="{Binding MessageHighlightContent.FilterLeftClickCommand}"
-						 attPTB:TextBoxAttProperties.EngineRightClickCommand="{Binding MessageHighlightContent.FilterRightClickCommand}"
-						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding MessageHighlightContent.IsFilterEnable}"
-						 attPTB:TextBoxAttProperties.Filter="{Binding MessageHighlightContent.CurrentFilterMode}"
+						 attPTB:TextBoxAttProperties.EngineHelperContent="{Binding FinderContent.EngineHelperContent}"
+						 attPTB:TextBoxAttProperties.EngineLeftClickCommand="{Binding FinderContent.FilterLeftClickCommand}"
+						 attPTB:TextBoxAttProperties.EngineRightClickCommand="{Binding FinderContent.FilterRightClickCommand}"
+						 attPTB:TextBoxAttProperties.IsFilterEnable="{Binding FinderContent.IsFilterEnable}"
+						 attPTB:TextBoxAttProperties.Filter="{Binding FinderContent.CurrentFilterMode}"
 						 TextChanged="TextChangeEventToAvoidDotNetBindingBug">
 					<TextBox.Style>
 						<Style TargetType="TextBox">
@@ -92,12 +92,12 @@
 								<Trigger Property="attPTB:TextBoxAttProperties.Search"
 										 Value="NormalSearch">
 									<Setter Property="Text"
-											Value="{Binding MessageHighlightContent.FilterContent, UpdateSourceTrigger=Default}" />
+											Value="{Binding FinderContent.FilterContent, UpdateSourceTrigger=Default}" />
 								</Trigger>
 								<Trigger Property="attPTB:TextBoxAttProperties.Search"
 										 Value="QuickSearch">
 									<Setter Property="Text"
-											Value="{Binding MessageHighlightContent.FilterContent, UpdateSourceTrigger=PropertyChanged}" />
+											Value="{Binding FinderContent.FilterContent, UpdateSourceTrigger=PropertyChanged}" />
 								</Trigger>
 							</Style.Triggers>
 						</Style>

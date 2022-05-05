@@ -24,6 +24,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
         private IEnumerable<MatchedWord> _pidSource;
         private IEnumerable<MatchedWord> _tidSource;
         private IEnumerable<MatchedWord> _tagSource;
+        private IEnumerable<MatchedWord> _extraTagSource;
         private IEnumerable<MatchedWord> _mesSource;
         private IEnumerable<MatchedWord> _extraMesSource;
 
@@ -96,6 +97,20 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.LogWatcher
             set
             {
                 _tagSource = (IEnumerable<MatchedWord>)value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public object ExtraHighlightTagSource
+        {
+            get
+            {
+                return _extraTagSource;
+            }
+            set
+            {
+                _extraTagSource = (IEnumerable<MatchedWord>)value;
                 InvalidateOwn();
             }
         }

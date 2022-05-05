@@ -19,11 +19,11 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         void FilterHighlight(object obj);
 
         /// <summary>
-        /// Highlight các chuỗi cần thiết trong đối tượng
+        /// Highlight các chuỗi cần thiết trong đối tượng đã được tìm kiếm bởi Finder
         /// </summary>
         /// <param name="obj">đối tượng cần được highlight</param>
         /// <returns></returns>
-        void Highlight(object obj);
+        void FinderHighlight(object obj);
 
         /// <summary>
         /// Làm mới đối tượng trước khi highlight 
@@ -33,7 +33,7 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
         void Clean(object obj);
 
         ISourceHighlightor MessageFilterHighlightor { get; set; }
-        ISourceHighlightor MessageHighlightor { get; set; }
+        ISourceHighlightor FinderHighlightor { get; set; }
         ISourceHighlightor TagFilterHighlightor { get; set; }
 
         void NotifyHighlightPropertyChanged(ISourceHighlightor sender, object e);

@@ -118,7 +118,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
                     if (SourceFilterManager.Filter(model))
                     {
                         SourceHighlightManager.FilterHighlight(model);
-                        SourceHighlightManager.Highlight(model);
+                        SourceHighlightManager.FinderHighlight(model);
 
                         model.LineNumber = _displaySource.Count;
                         _displaySource.Add(model);
@@ -272,7 +272,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
                     if (SourceFilterManager.Filter(item))
                     {
                         SourceHighlightManager.FilterHighlight(item);
-                        SourceHighlightManager.Highlight(item);
+                        SourceHighlightManager.FinderHighlight(item);
 
                         item.LineNumber = filterLst.Count;
 
@@ -346,7 +346,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceManager
                         token.ThrowIfCancellationRequested();
                     }
 
-                    SourceHighlightManager.Highlight(item);
+                    SourceHighlightManager.FinderHighlight(item);
                 }
             }
 

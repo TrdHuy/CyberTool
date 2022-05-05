@@ -18,7 +18,7 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceHighlightManager
         private Thread NotifyHighlightConditionChangedMessage { get; set; }
 
         public event SourceHighlightConditionChangedHandler HighlightConditionChanged;
-        public ISourceHighlightor MessageHighlightor { get => _logMessHighlightor; set => _logMessHighlightor = value; }
+        public ISourceHighlightor FinderHighlightor { get => _logMessHighlightor; set => _logMessHighlightor = value; }
         public ISourceHighlightor MessageFilterHighlightor { get => _logMessFilterHighlightor; set => _logMessFilterHighlightor = value; }
         public ISourceHighlightor TagFilterHighlightor { get => _logTagFilterHighlightor; set => _logTagFilterHighlightor = value; }
 
@@ -41,23 +41,20 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.SourceHighlightManager
         public void FilterHighlight(object obj)
         {
             MessageFilterHighlightor.Highlight(obj);
-            TagFilterHighlightor?.Highlight(obj);
-
+            TagFilterHighlightor.Highlight(obj);
         }
 
-        public void Highlight(object obj)
+        public void FinderHighlight(object obj)
         {
-            MessageHighlightor.Highlight(obj);
+            FinderHighlightor.Highlight(obj);
         }
 
         public void Clean(object obj)
         {
-            MessageHighlightor?.Clean(obj);
+            FinderHighlightor?.Clean(obj);
             TagFilterHighlightor?.Clean(obj);
             MessageFilterHighlightor?.Clean(obj);
         }
-
-        
 
         public static SourceHighlightManagerImpl Current
         {

@@ -292,7 +292,14 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
 
         protected virtual void OnFilterContentChanged(string value)
         {
-            UpdateEngingeComparableSource(value);
+            if (IsUseFilterEngine)
+            {
+                UpdateEngingeComparableSource(value);
+            }
+            else
+            {
+                NotifyFilterContentChanged(value);
+            }
         }
 
         protected virtual void OnFilterEnableChanged(bool value)
@@ -305,6 +312,11 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
             return false;
         }
 
+        protected virtual void OnComparableSourceUpdated(object sender, object args)
+        {
+            UpdateFilterConditionHelperContent();
+            NotifyFilterContentChanged(args);
+        }
         protected virtual void DoCleanHighlightSource(object obj)
         {
 
@@ -313,12 +325,6 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
         private void OnSourceFilteredAndDisplayed(object sender)
         {
             IsFilterBusy = false;
-        }
-
-        private void OnComparableSourceUpdated(object sender, object args)
-        {
-            UpdateFilterConditionHelperContent();
-            NotifyFilterContentChanged(args);
         }
 
         private void OnSourcePartsCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)

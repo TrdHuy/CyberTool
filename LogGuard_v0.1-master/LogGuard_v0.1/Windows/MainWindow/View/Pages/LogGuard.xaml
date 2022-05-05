@@ -253,6 +253,7 @@
 								<DataTemplate>
 									<TextBlock x:Name="mainContent"
 											   attProp:TextBlockAttProperties.HighlightSource="{Binding HighlightTagSource, UpdateSourceTrigger=PropertyChanged}"
+											   attProp:TextBlockAttProperties.ExtraHighlightSource="{Binding ExtraHighlightTagSource, UpdateSourceTrigger=PropertyChanged}"
 											   attProp:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
 											   attProp:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
 											   attProp:TextBlockAttProperties.RawText="{Binding Tag}"

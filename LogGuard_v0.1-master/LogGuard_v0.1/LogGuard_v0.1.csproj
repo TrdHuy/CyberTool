@@ -215,7 +215,7 @@
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\ChildOfAdvanceFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\MessageRemoveFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\MessageShowFilterUCViewModel.cs" />
-    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\MessageHighlightUCViewModel.cs" />
+    <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\LogFinderUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\PidFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TagRemoveFilterUCViewModel.cs" />
     <Compile Include="Windows\MainWindow\ViewModels\Pages\LogGuardPage\UserControls\UCAdvanceFilter\TagShowFilterUCViewModel.cs" />

@@ -31,7 +31,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
         private TagRemoveFilterUCViewModel _tagRemoveVM;
         private MessageShowFilterUCViewModel _messageFilterVM;
         private MessageRemoveFilterUCViewModel _messageRemoveFilterVM;
-        private MessageHighlightUCViewModel _messageHighlightVM;
+        private LogFinderUCViewModel _finderVM;
         private TidFilterUCViewModel _tidFilterVM;
         private PidFilterUCViewModel _pidFilterVM;
         private StartTimeFilterUCViewModel _startTimeFilterVM;
@@ -318,15 +318,15 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
         }
 
         [Bindable(true)]
-        public MessageHighlightUCViewModel MessageHighlightContent
+        public LogFinderUCViewModel FinderContent
         {
             get
             {
-                return _messageHighlightVM;
+                return _finderVM;
             }
             set
             {
-                _messageHighlightVM = value;
+                _finderVM = value;
                 InvalidateOwn();
             }
         }
@@ -380,7 +380,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
             TidFilterContent = new TidFilterUCViewModel(this);
             PidFilterContent = new PidFilterUCViewModel(this);
             TagRemoveContent = new TagRemoveFilterUCViewModel(this);
-            MessageHighlightContent = new MessageHighlightUCViewModel(this);
+            FinderContent = new LogFinderUCViewModel(this);
             StartTimeFilterContent = new StartTimeFilterUCViewModel(this);
             EndTimeFilterContent = new EndTimeFilterUCViewModel(this);
             MessageRemoveFilterContent = new MessageRemoveFilterUCViewModel(this);
@@ -395,7 +395,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage.UserCo
             SourceFilterManagerImpl.Current.LogEndTimeFilter = EndTimeFilterContent;
 
             SourceHighlightManagerImpl.Current.TagFilterHighlightor = TagFilterContent;
-            SourceHighlightManagerImpl.Current.MessageHighlightor = MessageHighlightContent;
+            SourceHighlightManagerImpl.Current.FinderHighlightor = FinderContent;
             SourceHighlightManagerImpl.Current.MessageFilterHighlightor = MessageFilterContent;
         }
 
