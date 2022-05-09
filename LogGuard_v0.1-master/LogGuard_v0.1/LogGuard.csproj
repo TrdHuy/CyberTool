@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>cyclone_weather_world_time_icon_194253.ico</ApplicationIcon>
+    <ApplicationIcon>cyber_tool_app_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HPSolutionCCDevPackage.netFramework">
@@ -412,7 +412,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="cyclone_weather_world_time_icon_194253.ico" />
+    <Resource Include="cyber_tool_app_icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="_Config\BoolSecFloatingFeature.mk" />
