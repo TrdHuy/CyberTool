@@ -21,56 +21,6 @@ namespace LogGuard_v0._1.Implement.Device
 
         public const int ADB_SHELL_COMMAND_TYPE = 1;
         public const int ADB_NONE_SHELL_COMMAND_TYPE = 2;
-        public static readonly List<LogParserVO> CMD_CONTACT_USER_INTERFACE_LIST = new List<LogParserVO>();
-        static DeviceCmdContact()
-        {
-            CMD_CONTACT_USER_INTERFACE_LIST.Add(new LogParserVO()
-            {
-                Cmd = " logcat -b main -b events -b system"
-            ,
-                FormatContact = LogParserFormatContact.NORMAL_ADB_COMMAND
-            });
-
-            CMD_CONTACT_USER_INTERFACE_LIST.Add(new LogParserVO()
-            {
-                Cmd = " logcat -v time"
-            ,
-                FormatContact = LogParserFormatContact.TIME_ADB_COMMAND
-            });
-
-            CMD_CONTACT_USER_INTERFACE_LIST.Add(new LogParserVO()
-            {
-                Cmd = " logcat -b radio -v time"
-            ,
-                FormatContact = LogParserFormatContact.TIME_ADB_COMMAND
-            });
-
-            CMD_CONTACT_USER_INTERFACE_LIST.Add(new LogParserVO()
-            {
-                Cmd = " logcat -b events -v time"
-            ,
-                FormatContact = LogParserFormatContact.TIME_ADB_COMMAND
-            });
-
-            CMD_CONTACT_USER_INTERFACE_LIST.Add(new LogParserVO()
-            {
-                Cmd = " logcat -v threadtime"
-            ,
-                FormatContact = LogParserFormatContact.NORMAL_ADB_COMMAND
-            });
-
-            CMD_CONTACT_USER_INTERFACE_LIST.Add(new LogParserVO()
-            {
-                Cmd = " logcat -v threadtime -b all"
-            ,
-                FormatContact = LogParserFormatContact.NORMAL_ADB_COMMAND
-            });
-            CMD_CONTACT_USER_INTERFACE_LIST.Add(new LogParserVO()
-            {
-                Cmd = " logcat all"
-            ,
-                FormatContact = LogParserFormatContact.NORMAL_ADB_COMMAND
-            });
-        }
+      
     }
 }

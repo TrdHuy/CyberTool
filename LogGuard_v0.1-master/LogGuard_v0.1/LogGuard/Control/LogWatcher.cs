@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace LogGuard_v0._1.LogGuard.Control
@@ -61,6 +62,9 @@ namespace LogGuard_v0._1.LogGuard.Control
             }
             else if (e.Action == NotifyCollectionChangedAction.Reset)
             {
+                var view = CollectionViewSource.GetDefaultView(CacheElements);
+                view?.Refresh();
+
                 var arg = e as RangeObservableCollectionChangedEventArgs;
                 if (arg != null)
                 {

@@ -171,6 +171,17 @@ namespace LogGuard_v0._1
             saveFileDialog1.ShowDialog();
             return saveFileDialog1.FileName;
         }
+
+        public string OpenFileChooserDialogWindow(string title = "Choose a log file", string filter = "Text files (*.txt)|*.txt|Log files (*.log)|*.log")
+        {
+            System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            openFileDialog.Filter = filter;
+            openFileDialog.Title = title;
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                return openFileDialog.FileName;
+            return "";
+        }
+
         private void StartDispandCCAnim(ContentControl cc
             , FloatingWindow floatWindow
             , int animTime

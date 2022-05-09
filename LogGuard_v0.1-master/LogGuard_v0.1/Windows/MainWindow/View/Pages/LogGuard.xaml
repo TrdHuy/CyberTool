@@ -7,12 +7,15 @@
 				  xmlns:logguard="clr-namespace:LogGuard_v0._1.LogGuard.Control"
 				  xmlns:hpss="clr-namespace:HPSolutionCCDevPackage.netFramework;assembly=HPSolutionCCDevPackage.netFramework"
 				  xmlns:local="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.Pages"
+				  xmlns:sys="clr-namespace:System;assembly=mscorlib"
 				  xmlns:appCtrl="clr-namespace:LogGuard_v0._1.AppResources.Controls.LogGPages"
 				  xmlns:converter="clr-namespace:LogGuard_v0._1.Utils.Converters"
 				  xmlns:uc="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.UserControls"
+				  xmlns:cpuc="clr-namespace:LogGuard_v0._1.Windows.MainWindow.View.UserControls.LogWatcherControlPanel"
 				  xmlns:vm="clr-namespace:LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages"
 				  xmlns:vmh="clr-namespace:LogGuard_v0._1.Base.ViewModel.ViewModelHelper"
 				  xmlns:attProp="clr-namespace:LogGuard_v0._1.AppResources.AttachedProperties"
+				  xmlns:tvh="clr-namespace:LogGuard_v0._1.Implement.Views"
 				  mc:Ignorable="d"
 				  d:DesignHeight="820"
 				  d:DesignWidth="883.714"
@@ -21,7 +24,9 @@
 		<converter:MultiBindingConverter x:Key="MultiBinding" />
 	</Page.Resources>
 	<Page.DataContext>
-		<Binding Source="{vmh:VMManagerMarkup {x:Type vm:LogGuardPageViewModel}}" />
+		<Binding Source="{vmh:VMManagerMarkup 
+			{x:Type vm:LogGuardPageViewModel}
+			,{x:Static vmh:DataContextGeneratorType.CreateNew}}" />
 	</Page.DataContext>
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -67,130 +72,35 @@
 						  Margin="0,0,15,15"
 						  Grid.RowSpan="3" />
 
-		<hpss:HorusBox Grid.Row="3"
-					   Grid.Column="0"
-					   SelectedIndex="{Binding SelectedCmdIndex}"
-					   ItemsSource="{Binding DeviceCmdItemsSource}"
-					   Background="{StaticResource Background_Level2}"
-					   PopupBackground="{StaticResource Background_Level3}"
-					   DropDownButtonBackground="{StaticResource Background_Level2}"
-					   BorderThickness="0"
-					   Template="{StaticResource CustomHorusBox}"
-					   FontSize="10"
-					   MaxDropDownHeight="130"
-					   Grid.ColumnSpan="2"
-					   Margin="0,0,15,15">
-			<hpss:HorusBox.ItemTemplate>
+		<ComboBox Grid.Row="3"
+				  Grid.ColumnSpan="2"
+				  Margin="0,0,15,15"
+				  Style="{StaticResource UneditableVirtualComboboxStyle}"
+				  MaxDropDownHeight="140"
+				  Background="{StaticResource Background_Level3}"
+				  Grid.Column="0"
+				  FontSize="12"
+				  FontFamily="Calibri"
+				  ToolTip="{Binding ParserBoxTip}"
+				  SelectedIndex="{Binding SelectedCmdIndex}"
+				  ItemsSource="{Binding DeviceCmdItemsSource}">
+			<ComboBox.ItemTemplate>
 				<ItemContainerTemplate>
-					<Label Content="{Binding Path=.}"
-						   Foreground="{StaticResource Foreground_Level3}" />
+					<TextBlock Text="{Binding Path=DisplayName}"
+							   Margin="5,0,0,0"
+							   ToolTip="{Binding Path=ParserTip}"
+							   Foreground="{StaticResource Foreground_Level3}" />
 				</ItemContainerTemplate>
-			</hpss:HorusBox.ItemTemplate>
-		</hpss:HorusBox>
+			</ComboBox.ItemTemplate>
+		</ComboBox>
 
-		<Button  Grid.Row="3"
-				 x:Name="PlayButton"
-				 Grid.Column="2"
-				 Command="{Binding CommandViewModel.PlayButtonCommand}"
-				 Margin="0,0,0,15"
-				 Background="{StaticResource ButtonBackground_Level1}"
-				 HorizontalAlignment="Left"
-				 Template="{StaticResource CircleBtnTmpl}">
-			<Path Fill="#FFF0F0F0"
-				  Margin="5"
-				  Stretch="Uniform">
-				<Path.Style>
-					<Style TargetType="Path">
-						<Style.Triggers>
-							<DataTrigger Binding="{Binding CurrentLogGuardState}"
-										 Value="{x:Static flow:LogGuardState.RUNNING}">
-								<Setter Property="Data"
-										Value="{Binding Source={StaticResource PauseBtnPathGeomerty}}" />
-							</DataTrigger>
-							<DataTrigger Binding="{Binding CurrentLogGuardState}"
-										 Value="{x:Static flow:LogGuardState.NONE}">
-								<Setter Property="Data"
-										Value="{Binding Source={StaticResource PlayBtnPathGeomerty}}" />
-							</DataTrigger>
-							<DataTrigger Binding="{Binding CurrentLogGuardState}"
-										 Value="{x:Static flow:LogGuardState.STOP}">
-								<Setter Property="Data"
-										Value="{Binding Source={StaticResource PlayBtnPathGeomerty}}" />
-							</DataTrigger>
-							<DataTrigger Binding="{Binding CurrentLogGuardState}"
-										 Value="{x:Static flow:LogGuardState.PAUSING}">
-								<Setter Property="Data"
-										Value="{Binding Source={StaticResource PlayBtnPathGeomerty}}" />
-							</DataTrigger>
-						</Style.Triggers>
-					</Style>
-				</Path.Style>
-			</Path>
-		</Button>
-
-		<Button  Grid.Row="3"
-				 x:Name="StopButton"
-				 Grid.Column="3"
-				 Command="{Binding CommandViewModel.StopButtonCommand}"
-				 Margin="0,0,0,15"
-				 Background="#eb2838"
-				 HorizontalAlignment="Left"
-				 Template="{DynamicResource CircleBtnTmpl}">
-			<Path Fill="#FFF0F0F0"
-				  Margin="5"
-				  Data="{Binding Source={StaticResource StopBtnPathGeomerty}}"
-				  Stretch="Uniform" />
-		</Button>
-
-		<Button  Grid.Row="3"
-				 x:Name="CaptureButton"
-				 Grid.Column="4"
-				 Margin="0,0,0,15"
-				 Background="{StaticResource ButtonBackground_Level1}"
-				 HorizontalAlignment="Left"
-				 Template="{StaticResource CircleBtnTmpl}">
-			<Path Fill="#FFF0F0F0"
-				  Margin="5"
-				  Data="{Binding Source={StaticResource CaptureBtnPathGeomerty}}"
-				  Stretch="Uniform" />
-		</Button>
-
-		<Button  Grid.Row="3"
-				 x:Name="ClearButton"
-				 Command="{Binding CommandViewModel.ClearButtonCommand}"
-				 Grid.Column="5"
-				 Margin="0,0,0,15"
-				 Background="{StaticResource ButtonBackground_Level1}"
-				 HorizontalAlignment="Left"
-				 Template="{StaticResource CircleBtnTmpl}">
-			<Path Fill="#FFF0F0F0"
-				  Margin="5"
-				  Data="{Binding Source={StaticResource ClearButtonIcon}}"
-				  Stretch="Uniform" />
-		</Button>
-
-		<Button  Grid.Row="3"
-				 x:Name="ZoomButton"
-				 Command="{Binding CommandViewModel.ZoomButtonCommand}"
-				 Grid.Column="6"
-				 Margin="0,0,0,15"
-				 Background="{StaticResource ButtonBackground_Level1}"
-				 HorizontalAlignment="Left"
-				 Template="{StaticResource CircleBtnTmpl}">
-			<Button.CommandParameter>
-				<MultiBinding Converter="{StaticResource MultiBinding}">
-					<Binding ElementName="LogWatcherCC" />
-					<Binding ElementName="ZoomButton" />
-				</MultiBinding>
-			</Button.CommandParameter>
-			<Path Fill="#FFF0F0F0"
-				  Margin="5"
-				  Data="{Binding Source={StaticResource ZoomLogGuardBtnPathGeomerty}}"
-				  Stretch="Uniform" />
-		</Button>
-
+		<cpuc:UC_DeviceLogCaptureControlPanel Grid.Row="3"
+											  Grid.Column="2"
+											  Grid.ColumnSpan="9"/>
+		
 		<ContentControl x:Name="LogWatcherCC"
 						Grid.Row="4"
+						tvh:LogGuardViewHelper.ViewKey="{x:Static tvh:LogGuardViewKeyDefinition.LogWatcherViewer}"
 						Grid.Column="0"
 						Grid.ColumnSpan="13">
 			<ContentControl.LayoutTransform>

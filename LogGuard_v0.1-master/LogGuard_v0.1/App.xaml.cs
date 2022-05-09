@@ -1,5 +1,6 @@
 ﻿using LogGuard_v0._1._Config;
 using LogGuard_v0._1.Base.AsyncTask;
+using LogGuard_v0._1.Implement.Device;
 using LogGuard_v0._1.Implement.ViewModels;
 using LogGuard_v0._1.Windows.WaitingWindow;
 using System;
@@ -83,6 +84,11 @@ namespace LogGuard_v0._1
         public string OpenSaveFileDialogWindow()
         {
             return _windowDirector.OpenSaveLogFileDialogWindow();
+        }
+
+        public string OpenFileChooserDialogWindow(string title = "Choose a log file", string filter = "Text files (*.txt)|*.txt|Log files (*.log)|*.log")
+        {
+            return _windowDirector.OpenFileChooserDialogWindow(title, filter);
         }
 
         public LogGuardWaitingBoxResult OpenWaitingTaskBox(string content

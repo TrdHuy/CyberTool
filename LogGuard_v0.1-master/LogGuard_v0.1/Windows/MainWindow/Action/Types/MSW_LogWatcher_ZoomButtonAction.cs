@@ -2,6 +2,7 @@
 using LogGuard_v0._1.Base.ViewModel;
 using LogGuard_v0._1.Implement.LogGuardFlow.StateController;
 using LogGuard_v0._1.Implement.UIEventHandler;
+using LogGuard_v0._1.Implement.Views;
 using LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages;
 using System;
 using System.Collections.Generic;
@@ -28,8 +29,8 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action.Types
         protected override void ExecuteCommand()
         {
             base.ExecuteCommand();
-            var cc = DataTransfer[0] as ContentControl;
-            var opener = DataTransfer[1] as UIElement;
+            var cc = LogGuardViewHelper.Current.GetViewByKey(LogGuardViewKeyDefinition.LogWatcherViewer) as ContentControl;
+            var opener = LogGuardViewHelper.Current.GetViewByKey(LogGuardViewKeyDefinition.LogWatcherZoomButton) as UIElement;
             if (cc != null)
             {
                 var shouldRunLogCapture = false;

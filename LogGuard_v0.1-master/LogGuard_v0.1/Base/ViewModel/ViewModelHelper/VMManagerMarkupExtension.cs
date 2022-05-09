@@ -23,17 +23,22 @@ namespace LogGuard_v0._1.Base.ViewModel.ViewModelHelper
         [ConstructorArgument("parentDataContextType")]
         public Type ParentDataContextType { get; set; }
 
+        public DataContextGeneratorType GeneratorType { get; set; }
+
         static VMManagerMarkupExtension()
         {
             DataContextCache = new Dictionary<Type, object>();
         }
 
-        public VMManagerMarkupExtension(Type dataContextType)
+        public VMManagerMarkupExtension(Type dataContextType
+            , DataContextGeneratorType generatorType = DataContextGeneratorType.CreateNew)
         {
             DataContextType = dataContextType;
+            GeneratorType = generatorType;
         }
 
-        public VMManagerMarkupExtension(Type dataContextType, Type parentDataContextType)
+        public VMManagerMarkupExtension(Type dataContextType
+            , Type parentDataContextType)
         {
             DataContextType = dataContextType;
             ParentDataContextType = parentDataContextType;
@@ -41,39 +46,48 @@ namespace LogGuard_v0._1.Base.ViewModel.ViewModelHelper
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            // if null mean this view model is the most parent
-            if (ParentDataContextType == null)
-            {
-                var dataContext = Activator.CreateInstance(DataContextType);
 
-                if (DataContextCache.ContainsKey(DataContextType))
-                {
-                    DataContextCache.Remove(DataContextType);
-                }
-                DataContextCache.Add(DataContextType, dataContext);
-                DataContextGenerated?.Invoke(this, new DataContextGeneratedArgs(dataContext));
-                return dataContext;
+            if (GeneratorType == DataContextGeneratorType.Reuse)
+            {
+                return DataContextCache[DataContextType];
             }
             else
             {
-                // if not exist parent so child should not be exist
-                if (!DataContextCache.ContainsKey(ParentDataContextType))
+                // if null mean this view model is the most parent
+                if (ParentDataContextType == null)
                 {
-                    return null;
-                }
-                var parentInCache = DataContextCache[ParentDataContextType];
-                var childContext = Activator.CreateInstance(DataContextType, parentInCache);
+                    var dataContext = Activator.CreateInstance(DataContextType);
 
-                var parentVM = parentInCache as BaseViewModel;
-                if (DataContextCache.ContainsKey(DataContextType))
+                    if (DataContextCache.ContainsKey(DataContextType))
+                    {
+                        DataContextCache.Remove(DataContextType);
+                    }
+                    DataContextCache.Add(DataContextType, dataContext);
+                    DataContextGenerated?.Invoke(this, new DataContextGeneratedArgs(dataContext));
+                    return dataContext;
+                }
+                else
                 {
-                    DataContextCache.Remove(DataContextType);
-                }
-                DataContextCache.Add(DataContextType, childContext);
-                DataContextGenerated?.Invoke(this, new DataContextGeneratedArgs(childContext));
+                    // if not exist parent so child should not be exist
+                    if (!DataContextCache.ContainsKey(ParentDataContextType))
+                    {
+                        return null;
+                    }
+                    var parentInCache = DataContextCache[ParentDataContextType];
+                    var childContext = Activator.CreateInstance(DataContextType, parentInCache);
 
-                return childContext;
+                    var parentVM = parentInCache as BaseViewModel;
+                    if (DataContextCache.ContainsKey(DataContextType))
+                    {
+                        DataContextCache.Remove(DataContextType);
+                    }
+                    DataContextCache.Add(DataContextType, childContext);
+                    DataContextGenerated?.Invoke(this, new DataContextGeneratedArgs(childContext));
+
+                    return childContext;
+                }
             }
+
         }
 
         public static void OnPageViewModelLoaded(Type dataContextType)
@@ -138,5 +152,11 @@ namespace LogGuard_v0._1.Base.ViewModel.ViewModelHelper
         {
             DataContext = dataContext;
         }
+    }
+
+    public enum DataContextGeneratorType
+    {
+        Reuse = 1,
+        CreateNew = 2,
     }
 }

@@ -27,38 +27,7 @@ namespace LogGuard_v0._1.Base.AndroidLog.LogParser
 
         }
 
-        public virtual LogInfo ParseLogInfos(string line, int lineNumber)
-        {
-            LogBuilder builder = new LogBuilder();
-
-            MatchCollection matches = Regex.Matches(line, Pattern);
-            if (matches.Count == 0 && Pattern2.Length > 0)
-                matches = Regex.Matches(line, Pattern2);
-
-            foreach (Match match in matches)
-            {
-                builder.Reset();
-                builder.BuildLine(lineNumber)
-                    .BuildDate(match.Groups[LogInfo.KEY_DATE].ToString())
-                    .BuildTime(match.Groups[LogInfo.KEY_TIME].ToString())
-                    .BuildDateTime()
-                    .BuildPID(match.Groups[LogInfo.KEY_PID].ToString())
-                    .BuildTID(match.Groups[LogInfo.KEY_TID].ToString())
-                    .BuildMessage(match.Groups[LogInfo.KEY_MESSAGE].ToString())
-                    .BuildTag(match.Groups[LogInfo.KEY_TAG].ToString())
-                    .BuildColorByLevel(match.Groups[LogInfo.KEY_LEVEL].ToString());
-            }
-
-            return builder.Build();
-        }
-
-        public virtual bool IsMatch(string line)
-        {
-            bool result = false;
-            result = Regex.IsMatch(line, Pattern);
-            if (Pattern2.Length > 0 && !result)
-                result = Regex.IsMatch(line, Pattern2);
-            return result;
-        }
+        public abstract LogInfo ParseLogInfos(string line, int lineNumber);
+       
     }
 }

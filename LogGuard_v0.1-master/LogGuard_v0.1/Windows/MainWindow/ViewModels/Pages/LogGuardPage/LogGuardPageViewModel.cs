@@ -1,6 +1,7 @@
 ﻿using LogGuard_v0._1.Base.Device;
 using LogGuard_v0._1.Base.LogGuardFlow;
 using LogGuard_v0._1.Base.ViewModel;
+using LogGuard_v0._1.Implement.AndroidLog.LogParser;
 using LogGuard_v0._1.Implement.Device;
 using LogGuard_v0._1.Implement.LogGuardFlow.RunThreadConfig;
 using LogGuard_v0._1.Implement.LogGuardFlow.SourceManager;
@@ -24,10 +25,12 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
 
         private RangeObservableCollection<LogWatcherItemViewModel> _logItemVMs;
         private int _logCount;
+        private string _parserBoxTip;
         private int _selectedCmdIndex;
         private LogGuardState _currentLogGuardState = LogGuardState.NONE;
         private bool _useAutoScroll = true;
-        private ObservableCollection<LogParserVO> _deviceCmdItemsSource = new ObservableCollection<LogParserVO>();
+        private Dictionary<LogParserOption, int> _parserOptionIndexMap = new Dictionary<LogParserOption, int>();
+        private ObservableCollection<LogParserItemViewModel> _deviceCmdItemsSource = new ObservableCollection<LogParserItemViewModel>();
         private DeviceItemViewModel _selectedDevice;
 
         [Bindable(true)]
@@ -55,13 +58,32 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
             set
             {
                 _selectedCmdIndex = value;
-                RunThreadConfigManager.Current.CurrentParser = _deviceCmdItemsSource[value];
+                if (_deviceCmdItemsSource[value].ParserVO != null)
+                {
+                    RunThreadConfigManager.Current.CurrentParser = _deviceCmdItemsSource[value].ParserVO;
+                }
+                ParserBoxTip = _deviceCmdItemsSource[value].ParserTip;
                 InvalidateOwn();
             }
         }
 
         [Bindable(true)]
-        public ObservableCollection<LogParserVO> DeviceCmdItemsSource
+        public string ParserBoxTip
+        {
+            get
+            {
+                return _parserBoxTip;
+            }
+            set
+            {
+                _parserBoxTip = value;
+                InvalidateOwn();
+            }
+        }
+
+
+        [Bindable(true)]
+        public ObservableCollection<LogParserItemViewModel> DeviceCmdItemsSource
         {
             get
             {
@@ -90,7 +112,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
 
         [Bindable(true)]
         public MSW_LogWatcherControlButtonCommandVM CommandViewModel { get; set; }
-        
+
         [Bindable(true)]
         public MSW_LogWatcherControlGestureCommandVM GestureViewModel { get; set; }
 
@@ -160,17 +182,35 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
         private void InitDeviceCmdItemsList()
         {
             int index = 0;
-            for (int i = 0; i < DeviceCmdContact.CMD_CONTACT_USER_INTERFACE_LIST.Count; i++)
+
+            foreach (KeyValuePair<LogParserOption, LogParserVO> entry in LogParserDefinition.LOG_PARSER_FORMATS_LIST)
             {
-                var item = DeviceCmdContact.CMD_CONTACT_USER_INTERFACE_LIST[i];
-                DeviceCmdItemsSource.Add(item);
+                var item = entry.Value;
+                var itemVM = new LogParserItemViewModel(item);
+                _parserOptionIndexMap.Add(entry.Key, index);
+                DeviceCmdItemsSource.Add(itemVM);
+
                 if (RunThreadConfigManager.Current.CurrentParser != null
                     && RunThreadConfigManager.Current.CurrentParser.Cmd == item.Cmd)
                 {
-                    index = i;
+                    SelectedCmdIndex = index;
                 }
+
+                if (item.FormatContact == LogParserFormatContact.OPEN_DUMPSTATE_FILE)
+                {
+                    itemVM.OnComboBoxItemSelected = GestureViewModel.ParserFormatSelectedCommand;
+                }
+
+                index++;
             }
-            SelectedCmdIndex = index;
+        }
+
+        public void SelectParserOption(LogParserOption opt)
+        {
+            if (_parserOptionIndexMap.ContainsKey(opt))
+            {
+                SelectedCmdIndex = _parserOptionIndexMap[opt];
+            }
         }
 
         public override bool OnUnloaded()

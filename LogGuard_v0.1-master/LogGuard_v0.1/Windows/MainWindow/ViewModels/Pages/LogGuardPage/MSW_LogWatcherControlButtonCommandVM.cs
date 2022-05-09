@@ -18,7 +18,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
         public CommandExecuterModel LWCtrlAGestureCommand { get; set; }
         public CommandExecuterModel LWDeleteGestureCommand { get; set; }
         public CommandExecuterModel ZoomButtonCommand { get; set; }
-        
+        public CommandExecuterModel ImportLogFileButtonCommand { get; set; }
 
         public MSW_LogWatcherControlButtonCommandVM(BaseViewModel parentsModel) : base(parentsModel)
         {
@@ -56,7 +56,13 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages
                 return OnKey(KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_ZOOM_FEATURE
                     , paramaters);
             });
-            
+
+            ImportLogFileButtonCommand = new CommandExecuterModel((paramaters) =>
+            {
+                return OnKey(KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_IMPORT_LOG_FILE_FEATURE
+                    , paramaters);
+            });
+
         }
     }
 }

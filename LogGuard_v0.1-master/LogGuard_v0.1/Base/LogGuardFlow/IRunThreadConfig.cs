@@ -37,22 +37,25 @@ namespace LogGuard_v0._1.Base.LogGuardFlow
 
     public class LogParserVO
     {
+        public string DisplayName { get; set; }
+        public string ParserTip { get; set; }
         public string Cmd { get; set; }
-        public int FormatContact { get; set; }
+        public LogParserFormatContact FormatContact { get; set; }
 
         public override string ToString()
         {
-            return Cmd;
+            return DisplayName;
         }
     }
 
-    public class LogParserFormatContact
+    public enum LogParserFormatContact
     {
-        public const int NONE = -1;
-        public const int NORMAL_ADB_COMMAND = 0;
-        public const int TIME_ADB_COMMAND = 1;
-        public const int SHELL_CAT_ADB_COMMAND = 2;
-        public const int OPEN_LOG_FILE = 3;
-        public const int OPEN_DUMPSTATE_FILE = 4;
+        NONE = -1,
+        NORMAL_ADB_COMMAND = 0,
+        TIME_ADB_COMMAND = 1,
+        SHELL_CAT_ADB_COMMAND = 2,
+        OPEN_LOG_FILE = 3,
+        OPEN_DUMPSTATE_FILE = 4
     }
+
 }

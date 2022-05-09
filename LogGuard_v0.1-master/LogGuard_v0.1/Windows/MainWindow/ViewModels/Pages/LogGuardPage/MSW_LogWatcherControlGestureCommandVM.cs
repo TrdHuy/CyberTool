@@ -12,6 +12,7 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage
     {
         public CommandExecuterModel LogTagDoubleClickCommand { get; set; }
         public CommandExecuterModel LogMessageDoubleClickCommand { get; set; }
+        public CommandExecuterModel ParserFormatSelectedCommand { get; set; }
 
         public MSW_LogWatcherControlGestureCommandVM(BaseViewModel parentsModel) : base(parentsModel)
         {
@@ -24,6 +25,12 @@ namespace LogGuard_v0._1.Windows.MainWindow.ViewModels.Pages.LogGuardPage
             LogMessageDoubleClickCommand = new CommandExecuterModel((paramaters) =>
             {
                 return OnKey(KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_MESSAGE_DOUBLE_CLICK_GESTURE_FEATURE
+                    , paramaters);
+            });
+
+            ParserFormatSelectedCommand = new CommandExecuterModel((paramaters) =>
+            {
+                return OnKey(KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_PARSER_ITEM_SELECTED_GESTURE_FEATURE
                     , paramaters);
             });
         }

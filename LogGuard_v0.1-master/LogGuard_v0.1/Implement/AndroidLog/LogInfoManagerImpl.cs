@@ -51,6 +51,9 @@ namespace LogGuard_v0._1.Implement.AndroidLog
                 case LogParserFormatContact.TIME_ADB_COMMAND:
                     _logParser = new TimeAdbCmdLogParser();
                     break;
+                case LogParserFormatContact.OPEN_DUMPSTATE_FILE:
+                    _logParser = new DumpstateLogParser();
+                    break;
                 default:
                     _logParser = new AdbCmdLogParser();
                     break;

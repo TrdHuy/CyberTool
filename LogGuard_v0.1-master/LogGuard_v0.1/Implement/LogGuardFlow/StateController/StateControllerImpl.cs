@@ -10,6 +10,7 @@ using LogGuard_v0._1.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -98,6 +99,31 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
             }
         }
 
+        public void StartImportLogFile(string filePath)
+        {
+            LGSourceManager.UpdateLogParser(RTCManager.CurrentConfig);
+
+            RunningThread = new Thread(() =>
+            {
+                if (File.Exists(filePath))
+                {
+                    using (StreamReader sr = new StreamReader(filePath))
+                    {
+
+                        // Iterating the file
+                        while (sr.Peek() >= 0)
+                        {
+
+                            // Read the data in the file until the peak
+                            var line = sr.ReadLine();
+                            LGSourceManager.AddItem(line);
+                        }
+                    }
+                }
+            });
+            RunningThread.Start();
+        }
+
         public bool Start()
         {
             if (CurrentState == LogGuardState.STOP || CurrentState == LogGuardState.NONE)
@@ -110,6 +136,11 @@ namespace LogGuard_v0._1.Implement.LogGuardFlow.StateController
                 if (DeviceManager.SelectedDevice == null)
                 {
                     App.Current.ShowWaringBox("Please select a device!");
+                    return false;
+                }
+                if (string.IsNullOrEmpty(RTCManager.CurrentParser.Cmd))
+                {
+                    App.Current.ShowWaringBox("Command not found, please reselect parser format!");
                     return false;
                 }
                 var cmd = DeviceCmdExecuterImpl

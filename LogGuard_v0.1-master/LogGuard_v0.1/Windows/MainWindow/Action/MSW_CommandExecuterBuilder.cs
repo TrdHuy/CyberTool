@@ -80,6 +80,12 @@ namespace LogGuard_v0._1.Windows.MainWindow.Action
                 case KeyFeatureTag.KEY_TAG_MSW_LOGMANAGER_DELETE_MESSAGE_ITEM_FEATURE:
                     viewModelCommandExecuter = new MSW_LMUC_DeleteMessageItemAction(keyTag, WindowTag.WINDOW_TAG_MAIN_SCREEN, viewModel, logger);
                     break;
+                case KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_IMPORT_LOG_FILE_FEATURE:
+                    viewModelCommandExecuter = new MSW_LogWatcher_ImportLogFileButtonAction(keyTag, WindowTag.WINDOW_TAG_MAIN_SCREEN, viewModel, logger);
+                    break;
+                case KeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_PARSER_ITEM_SELECTED_GESTURE_FEATURE:
+                    viewModelCommandExecuter = new MSW_LPI_LeftMouseClick(keyTag, WindowTag.WINDOW_TAG_MAIN_SCREEN, viewModel, logger);
+                    break;
                 default:
                     break;
             }
