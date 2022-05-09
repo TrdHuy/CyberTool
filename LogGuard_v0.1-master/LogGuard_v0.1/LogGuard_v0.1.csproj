@@ -38,9 +38,8 @@
     <ApplicationIcon>cyclone_weather_world_time_icon_194253.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HPSolutionCCDevPackage.netFramework, Version=1.2.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\HPSolutionCCDevPackage.netFramework.dll</HintPath>
+    <Reference Include="HPSolutionCCDevPackage.netFramework">
+      <HintPath>..\exterior\HPSolutionCCDevPackage.netFramework.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
