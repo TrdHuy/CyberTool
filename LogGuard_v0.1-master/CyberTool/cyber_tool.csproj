@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="app_resources\attached_properties\" />
+    <Folder Include="windows\cyber_iface\models\" />
+    <Folder Include="windows\cyber_iface\views\others\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\cyber_extension\cyber_extension.csproj" />
+    <ProjectReference Include="..\dashboard_service\dashboard_service.csproj" />
+    <ProjectReference Include="..\log_guard\log_guard.csproj" />
+  </ItemGroup>
+
+</Project>

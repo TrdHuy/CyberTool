@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="base\" />
+    <Folder Include="utils\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\cyber_base\cyber_base.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="HPSolutionCCDevPackage.netFramework">
+      <HintPath>..\exterior\HPSolutionCCDevPackage.netFramework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

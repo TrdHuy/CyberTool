@@ -37,6 +37,9 @@
   <PropertyGroup>
     <ApplicationIcon>cyber_tool_app_icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="HPSolutionCCDevPackage.netFramework">
       <HintPath>..\exterior\HPSolutionCCDevPackage.netFramework.dll</HintPath>
@@ -122,7 +125,6 @@
     <Compile Include="Base\Utils\ICancelable.cs" />
     <Compile Include="Base\Utils\IDestroyable.cs" />
     <Compile Include="Base\Utils\ILogger.cs" />
-    <Compile Include="Base\ViewModel\BaseButtonCommandViewModel.cs" />
     <Compile Include="Base\ViewModel\BaseViewModel.cs" />
     <Compile Include="Base\ViewModel\IPageViewModel.cs" />
     <Compile Include="Base\ViewModel\ViewModelHelper\VMManagerMarkupExtension.cs" />

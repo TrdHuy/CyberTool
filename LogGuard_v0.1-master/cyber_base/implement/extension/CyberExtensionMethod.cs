@@ -1,0 +1,56 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
+
+namespace cyber_base.implement.extension
+{
+    public static class CyberExtensionMethod
+    {
+        public static T FindChild<T>(this DependencyObject dO, string childName) where T : DependencyObject
+        {
+            if (dO == null)
+            {
+                return null;
+            }
+
+            T val = null;
+            int childrenCount = VisualTreeHelper.GetChildrenCount(dO);
+            for (int i = 0; i < childrenCount; i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(dO, i);
+                if (child as T == null)
+                {
+                    val = child.FindChild<T>(childName);
+                    if (val != null)
+                    {
+                        break;
+                    }
+
+                    continue;
+                }
+
+                if (!string.IsNullOrEmpty(childName))
+                {
+                    FrameworkElement frameworkElement = child as FrameworkElement;
+                    if (frameworkElement != null && frameworkElement.Name == childName)
+                    {
+                        val = (T)child;
+                        break;
+                    }
+
+                    continue;
+                }
+
+                val = (T)child;
+                break;
+            }
+
+            return val;
+        }
+
+    }
+}

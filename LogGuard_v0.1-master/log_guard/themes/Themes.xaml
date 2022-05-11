@@ -1,0 +1,503 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:sys="clr-namespace:System;assembly=mscorlib"
+					xmlns:lwsc="clr-namespace:log_guard.views.others.log_watcher._scroll_view">
+	
+	<ResourceDictionary.MergedDictionaries>
+		<!--LogWatcher res-->
+		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/log_watcher/_log_mapping_border/LogMappingBorder.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/log_watcher/_scroll_view/ScrollViewWatcher.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/log_watcher/LogWatcher.xaml" />
+
+	</ResourceDictionary.MergedDictionaries>
+
+	<Style TargetType="{x:Type lwsc:ScrollViewWatcher}"
+		   x:Key="HanzaScrollViewWatcherStyle">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type lwsc:ScrollViewWatcher}">
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="*" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
+
+						<Border Background="Transparent"
+								BorderBrush="{TemplateBinding Background}"
+								Margin="{TemplateBinding Padding}">
+							<ScrollContentPresenter Name="PART_ScrollContentPresenter"
+													KeyboardNavigation.DirectionalNavigation="Local"
+													CanContentScroll="True"
+													CanHorizontallyScroll="False"
+													CanVerticallyScroll="False" />
+
+						</Border>
+
+						<ScrollBar Name="PART_HorizontalScrollBar"
+								   Orientation="Horizontal"
+								   Grid.Row="1"
+								   BorderThickness="0"
+								   Maximum="{TemplateBinding ScrollableWidth}"
+								   ViewportSize="{TemplateBinding ViewportWidth}"
+								   Value="{TemplateBinding HorizontalOffset}"
+								   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+								   Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type lwsc:ScrollViewWatcher}, Mode=FindAncestor}, Path=ScrollBarBackground}">
+							<ScrollBar.Template>
+								<ControlTemplate TargetType="{x:Type ScrollBar}">
+									<Grid x:Name="Bg"
+										  SnapsToDevicePixels="True">
+										<Border BorderBrush="{TemplateBinding BorderBrush}"
+												BorderThickness="{TemplateBinding BorderThickness}"
+												Background="{TemplateBinding Background}"
+												Grid.Column="1" />
+										<Track x:Name="PART_Track"
+											   Grid.Column="1"
+											   IsEnabled="{TemplateBinding IsMouseOver}">
+											<Track.DecreaseRepeatButton>
+												<RepeatButton Command="ScrollBar.PageLeftCommand">
+													<RepeatButton.Style>
+														<Style TargetType="{x:Type RepeatButton}">
+															<Setter Property="OverridesDefaultStyle"
+																	Value="True" />
+															<Setter Property="Background"
+																	Value="Transparent" />
+															<Setter Property="Focusable"
+																	Value="False" />
+															<Setter Property="IsTabStop"
+																	Value="False" />
+															<Setter Property="Template">
+																<Setter.Value>
+																	<ControlTemplate TargetType="{x:Type RepeatButton}">
+																		<Rectangle Fill="{TemplateBinding Background}"
+																				   Height="{TemplateBinding Height}"
+																				   Width="{TemplateBinding Width}" />
+																	</ControlTemplate>
+																</Setter.Value>
+															</Setter>
+														</Style>
+													</RepeatButton.Style>
+												</RepeatButton>
+											</Track.DecreaseRepeatButton>
+											<Track.IncreaseRepeatButton>
+												<RepeatButton Command="ScrollBar.PageRightCommand">
+													<RepeatButton.Style>
+														<Style TargetType="{x:Type RepeatButton}">
+															<Setter Property="OverridesDefaultStyle"
+																	Value="True" />
+															<Setter Property="Background"
+																	Value="Transparent" />
+															<Setter Property="Focusable"
+																	Value="False" />
+															<Setter Property="IsTabStop"
+																	Value="False" />
+															<Setter Property="Template">
+																<Setter.Value>
+																	<ControlTemplate TargetType="{x:Type RepeatButton}">
+																		<Rectangle Fill="{TemplateBinding Background}"
+																				   Height="{TemplateBinding Height}"
+																				   Width="{TemplateBinding Width}" />
+																	</ControlTemplate>
+																</Setter.Value>
+															</Setter>
+														</Style>
+													</RepeatButton.Style>
+												</RepeatButton>
+											</Track.IncreaseRepeatButton>
+											<Track.Thumb>
+												<Thumb>
+													<Thumb.Style>
+														<Style TargetType="{x:Type Thumb}">
+															<Setter Property="OverridesDefaultStyle"
+																	Value="True" />
+															<Setter Property="IsTabStop"
+																	Value="False" />
+															<Setter Property="Template">
+																<Setter.Value>
+																	<ControlTemplate TargetType="{x:Type Thumb}">
+																		<Rectangle x:Name="rectangle"
+																				   Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type lwsc:ScrollViewWatcher},Mode=FindAncestor},Path=ThumbBackground}"
+																				   Height="{TemplateBinding Height}"
+																				   SnapsToDevicePixels="True"
+																				   Width="{TemplateBinding Width}" />
+																	</ControlTemplate>
+																</Setter.Value>
+															</Setter>
+														</Style>
+													</Thumb.Style>
+												</Thumb>
+											</Track.Thumb>
+										</Track>
+									</Grid>
+								</ControlTemplate>
+							</ScrollBar.Template>
+						</ScrollBar>
+
+						<ScrollBar Name="PART_VerticalScrollBar"
+								   Grid.Column="1"
+								   Grid.RowSpan="2"
+								   Maximum="{TemplateBinding ScrollableHeight}"
+								   ViewportSize="{TemplateBinding ViewportHeight}"
+								   Value="{TemplateBinding VerticalOffset}"
+								   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+								   Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type lwsc:ScrollViewWatcher}, Mode=FindAncestor}, Path=ScrollBarBackground}">
+							<ScrollBar.Template>
+								<ControlTemplate TargetType="{x:Type ScrollBar}">
+									<Grid x:Name="Bg"
+										  SnapsToDevicePixels="True">
+										<Border x:Name="border"
+												BorderBrush="{TemplateBinding BorderBrush}"
+												BorderThickness="0"
+												Background="{TemplateBinding Background}"
+												Grid.Row="1" />
+										<Track x:Name="PART_Track"
+											   IsDirectionReversed="True"
+											   IsEnabled="{TemplateBinding IsMouseOver}"
+											   Grid.Row="1">
+											<Track.DecreaseRepeatButton>
+												<RepeatButton Command="ScrollBar.PageUpCommand">
+													<RepeatButton.Style>
+														<Style TargetType="{x:Type RepeatButton}">
+															<Setter Property="OverridesDefaultStyle"
+																	Value="True" />
+															<Setter Property="Background"
+																	Value="Transparent" />
+															<Setter Property="Focusable"
+																	Value="False" />
+															<Setter Property="IsTabStop"
+																	Value="False" />
+															<Setter Property="Template">
+																<Setter.Value>
+																	<ControlTemplate TargetType="{x:Type RepeatButton}">
+																		<Rectangle Fill="{TemplateBinding Background}"
+																				   Height="{TemplateBinding Height}"
+																				   Width="{TemplateBinding Width}" />
+																	</ControlTemplate>
+																</Setter.Value>
+															</Setter>
+														</Style>
+													</RepeatButton.Style>
+												</RepeatButton>
+											</Track.DecreaseRepeatButton>
+											<Track.IncreaseRepeatButton>
+												<RepeatButton Command="ScrollBar.PageDownCommand">
+													<RepeatButton.Style>
+														<Style TargetType="{x:Type RepeatButton}">
+															<Setter Property="OverridesDefaultStyle"
+																	Value="True" />
+															<Setter Property="Background"
+																	Value="Transparent" />
+															<Setter Property="Focusable"
+																	Value="False" />
+															<Setter Property="IsTabStop"
+																	Value="False" />
+															<Setter Property="Template">
+																<Setter.Value>
+																	<ControlTemplate TargetType="{x:Type RepeatButton}">
+																		<Rectangle Fill="{TemplateBinding Background}"
+																				   Height="{TemplateBinding Height}"
+																				   Width="{TemplateBinding Width}" />
+																	</ControlTemplate>
+																</Setter.Value>
+															</Setter>
+														</Style>
+													</RepeatButton.Style>
+												</RepeatButton>
+											</Track.IncreaseRepeatButton>
+											<Track.Thumb>
+												<Thumb>
+													<Thumb.Style>
+														<Style TargetType="{x:Type Thumb}">
+															<Setter Property="OverridesDefaultStyle"
+																	Value="True" />
+															<Setter Property="IsTabStop"
+																	Value="False" />
+															<Setter Property="Template">
+																<Setter.Value>
+																	<ControlTemplate TargetType="{x:Type Thumb}">
+																		<Rectangle x:Name="rectangle"
+																				   Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type lwsc:ScrollViewWatcher},Mode=FindAncestor},Path=ThumbBackground}"
+																				   Height="{TemplateBinding Height}"
+																				   SnapsToDevicePixels="True"
+																				   Width="{TemplateBinding Width}" />
+																		<ControlTemplate.Triggers>
+																			<Trigger Property="IsEnabled"
+																					 Value="False">
+																				<Setter Property="Width"
+																						TargetName="rectangle"
+																						Value="2" />
+																				<Setter Property="HorizontalAlignment"
+																						TargetName="rectangle"
+																						Value="Right" />
+																			</Trigger>
+																		</ControlTemplate.Triggers>
+																	</ControlTemplate>
+																</Setter.Value>
+															</Setter>
+														</Style>
+													</Thumb.Style>
+												</Thumb>
+											</Track.Thumb>
+										</Track>
+									</Grid>
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsMouseOver"
+												 Value="False">
+											<Setter TargetName="border"
+													Property="Background"
+													Value="Transparent" />
+										</Trigger>
+
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</ScrollBar.Template>
+
+						</ScrollBar>
+
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	
+	<ControlTemplate x:Key="UneditableComBoboxTmpl"
+					 TargetType="{x:Type ComboBox}">
+		<ControlTemplate.Resources>
+			<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
+			<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
+
+			<ControlTemplate x:Key="ComboBoxToggleButton"
+							 TargetType="{x:Type ToggleButton}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition />
+						<ColumnDefinition Width="25" />
+					</Grid.ColumnDefinitions>
+					<VisualStateManager.VisualStateGroups>
+						<VisualStateGroup x:Name="CommonStates">
+							<VisualState x:Name="Normal" />
+							<VisualState x:Name="MouseOver" />
+							<VisualState x:Name="Pressed" />
+							<VisualState x:Name="Disabled" />
+
+						</VisualStateGroup>
+						<VisualStateGroup x:Name="CheckStates">
+							<VisualState x:Name="Checked">
+								<Storyboard>
+									<ThicknessAnimation Storyboard.TargetProperty="BorderThickness"
+														Storyboard.TargetName="Border"
+														From="0"
+														To="1"
+														Duration="0:0:0.1" />
+									<DoubleAnimation Storyboard.TargetProperty="(RotateTransform.Angle)"
+													 Storyboard.TargetName="AnimRotateTransfrom"
+													 From="0"
+													 To="-90"
+													 Duration="0:0:0.1" />
+								</Storyboard>
+							</VisualState>
+							<VisualState x:Name="Unchecked">
+								<Storyboard>
+									<ThicknessAnimation Storyboard.TargetProperty="BorderThickness"
+														Storyboard.TargetName="Border"
+														From="1"
+														To="0"
+														Duration="0:0:0.1" />
+									<DoubleAnimation Storyboard.TargetProperty="(RotateTransform.Angle)"
+													 Storyboard.TargetName="AnimRotateTransfrom"
+													 From="-90"
+													 To="0"
+													 Duration="0:0:0.1" />
+								</Storyboard>
+							</VisualState>
+							<VisualState x:Name="Indeterminate" />
+						</VisualStateGroup>
+					</VisualStateManager.VisualStateGroups>
+					<Border x:Name="Border"
+							Grid.ColumnSpan="2"
+							BorderBrush="{StaticResource BorderbrushEffect_Level1}"
+							CornerRadius="5"
+							BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource AncestorType=ComboBox, Mode=FindAncestor}}"
+							Background="{Binding Background, RelativeSource={RelativeSource AncestorType=ComboBox, Mode=FindAncestor}}" />
+
+					<Path x:Name="Arrow"
+						  Grid.Column="1"
+						  Height="9"
+						  Width="9"
+						  Fill="{StaticResource Foreground_Level3}"
+						  HorizontalAlignment="Center"
+						  VerticalAlignment="Center"
+						  Stretch="Uniform"
+						  RenderTransformOrigin="0.5,0.5"
+						  Data="{Binding Source={StaticResource DropDownIcon}}">
+						<Path.RenderTransform>
+							<RotateTransform x:Name="AnimRotateTransfrom"
+											 Angle="0" />
+						</Path.RenderTransform>
+					</Path>
+				</Grid>
+			</ControlTemplate>
+
+			<ControlTemplate x:Key="ComboBoxTextBox"
+							 TargetType="{x:Type TextBox}">
+				<Border x:Name="PART_ContentHost"
+						Focusable="False"
+						Background="{TemplateBinding Background}" />
+			</ControlTemplate>
+
+			<Style x:Key="{x:Type ComboBoxItem}"
+				   TargetType="{x:Type ComboBoxItem}">
+				<Setter Property="Foreground"
+						Value="{StaticResource Foreground_Level3}" />
+				<Setter Property="SnapsToDevicePixels"
+						Value="true" />
+				<Setter Property="Height"
+						Value="30" />
+				<Setter Property="OverridesDefaultStyle"
+						Value="true" />
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type ComboBoxItem}">
+							<Border x:Name="Border"
+									Padding="2"
+									BorderThickness="1"
+									BorderBrush="Transparent"
+									SnapsToDevicePixels="true"
+									Background="Transparent">
+								<Border.InputBindings>
+									<MouseBinding MouseAction="LeftClick"
+												  CommandParameter="{Binding .}"
+												  Command="{Binding OnComboBoxItemSelected}" />
+								</Border.InputBindings>
+								<ContentPresenter VerticalAlignment="Center" />
+							</Border>
+
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsMouseOver"
+										 Value="True">
+									<Setter TargetName="Border"
+											Property="BorderBrush"
+											Value="{StaticResource BorderbrushEffect_Level1}" />
+								</Trigger>
+
+								<Trigger Property="IsSelected"
+										 Value="True">
+									<Setter TargetName="Border"
+											Property="Background"
+											Value="{StaticResource ButtonBackground_Level1}" />
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+
+			</Style>
+		</ControlTemplate.Resources>
+		<Grid>
+			<VisualStateManager.VisualStateGroups>
+				<VisualStateGroup x:Name="CommonStates">
+					<VisualState x:Name="Normal" />
+					<VisualState x:Name="MouseOver" />
+					<VisualState x:Name="Disabled" />
+
+				</VisualStateGroup>
+				<VisualStateGroup x:Name="EditStates">
+					<VisualState x:Name="Editable" />
+					<VisualState x:Name="Uneditable" />
+				</VisualStateGroup>
+			</VisualStateManager.VisualStateGroups>
+			
+			<ToggleButton x:Name="ToggleButton"
+						  Template="{StaticResource ComboBoxToggleButton}"
+						  Grid.Column="2"
+						  Focusable="false"
+						  ClickMode="Press"
+						  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, 
+              RelativeSource={RelativeSource TemplatedParent}}" />
+			<ContentPresenter x:Name="ContentSite"
+							  IsHitTestVisible="False"
+							  Content="{TemplateBinding SelectionBoxItem}"
+							  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+							  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+							  Margin="8,0,0,0"
+							  VerticalAlignment="Center"
+							  HorizontalAlignment="Left">
+			</ContentPresenter>
+			<TextBox x:Name="PART_EditableTextBox"
+					 Style="{x:Null}"
+					 Template="{StaticResource ComboBoxTextBox}"
+					 HorizontalAlignment="Left"
+					 VerticalAlignment="Bottom"
+					 Margin="3,3,23,3"
+					 Focusable="True"
+					 Background="Transparent"
+					 Visibility="Hidden"
+					 IsReadOnly="{TemplateBinding IsReadOnly}" />
+			<Popup x:Name="Popup"
+				   Placement="Bottom"
+				   IsOpen="{TemplateBinding IsDropDownOpen}"
+				   AllowsTransparency="True"
+				   Focusable="False"
+				   PopupAnimation="Slide">
+				<Grid x:Name="DropDown"
+					  SnapsToDevicePixels="True"
+					  MinWidth="{TemplateBinding ActualWidth}"
+					  MaxHeight="{TemplateBinding MaxDropDownHeight}">
+					<Rectangle x:Name="DropDownBorder"
+							   StrokeThickness="10"
+							   Stroke="Transparent"
+							   RadiusX="5"
+							   RadiusY="5"
+							   Fill="{StaticResource Background_Level3}">
+
+					</Rectangle>
+					<lwsc:ScrollViewWatcher Margin="5,10,5,10"
+													   SnapsToDevicePixels="True"
+													   Background="Transparent"
+													   Style="{DynamicResource HanzaScrollViewWatcherStyle}"
+													   ScrollHeaderHeight="0"
+													   ThumbBackground="{StaticResource ButtonBackground_Level1}"
+													   ScrollBarBackground="Transparent">
+						<ItemsPresenter x:Name="ItemsPresenter"
+										SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+					</lwsc:ScrollViewWatcher>
+				</Grid>
+			</Popup>
+		</Grid>
+		<ControlTemplate.Triggers>
+			<Trigger Property="HasItems"
+					 Value="false">
+				<Setter TargetName="DropDownBorder"
+						Property="MinHeight"
+						Value="95" />
+			</Trigger>
+			<Trigger Property="IsGrouping"
+					 Value="true">
+				<Setter Property="ScrollViewer.CanContentScroll"
+						Value="false" />
+			</Trigger>
+
+		</ControlTemplate.Triggers>
+	</ControlTemplate>
+
+	<Style x:Key="UneditableVirtualComboboxStyle"
+		   TargetType="ComboBox">
+		<Setter Property="Template"
+				Value="{StaticResource UneditableComBoboxTmpl}" />
+		<Setter Property="ItemsPanel">
+			<Setter.Value>
+				<ItemsPanelTemplate>
+					<VirtualizingStackPanel VirtualizingPanel.CacheLength="1"
+											VirtualizingPanel.CacheLengthUnit="Pixel"
+											VirtualizingPanel.IsContainerVirtualizable="True"
+											VirtualizingPanel.IsVirtualizing="True"
+											VirtualizingPanel.VirtualizationMode="Recycling"
+											VirtualizingPanel.IsVirtualizingWhenGrouping="True" />
+				</ItemsPanelTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+</ResourceDictionary>

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
-namespace LogGuard_v0._1.Base.ViewModel
+namespace cyber_base.service
 {
-    public abstract class BaseButtonCommandViewModel : BaseViewModel
+    public interface ICyberServiceManager
     {
+        public Application App { get; }
     }
 }

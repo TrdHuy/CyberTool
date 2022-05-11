@@ -1,0 +1,33 @@
+﻿<Application x:Class="cyber_tool.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:cyber_tool"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="debug-mode"
+			 StartupUri="windows/cyber_iface/views/CyberIFaceWindow.xaml">
+    <Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<!--Base resource such as string, color,.. define here-->
+				<ResourceDictionary Source="app_resources/ResourceThemes.xaml" />
+				
+				<ResourceDictionary Source="app_resources/controls/cyber_window/CyberWindow.xaml" />
+
+				
+				
+				<!--Resource cho chế độ debug:
+				res này sử dụng để quá trình build file xaml trong lúc dev được hiển 
+				thị các style, template, res...
+				Chỉ add các resource của các project khác nằm ngoài phạm vi cyber_tool
+				-->
+				<ResourceDictionary Source="pack://application:,,,/log_guard;component/themes/Themes.xaml" />
+				<mc:AlternateContent>
+					<mc:Choice Requires="d">
+					</mc:Choice>
+				</mc:AlternateContent>
+
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+
+	</Application.Resources>
+</Application>

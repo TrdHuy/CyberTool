@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\cyber_base\cyber_base.csproj" />
+    <ProjectReference Include="..\cyber_extension\cyber_extension.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="view_models\" />
+  </ItemGroup>
+
+</Project>
