@@ -1,5 +1,5 @@
 ﻿using cyber_base.implement.utils;
-using log_guard.views.others.log_watcher._base;
+using log_guard.@base.watcher;
 using log_guard.views.others.log_watcher._item;
 using log_guard.views.others.log_watcher._log_mapping_border;
 using log_guard.views.others.log_watcher._scroll_view;

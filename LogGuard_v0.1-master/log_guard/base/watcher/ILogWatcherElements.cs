@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace log_guard.views.others.log_watcher._base
+namespace log_guard.@base.watcher
 {
-    public interface ILogWatcherElements
+    internal interface ILogWatcherElements
     {
         Color? TrackColor { get; }
 

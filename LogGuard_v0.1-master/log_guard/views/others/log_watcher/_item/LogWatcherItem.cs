@@ -1,4 +1,4 @@
-﻿using log_guard.views.others.log_watcher._base;
+﻿using log_guard.@base.watcher;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +36,7 @@ namespace log_guard.views.others.log_watcher._item
 
         }
 
-        public void SetContext(ILogWatcherElements context)
+        internal void SetContext(ILogWatcherElements context)
         {
             _context = context;
         }

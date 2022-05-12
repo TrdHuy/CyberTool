@@ -49,6 +49,7 @@ namespace log_guard
         public override void OnServiceViewInstantiated(ICyberServiceManager cyberServiceManager)
         {
             base.OnServiceViewInstantiated(cyberServiceManager);
+            int a = 1;
         }
 
         public override void OnServiceUnloaded(ICyberServiceManager cyberServiceManager)
@@ -56,7 +57,7 @@ namespace log_guard
             base.OnServiceUnloaded(cyberServiceManager);
         }
 
-        public override object? GetServiceView()
+        protected override object? GenerateServiceView()
         {
             return new LogGuard();
         }

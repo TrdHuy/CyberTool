@@ -7,8 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="base\" />
-    <Folder Include="utils\" />
+    <Compile Remove="utils\**" />
+    <EmbeddedResource Remove="utils\**" />
+    <None Remove="utils\**" />
+    <Page Remove="utils\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +25,10 @@
     <Reference Include="HPSolutionCCDevPackage.netFramework">
       <HintPath>..\exterior\HPSolutionCCDevPackage.netFramework.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="base\android_log\" />
   </ItemGroup>
 
 </Project>

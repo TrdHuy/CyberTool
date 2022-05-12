@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log_guard.@base.flow.highlight;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,15 +11,8 @@ using System.Windows.Media;
 
 namespace log_guard.prop.attached_properties
 {
-    public interface IHighlightable
-    {
-        string SearchWord { get; }
-        int StartIndex { get; }
-        int WordLength { get; }
-        string RawWord { get; }
-    }
 
-    public class TextBlockAttProperties : UIElement
+    internal class TextBlockAttProperties : UIElement
     {
 
         #region RawText
@@ -140,6 +134,7 @@ namespace log_guard.prop.attached_properties
 
 
         #endregion
+
         private static void OnTextBlockHighlightPropertyChanged(TextBlock textBlock)
         {
             if (textBlock == null) return;

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace log_guard.view_models
 {
-    public class LogGuardPageViewModel : BaseViewModel
+    public class LogGuardViewModel : BaseViewModel
     {
-        public LogGuardPageViewModel()
+        public LogGuardViewModel()
         {
         }
     }

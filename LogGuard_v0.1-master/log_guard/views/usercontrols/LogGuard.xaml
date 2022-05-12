@@ -15,7 +15,7 @@
 			 d:DesignHeight="820"
 			 d:DesignWidth="883.714">
 	<UserControl.DataContext>
-		<vm:LogGuardPageViewModel />
+		<vm:LogGuardViewModel />
 	</UserControl.DataContext>
 
 	<!--<UserControl.Resources>

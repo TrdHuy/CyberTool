@@ -1,6 +1,7 @@
 ﻿using cyber_base.implement.attributes;
 using cyber_base.implement.command;
 using cyber_base.implement.extension;
+using log_guard.@base.flow.source_filterr;
 using log_guard.views.others.calendar;
 using System;
 using System.Collections.Generic;
@@ -15,17 +16,7 @@ using System.Windows.Media;
 
 namespace log_guard.prop.attached_properties
 {
-    public enum FilterType
-    {
-        [StringValue("Simple")]
-        Simple = 0,
-
-        [StringValue("Syntax")]
-        Syntax = 1,
-
-        [StringValue("Advance")]
-        Advance = 2
-    }
+    
     /// <summary>
     /// Cách search mà Text box sẽ hoạt động
     /// None: TextBox sẽ không thực hiện bất kỳ chức năng nào khi người dùng thay đổi input
@@ -40,7 +31,8 @@ namespace log_guard.prop.attached_properties
 
         QuickSearch = 1
     }
-    public class TextBoxAttProperties : UIElement
+
+    internal class TextBoxAttProperties : UIElement
     {
         #region Search
         public static readonly DependencyProperty SearchProperty =

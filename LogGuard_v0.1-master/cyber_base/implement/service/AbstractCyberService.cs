@@ -26,6 +26,9 @@ namespace cyber_base.implement.service
 
         public abstract Uri ServiceResourceUri { get; protected set; }
 
+        protected object? DataContext { get; set; }
+        protected object? CurrentServiceView { get; set; }
+
         public virtual void OnServiceCreate(ICyberServiceManager cyberServiceManager)
         {
             ServiceManager = cyberServiceManager;
@@ -37,7 +40,18 @@ namespace cyber_base.implement.service
             ServiceManager?.App.Resources.MergedDictionaries.Add(resource);
         }
 
-        public abstract object? GetServiceView();
+        public object? GetServiceView()
+        {
+            CurrentServiceView = GenerateServiceView();
+
+            DataContext = CurrentServiceView?
+                .GetType()?
+                .GetProperty("DataContext")?
+                .GetValue(CurrentServiceView, null);
+
+            return CurrentServiceView;
+        }
+
 
         public virtual void OnPreServiceViewInit(ICyberServiceManager cyberServiceManager)
         {
@@ -50,5 +64,8 @@ namespace cyber_base.implement.service
         public virtual void OnServiceViewInstantiated(ICyberServiceManager cyberServiceManager)
         {
         }
+
+        protected abstract object? GenerateServiceView();
+
     }
 }
