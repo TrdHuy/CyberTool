@@ -1,4 +1,5 @@
-﻿using System;
+﻿using cyber_base.app;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,6 @@ namespace cyber_base.service
 {
     public interface ICyberServiceManager
     {
-        public Application App { get; }
+        public ICyberApplication App { get; }
     }
 }

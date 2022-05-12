@@ -37,7 +37,7 @@ namespace cyber_base.implement.service
             {
                 Source = ServiceResourceUri
             };
-            ServiceManager?.App.Resources.MergedDictionaries.Add(resource);
+            ServiceManager?.App?.Current?.Resources.MergedDictionaries.Add(resource);
         }
 
         public object? GetServiceView()
