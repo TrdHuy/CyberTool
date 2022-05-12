@@ -1,4 +1,5 @@
 ﻿using cyber_extension.dll_base.extension;
+using cyber_tool.@base.module;
 using cyber_tool.utils;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace cyber_tool.plugins
 {
-    public class CyberPluginsManager
+    public class CyberPluginsManager : ICyberModule
     {
         private static string PLUGIN_FOLDER_PATH { get; } = System.AppDomain.CurrentDomain.BaseDirectory + "plugins";
         private static string CYBER_EXTENSION_MODULE_PATH { get; } = System.AppDomain.CurrentDomain.BaseDirectory + "plugins\\cyber_extension.dll";
@@ -26,6 +27,15 @@ namespace cyber_tool.plugins
         private CyberPluginsManager()
         {
             Plugins = new Collection<ICyberExtension>();
+        }
+
+        public void OnModuleInit()
+        {
+            LoadExternalPlugin();
+        }
+
+        public void OnModuleStart()
+        {
         }
 
         public void LoadExternalPlugin()
@@ -61,5 +71,7 @@ namespace cyber_tool.plugins
 
             }
         }
+
+
     }
 }

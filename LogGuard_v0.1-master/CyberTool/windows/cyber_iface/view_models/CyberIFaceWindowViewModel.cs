@@ -1,6 +1,5 @@
 ﻿using cyber_base.view_model;
 using cyber_tool.services;
-using cyber_tool.windows.cyber_iface.pages.page_controller;
 using cyber_tool.windows.cyber_iface.view_models.page_header;
 using cyber_tool.windows.cyber_iface.views.usercontrols;
 using System;
@@ -16,7 +15,7 @@ namespace cyber_tool.windows.cyber_iface.view_models
 {
     public class CyberIFaceWindowViewModel : BaseViewModel
     {
-        private CIFaceW_PageController _PageHost = CIFaceW_PageController.Current;
+        private CyberServiceController _ServiceController = CyberServiceController.Current;
         private CyberServiceManager _ServiceManager = CyberServiceManager.Current;
         private CyberIFacePageHeaderItemViewModel _selectedHeaderItem = null;
 
@@ -36,7 +35,7 @@ namespace cyber_tool.windows.cyber_iface.view_models
                 if (IsShouldChangePage(_selectedHeaderItem, value))
                 {
                     _selectedHeaderItem = value;
-                    _PageHost.UpdateCurrentServiceVOByID(value.PageVO.CyberService.ServiceID);
+                    _ServiceController.UpdateCurrentServiceByID(value.Service.ServiceID);
                 }
                 InvalidateOwn();
             }
@@ -47,45 +46,29 @@ namespace cyber_tool.windows.cyber_iface.view_models
         {
             get
             {
-                if (_PageHost.CurrentServicePageOV.IsPageUnderconstruction)
-                {
-                    return new Underconstruction();
-                }
-                else
-                {
-                    _PageHost?.PreviousServicePageOV?.CyberService?.OnServiceUnloaded(_ServiceManager);
-
-                    _PageHost?.CurrentServicePageOV?.CyberService?.OnPreServiceViewInit(_ServiceManager);
-
-                    var content = _PageHost?.CurrentServicePageOV?.CyberService?.GetServiceView();
-
-                    if (content != null)
-                        _PageHost?.CurrentServicePageOV?.CyberService?.OnServiceViewInstantiated(_ServiceManager);
-
-                    return content;
-                }
+                return _ServiceController.CurrentServiceView;
             }
         }
 
 
         public CyberIFaceWindowViewModel()
         {
-            InitPageHeaderItemSource();
-
-            _PageHost.CurrentPageSourceChanged -= OnPageSourceChanged;
-            _PageHost.CurrentPageSourceChanged += OnPageSourceChanged;
-
+            InitServiceHeaderItemSource();
+            _ServiceController.CurrentServiceChanged -= OnServiceChanged;
+            _ServiceController.CurrentServiceChanged += OnServiceChanged;
         }
 
-        private void InitPageHeaderItemSource()
+        
+
+        private void InitServiceHeaderItemSource()
         {
-            foreach (var vo in _PageHost.ServicePageVOsMap.Values)
+            foreach (var vo in _ServiceManager.CyberServiceMaper.Values)
             {
                 if (vo != null)
                 {
                     var vm = new CyberIFacePageHeaderItemViewModel(vo);
                     PageHeaderItems.Add(vm);
-                    if (_PageHost.CurrentServicePageOV == vo)
+                    if (_ServiceController.CurrentService == vo)
                     {
                         _selectedHeaderItem = vm;
                     }
@@ -93,7 +76,7 @@ namespace cyber_tool.windows.cyber_iface.view_models
             }
         }
 
-        private void OnPageSourceChanged(object sender)
+        private void OnServiceChanged(object sender, CyberServiceController.ServiceEventArgs args)
         {
             Invalidate("ServiceContent");
         }
@@ -101,7 +84,6 @@ namespace cyber_tool.windows.cyber_iface.view_models
         private bool IsShouldChangePage(CyberIFacePageHeaderItemViewModel oldValue
             , CyberIFacePageHeaderItemViewModel newValue)
         {
-
             return true;
         }
     }

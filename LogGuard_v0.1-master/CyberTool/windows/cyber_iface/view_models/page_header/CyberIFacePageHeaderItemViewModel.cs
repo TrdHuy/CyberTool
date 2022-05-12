@@ -1,5 +1,5 @@
-﻿using cyber_base.view_model;
-using cyber_tool.@base.page.model;
+﻿using cyber_base.service;
+using cyber_base.view_model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,11 +11,11 @@ namespace cyber_tool.windows.cyber_iface.view_models.page_header
 {
     public class CyberIFacePageHeaderItemViewModel : BaseViewModel
     {
-        public ServiceVO PageVO { get; private set; }
+        public ICyberService Service { get; private set; }
 
-        public CyberIFacePageHeaderItemViewModel(ServiceVO vo)
+        public CyberIFacePageHeaderItemViewModel(ICyberService service)
         {
-            PageVO = vo;
+            Service = service;
         }
 
         [Bindable(true)]
@@ -23,7 +23,7 @@ namespace cyber_tool.windows.cyber_iface.view_models.page_header
         {
             get
             {
-                return PageVO.Header;
+                return Service.Header;
             }
         }
 
@@ -32,7 +32,7 @@ namespace cyber_tool.windows.cyber_iface.view_models.page_header
         {
             get
             {
-                return PageVO.IconHeaderGeometryData;
+                return Service.HeaderGeometryData;
             }
         }
     }

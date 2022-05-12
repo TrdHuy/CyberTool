@@ -8,9 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="app_resources\attached_properties\" />
-    <Folder Include="windows\cyber_iface\models\" />
-    <Folder Include="windows\cyber_iface\views\others\" />
+    <Compile Remove="app_resources\attached_properties\**" />
+    <Compile Remove="windows\cyber_iface\views\others\**" />
+    <EmbeddedResource Remove="app_resources\attached_properties\**" />
+    <EmbeddedResource Remove="windows\cyber_iface\views\others\**" />
+    <None Remove="app_resources\attached_properties\**" />
+    <None Remove="windows\cyber_iface\views\others\**" />
+    <Page Remove="app_resources\attached_properties\**" />
+    <Page Remove="windows\cyber_iface\views\others\**" />
   </ItemGroup>
 
   <ItemGroup>
