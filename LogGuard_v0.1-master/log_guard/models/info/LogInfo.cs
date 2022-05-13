@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace log_guard.models
+namespace log_guard.models.info
 {
     enum LogLevel
     {

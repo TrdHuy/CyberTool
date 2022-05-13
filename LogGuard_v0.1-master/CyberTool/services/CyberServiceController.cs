@@ -45,7 +45,11 @@ namespace cyber_tool.services
         {
             _ServiceManager = CyberServiceManager.Current;
             CurrentService = _ServiceManager.LogGuardService;
-            UpdateCurrentServiceView();
+        }
+
+        public void OnIFaceWindowShowed()
+        {
+            UpdateCurrentServiceView(new ServiceEventArgs(CurrentService, PreviousService));
         }
 
         public void UpdateCurrentServiceByID(string id)
@@ -56,35 +60,21 @@ namespace cyber_tool.services
                 return;
             }
 
-            bool isChanged = false;
-
             if (_ServiceManager.CyberServiceMaper[id] != null)
             {
                 PreviousService = CurrentService;
                 CurrentService = _ServiceManager.CyberServiceMaper[id];
                 var args = new ServiceEventArgs(CurrentService, PreviousService);
 
-                if (!args.Handled)
-                {
-                    BeforeServiceChange?.Invoke(this, args);
-                }
-
-                UpdateCurrentServiceView();
-
-                if (!args.Handled)
-                {
-                    ServiceChange?.Invoke(this, args);
-                }
-                if (!args.Handled)
-                {
-                    ServiceChanged?.Invoke(this, args);
-                }
+                UpdateCurrentServiceView(args);
             }
 
         }
 
-        private void UpdateCurrentServiceView()
+        private void UpdateCurrentServiceView(ServiceEventArgs args)
         {
+            BeforeServiceChange?.Invoke(this, args);
+
             if (CurrentService.IsUnderconstruction)
             {
                 CurrentServiceView = new Underconstruction();
@@ -92,6 +82,15 @@ namespace cyber_tool.services
             else
             {
                 CurrentServiceView = CurrentService.GetServiceView();
+            }
+
+            if (!args.Handled)
+            {
+                ServiceChange?.Invoke(this, args);
+            }
+            if (!args.Handled)
+            {
+                ServiceChanged?.Invoke(this, args);
             }
         }
 

@@ -38,6 +38,10 @@ namespace cyber_tool.plugins
         {
         }
 
+        public void OnIFaceWindowShowed()
+        {
+        }
+
         public void LoadExternalPlugin()
         {
             Plugins.Clear();
@@ -71,7 +75,6 @@ namespace cyber_tool.plugins
 
             }
         }
-
 
     }
 }

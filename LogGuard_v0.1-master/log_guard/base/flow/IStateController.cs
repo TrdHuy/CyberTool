@@ -1,4 +1,5 @@
 ﻿using log_guard.@base.device;
+using log_guard.definitions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,6 @@ using System.Threading.Tasks;
 
 namespace log_guard.@base.flow
 {
-    public enum LogGuardState
-    {
-        NONE = 0,
-        RUNNING = 1,
-        PAUSING = 2,
-        STOP = 3,
-    }
     internal interface IStateController
     {
         bool Start();

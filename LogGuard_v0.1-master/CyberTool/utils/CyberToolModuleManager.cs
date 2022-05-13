@@ -40,8 +40,13 @@ namespace cyber_tool.utils
             }
         }
 
-       
-        
+        public static void OnIFaceShowed()
+        {
+            foreach (var module in _CyberModules)
+            {
+                module.OnIFaceWindowShowed();
+            }
+        }
 
         public static CyberPluginsManager? CPM_Instance
         {

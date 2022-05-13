@@ -83,6 +83,10 @@ namespace cyber_tool.services
 
         }
 
+        public void OnIFaceWindowShowed()
+        {
+        }
+
         private void OnBeforeServiceChange(object sender, CyberServiceController.ServiceEventArgs args)
         {
             args.Current.OnPreServiceViewInit(this);
@@ -95,7 +99,8 @@ namespace cyber_tool.services
 
         private void OnServiceChanged(object sender, CyberServiceController.ServiceEventArgs args)
         {
-            args.Previous.OnServiceUnloaded(this);
+            args.Previous?.OnServiceUnloaded(this);
         }
+
     }
 }

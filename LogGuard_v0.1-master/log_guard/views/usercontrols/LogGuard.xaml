@@ -5,7 +5,8 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="clr-namespace:log_guard.views.usercontrols"
 			 mc:Ignorable="d"
-			 xmlns:tvh="clr-namespace:log_guard.flow.view_helper"
+			 xmlns:def="clr-namespace:log_guard.definitions"
+			 xmlns:tvh="clr-namespace:log_guard.implement.flow.view_helper"
 			 xmlns:vm="clr-namespace:log_guard.view_models"
 			 xmlns:wr="clr-namespace:log_guard.views.others.log_watcher"
 			 xmlns:mb="clr-namespace:log_guard.views.others.log_watcher._log_mapping_border"
@@ -97,7 +98,7 @@
 
 		<ContentControl x:Name="LogWatcherCC"
 						Grid.Row="4"
-						tvh:LogGuardViewHelper.ViewKey="{x:Static tvh:LogGuardViewKeyDefinition.LogWatcherViewer}"
+						tvh:LogGuardViewHelper.ViewKey="{x:Static def:LogGuardViewKeyDefinition.LogWatcherViewer}"
 						Grid.Column="0"
 						Grid.ColumnSpan="13">
 			<wr:LogWatcher UseAutoScroll="{Binding UseAutoScroll}"

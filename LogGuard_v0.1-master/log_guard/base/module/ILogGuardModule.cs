@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cyber_tool.@base.module
+namespace log_guard.@base.module
 {
-    internal interface ICyberModule
+    internal interface ILogGuardModule
     {
+
         /// <summary>
         /// Sự kiện xảy ra khi bắt đầu khởi tạo module
         /// </summary>
@@ -17,10 +18,5 @@ namespace cyber_tool.@base.module
         /// Sự kiện xảy ra sau khi khởi tạo module
         /// </summary>
         void OnModuleStart();
-
-        /// <summary>
-        /// Sự kiện xảy ra sau khi IFace window hiển thị
-        /// </summary>
-        void OnIFaceWindowShowed();
     }
 }

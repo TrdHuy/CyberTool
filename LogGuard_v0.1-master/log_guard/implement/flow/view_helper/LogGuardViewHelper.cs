@@ -1,4 +1,7 @@
-﻿using System;
+﻿using log_guard.@base.module;
+using log_guard.definitions;
+using log_guard.implement.module;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,16 +9,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
 
-namespace log_guard.flow.view_helper
+namespace log_guard.implement.flow.view_helper
 {
-    public class LogGuardViewHelper
+    public class LogGuardViewHelper : ILogGuardModule
     {
         private static Dictionary<LogGuardViewKeyDefinition, object> ViewMap;
-
-        static LogGuardViewHelper()
-        {
-            ViewMap = new Dictionary<LogGuardViewKeyDefinition, object>();
-        }
 
         #region ViewKey
         public static readonly DependencyProperty ViewKeyProperty = DependencyProperty.RegisterAttached(
@@ -49,8 +47,17 @@ namespace log_guard.flow.view_helper
         {
             get
             {
-                return LogGuardSingletonController.LG_ViewHelper;
+                return LogGuardModuleManager.LGVH_Instance;
             }
+        }
+
+        public void OnModuleInit()
+        {
+            ViewMap = new Dictionary<LogGuardViewKeyDefinition, object>();
+        }
+
+        public void OnModuleStart()
+        {
         }
 
         public object GetViewByKey(LogGuardViewKeyDefinition key)
@@ -59,9 +66,4 @@ namespace log_guard.flow.view_helper
         }
     }
 
-    public enum LogGuardViewKeyDefinition
-    {
-        LogWatcherViewer = 1,
-        LogWatcherZoomButton = 2,
-    }
 }

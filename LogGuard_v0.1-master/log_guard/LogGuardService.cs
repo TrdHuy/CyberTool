@@ -1,6 +1,7 @@
 ﻿using cyber_base.implement.service;
 using cyber_base.service;
 using log_guard.definitions;
+using log_guard.implement.module;
 using log_guard.view_models;
 using log_guard.views.usercontrols;
 using System;
@@ -44,12 +45,12 @@ namespace log_guard
         public override void OnPreServiceViewInit(ICyberServiceManager cyberServiceManager)
         {
             base.OnPreServiceViewInit(cyberServiceManager);
+            LogGuardModuleManager.Init();
         }
 
         public override void OnServiceViewInstantiated(ICyberServiceManager cyberServiceManager)
         {
             base.OnServiceViewInstantiated(cyberServiceManager);
-            int a = 1;
         }
 
         public override void OnServiceUnloaded(ICyberServiceManager cyberServiceManager)

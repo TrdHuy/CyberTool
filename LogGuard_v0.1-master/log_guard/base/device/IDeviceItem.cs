@@ -8,5 +8,7 @@ namespace log_guard.@base.device
 {
     internal interface IDeviceItem
     {
+        object BuildNumber { get; }
+        object SerialNumber { get; }
     }
 }

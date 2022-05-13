@@ -1,9 +1,9 @@
 ﻿using log_guard.@base.flow;
-using log_guard.models;
+using log_guard.models.info;
 
 namespace log_guard.@base.flow
 {
-    public interface ILogInfoManager
+    internal interface ILogInfoManager
     {
 
         /// <summary>

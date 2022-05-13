@@ -19,13 +19,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using cyber_base.view.window;
 
 namespace cyber_tool.windows.cyber_istand.views
 {
     /// <summary>
     /// Interaction logic for CyberIStandWindow.xaml
     /// </summary>
-    public partial class CyberIStandWindow : CyberWindow
+    public partial class CyberIStandWindow : CyberWindow, IStandBox
     {
         public CyberIStandBoxResult MesResult { get; private set; } = CyberIStandBoxResult.None;
         private AsyncTask MainTask { get; set; }

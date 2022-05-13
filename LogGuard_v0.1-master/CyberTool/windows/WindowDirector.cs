@@ -1,4 +1,5 @@
-﻿using cyber_base.utils.async_task;
+﻿using cyber_base.definition;
+using cyber_base.utils.async_task;
 using cyber_tool.definitions;
 using cyber_tool.windows.cyber_iface.views;
 using cyber_tool.windows.cyber_imes.views;
@@ -46,7 +47,7 @@ namespace cyber_tool.windows
         }
 
 
-        public void ShowMainWindow()
+        public void ShowCyberIFace()
         {
             IFaceWindow.Show();
         }
@@ -91,10 +92,21 @@ namespace cyber_tool.windows
         }
 
 
-        public CyberIStandBoxResult OpenWaitingTaskBox(string content, string title, Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask, Func<bool> canExecute = null, Action<object, AsyncTaskResult> callback = null, long delayTime = 0)
+        public CyberContactMessage OpenWaitingTaskBox(string content, string title, Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask, Func<bool> canExecute = null, Action<object, AsyncTaskResult> callback = null, long delayTime = 0)
         {
             var newWaitingBox = new CyberIStandWindow(content, title, asyncTask, canExecute, callback, delayTime, IFaceWindow);
-            return newWaitingBox.Show();
+            var message = newWaitingBox.Show();
+
+            switch (message)
+            {
+                case CyberIStandBoxResult.None:
+                    return CyberContactMessage.None;
+                case CyberIStandBoxResult.Cancel:
+                    return CyberContactMessage.Cancel;
+                case CyberIStandBoxResult.Done:
+                    return CyberContactMessage.Done;
+            }
+            return CyberContactMessage.None;
         }
 
         public void ShowPopupCustomControlWindow(ContentControl cc

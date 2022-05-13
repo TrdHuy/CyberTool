@@ -1,4 +1,5 @@
-﻿using cyber_base.utils.async_task;
+﻿using cyber_base.definition;
+using cyber_base.utils.async_task;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace cyber_base.app
     {
         Application? CyberApp { get; }
 
-        void OpenWaitingTaskBox(string content
+        CyberContactMessage OpenWaitingTaskBox(string content
             , string title
             , Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask
             , Func<bool> canExecute = null
