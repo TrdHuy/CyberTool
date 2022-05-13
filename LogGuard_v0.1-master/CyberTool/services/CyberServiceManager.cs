@@ -1,4 +1,5 @@
-﻿using cyber_base.service;
+﻿using cyber_base.app;
+using cyber_base.service;
 using cyber_tool.@base.module;
 using cyber_tool.utils;
 using dashboard_service;
@@ -39,13 +40,14 @@ namespace cyber_tool.services
             }
         }
 
-        public Application App
+        public ICyberApplication App
         {
             get
             {
                 return cyber_tool.App.Current;
             }
         }
+
 
         private CyberServiceManager()
         {
@@ -69,31 +71,31 @@ namespace cyber_tool.services
         public void OnModuleStart()
         {
             _ServiceController = CyberServiceController.Current;
-            _ServiceController.CurrentServiceChange -= OnCurrentServiceViewGenerated;
-            _ServiceController.CurrentServiceChange += OnCurrentServiceViewGenerated;
 
-            _ServiceController.CurrentServiceChanged -= OnCurrentServiceChanged;
-            _ServiceController.CurrentServiceChanged += OnCurrentServiceChanged;
+            _ServiceController.BeforeServiceChange -= OnBeforeServiceChange;
+            _ServiceController.BeforeServiceChange += OnBeforeServiceChange;
+
+            _ServiceController.ServiceChange -= OnServiceChange;
+            _ServiceController.ServiceChange += OnServiceChange;
+
+            _ServiceController.ServiceChanged -= OnServiceChanged;
+            _ServiceController.ServiceChanged += OnServiceChanged;
 
         }
 
-        private void OnCurrentServiceViewGenerated(object sender, CyberServiceController.ServiceEventArgs args)
+        private void OnBeforeServiceChange(object sender, CyberServiceController.ServiceEventArgs args)
         {
-            if (args.IsChanged)
-            {
-                args.Previous.OnServiceUnloaded(this);
-
-                args.Current.OnPreServiceViewInit(this);
-            }
-            else
-            {
-                args.Handled = true;
-            }
+            args.Current.OnPreServiceViewInit(this);
         }
 
-        private void OnCurrentServiceChanged(object sender, CyberServiceController.ServiceEventArgs args)
+        private void OnServiceChange(object sender, CyberServiceController.ServiceEventArgs args)
         {
             args.Current.OnServiceViewInstantiated(this);
+        }
+
+        private void OnServiceChanged(object sender, CyberServiceController.ServiceEventArgs args)
+        {
+            args.Previous.OnServiceUnloaded(this);
         }
     }
 }

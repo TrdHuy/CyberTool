@@ -11,7 +11,7 @@
 				 Height="820"
 				 Width="1066"
 				 Background="{StaticResource Background_Level1}"
-				 Style="{StaticResource DefaultLogGuardStyle}"
+				 Style="{StaticResource DefaultCyberStyle}"
 				 FontFamily="Calibri">
 	<Window.DataContext>
 		<vm:CyberIFaceWindowViewModel />

@@ -13,8 +13,8 @@
 				
 				<ResourceDictionary Source="app_resources/controls/cyber_window/CyberWindow.xaml" />
 
-				
-				
+				<ResourceDictionary Source="app_resources/Themes.xaml" />
+
 				<!--Resource cho chế độ debug:
 				res này sử dụng để quá trình build file xaml trong lúc dev được hiển 
 				thị các style, template, res...

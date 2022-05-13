@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:local="clr-namespace:cyber_tool.app_resources.controls.cyber_window">
 	<Style TargetType="{x:Type local:CyberWindow}"
-		   x:Key="DefaultLogGuardStyle">
+		   x:Key="DefaultCyberStyle">
 		<Setter Property="ChromeBackground" 
 				Value="#20FFFFFF"/>
 		<Setter Property="AllowsTransparency"

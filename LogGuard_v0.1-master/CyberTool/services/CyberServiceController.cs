@@ -29,8 +29,9 @@ namespace cyber_tool.services
         public ICyberService PreviousService { get; private set; }
         public object? CurrentServiceView { get; private set; }
 
-        public event CurrentServiceChangeHandler CurrentServiceChange;
-        public event CurrentServiceChangedHandler CurrentServiceChanged;
+        public event BeforeServiceChangeHandler BeforeServiceChange;
+        public event ServiceChangeHandler ServiceChange;
+        public event ServiceChangedHandler ServiceChanged;
 
         private CyberServiceController()
         {
@@ -61,17 +62,25 @@ namespace cyber_tool.services
             {
                 PreviousService = CurrentService;
                 CurrentService = _ServiceManager.CyberServiceMaper[id];
-                isChanged = true;
+                var args = new ServiceEventArgs(CurrentService, PreviousService);
+
+                if (!args.Handled)
+                {
+                    BeforeServiceChange?.Invoke(this, args);
+                }
 
                 UpdateCurrentServiceView();
-            }
-            var args = new ServiceEventArgs(CurrentService, PreviousService, isChanged);
-            CurrentServiceChange?.Invoke(this, args);
 
-            if (!isChanged || !args.Handled)
-            {
-                CurrentServiceChanged?.Invoke(this, args);
+                if (!args.Handled)
+                {
+                    ServiceChange?.Invoke(this, args);
+                }
+                if (!args.Handled)
+                {
+                    ServiceChanged?.Invoke(this, args);
+                }
             }
+
         }
 
         private void UpdateCurrentServiceView()
@@ -86,21 +95,20 @@ namespace cyber_tool.services
             }
         }
 
-        internal delegate void CurrentServiceChangeHandler(object sender, ServiceEventArgs args);
-        internal delegate void CurrentServiceChangedHandler(object sender, ServiceEventArgs args);
+        internal delegate void BeforeServiceChangeHandler(object sender, ServiceEventArgs args);
+        internal delegate void ServiceChangeHandler(object sender, ServiceEventArgs args);
+        internal delegate void ServiceChangedHandler(object sender, ServiceEventArgs args);
 
         internal class ServiceEventArgs
         {
-            public bool IsChanged { get; }
             public bool Handled { get; set; }
             public ICyberService Previous { get; }
             public ICyberService Current { get; }
 
-            public ServiceEventArgs(ICyberService cur, ICyberService pre, bool isChanged)
+            public ServiceEventArgs(ICyberService cur, ICyberService pre)
             {
                 Current = cur;
                 Previous = pre;
-                IsChanged = isChanged;
             }
         }
     }

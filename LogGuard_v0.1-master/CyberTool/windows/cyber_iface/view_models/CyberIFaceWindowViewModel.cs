@@ -54,8 +54,8 @@ namespace cyber_tool.windows.cyber_iface.view_models
         public CyberIFaceWindowViewModel()
         {
             InitServiceHeaderItemSource();
-            _ServiceController.CurrentServiceChanged -= OnServiceChanged;
-            _ServiceController.CurrentServiceChanged += OnServiceChanged;
+            _ServiceController.ServiceChanged -= OnServiceChanged;
+            _ServiceController.ServiceChanged += OnServiceChanged;
         }
 
         

@@ -1,4 +1,160 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
+	
+	<ControlTemplate TargetType="{x:Type Button}"
+					 x:Key="CircleBtnTmpl">
+		<Grid>
+			<Ellipse Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=ActualHeight}"
+					 Fill="{TemplateBinding Background}"
+					 StrokeThickness="0"
+					 Stroke="{TemplateBinding BorderBrush}"
+					 x:Name="ClipCircle"
+					 HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+					 VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+			<Ellipse Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=ActualHeight}"
+					 StrokeThickness="2"
+					 Fill="#19B8E7F9"
+					 Stroke="#FFB8EAF9"
+					 x:Name="FeedBackElp"
+					 Visibility="Hidden"
+					 HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+					 VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+			<ContentPresenter Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=ActualHeight}"
+							  Content="{TemplateBinding Content}"
+							  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+							  VerticalAlignment="{TemplateBinding VerticalAlignment}">
+
+			</ContentPresenter>
+		</Grid>
+		<ControlTemplate.Triggers>
+			<Trigger Property="IsMouseOver"
+					 Value="True">
+				<Setter Property="Visibility"
+						TargetName="FeedBackElp"
+						Value="Visible" />
+			</Trigger>
+
+			<Trigger Property="IsPressed"
+					 Value="True">
+				<Setter Property="Visibility"
+						TargetName="FeedBackElp"
+						Value="Visible" />
+				<Setter Property="Fill"
+						TargetName="FeedBackElp"
+						Value="#AAB8E7F9" />
+			</Trigger>
+
+		</ControlTemplate.Triggers>
+	</ControlTemplate>
+
+	<ControlTemplate TargetType="{x:Type Button}"
+					 x:Key="RecBtnTmpl">
+		<Grid>
+			<Rectangle Fill="{TemplateBinding Background}"
+					   StrokeThickness="0"
+					   Stroke="{TemplateBinding BorderBrush}"
+					   x:Name="ClipRec" />
+			<Rectangle StrokeThickness="1"
+					   Fill="#19B8E7F9"
+					   Stroke="#FFB8EAF9"
+					   x:Name="FeedBackRec"
+					   Visibility="Hidden" />
+			<ContentPresenter Margin="{TemplateBinding Padding}"
+							  Content="{TemplateBinding Content}"
+							  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+							  VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+				<ContentPresenter.OpacityMask>
+					<VisualBrush Visual="{Binding ElementName=ClipRec}" />
+				</ContentPresenter.OpacityMask>
+			</ContentPresenter>
+		</Grid>
+		<ControlTemplate.Triggers>
+			<Trigger Property="IsMouseOver"
+					 Value="True">
+				<Setter Property="Visibility"
+						TargetName="FeedBackRec"
+						Value="Visible" />
+			</Trigger>
+
+			<Trigger Property="IsPressed"
+					 Value="True">
+				<Setter Property="Visibility"
+						TargetName="FeedBackRec"
+						Value="Visible" />
+				<Setter Property="Fill"
+						TargetName="FeedBackRec"
+						Value="#AAB8E7F9" />
+			</Trigger>
+
+		</ControlTemplate.Triggers>
+	</ControlTemplate>
+
+	<ControlTemplate TargetType="CheckBox"
+					 x:Key="ColorCheckBoxTmpl">
+		<Grid>
+			<Ellipse x:Name="FeedbackElp"
+					 Visibility="Hidden"
+					 Fill="#AAB8E7F9" />
+			<Ellipse x:Name="FillElp"
+					 Visibility="Hidden"
+					 Fill="{TemplateBinding Background}" />
+			<Ellipse x:Name="MainElp"
+					 Stroke="{TemplateBinding BorderBrush}" />
+		</Grid>
+		<ControlTemplate.Triggers>
+			<Trigger Property="IsMouseOver"
+					 Value="True">
+				<Setter Property="Visibility"
+						TargetName="FeedbackElp"
+						Value="Visible" />
+				<Setter Property="Cursor"
+						Value="Hand" />
+			</Trigger>
+
+			<Trigger Property="IsChecked"
+					 Value="True">
+				<Setter Property="Visibility"
+						TargetName="FillElp"
+						Value="Visible" />
+			</Trigger>
+		</ControlTemplate.Triggers>
+	</ControlTemplate>
+
+	<ControlTemplate TargetType="CheckBox"
+					 x:Key="RoundCheckBoxTmpl">
+		<Border Height="11"
+				Width="11"
+				CornerRadius="2"
+				Background="{TemplateBinding Background}">
+			<Grid>
+				<Rectangle x:Name="FeedbackRec"
+						   RadiusX="2"
+						   RadiusY="2"
+						   Visibility="Hidden"
+						   Fill="#19B8E7F9"
+						   Stroke="#FFB8EAF9" />
+				<Path x:Name="CheckPath"
+					  Fill="{StaticResource Foreground_Level3}"
+					  Stretch="Uniform"
+					  Margin="1"
+					  Visibility="Hidden"
+					  Data="{Binding Source={StaticResource CheckPathGeomerty}}" />
+			</Grid>
+		</Border>
+		<ControlTemplate.Triggers>
+			<Trigger Property="IsMouseOver"
+					 Value="True">
+				<Setter Property="Visibility"
+						TargetName="FeedbackRec"
+						Value="Visible" />
+			</Trigger>
+
+			<Trigger Property="IsChecked"
+					 Value="True">
+				<Setter Property="Visibility"
+						TargetName="CheckPath"
+						Value="Visible" />
+			</Trigger>
+		</ControlTemplate.Triggers>
+	</ControlTemplate>
 </ResourceDictionary>
