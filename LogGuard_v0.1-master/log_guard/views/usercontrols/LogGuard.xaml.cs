@@ -24,5 +24,10 @@ namespace log_guard.views.usercontrols
         {
             InitializeComponent();
         }
+
+        ~LogGuard()
+        {
+            int a = 1;
+        }
     }
 }

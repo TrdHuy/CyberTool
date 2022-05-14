@@ -1,4 +1,5 @@
 ﻿using log_guard.@base.flow.highlight;
+using log_guard.models.vo;
 using System.Collections.Generic;
 
 namespace log_guard.@base.flow.source_filter
@@ -15,7 +16,7 @@ namespace log_guard.@base.flow.source_filter
 
         void Refresh();
 
-        List<MatchedWord> GetMatchWords();
+        List<MatchedWordVO> GetMatchWords();
 
         bool IsMatchLstEmpty { get; }
 
@@ -28,19 +29,5 @@ namespace log_guard.@base.flow.source_filter
 
     public delegate void OnComparableSourceUpdatedHandler (object sender, object args);
 
-    public class MatchedWord : IHighlightable
-    {
-        public string SearchWord { get; }
-        public int StartIndex { get; }
-        public int WordLength { get; }
-        public string RawWord { get; }
-
-        public MatchedWord(int startIndex, string word, string rawWord)
-        {
-            StartIndex = startIndex;
-            WordLength = word.Length;
-            SearchWord = word;
-            RawWord = rawWord;
-        }
-    }
+    
 }

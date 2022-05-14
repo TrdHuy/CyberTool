@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using log_guard.definitions;
+using System.Drawing;
 
 namespace log_guard.@base.watcher
 {
@@ -11,7 +12,7 @@ namespace log_guard.@base.watcher
         /// <summary>
         /// thứ tự dòng của phần tử trong log watcher
         /// </summary>
-        int LineNumber { get; }
+        int LineNumber { get; set; }
 
         /// <summary>
         /// Chế độ hiển thị của mỗi dòng log
@@ -20,16 +21,5 @@ namespace log_guard.@base.watcher
 
     }
 
-    public enum ElementViewType
-    {
-        /// <summary>
-        /// kiểu view cho android log
-        /// </summary>
-        LogView = 0,
-
-        /// <summary>
-        /// kiểu view cho row có thể mở rộng 
-        /// </summary>
-        ExpandableRowView = 1,
-    }
+    
 }

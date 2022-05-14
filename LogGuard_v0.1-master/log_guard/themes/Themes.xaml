@@ -8,6 +8,7 @@
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/log_watcher/_log_mapping_border/LogMappingBorder.xaml" />
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/log_watcher/_scroll_view/ScrollViewWatcher.xaml" />
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/log_watcher/LogWatcher.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/tripple_toggle/TrippleToggle.xaml" />
 
 	</ResourceDictionary.MergedDictionaries>
 

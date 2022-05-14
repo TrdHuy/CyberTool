@@ -14,9 +14,9 @@ namespace log_guard.@base.flow
         void Stop();
         void Resume();
         void Pause();
-        ISourceManager LGSourceManager { get; }
+        ISourceManager LwSourceManager { get; }
         IRunThreadConfigManager RTCManager { get; }
-        IDeviceManager DeviceManager { get; }
+        IDeviceManager DcManager { get; }
         LogGuardState CurrentState { get; set; }
         LogGuardState PreviousState { get; set; }
         object SynchronizeStateObject { get; set; }

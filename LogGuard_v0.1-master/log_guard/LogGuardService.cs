@@ -1,6 +1,9 @@
 ﻿using cyber_base.implement.service;
 using cyber_base.service;
+using cyber_base.view_model;
+using log_guard._config;
 using log_guard.definitions;
+using log_guard.implement.device;
 using log_guard.implement.module;
 using log_guard.view_models;
 using log_guard.views.usercontrols;
@@ -15,6 +18,8 @@ namespace log_guard
 {
     public class LogGuardService : AbstractCyberService
     {
+        public static LogGuardService? Current { get;private set; }
+
         public override string ServiceID { get; protected set; }
 
         public override long ServicePageLoadingDelayTime { get; protected set; }
@@ -40,6 +45,8 @@ namespace log_guard
         public override void OnServiceCreate(ICyberServiceManager cyberServiceManager)
         {
             base.OnServiceCreate(cyberServiceManager);
+            Current = this;
+            RUNE.Init();
         }
 
         public override void OnPreServiceViewInit(ICyberServiceManager cyberServiceManager)
@@ -51,11 +58,16 @@ namespace log_guard
         public override void OnServiceViewInstantiated(ICyberServiceManager cyberServiceManager)
         {
             base.OnServiceViewInstantiated(cyberServiceManager);
+            (ServiceViewContext as BaseViewModel)?.OnBegin();
         }
 
         public override void OnServiceUnloaded(ICyberServiceManager cyberServiceManager)
         {
             base.OnServiceUnloaded(cyberServiceManager);
+            (ServiceViewContext as BaseViewModel)?.OnDestroy();
+            CurrentServiceView = null;
+            LogGuardModuleManager.Destroy();
+            GC.Collect();
         }
 
         protected override object? GenerateServiceView()

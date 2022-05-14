@@ -53,10 +53,6 @@ namespace log_guard.implement.device
             }
         }
 
-        private DeviceManager()
-        {
-        }
-
         public void OnModuleInit()
         {
             _deviceHolders = new List<IDeviceHolder>();

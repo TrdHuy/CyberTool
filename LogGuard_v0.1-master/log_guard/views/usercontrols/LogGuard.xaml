@@ -98,13 +98,14 @@
 
 		<ContentControl x:Name="LogWatcherCC"
 						Grid.Row="4"
-						tvh:LogGuardViewHelper.ViewKey="{x:Static def:LogGuardViewKeyDefinition.LogWatcherViewer}"
+						tvh:LogGuardViewHelper.ViewKey="{x:Static def:LogGuardViewKeyDefinition.LogWatcherContentControl}"
 						Grid.Column="0"
 						Grid.ColumnSpan="13">
 			<wr:LogWatcher UseAutoScroll="{Binding UseAutoScroll}"
 						   LogWatcherItemsSource="{Binding ItemsSource}"
 						   ScrollViewer.HorizontalScrollBarVisibility="Visible"
 						   ScrollViewer.VerticalScrollBarVisibility="Visible"
+						   tvh:LogGuardViewHelper.ViewKey="{x:Static def:LogGuardViewKeyDefinition.LogWatcher}"
 						   VirtualizingPanel.CacheLength="1"
 						   VirtualizingPanel.CacheLengthUnit="Pixel"
 						   VirtualizingPanel.IsContainerVirtualizable="True"
