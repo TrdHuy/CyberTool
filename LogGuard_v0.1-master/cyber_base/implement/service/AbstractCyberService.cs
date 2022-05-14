@@ -10,9 +10,7 @@ namespace cyber_base.implement.service
 {
     public abstract class AbstractCyberService : ICyberService
     {
-        public static ICyberService Current { get; private set; }
-
-        public ICyberServiceManager ServiceManager { get; protected set; }
+        public ICyberServiceManager? ServiceManager { get; protected set; }
 
         public abstract bool IsUnderconstruction { get; }
 
@@ -26,13 +24,12 @@ namespace cyber_base.implement.service
 
         public abstract Uri ServiceResourceUri { get; protected set; }
 
-        protected object? DataContext { get; set; }
+        protected object? ServiceViewContext { get; set; }
         protected object? CurrentServiceView { get; set; }
 
         public virtual void OnServiceCreate(ICyberServiceManager cyberServiceManager)
         {
             ServiceManager = cyberServiceManager;
-            Current = this;
             var resource = new ResourceDictionary
             {
                 Source = ServiceResourceUri
@@ -44,7 +41,7 @@ namespace cyber_base.implement.service
         {
             CurrentServiceView = GenerateServiceView();
 
-            DataContext = CurrentServiceView?
+            ServiceViewContext = CurrentServiceView?
                 .GetType()?
                 .GetProperty("DataContext")?
                 .GetValue(CurrentServiceView, null);

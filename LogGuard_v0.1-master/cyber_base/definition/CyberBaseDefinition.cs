@@ -10,6 +10,12 @@ namespace cyber_base.definition
     {
     }
 
+    public enum CyberOwner
+    {
+        Default = 0,
+        ServiceManager = 1
+    }
+
     public enum CyberContactMessage
     {
         None = 0,
