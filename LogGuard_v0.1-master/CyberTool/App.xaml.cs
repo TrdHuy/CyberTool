@@ -45,7 +45,7 @@ namespace cyber_tool
         {
             get
             {
-                return this;
+                return Current;
             }
         }
 
@@ -79,6 +79,55 @@ namespace cyber_tool
         {
             return _WindowDirector.OpenWaitingTaskBox(content, title, asyncTask, canExecute, callback, delayTime);
 
+        }
+
+        public CyberContactMessage ShowWaringBox(string warning, bool isDialog = true)
+        {
+            return _WindowDirector.ShowWarningBox(warning, isDialog);
+        }
+
+        public void ShowPopupCControl(ContentControl cc
+           , UIElement opener
+           , CyberOwner ownerType = CyberOwner.Default
+           , double width = 500
+           , double height = 400
+           , object dataContext = null
+           , Action<object> windowShowedCallback = null
+           , string title = "Floating window")
+        {
+            switch (ownerType)
+            {
+                case CyberOwner.Default:
+                    _WindowDirector.ShowPopupCustomControlWindow(cc
+                        , opener
+                        , CyberOwnerWindow.Default
+                        , width
+                        , height
+                        , dataContext
+                        , windowShowedCallback
+                        , title);
+                    break;
+                case CyberOwner.ServiceManager:
+                    _WindowDirector.ShowPopupCustomControlWindow(cc
+                        , opener
+                        , CyberOwnerWindow.CyberIFace
+                        , width
+                        , height
+                        , dataContext
+                        , windowShowedCallback
+                        , title);
+                    break;
+            }
+        }
+
+        public string OpenSaveFileDialogWindow()
+        {
+            return _WindowDirector.OpenSaveLogFileDialogWindow();
+        }
+
+        public string OpenFileChooserDialogWindow(string title = "Choose a log file", string filter = "Text files (*.txt)|*.txt|Log files (*.log)|*.log")
+        {
+            return _WindowDirector.OpenFileChooserDialogWindow(title, filter);
         }
 
     }

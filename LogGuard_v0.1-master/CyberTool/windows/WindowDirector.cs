@@ -67,7 +67,7 @@ namespace cyber_tool.windows
             return mesBox.ShowDialog();
         }
 
-        public CyberIMesBoxResult ShowWarningBox(string warning, bool isDialog)
+        public CyberContactMessage ShowWarningBox(string warning, bool isDialog)
         {
             CyberIMesWindow mesBox = new CyberIMesWindow(
                 "Warning",
@@ -88,7 +88,7 @@ namespace cyber_tool.windows
             {
                 mesBox.Show();
             }
-            return res;
+            return ConvertToContactMessage(res);
         }
 
 
@@ -97,16 +97,7 @@ namespace cyber_tool.windows
             var newWaitingBox = new CyberIStandWindow(content, title, asyncTask, canExecute, callback, delayTime, IFaceWindow);
             var message = newWaitingBox.Show();
 
-            switch (message)
-            {
-                case CyberIStandBoxResult.None:
-                    return CyberContactMessage.None;
-                case CyberIStandBoxResult.Cancel:
-                    return CyberContactMessage.Cancel;
-                case CyberIStandBoxResult.Done:
-                    return CyberContactMessage.Done;
-            }
-            return CyberContactMessage.None;
+            return ConvertToContactMessage(message);
         }
 
         public void ShowPopupCustomControlWindow(ContentControl cc
@@ -210,8 +201,8 @@ namespace cyber_tool.windows
             };
 
             dispand.Begin(cc);
-
         }
+
         private void StartExpandCCAnim(ContentControl cc, int animTime)
         {
             Storyboard expandSB = new Storyboard();
@@ -230,13 +221,32 @@ namespace cyber_tool.windows
             scaleYAnim.Duration = TimeSpan.FromMilliseconds(animTime);
             expandSB.Children.Add(scaleYAnim);
             expandSB.Children.Add(scaleXAnim);
-
-
             expandSB.Begin(cc);
-
         }
 
 
+        private CyberContactMessage ConvertToContactMessage(object mes)
+        {
+            switch (mes)
+            {
+                case CyberIMesBoxResult.None:
+                case CyberIStandBoxResult.None:
+                    return CyberContactMessage.None;
+                case CyberIMesBoxResult.Cancel:
+                case CyberIStandBoxResult.Cancel:
+                    return CyberContactMessage.Cancel;
+                case CyberIStandBoxResult.Done:
+                    return CyberContactMessage.Done;
+                case CyberIMesBoxResult.Yes:
+                    return CyberContactMessage.Yes;
+                case CyberIMesBoxResult.No:
+                    return CyberContactMessage.No;
+                case CyberIMesBoxResult.Continue:
+                    return CyberContactMessage.Continue;
+            }
+
+            return CyberContactMessage.None;
+        }
     }
 
 

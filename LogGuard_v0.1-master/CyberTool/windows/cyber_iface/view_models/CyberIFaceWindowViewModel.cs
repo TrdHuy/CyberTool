@@ -58,8 +58,6 @@ namespace cyber_tool.windows.cyber_iface.view_models
             _ServiceController.ServiceChanged += OnServiceChanged;
         }
 
-        
-
         private void InitServiceHeaderItemSource()
         {
             foreach (var vo in _ServiceManager.CyberServiceMaper.Values)
