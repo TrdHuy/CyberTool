@@ -51,20 +51,21 @@ namespace log_guard
 
         public override void OnPreServiceViewInit(ICyberServiceManager cyberServiceManager)
         {
-            base.OnPreServiceViewInit(cyberServiceManager);
             LogGuardModuleManager.Init();
         }
 
         public override void OnServiceViewInstantiated(ICyberServiceManager cyberServiceManager)
         {
-            base.OnServiceViewInstantiated(cyberServiceManager);
-            (ServiceViewContext as BaseViewModel)?.OnBegin();
+        }
+
+        public override void OnServiceViewLoaded(ICyberServiceManager cyberServiceManager)
+        {
+            base.OnServiceViewLoaded(cyberServiceManager);
         }
 
         public override void OnServiceUnloaded(ICyberServiceManager cyberServiceManager)
         {
             base.OnServiceUnloaded(cyberServiceManager);
-            (ServiceViewContext as BaseViewModel)?.OnDestroy();
             CurrentServiceView = null;
             LogGuardModuleManager.Destroy();
             GC.Collect();

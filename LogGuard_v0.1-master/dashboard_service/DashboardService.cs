@@ -54,6 +54,8 @@ namespace dashboard_service
             return null;
         }
 
-        
+        public void OnServiceViewLoaded(ICyberServiceManager cyberServiceManager)
+        {
+        }
     }
 }

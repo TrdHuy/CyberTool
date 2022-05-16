@@ -69,6 +69,12 @@ namespace cyber_base.service
         void OnServiceViewInstantiated(ICyberServiceManager cyberServiceManager);
 
         /// <summary>
+        /// Sự kiện này xảy ra khi service hiển thị nội dung hoàn tất
+        /// </summary>
+        /// <param name="cyberServiceManager"> Người khởi tạo service</param>
+        void OnServiceViewLoaded(ICyberServiceManager cyberServiceManager);
+
+        /// <summary>
         /// Sự kiện này xảy ra khi người dùng chuyển sang service khác.
         /// </summary>
         /// <param name="cyberServiceManager"> Người khởi tạo service</param>

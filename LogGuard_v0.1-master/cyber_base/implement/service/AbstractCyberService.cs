@@ -1,4 +1,5 @@
 ﻿using cyber_base.service;
+using cyber_base.view_model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,16 +51,18 @@ namespace cyber_base.implement.service
         }
 
 
-        public virtual void OnPreServiceViewInit(ICyberServiceManager cyberServiceManager)
+        public abstract void OnPreServiceViewInit(ICyberServiceManager cyberServiceManager);
+
+        public abstract void OnServiceViewInstantiated(ICyberServiceManager cyberServiceManager);
+
+        public virtual void OnServiceViewLoaded(ICyberServiceManager cyberServiceManager)
         {
+            (ServiceViewContext as BaseViewModel)?.OnBegin();
         }
 
         public virtual void OnServiceUnloaded(ICyberServiceManager cyberServiceManager)
         {
-        }
-
-        public virtual void OnServiceViewInstantiated(ICyberServiceManager cyberServiceManager)
-        {
+            (ServiceViewContext as BaseViewModel)?.OnDestroy();
         }
 
         protected abstract object? GenerateServiceView();

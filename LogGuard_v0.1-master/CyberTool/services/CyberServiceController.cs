@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace cyber_tool.services
 {
@@ -27,11 +28,12 @@ namespace cyber_tool.services
         private CyberServiceManager _ServiceManager;
         public ICyberService CurrentService { get; private set; }
         public ICyberService PreviousService { get; private set; }
-        public object? CurrentServiceView { get; private set; }
+        public FrameworkElement? CurrentServiceView { get; private set; }
 
         public event BeforeServiceChangeHandler BeforeServiceChange;
         public event ServiceChangeHandler ServiceChange;
         public event ServiceChangedHandler ServiceChanged;
+        public event ServiceViewLoadedHandler ServiceLoaded;
 
         private CyberServiceController()
         {
@@ -64,15 +66,16 @@ namespace cyber_tool.services
             {
                 PreviousService = CurrentService;
                 CurrentService = _ServiceManager.CyberServiceMaper[id];
-                var args = new ServiceEventArgs(CurrentService, PreviousService);
+                var arg = new ServiceEventArgs(CurrentService, PreviousService);
 
-                UpdateCurrentServiceView(args);
+                UpdateCurrentServiceView(arg);
             }
 
         }
 
         private void UpdateCurrentServiceView(ServiceEventArgs args)
         {
+
             BeforeServiceChange?.Invoke(this, args);
 
             if (CurrentService.IsUnderconstruction)
@@ -81,7 +84,18 @@ namespace cyber_tool.services
             }
             else
             {
-                CurrentServiceView = CurrentService.GetServiceView();
+                CurrentServiceView = CurrentService.GetServiceView() as FrameworkElement;
+
+                if (CurrentServiceView != null)
+                {
+                    var onloaded = new Action<object, RoutedEventArgs>((s, e) =>
+                    {
+                        ServiceLoaded?.Invoke(this, args);
+                    });
+                    CurrentServiceView.Loaded -= new RoutedEventHandler(onloaded);
+                    CurrentServiceView.Loaded += new RoutedEventHandler(onloaded);
+                }
+
             }
 
             if (!args.Handled)
@@ -94,8 +108,10 @@ namespace cyber_tool.services
             }
         }
 
+
         internal delegate void BeforeServiceChangeHandler(object sender, ServiceEventArgs args);
         internal delegate void ServiceChangeHandler(object sender, ServiceEventArgs args);
+        internal delegate void ServiceViewLoadedHandler(object sender, ServiceEventArgs args);
         internal delegate void ServiceChangedHandler(object sender, ServiceEventArgs args);
 
         internal class ServiceEventArgs

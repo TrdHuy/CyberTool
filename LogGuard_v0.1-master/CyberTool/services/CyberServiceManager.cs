@@ -78,11 +78,15 @@ namespace cyber_tool.services
             _ServiceController.ServiceChange -= OnServiceChange;
             _ServiceController.ServiceChange += OnServiceChange;
 
+            _ServiceController.ServiceLoaded -= OnServiceLoaded;
+            _ServiceController.ServiceLoaded += OnServiceLoaded;
+
             _ServiceController.ServiceChanged -= OnServiceChanged;
             _ServiceController.ServiceChanged += OnServiceChanged;
 
         }
 
+       
         public void OnIFaceWindowShowed()
         {
         }
@@ -95,6 +99,11 @@ namespace cyber_tool.services
         private void OnServiceChange(object sender, CyberServiceController.ServiceEventArgs args)
         {
             args.Current.OnServiceViewInstantiated(this);
+        }
+
+        private void OnServiceLoaded(object sender, CyberServiceController.ServiceEventArgs args)
+        {
+            args.Current.OnServiceViewLoaded(this);
         }
 
         private void OnServiceChanged(object sender, CyberServiceController.ServiceEventArgs args)
