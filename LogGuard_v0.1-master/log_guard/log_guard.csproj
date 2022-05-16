@@ -56,6 +56,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="views\others\loading_list\LoadingListView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="views\others\tripple_toggle\TrippleToggle.xaml">
       <SubType>Designer</SubType>
     </Page>

@@ -9,6 +9,7 @@
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/log_watcher/_scroll_view/ScrollViewWatcher.xaml" />
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/log_watcher/LogWatcher.xaml" />
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/tripple_toggle/TrippleToggle.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/loading_list/LoadingListView.xaml" />
 
 	</ResourceDictionary.MergedDictionaries>
 
@@ -501,4 +502,13 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+
+	<CornerRadius x:Key="DefaultPanelCornerRadius"
+				  TopLeft="15"
+				  TopRight="15"
+				  BottomRight="15"
+				  BottomLeft="15" />
+
+	<SolidColorBrush x:Key="TestBrush"
+					 Color="Yellow" />
 </ResourceDictionary>

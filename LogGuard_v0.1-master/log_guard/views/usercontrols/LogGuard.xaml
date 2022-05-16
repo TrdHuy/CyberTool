@@ -12,20 +12,16 @@
 			 xmlns:mb="clr-namespace:log_guard.views.others.log_watcher._log_mapping_border"
 			 xmlns:gw="clr-namespace:log_guard.views.others.log_watcher._grid_view"
 			 xmlns:ap="clr-namespace:log_guard.prop.attached_properties"
+			 xmlns:uc_ld="clr-namespace:log_guard.views.usercontrols.elements.device"
 			 xmlns:uc="clr-namespace:log_guard.views.usercontrols"
+			 xmlns:vmm="clr-namespace:log_guard.implement.markup"
 			 d:DesignHeight="820"
 			 d:DesignWidth="883.714">
 	<UserControl.DataContext>
-		<vm:LogGuardViewModel />
+		<Binding Source="{vmm:ViewModelManagerME 
+			{x:Type vm:LogGuardViewModel}
+			,{x:Static vmm:DataContextGeneratorType.CreateNew}}" />
 	</UserControl.DataContext>
-
-	<!--<UserControl.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/log_guard;component/themes/Themes.xaml" />
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
-	</UserControl.Resources>-->
 	<Grid >
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="1.57*" />
@@ -51,11 +47,11 @@
 			<RowDefinition Height="0.1*" />
 		</Grid.RowDefinitions>
 
-		<!--<uc:UC_ListOfDevice Grid.Column="0"
+		<uc_ld:ListOfDevice Grid.Column="0"
 							Grid.Row="1"
 							Margin="0,0,15,15" />
 
-		<uc:UC_LogLevelFilter Grid.Column="0"
+		<!--<uc:UC_LogLevelFilter Grid.Column="0"
 							  Grid.Row="2"
 							  Margin="0,0,15,15" />
 
