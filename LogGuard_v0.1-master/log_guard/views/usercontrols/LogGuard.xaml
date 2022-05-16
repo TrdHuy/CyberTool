@@ -13,7 +13,7 @@
 			 xmlns:gw="clr-namespace:log_guard.views.others.log_watcher._grid_view"
 			 xmlns:ap="clr-namespace:log_guard.prop.attached_properties"
 			 xmlns:uc_ld="clr-namespace:log_guard.views.usercontrols.elements.device"
-			 xmlns:uc="clr-namespace:log_guard.views.usercontrols"
+			 xmlns:uc_ft="clr-namespace:log_guard.views.usercontrols.elements.filter"
 			 xmlns:vmm="clr-namespace:log_guard.implement.markup"
 			 d:DesignHeight="820"
 			 d:DesignWidth="883.714">
@@ -53,15 +53,15 @@
 
 		<!--<uc:UC_LogLevelFilter Grid.Column="0"
 							  Grid.Row="2"
-							  Margin="0,0,15,15" />
+							  Margin="0,0,15,15" />-->
 
-		<uc:UC_AdvanceFilter Grid.Column="1"
+		<uc_ft:AdvanceFilter Grid.Column="1"
 							 Grid.Row="1"
 							 Margin="0,0,15,15"
 							 Grid.RowSpan="2"
 							 Grid.ColumnSpan="11" />
 
-		<uc:UC_LogManager Grid.Column="13"
+		<!--<uc:UC_LogManager Grid.Column="13"
 						  Grid.Row="1"
 						  Margin="0,0,15,15"
 						  Grid.RowSpan="3" />-->

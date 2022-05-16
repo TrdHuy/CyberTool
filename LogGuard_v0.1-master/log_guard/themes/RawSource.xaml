@@ -1,0 +1,82 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	
+	<CornerRadius x:Key="DefaultPanelCornerRadius"
+				  TopLeft="15"
+				  TopRight="15"
+				  BottomRight="15"
+				  BottomLeft="15" />
+	<LinearGradientBrush x:Key="HorizontalFench1pixel_Background"
+						 EndPoint="0.5,1"
+						 StartPoint="0.5,0">
+		<LinearGradientBrush.RelativeTransform>
+			<TransformGroup>
+				<ScaleTransform CenterY="0.5"
+								CenterX="0.5" />
+				<SkewTransform CenterX="0.5"
+							   CenterY="0.5" />
+				<RotateTransform Angle="90"
+								 CenterX="0.5"
+								 CenterY="0.5" />
+				<TranslateTransform />
+			</TransformGroup>
+		</LinearGradientBrush.RelativeTransform>
+		<GradientStop Color="#1e2024"
+					  Offset="0.138" />
+		<GradientStop Color="#FFA7A7A7"
+					  Offset="0.554" />
+		<GradientStop Color="#FFD0D0D1"
+					  Offset="0.49" />
+		<GradientStop Color="#1e2024"
+					  Offset="0.86" />
+	</LinearGradientBrush>
+
+	<LinearGradientBrush x:Key="VerticalFench1pixel_Background"
+						 EndPoint="0.5,1"
+						 StartPoint="0.5,0">
+		<LinearGradientBrush.RelativeTransform>
+			<TransformGroup>
+				<ScaleTransform CenterY="0.5"
+								CenterX="0.5" />
+				<SkewTransform CenterX="0.5"
+							   CenterY="0.5" />
+				<TranslateTransform />
+			</TransformGroup>
+		</LinearGradientBrush.RelativeTransform>
+		<GradientStop Color="#1e2024"
+					  Offset="0.138" />
+		<GradientStop Color="#FFA7A7A7"
+					  Offset="0.554" />
+		<GradientStop Color="#FFD0D0D1"
+					  Offset="0.49" />
+		<GradientStop Color="#1e2024"
+					  Offset="0.86" />
+	</LinearGradientBrush>
+
+	<SolidColorBrush Color="#33ADFF55"
+					 x:Key="DebugLevelForeground_Level1" />
+	<SolidColorBrush Color="#33FFB855"
+					 x:Key="WarningLevelForeground_Level1" />
+	<SolidColorBrush Color="#33FF6255"
+					 x:Key="ErrorLevelForeground_Level1" />
+	<SolidColorBrush Color="#33CAF1E1"
+					 x:Key="InfoLevelForeground_Level1" />
+	<SolidColorBrush Color="#3352ABE8"
+					 x:Key="VerboseLevelForeground_Level1" />
+	<SolidColorBrush Color="#33F0ADF1"
+					 x:Key="FatalLevelForeground_Level1" />
+	
+	<SolidColorBrush Color="#ADFF55"
+					 x:Key="DebugLevelForeground_Level2" />
+	<SolidColorBrush Color="#FFB855"
+					 x:Key="WarningLevelForeground_Level2" />
+	<SolidColorBrush Color="#FF6255"
+					 x:Key="ErrorLevelForeground_Level2" />
+	<SolidColorBrush Color="#FFCAF1E1"
+					 x:Key="InfoLevelForeground_Level2" />
+	<SolidColorBrush Color="#FF52ABE8"
+					 x:Key="VerboseLevelForeground_Level2" />
+	<SolidColorBrush Color="#FFF0ADF1"
+					 x:Key="FatalLevelForeground_Level2" />
+	
+</ResourceDictionary>
