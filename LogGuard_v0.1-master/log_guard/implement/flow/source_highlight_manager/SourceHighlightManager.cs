@@ -39,10 +39,6 @@ namespace log_guard.implement.flow.source_highlight_manager
             NotifyHighlightConditionChangedMessage.Start();
         }
 
-        public void OnModuleInit()
-        {
-        }
-
         public void OnModuleStart()
         {
         }

@@ -14,9 +14,9 @@
 			 FontFamily="Calibri">
 
 	<UserControl.DataContext>
-		<Binding Source="{vmm:ViewModelManagerME 
-			{x:Type vm:AdvanceFilterUCViewModel},
-			{x:Type vmp:LogGuardViewModel}}" />
+		<vmm:ViewModelManagerME DataContextType="{x:Type vm:AdvanceFilterUCViewModel}"
+								ParentDataContextType="{x:Type vmp:LogGuardViewModel }"
+								GeneratorType="{x:Static vmm:DataContextGeneratorType.CreateNew}" />
 	</UserControl.DataContext>
 
 

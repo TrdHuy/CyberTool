@@ -20,6 +20,7 @@ namespace log_guard.implement.device
                 return LogGuardModuleManager.DCE_Instance;
             }
         }
+
         public Process CreateProcess(string cmd)
         {
             Process process = new Process();
@@ -52,10 +53,6 @@ namespace log_guard.implement.device
             }
 
             return cmd;
-        }
-
-        public void OnModuleInit()
-        {
         }
 
         public void OnModuleStart()

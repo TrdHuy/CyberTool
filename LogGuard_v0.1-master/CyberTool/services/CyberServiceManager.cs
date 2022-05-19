@@ -22,7 +22,7 @@ namespace cyber_tool.services
     {
         private CyberServiceController _ServiceController;
 
-        public ICyberService LogGuardService { get; private set; }
+        public ICyberService LogGuardSvc { get; private set; }
         public ICyberService DashboardService { get; private set; }
         public ICyberService IssueManagerService { get; private set; }
         public ICyberService ExtensionService { get; private set; }
@@ -58,14 +58,14 @@ namespace cyber_tool.services
         {
             CyberServiceMaper.Clear();
 
-            LogGuardService = new LogGuardService();
+            LogGuardSvc = LogGuardService.Current;
             DashboardService = new DashboardService();
 
-            LogGuardService.OnServiceCreate(this);
+            LogGuardSvc.OnServiceCreate(this);
             DashboardService.OnServiceCreate(this);
 
             CyberServiceMaper.Add(DashboardService.ServiceID, DashboardService);
-            CyberServiceMaper.Add(LogGuardService.ServiceID, LogGuardService);
+            CyberServiceMaper.Add(LogGuardSvc.ServiceID, LogGuardSvc);
         }
 
         public void OnModuleStart()

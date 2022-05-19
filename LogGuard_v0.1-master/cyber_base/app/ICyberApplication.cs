@@ -13,7 +13,7 @@ namespace cyber_base.app
 {
     public interface ICyberApplication
     {
-        Application? CyberApp { get; }
+        Application CyberApp { get; }
 
         CyberContactMessage OpenWaitingTaskBox(string content
             , string title

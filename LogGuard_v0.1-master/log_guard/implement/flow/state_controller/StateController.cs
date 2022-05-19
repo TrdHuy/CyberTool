@@ -37,23 +37,27 @@ namespace log_guard.implement.flow.state_controller
         public ISourceManager LwSourceManager => SourceManager.Current;
         public IDeviceManager DcManager => DeviceManager.Current;
 
-        public event StateChangedHandler StateChanged;
+        public event StateChangedHandler? StateChanged;
 
-        protected Thread RunningThread;
-        protected Process CaptureProc;
+        protected Thread? RunningThread;
+        protected Process? CaptureProc;
 
-        public void OnModuleInit()
+        public StateController()
         {
             _syncObject = new object();
             CurrentState = LogGuardState.STOP;
             PreviousState = LogGuardState.NONE;
 
-            LogGuardService.Current.ServiceManager.App.CyberApp.Exit -= StateControllerAppExit;
-            LogGuardService.Current.ServiceManager.App.CyberApp.Exit += StateControllerAppExit;
         }
 
         public void OnModuleStart()
         {
+
+            if (LogGuardService.Current.ServiceManager != null)
+            {
+                LogGuardService.Current.ServiceManager.App.CyberApp.Exit -= StateControllerAppExit;
+                LogGuardService.Current.ServiceManager.App.CyberApp.Exit += StateControllerAppExit;
+            }
         }
 
         public void Pause()
@@ -116,7 +120,10 @@ namespace log_guard.implement.flow.state_controller
 
                             // Read the data in the file until the peak
                             var line = sr.ReadLine();
-                            LwSourceManager.AddItem(line);
+                            if (!string.IsNullOrEmpty(line))
+                            {
+                                LwSourceManager.AddItem(line);
+                            }
                         }
                     }
                 }
@@ -130,17 +137,17 @@ namespace log_guard.implement.flow.state_controller
             {
                 if (DcManager.DeviceSource.Count == 0)
                 {
-                    LogGuardService.Current.ServiceManager.App.ShowWaringBox("No devices found!");
+                    LogGuardService.Current.ServiceManager?.App.ShowWaringBox("No devices found!");
                     return false;
                 }
                 if (DcManager.SelectedDevice == null)
                 {
-                    LogGuardService.Current.ServiceManager.App.ShowWaringBox("Please select a device!");
+                    LogGuardService.Current.ServiceManager?.App.ShowWaringBox("Please select a device!");
                     return false;
                 }
                 if (string.IsNullOrEmpty(RTCManager.CurrentParser.Cmd))
                 {
-                    LogGuardService.Current.ServiceManager.App.ShowWaringBox("Command not found, please reselect parser format!");
+                    LogGuardService.Current.ServiceManager?.App.ShowWaringBox("Command not found, please reselect parser format!");
                     return false;
                 }
                 var cmd = DeviceCmdExecuter
@@ -149,7 +156,7 @@ namespace log_guard.implement.flow.state_controller
                         , type: DeviceCmdContact.ADB_NONE_SHELL_COMMAND_TYPE
                         , asroot: false
                         , multiDevice: true
-                        , serialNumber: DcManager.SelectedDevice.SerialNumber.ToString());
+                        , serialNumber: DcManager.SelectedDevice.SerialNumber);
 
                 CaptureProc = DeviceCmdExecuter
                     .Current
@@ -162,7 +169,7 @@ namespace log_guard.implement.flow.state_controller
             }
 
             OnStart();
-            RunningThread.Start();
+            RunningThread?.Start();
 
             bool isNeedNotifyStateChange = CurrentState != LogGuardState.RUNNING;
             UpdateRunningState();
@@ -180,7 +187,7 @@ namespace log_guard.implement.flow.state_controller
                 Stop();
                 LogGuardService
                     .Current
-                    .ServiceManager.App.CyberApp.Dispatcher.Invoke(() =>
+                    .ServiceManager?.App.CyberApp.Dispatcher.Invoke(() =>
                 {
                     LogGuardService
                     .Current
@@ -193,12 +200,16 @@ namespace log_guard.implement.flow.state_controller
 
         private void Running()
         {
-            lock (CaptureProc)
+            if (CaptureProc != null)
             {
-                CaptureProc.Start();
-                ProcessManager.Current.AddNewProcessID(CaptureProc.Id);
-                OnRunning();
+                lock (CaptureProc)
+                {
+                    CaptureProc.Start();
+                    ProcessManager.Current.AddNewProcessID(CaptureProc.Id);
+                    OnRunning();
+                }
             }
+            
         }
 
         protected abstract void OnStart();

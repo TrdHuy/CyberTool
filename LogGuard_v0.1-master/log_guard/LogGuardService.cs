@@ -18,7 +18,7 @@ namespace log_guard
 {
     public class LogGuardService : AbstractCyberService
     {
-        public static LogGuardService? Current { get;private set; }
+        public static LogGuardService Current { get;private set; }
 
         public override string ServiceID { get; protected set; }
 
@@ -31,6 +31,11 @@ namespace log_guard
         public override bool IsUnderconstruction => false;
 
         public override Uri ServiceResourceUri { get; protected set; }
+
+        static LogGuardService()
+        {
+            Current = new LogGuardService();
+        }
 
         public LogGuardService()
         {
@@ -45,7 +50,6 @@ namespace log_guard
         public override void OnServiceCreate(ICyberServiceManager cyberServiceManager)
         {
             base.OnServiceCreate(cyberServiceManager);
-            Current = this;
             RUNE.Init();
         }
 

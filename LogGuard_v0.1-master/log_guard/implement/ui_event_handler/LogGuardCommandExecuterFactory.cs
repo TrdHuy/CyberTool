@@ -29,10 +29,9 @@ namespace log_guard.implement.ui_event_handler
 
         public override ILogger Logger => logger;
 
-        public void OnModuleInit()
+        public LogGuardCommandExecuterFactory()
         {
             RegisterBuilder(LogGuardDefinition.LOG_GUARD_SERVICE_TAG, new LogGuardActionBuilder());
-
         }
 
         public void OnModuleStart()

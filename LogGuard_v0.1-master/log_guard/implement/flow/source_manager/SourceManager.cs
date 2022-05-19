@@ -37,8 +37,8 @@ namespace log_guard.implement.flow.source_manager
         private List<ISourceHolder> _sourceHolder;
         private Dictionary<object, int> _logLevelCountMap;
         private RangeObservableCollection<string> _rawLog;
-        private SourceFilterManager _sourceFilter;
-        private SourceHighlightManager _sourceHighlighter;
+        private SourceFilterManager? _sourceFilter;
+        private SourceHighlightManager? _sourceHighlighter;
 
         public List<ISourceHolder> SourceHolders { get => _sourceHolder; }
         public RangeObservableCollection<ILogWatcherElements> RawSource => _rawSource;
@@ -47,11 +47,11 @@ namespace log_guard.implement.flow.source_manager
 
         public RangeObservableCollection<string> RawLog { get => _rawLog; }
 
-        public event SourceCollectionChangedHandler SourceCollectionChanged;
-        public event SourceFilteredAndDisplayedHandler SourceFilteredAndDisplayed;
+        public event SourceCollectionChangedHandler? SourceCollectionChanged;
+        public event SourceFilteredAndDisplayedHandler? SourceFilteredAndDisplayed;
 
-        public ISourceFilterManager SrcFilterManager => _sourceFilter;
-        public ISourceHighlightManager SrcHighlightManager => _sourceHighlighter;
+        public ISourceFilterManager? SrcFilterManager => _sourceFilter;
+        public ISourceHighlightManager? SrcHighlightManager => _sourceHighlighter;
         public static SourceManager Current
         {
             get
@@ -60,25 +60,25 @@ namespace log_guard.implement.flow.source_manager
             }
         }
 
-        public void OnModuleInit()
+        public SourceManager()
         {
-            _sourceFilter = SourceFilterManager.Current;
-            _sourceHighlighter = SourceHighlightManager.Current;
             _rawSource = new RangeObservableCollection<ILogWatcherElements>();
             _displaySource = new RangeObservableCollection<ILogWatcherElements>();
             _sourceHolder = new List<ISourceHolder>();
             _logLevelCountMap = new Dictionary<object, int>();
             _rawLog = new RangeObservableCollection<string>();
             ResetLogLevelCountMap();
+        }
+
+        public void OnModuleStart()
+        {
+            _sourceFilter = SourceFilterManager.Current;
+            _sourceHighlighter = SourceHighlightManager.Current;
 
             _sourceFilter.FilterConditionChanged -= OnFilterConditionChanged;
             _sourceFilter.FilterConditionChanged += OnFilterConditionChanged;
             _sourceHighlighter.HighlightConditionChanged -= OnHighlightConditionChanged;
             _sourceHighlighter.HighlightConditionChanged += OnHighlightConditionChanged;
-        }
-
-        public void OnModuleStart()
-        {
         }
 
         public void AddItem(string line)
@@ -181,7 +181,6 @@ namespace log_guard.implement.flow.source_manager
             holder.ItemsSource = null;
         }
 
-
         public int ErrorItemsCount()
         {
             return _logLevelCountMap["E"];
@@ -229,8 +228,8 @@ namespace log_guard.implement.flow.source_manager
         }
 
         #region Filter area
-        private CancellationTokenSource SourceFilterCancellationTokenCache { get; set; }
-        private AsyncTask FilterTaskCache { get; set; }
+        private CancellationTokenSource? SourceFilterCancellationTokenCache { get; set; }
+        private AsyncTask? FilterTaskCache { get; set; }
 
         private void OnFilterConditionChanged(object sender, ConditionChangedEventArgs e)
         {
@@ -305,8 +304,8 @@ namespace log_guard.implement.flow.source_manager
         #endregion
 
         #region Highlight area
-        private CancellationTokenSource SourceHighlightCancellationTokenCache { get; set; }
-        private AsyncTask HighlightTaskCache { get; set; }
+        private CancellationTokenSource? SourceHighlightCancellationTokenCache { get; set; }
+        private AsyncTask? HighlightTaskCache { get; set; }
 
         private void OnHighlightConditionChanged(object sender, ConditionChangedEventArgs e)
         {
@@ -371,9 +370,9 @@ namespace log_guard.implement.flow.source_manager
         /// but re-create only: O(n)
         /// </summary>
         #region Delete display log area
-        private CancellationTokenSource SourceDeleteCancellationTokenCache { get; set; }
-        private AsyncTask DeleteTaskCache { get; set; }
-        private INotifyCollectionChanged SelectedItemNotifierCache { get; set; }
+        private CancellationTokenSource? SourceDeleteCancellationTokenCache { get; set; }
+        private AsyncTask? DeleteTaskCache { get; set; }
+        private INotifyCollectionChanged? SelectedItemNotifierCache { get; set; }
         public void DeleteSeletedLogLine(IEnumerable<LogWatcherItemViewModel> selectedItem, INotifyCollectionChanged selectedItemNotifier)
         {
             if (selectedItemNotifier == null)
@@ -407,7 +406,7 @@ namespace log_guard.implement.flow.source_manager
 
         }
 
-        private void OnSelectedItemChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnSelectedItemChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
 #if DEBUG
             Console.WriteLine("Selected collection changed!");
@@ -436,7 +435,7 @@ namespace log_guard.implement.flow.source_manager
             }
         }
 
-        private async Task<AsyncTaskResult> DeleteSelectedItems(object data, CancellationToken token)
+        private async Task<AsyncTaskResult> DeleteSelectedItems(object? data, CancellationToken token)
         {
             var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
             var selectedItem = data as IEnumerable<LogWatcherItemViewModel>;
@@ -669,8 +668,8 @@ namespace log_guard.implement.flow.source_manager
         ///     +) SourceRedoDeleteCancellationTokenCache: Cancellation token for RedoDeleteTaskCache
         /// </summary>
         #region Redo delete source
-        private CancellationTokenSource SourceRedoDeleteCancellationTokenCache { get; set; }
-        private AsyncTask RedoDeleteTaskCache { get; set; }
+        private CancellationTokenSource? SourceRedoDeleteCancellationTokenCache { get; set; }
+        private AsyncTask? RedoDeleteTaskCache { get; set; }
 
         public void RedoDeleteLogLine(LogWatcherItemViewModel expandableViewModel)
         {
@@ -758,8 +757,8 @@ namespace log_guard.implement.flow.source_manager
         ///     +) SourceCompletelyDeleteCancellationTokenCache: Cancellation token for CompletelyDeleteTaskCache
         /// </summary>
         #region Completely delete expandble log view
-        private CancellationTokenSource SourceCompletelyDeleteCancellationTokenCache { get; set; }
-        private AsyncTask CompletelyDeleteTaskCache { get; set; }
+        private CancellationTokenSource? SourceCompletelyDeleteCancellationTokenCache { get; set; }
+        private AsyncTask? CompletelyDeleteTaskCache { get; set; }
 
         public void CompletelyDeleteExpandableLogLine(LogWatcherItemViewModel expandableViewModel)
         {

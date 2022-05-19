@@ -10,7 +10,7 @@ namespace cyber_base.service
 {
     public interface ICyberServiceManager
     {
-        public ICyberApplication? App { get; }
+        public ICyberApplication App { get; }
 
     }
 }

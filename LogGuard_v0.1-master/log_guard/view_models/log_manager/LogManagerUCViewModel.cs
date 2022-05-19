@@ -9,15 +9,15 @@ namespace log_guard.view_models.log_manager
 {
     internal class LogManagerUCViewModel : BaseViewModel
     {
-        private TagManagerUCViewModel _tagManagerUCViewModel;
-        private MessageManagerUCViewModel _messageManagerUCViewModel;
+        private TagManagerUCViewModel? _tagManagerUCViewModel;
+        private MessageManagerUCViewModel? _messageManagerUCViewModel;
 
 
         [Bindable(true)]
         public LMUC_ButtonCommandVM CommandViewModel { get; set; }
 
         [Bindable(true)]
-        public MessageManagerUCViewModel MessageManagerContent
+        public MessageManagerUCViewModel? MessageManagerContent
         {
             get
             {
@@ -30,7 +30,7 @@ namespace log_guard.view_models.log_manager
         }
 
         [Bindable(true)]
-        public TagManagerUCViewModel TagManagerContent
+        public TagManagerUCViewModel? TagManagerContent
         {
             get
             {
@@ -41,11 +41,7 @@ namespace log_guard.view_models.log_manager
                 _tagManagerUCViewModel = value;
             }
         }
-
-        public LogManagerUCViewModel()
-        {
-        }
-
+        
         public LogManagerUCViewModel(BaseViewModel baseViewModel) : base(baseViewModel)
         {
             TagManagerContent = new TagManagerUCViewModel(this);

@@ -5,6 +5,8 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <PackageIcon>cyber_tool_app_icon.ico</PackageIcon>
+    <ApplicationIcon>cyber_tool_app_icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,9 +21,36 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="cyber_tool_app_icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\cyber_extension\cyber_extension.csproj" />
     <ProjectReference Include="..\dashboard_service\dashboard_service.csproj" />
     <ProjectReference Include="..\log_guard\log_guard.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="app_resources\controls\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LogGuard_v0.1\cyber_tool_app_icon.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="HPSolutionCCDevPackage.netFramework">
+      <HintPath>..\exterior\HPSolutionCCDevPackage.netFramework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="app_resources\MenuThemes.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

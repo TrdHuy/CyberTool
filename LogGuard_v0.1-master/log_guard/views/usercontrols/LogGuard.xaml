@@ -14,15 +14,17 @@
 			 xmlns:ap="clr-namespace:log_guard.prop.attached_properties"
 			 xmlns:uc_ld="clr-namespace:log_guard.views.usercontrols.elements.device"
 			 xmlns:uc_ft="clr-namespace:log_guard.views.usercontrols.elements.filter"
+			 xmlns:uc_lm="clr-namespace:log_guard.views.usercontrols.elements.log_manager"
+			 xmlns:uc_cp="clr-namespace:log_guard.views.usercontrols.elements.control_panel"
 			 xmlns:vmm="clr-namespace:log_guard.implement.markup"
 			 d:DesignHeight="820"
 			 d:DesignWidth="883.714">
 	<UserControl.DataContext>
-		<Binding Source="{vmm:ViewModelManagerME 
-			{x:Type vm:LogGuardViewModel}
-			,{x:Static vmm:DataContextGeneratorType.CreateNew}}" />
+		<vmm:ViewModelManagerME DataContextType="{x:Type vm:LogGuardViewModel}"
+								ParentDataContextType="{x:Null}"
+								GeneratorType="{x:Static vmm:DataContextGeneratorType.CreateNew}" />
 	</UserControl.DataContext>
-	<Grid >
+	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="1.57*" />
 			<ColumnDefinition Width="1.65*" />
@@ -51,9 +53,9 @@
 							Grid.Row="1"
 							Margin="0,0,15,15" />
 
-		<!--<uc:UC_LogLevelFilter Grid.Column="0"
-							  Grid.Row="2"
-							  Margin="0,0,15,15" />-->
+		<uc_ft:LevelFilter Grid.Column="0"
+						   Grid.Row="2"
+						   Margin="0,0,15,15" />
 
 		<uc_ft:AdvanceFilter Grid.Column="1"
 							 Grid.Row="1"
@@ -61,10 +63,10 @@
 							 Grid.RowSpan="2"
 							 Grid.ColumnSpan="11" />
 
-		<!--<uc:UC_LogManager Grid.Column="13"
+		<uc_lm:LogManager Grid.Column="13"
 						  Grid.Row="1"
 						  Margin="0,0,15,15"
-						  Grid.RowSpan="3" />-->
+						  Grid.RowSpan="3" />
 
 		<ComboBox Grid.Row="3"
 				  Grid.ColumnSpan="2"
@@ -88,15 +90,20 @@
 			</ComboBox.ItemTemplate>
 		</ComboBox>
 
-		<!--<cpuc:UC_DeviceLogCaptureControlPanel Grid.Row="3"
-											  Grid.Column="2"
-											  Grid.ColumnSpan="9" />-->
+		<uc_cp:CaptureControlPanel Grid.Row="3"
+								   Grid.Column="2"
+								   Grid.ColumnSpan="9" />
 
 		<ContentControl x:Name="LogWatcherCC"
 						Grid.Row="4"
 						tvh:LogGuardViewHelper.ViewKey="{x:Static def:LogGuardViewKeyDefinition.LogWatcherContentControl}"
 						Grid.Column="0"
 						Grid.ColumnSpan="13">
+			<ContentControl.LayoutTransform>
+				<ScaleTransform x:Name="CC_ScaleTransform"
+								ScaleX="1"
+								ScaleY="1" />
+			</ContentControl.LayoutTransform>
 			<wr:LogWatcher UseAutoScroll="{Binding UseAutoScroll}"
 						   LogWatcherItemsSource="{Binding ItemsSource}"
 						   ScrollViewer.HorizontalScrollBarVisibility="Visible"

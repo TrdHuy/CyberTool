@@ -44,20 +44,20 @@ namespace log_guard.view_models.log_manager
         }
 
         [Bindable(true)]
-        public ICommand ShowContentItemCommand { get; set; }
+        public ICommand? ShowContentItemCommand { get; set; }
 
         [Bindable(true)]
-        public ICommand RemoveContentItemCommand { get; set; }
+        public ICommand? RemoveContentItemCommand { get; set; }
 
         [Bindable(true)]
-        public ICommand OffContentItemCommand { get; set; }
+        public ICommand? OffContentItemCommand { get; set; }
 
 
         [Bindable(true)]
-        public ICommand DeleteContentItemCommand { get; set; }
+        public ICommand? DeleteContentItemCommand { get; set; }
 
         [Bindable(true)]
-        public ICommand EditContentItemCommand { get; set; }
+        public ICommand? EditContentItemCommand { get; set; }
 
         [Bindable(true)]
         public bool IsEditMode
@@ -130,7 +130,6 @@ namespace log_guard.view_models.log_manager
                 }
             }
         }
-
      
         protected virtual void OnTagItemStatChanged(TrippleToggleItemVO.Status oldStat, TrippleToggleItemVO.Status newStat)
         {

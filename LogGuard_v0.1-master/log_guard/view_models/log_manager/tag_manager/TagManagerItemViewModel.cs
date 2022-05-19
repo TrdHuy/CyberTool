@@ -17,13 +17,18 @@ namespace log_guard.view_models.log_manager.tag_manager
         private IMechanicalSourceFilter _tagShowFilter;
         private IMechanicalSourceFilter _tagRemoveFilter;
 
-        private ISeparableSourceFilterEngine _tagShowFilterEngineCache;
-        private ISeparableSourceFilterEngine _tagRemoveFilterEngineCache;
+        private ISeparableSourceFilterEngine? _tagShowFilterEngineCache;
+        private ISeparableSourceFilterEngine? _tagRemoveFilterEngineCache;
 
         public TagManagerItemViewModel(BaseViewModel parents, TrippleToggleItemVO vo) : base(parents, vo)
         {
-            LMUCViewModelGenerated(ViewModelManager.Current.LogManagerUCViewModel);
-            AFUCViewModelGenerated(ViewModelManager.Current.AdvanceFilterUCViewModel);
+            EditContentItemCommand = ViewModelManager.Current.LogManagerUCViewModel.CommandViewModel.EditTagItemButtonCommand;
+            DeleteContentItemCommand = ViewModelManager.Current.LogManagerUCViewModel.CommandViewModel.DeleteTagItemButtonCommand;
+
+            _tagShowFilter = ViewModelManager.Current.AdvanceFilterUCViewModel.TagFilterContent;
+            _tagRemoveFilter = ViewModelManager.Current.AdvanceFilterUCViewModel.TagRemoveContent;
+
+            OnTagItemStatChanged(TrippleToggleItemVO.Status.None, itemVO.Stat);
         }
 
         protected override void OnTagItemStatChanged(TrippleToggleItemVO.Status oldStat, TrippleToggleItemVO.Status newStat)
@@ -79,20 +84,6 @@ namespace log_guard.view_models.log_manager.tag_manager
                     }
                     break;
             }
-        }
-        private void LMUCViewModelGenerated(LogManagerUCViewModel vm)
-        {
-            EditContentItemCommand = vm.CommandViewModel.EditTagItemButtonCommand;
-            DeleteContentItemCommand = vm.CommandViewModel.DeleteTagItemButtonCommand;
-
-        }
-
-        private void AFUCViewModelGenerated(AdvanceFilterUCViewModel vm)
-        {
-            _tagShowFilter = vm.TagFilterContent;
-            _tagRemoveFilter = vm.TagRemoveContent;
-
-            OnTagItemStatChanged(TrippleToggleItemVO.Status.None, itemVO.Stat);
         }
     }
 }

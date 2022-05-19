@@ -56,13 +56,9 @@ namespace log_guard.implement.flow.log_manager
             }
         }
 
-        public void OnModuleInit()
-        {
-            ResetLogInfos();
-        }
-
         public void OnModuleStart()
         {
+            ResetLogInfos();
         }
 
         public static LogInfoManager Current

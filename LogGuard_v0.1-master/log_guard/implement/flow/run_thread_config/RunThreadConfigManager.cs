@@ -20,7 +20,7 @@ namespace log_guard.implement.flow.run_thread_config
         private const string _configPath = @"\config.json";
         private RunThreadConfigImpl _config;
 
-        public event OnConfigChangedHandler ConfigChanged;
+        public event OnConfigChangedHandler? ConfigChanged;
 
         public static RunThreadConfigManager Current
         {
@@ -80,7 +80,7 @@ namespace log_guard.implement.flow.run_thread_config
             FileIOManager.ExportJsonToDataFile(_configPath, _config);
         }
 
-        public void OnModuleInit()
+        public RunThreadConfigManager()
         {
             _config = new RunThreadConfigImpl();
 
@@ -121,13 +121,14 @@ namespace log_guard.implement.flow.run_thread_config
 
             public RunThreadConfigImpl()
             {
+                _logParserFormat = new LogParserVO();
+                _tags = new List<TrippleToggleItemVO>();
+                _messages = new List<TrippleToggleItemVO>();
             }
 
             public void Init()
             {
                 var config = FileIOManager.LoadJsonFromDataFile<RunThreadConfigImpl>(_configPath);
-                LogTags = new List<TrippleToggleItemVO>();
-                LogMessages = new List<TrippleToggleItemVO>();
 
                 if (config != null)
                 {

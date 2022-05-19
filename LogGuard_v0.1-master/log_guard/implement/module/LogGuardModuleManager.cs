@@ -38,9 +38,14 @@ namespace log_guard.implement.module
         private static ILogGuardModule? _LIF_Instance;
         private static ILogGuardModule? _SC_Instance;
 
-        public static void Init()
+        static LogGuardModuleManager()
         {
             _Modules = new Collection<ILogGuardModule>();
+        }
+
+        public static void Init()
+        {
+            _Modules.Clear();
 
             _Modules.Add(PM_Instance);
             _Modules.Add(LGVH_Instance);
@@ -55,11 +60,6 @@ namespace log_guard.implement.module
             _Modules.Add(SM_Instance);
             _Modules.Add(LIF_Instance);
             _Modules.Add(SC_Instance);
-
-            foreach (var module in _Modules)
-            {
-                module.OnModuleInit();
-            }
 
             foreach (var module in _Modules)
             {
@@ -84,159 +84,160 @@ namespace log_guard.implement.module
             _LIF_Instance = null;
             _SC_Instance = null;
         }
-        public static StateController? SC_Instance
+
+        public static StateController SC_Instance
         {
             get
             {
                 if (_SC_Instance == null)
                 {
                     if (RUNE.IS_SUPPORT_HIGH_CPU_LOG_CAPTURE)
-                        _SC_Instance = Activator.CreateInstance(typeof(HighCpu_StateController)) as ILogGuardModule;
+                        _SC_Instance = new HighCpu_StateController();
 
                     else
-                        _SC_Instance = Activator.CreateInstance(typeof(LowCpu_StateController)) as ILogGuardModule;
+                        _SC_Instance = new LowCpu_StateController();
                 }
-                return _SC_Instance as StateController;
+                return (StateController)_SC_Instance;
             }
         }
-        public static LogGuardCommandExecuterFactory? LGCEF_Instance
+        public static LogGuardCommandExecuterFactory LGCEF_Instance
         {
             get
             {
                 if (_LGCEF_Instance == null)
                 {
-                    _LGCEF_Instance = Activator.CreateInstance(typeof(LogGuardCommandExecuterFactory)) as ILogGuardModule;
+                    _LGCEF_Instance = new LogGuardCommandExecuterFactory();
                 }
-                return _LGCEF_Instance as LogGuardCommandExecuterFactory;
+                return (LogGuardCommandExecuterFactory)_LGCEF_Instance;
             }
         }
 
-        public static LogGuardKeyActionListener? LGKAL_Instance
+        public static LogGuardKeyActionListener LGKAL_Instance
         {
             get
             {
                 if (_LGKAL_Instance == null)
                 {
-                    _LGKAL_Instance = Activator.CreateInstance(typeof(LogGuardKeyActionListener)) as ILogGuardModule;
+                    _LGKAL_Instance = new LogGuardKeyActionListener();
                 }
-                return _LGKAL_Instance as LogGuardKeyActionListener;
+                return (LogGuardKeyActionListener)_LGKAL_Instance;
             }
         }
-        public static LogInfoManager? LIF_Instance
+        public static LogInfoManager LIF_Instance
         {
             get
             {
                 if (_LIF_Instance == null)
                 {
-                    _LIF_Instance = Activator.CreateInstance(typeof(LogInfoManager)) as ILogGuardModule;
+                    _LIF_Instance = new LogInfoManager();
                 }
-                return _LIF_Instance as LogInfoManager;
+                return (LogInfoManager)_LIF_Instance;
             }
         }
-        public static RunThreadConfigManager? RTCM_Instance
+        public static RunThreadConfigManager RTCM_Instance
         {
             get
             {
                 if (_RTCM_Instance == null)
                 {
-                    _RTCM_Instance = Activator.CreateInstance(typeof(RunThreadConfigManager)) as ILogGuardModule;
+                    _RTCM_Instance = new RunThreadConfigManager();
                 }
-                return _RTCM_Instance as RunThreadConfigManager;
+                return (RunThreadConfigManager)_RTCM_Instance;
             }
         }
-        public static SourceHighlightManager? SHM_Instance
+        public static SourceHighlightManager SHM_Instance
         {
             get
             {
                 if (_SHM_Instance == null)
                 {
-                    _SHM_Instance = Activator.CreateInstance(typeof(SourceHighlightManager)) as ILogGuardModule;
+                    _SHM_Instance = new SourceHighlightManager();
                 }
-                return _SHM_Instance as SourceHighlightManager;
+                return (SourceHighlightManager)_SHM_Instance;
             }
 
         }
-        public static SourceManager? SM_Instance
+        public static SourceManager SM_Instance
         {
             get
             {
                 if (_SM_Instance == null)
                 {
-                    _SM_Instance = Activator.CreateInstance(typeof(SourceManager)) as ILogGuardModule;
+                    _SM_Instance = new SourceManager();
                 }
-                return _SM_Instance as SourceManager;
+                return (SourceManager)_SM_Instance;
             }
 
         }
-        public static SourceFilterManager? SFM_Instance
+        public static SourceFilterManager SFM_Instance
         {
             get
             {
                 if (_SFM_Instance == null)
                 {
-                    _SFM_Instance = Activator.CreateInstance(typeof(SourceFilterManager)) as ILogGuardModule;
+                    _SFM_Instance = new SourceFilterManager();
                 }
-                return _SFM_Instance as SourceFilterManager;
+                return (SourceFilterManager)_SFM_Instance;
             }
         }
 
-        public static ViewModelManager? VMM_Instance
+        public static ViewModelManager VMM_Instance
         {
             get
             {
                 if (_VMM_Instance == null)
                 {
-                    _VMM_Instance = Activator.CreateInstance(typeof(ViewModelManager)) as ILogGuardModule;
+                    _VMM_Instance = new ViewModelManager();
                 }
-                return _VMM_Instance as ViewModelManager;
+                return (ViewModelManager)_VMM_Instance;
             }
         }
 
-        public static ProcessManager? PM_Instance
+        public static ProcessManager PM_Instance
         {
             get
             {
                 if (_PM_Instance == null)
                 {
-                    _PM_Instance = Activator.CreateInstance(typeof(ProcessManager)) as ILogGuardModule;
+                    _PM_Instance = new ProcessManager();
                 }
-                return _PM_Instance as ProcessManager;
+                return (ProcessManager)_PM_Instance;
             }
         }
 
-        public static LogGuardViewHelper? LGVH_Instance
+        public static LogGuardViewHelper LGVH_Instance
         {
             get
             {
                 if (_LGVH_Instance == null)
                 {
-                    _LGVH_Instance = Activator.CreateInstance(typeof(LogGuardViewHelper)) as ILogGuardModule;
+                    _LGVH_Instance = new LogGuardViewHelper();
                 }
-                return _LGVH_Instance as LogGuardViewHelper;
+                return (LogGuardViewHelper)_LGVH_Instance;
             }
         }
 
-        public static DeviceManager? DM_Instance
+        public static DeviceManager DM_Instance
         {
             get
             {
                 if (_DM_Instance == null)
                 {
-                    _DM_Instance = Activator.CreateInstance(typeof(DeviceManager)) as ILogGuardModule;
+                    _DM_Instance = new DeviceManager();
                 }
-                return _DM_Instance as DeviceManager;
+                return (DeviceManager)_DM_Instance;
             }
         }
 
-        public static DeviceCmdExecuter? DCE_Instance
+        public static DeviceCmdExecuter DCE_Instance
         {
             get
             {
                 if (_DCE_Instance == null)
                 {
-                    _DCE_Instance = Activator.CreateInstance(typeof(DeviceCmdExecuter)) as ILogGuardModule;
+                    _DCE_Instance = new DeviceCmdExecuter();
                 }
-                return _DCE_Instance as DeviceCmdExecuter;
+                return (DeviceCmdExecuter)_DCE_Instance;
             }
         }
 

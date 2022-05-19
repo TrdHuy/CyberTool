@@ -26,7 +26,7 @@ namespace cyber_tool
     /// </summary>
     public partial class App : Application, ICyberApplication
     {
-        private static App _instance;
+        private static App? _instance;
         private WindowDirector _WindowDirector;
 
         public static new App Current
@@ -53,13 +53,13 @@ namespace cyber_tool
         private App() : base()
         {
             _instance = this;
+            _WindowDirector = new WindowDirector();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             CyberToolModuleManager.Init();
 
-            _WindowDirector = new WindowDirector();
             //CyberPluginsManager.Current.LoadExternalPlugin();
 
             base.OnStartup(e);
@@ -73,7 +73,7 @@ namespace cyber_tool
         public CyberContactMessage OpenWaitingTaskBox(string content
             , string title
             , Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask
-            , Func<bool> canExecute = null
+            , Func<bool>? canExecute = null
             , Action<object, AsyncTaskResult> callback = null
             , long delayTime = 0)
         {

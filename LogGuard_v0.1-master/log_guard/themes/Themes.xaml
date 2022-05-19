@@ -16,267 +16,17 @@
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/log_watcher/_scroll_view/ScrollViewWatcher.xaml" />
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/log_watcher/LogWatcher.xaml" />
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/log_watcher/_radial_bar/RadialProgressBar.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/log_watcher/_tree_viewer/HanzaTreeViewer.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/log_watcher/_item/HanzaTreeViewItem.xaml" />
 		
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/tripple_toggle/TrippleToggle.xaml" />
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/loading_list/LoadingListView.xaml" />
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/animations/LoadingAnimation.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/header_label/HeaderLabel.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/calendar/DateTimeSeker.xaml" />
 
 	</ResourceDictionary.MergedDictionaries>
-	
 
-	
-	<Style TargetType="{x:Type lwsc:ScrollViewWatcher}"
-		   x:Key="HanzaScrollViewWatcherStyle">
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type lwsc:ScrollViewWatcher}">
-					<Grid>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="*" />
-							<ColumnDefinition Width="Auto" />
-						</Grid.ColumnDefinitions>
-						<Grid.RowDefinitions>
-							<RowDefinition Height="*" />
-							<RowDefinition Height="Auto" />
-						</Grid.RowDefinitions>
-
-						<Border Background="Transparent"
-								BorderBrush="{TemplateBinding Background}"
-								Margin="{TemplateBinding Padding}">
-							<ScrollContentPresenter Name="PART_ScrollContentPresenter"
-													KeyboardNavigation.DirectionalNavigation="Local"
-													CanContentScroll="True"
-													CanHorizontallyScroll="False"
-													CanVerticallyScroll="False" />
-
-						</Border>
-
-						<ScrollBar Name="PART_HorizontalScrollBar"
-								   Orientation="Horizontal"
-								   Grid.Row="1"
-								   BorderThickness="0"
-								   Maximum="{TemplateBinding ScrollableWidth}"
-								   ViewportSize="{TemplateBinding ViewportWidth}"
-								   Value="{TemplateBinding HorizontalOffset}"
-								   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
-								   Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type lwsc:ScrollViewWatcher}, Mode=FindAncestor}, Path=ScrollBarBackground}">
-							<ScrollBar.Template>
-								<ControlTemplate TargetType="{x:Type ScrollBar}">
-									<Grid x:Name="Bg"
-										  SnapsToDevicePixels="True">
-										<Border BorderBrush="{TemplateBinding BorderBrush}"
-												BorderThickness="{TemplateBinding BorderThickness}"
-												Background="{TemplateBinding Background}"
-												Grid.Column="1" />
-										<Track x:Name="PART_Track"
-											   Grid.Column="1"
-											   IsEnabled="{TemplateBinding IsMouseOver}">
-											<Track.DecreaseRepeatButton>
-												<RepeatButton Command="ScrollBar.PageLeftCommand">
-													<RepeatButton.Style>
-														<Style TargetType="{x:Type RepeatButton}">
-															<Setter Property="OverridesDefaultStyle"
-																	Value="True" />
-															<Setter Property="Background"
-																	Value="Transparent" />
-															<Setter Property="Focusable"
-																	Value="False" />
-															<Setter Property="IsTabStop"
-																	Value="False" />
-															<Setter Property="Template">
-																<Setter.Value>
-																	<ControlTemplate TargetType="{x:Type RepeatButton}">
-																		<Rectangle Fill="{TemplateBinding Background}"
-																				   Height="{TemplateBinding Height}"
-																				   Width="{TemplateBinding Width}" />
-																	</ControlTemplate>
-																</Setter.Value>
-															</Setter>
-														</Style>
-													</RepeatButton.Style>
-												</RepeatButton>
-											</Track.DecreaseRepeatButton>
-											<Track.IncreaseRepeatButton>
-												<RepeatButton Command="ScrollBar.PageRightCommand">
-													<RepeatButton.Style>
-														<Style TargetType="{x:Type RepeatButton}">
-															<Setter Property="OverridesDefaultStyle"
-																	Value="True" />
-															<Setter Property="Background"
-																	Value="Transparent" />
-															<Setter Property="Focusable"
-																	Value="False" />
-															<Setter Property="IsTabStop"
-																	Value="False" />
-															<Setter Property="Template">
-																<Setter.Value>
-																	<ControlTemplate TargetType="{x:Type RepeatButton}">
-																		<Rectangle Fill="{TemplateBinding Background}"
-																				   Height="{TemplateBinding Height}"
-																				   Width="{TemplateBinding Width}" />
-																	</ControlTemplate>
-																</Setter.Value>
-															</Setter>
-														</Style>
-													</RepeatButton.Style>
-												</RepeatButton>
-											</Track.IncreaseRepeatButton>
-											<Track.Thumb>
-												<Thumb>
-													<Thumb.Style>
-														<Style TargetType="{x:Type Thumb}">
-															<Setter Property="OverridesDefaultStyle"
-																	Value="True" />
-															<Setter Property="IsTabStop"
-																	Value="False" />
-															<Setter Property="Template">
-																<Setter.Value>
-																	<ControlTemplate TargetType="{x:Type Thumb}">
-																		<Rectangle x:Name="rectangle"
-																				   Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type lwsc:ScrollViewWatcher},Mode=FindAncestor},Path=ThumbBackground}"
-																				   Height="{TemplateBinding Height}"
-																				   SnapsToDevicePixels="True"
-																				   Width="{TemplateBinding Width}" />
-																	</ControlTemplate>
-																</Setter.Value>
-															</Setter>
-														</Style>
-													</Thumb.Style>
-												</Thumb>
-											</Track.Thumb>
-										</Track>
-									</Grid>
-								</ControlTemplate>
-							</ScrollBar.Template>
-						</ScrollBar>
-
-						<ScrollBar Name="PART_VerticalScrollBar"
-								   Grid.Column="1"
-								   Grid.RowSpan="2"
-								   Maximum="{TemplateBinding ScrollableHeight}"
-								   ViewportSize="{TemplateBinding ViewportHeight}"
-								   Value="{TemplateBinding VerticalOffset}"
-								   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
-								   Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type lwsc:ScrollViewWatcher}, Mode=FindAncestor}, Path=ScrollBarBackground}">
-							<ScrollBar.Template>
-								<ControlTemplate TargetType="{x:Type ScrollBar}">
-									<Grid x:Name="Bg"
-										  SnapsToDevicePixels="True">
-										<Border x:Name="border"
-												BorderBrush="{TemplateBinding BorderBrush}"
-												BorderThickness="0"
-												Background="{TemplateBinding Background}"
-												Grid.Row="1" />
-										<Track x:Name="PART_Track"
-											   IsDirectionReversed="True"
-											   IsEnabled="{TemplateBinding IsMouseOver}"
-											   Grid.Row="1">
-											<Track.DecreaseRepeatButton>
-												<RepeatButton Command="ScrollBar.PageUpCommand">
-													<RepeatButton.Style>
-														<Style TargetType="{x:Type RepeatButton}">
-															<Setter Property="OverridesDefaultStyle"
-																	Value="True" />
-															<Setter Property="Background"
-																	Value="Transparent" />
-															<Setter Property="Focusable"
-																	Value="False" />
-															<Setter Property="IsTabStop"
-																	Value="False" />
-															<Setter Property="Template">
-																<Setter.Value>
-																	<ControlTemplate TargetType="{x:Type RepeatButton}">
-																		<Rectangle Fill="{TemplateBinding Background}"
-																				   Height="{TemplateBinding Height}"
-																				   Width="{TemplateBinding Width}" />
-																	</ControlTemplate>
-																</Setter.Value>
-															</Setter>
-														</Style>
-													</RepeatButton.Style>
-												</RepeatButton>
-											</Track.DecreaseRepeatButton>
-											<Track.IncreaseRepeatButton>
-												<RepeatButton Command="ScrollBar.PageDownCommand">
-													<RepeatButton.Style>
-														<Style TargetType="{x:Type RepeatButton}">
-															<Setter Property="OverridesDefaultStyle"
-																	Value="True" />
-															<Setter Property="Background"
-																	Value="Transparent" />
-															<Setter Property="Focusable"
-																	Value="False" />
-															<Setter Property="IsTabStop"
-																	Value="False" />
-															<Setter Property="Template">
-																<Setter.Value>
-																	<ControlTemplate TargetType="{x:Type RepeatButton}">
-																		<Rectangle Fill="{TemplateBinding Background}"
-																				   Height="{TemplateBinding Height}"
-																				   Width="{TemplateBinding Width}" />
-																	</ControlTemplate>
-																</Setter.Value>
-															</Setter>
-														</Style>
-													</RepeatButton.Style>
-												</RepeatButton>
-											</Track.IncreaseRepeatButton>
-											<Track.Thumb>
-												<Thumb>
-													<Thumb.Style>
-														<Style TargetType="{x:Type Thumb}">
-															<Setter Property="OverridesDefaultStyle"
-																	Value="True" />
-															<Setter Property="IsTabStop"
-																	Value="False" />
-															<Setter Property="Template">
-																<Setter.Value>
-																	<ControlTemplate TargetType="{x:Type Thumb}">
-																		<Rectangle x:Name="rectangle"
-																				   Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type lwsc:ScrollViewWatcher},Mode=FindAncestor},Path=ThumbBackground}"
-																				   Height="{TemplateBinding Height}"
-																				   SnapsToDevicePixels="True"
-																				   Width="{TemplateBinding Width}" />
-																		<ControlTemplate.Triggers>
-																			<Trigger Property="IsEnabled"
-																					 Value="False">
-																				<Setter Property="Width"
-																						TargetName="rectangle"
-																						Value="2" />
-																				<Setter Property="HorizontalAlignment"
-																						TargetName="rectangle"
-																						Value="Right" />
-																			</Trigger>
-																		</ControlTemplate.Triggers>
-																	</ControlTemplate>
-																</Setter.Value>
-															</Setter>
-														</Style>
-													</Thumb.Style>
-												</Thumb>
-											</Track.Thumb>
-										</Track>
-									</Grid>
-									<ControlTemplate.Triggers>
-										<Trigger Property="IsMouseOver"
-												 Value="False">
-											<Setter TargetName="border"
-													Property="Background"
-													Value="Transparent" />
-										</Trigger>
-
-									</ControlTemplate.Triggers>
-								</ControlTemplate>
-							</ScrollBar.Template>
-
-						</ScrollBar>
-
-					</Grid>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
-	
 	<ControlTemplate x:Key="UneditableComBoboxTmpl"
 					 TargetType="{x:Type ComboBox}">
 		<ControlTemplate.Resources>
@@ -853,4 +603,40 @@
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
 
+	<ControlTemplate TargetType="ListView"
+					 x:Key="ListViewLV2Tmpl">
+		<ControlTemplate.Resources>
+			<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
+			<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
+
+		</ControlTemplate.Resources>
+		<Border Name="Border"
+				Background="{TemplateBinding Background}">
+
+			<lwsc:ScrollViewWatcher Background="Transparent"
+											   ScrollHeaderHeight="0"
+											   Style="{StaticResource HanzaScrollViewWatcherStyle}"
+											   HorizontalScrollBarVisibility="Disabled"
+											   ThumbBackground="{StaticResource ButtonBackground_Level1}"
+											   ScrollBarBackground="Transparent">
+				<ItemsPresenter />
+			</lwsc:ScrollViewWatcher>
+		</Border>
+
+	</ControlTemplate>
+
+	<ControlTemplate TargetType="{x:Type TextBox}"
+					 x:Key="NonfocusableTextBox">
+		<Border x:Name="border"
+				BorderBrush="{TemplateBinding BorderBrush}"
+				BorderThickness="{TemplateBinding BorderThickness}"
+				Background="{TemplateBinding Background}"
+				SnapsToDevicePixels="True">
+			<ScrollViewer x:Name="PART_ContentHost"
+						  Focusable="false"
+						  HorizontalScrollBarVisibility="Hidden"
+						  VerticalScrollBarVisibility="Hidden" />
+		</Border>
+	</ControlTemplate>
+	
 </ResourceDictionary>

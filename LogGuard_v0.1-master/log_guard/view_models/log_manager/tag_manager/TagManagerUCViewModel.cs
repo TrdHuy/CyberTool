@@ -32,9 +32,13 @@ namespace log_guard.view_models.log_manager.tag_manager
 
         public TagManagerUCViewModel(BaseViewModel baseViewModel) : base(baseViewModel)
         {
-            var vos = RunThreadConfigManager.Current.TagEmployees;
             _tags = new RangeObservableCollection<TrippleToggleItemViewModel>();
+        }
 
+        public override void OnBegin()
+        {
+            base.OnBegin();
+            var vos = RunThreadConfigManager.Current.TagEmployees;
 
             if (vos != null)
             {
@@ -45,17 +49,21 @@ namespace log_guard.view_models.log_manager.tag_manager
                 }
                 _tags.SendNotifications();
             }
-
         }
 
         public override void OnDestroy()
         {
             base.OnDestroy();
             RunThreadConfigManager.Current.TagEmployees.Clear();
-            foreach (var vo in _tags)
+
+            if (_tags != null)
             {
-                RunThreadConfigManager.Current.TagEmployees.Add(vo.ItemVO);
+                foreach (var vo in _tags)
+                {
+                    RunThreadConfigManager.Current.TagEmployees.Add(vo.ItemVO);
+                }
             }
+
         }
     }
 }

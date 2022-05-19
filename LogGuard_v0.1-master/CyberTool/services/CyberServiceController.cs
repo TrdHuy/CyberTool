@@ -46,7 +46,7 @@ namespace cyber_tool.services
         public void OnModuleStart()
         {
             _ServiceManager = CyberServiceManager.Current;
-            CurrentService = _ServiceManager.LogGuardService;
+            CurrentService = _ServiceManager.LogGuardSvc;
         }
 
         public void OnIFaceWindowShowed()

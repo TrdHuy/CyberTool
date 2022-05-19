@@ -1,0 +1,168 @@
+﻿<UserControl x:Class="log_guard.views.usercontrols.elements.control_panel.CaptureControlPanel"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:vm="clr-namespace:log_guard.view_models"
+			 xmlns:def="clr-namespace:log_guard.definitions"
+			 xmlns:vmm="clr-namespace:log_guard.implement.markup"
+			 xmlns:tvh="clr-namespace:log_guard.implement.flow.view_helper"
+			 mc:Ignorable="d"
+			 d:DesignHeight="30"
+			 d:DesignWidth="160">
+	<UserControl.DataContext>
+		<vmm:ViewModelManagerME DataContextType="{x:Type vm:LogGuardViewModel}"
+								ParentDataContextType="{x:Null}"
+								GeneratorType="{x:Static vmm:DataContextGeneratorType.Reuse}" />
+	</UserControl.DataContext>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition />
+			<ColumnDefinition />
+			<ColumnDefinition />
+			<ColumnDefinition />
+			<ColumnDefinition />
+			<ColumnDefinition />
+			<ColumnDefinition />
+			<ColumnDefinition />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+
+		<Button  x:Name="PlayButton"
+				 Grid.Column="0"
+				 Command="{Binding CommandViewModel.PlayButtonCommand}"
+				 Margin="0,0,0,15"
+				 Background="{StaticResource ButtonBackground_Level1}"
+				 HorizontalAlignment="Left"
+				 Template="{StaticResource CircleBtnTmpl}">
+			<Button.Style>
+				<Style TargetType="Button">
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding CurrentLogGuardState}"
+									 Value="{x:Static def:LogGuardState.RUNNING}">
+							<Setter Property="ToolTip"
+									Value="Pause capturing log from device" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding CurrentLogGuardState}"
+									 Value="{x:Static def:LogGuardState.NONE}">
+							<Setter Property="ToolTip"
+									Value="Start capturing log from device" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding CurrentLogGuardState}"
+									 Value="{x:Static def:LogGuardState.STOP}">
+							<Setter Property="ToolTip"
+									Value="Start capturing log from device" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding CurrentLogGuardState}"
+									 Value="{x:Static def:LogGuardState.PAUSING}">
+							<Setter Property="ToolTip"
+									Value="Resume capturing log from device" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Button.Style>
+
+			<Path Fill="#FFF0F0F0"
+				  Margin="5"
+				  Stretch="Uniform">
+				<Path.Style>
+					<Style TargetType="Path">
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding CurrentLogGuardState}"
+										 Value="{x:Static def:LogGuardState.RUNNING}">
+								<Setter Property="Data"
+										Value="{Binding Source={StaticResource PauseBtnPathGeomerty}}" />
+							</DataTrigger>
+							<DataTrigger Binding="{Binding CurrentLogGuardState}"
+										 Value="{x:Static def:LogGuardState.NONE}">
+								<Setter Property="Data"
+										Value="{Binding Source={StaticResource PlayBtnPathGeomerty}}" />
+							</DataTrigger>
+							<DataTrigger Binding="{Binding CurrentLogGuardState}"
+										 Value="{x:Static def:LogGuardState.STOP}">
+								<Setter Property="Data"
+										Value="{Binding Source={StaticResource PlayBtnPathGeomerty}}" />
+							</DataTrigger>
+							<DataTrigger Binding="{Binding CurrentLogGuardState}"
+										 Value="{x:Static def:LogGuardState.PAUSING}">
+								<Setter Property="Data"
+										Value="{Binding Source={StaticResource PlayBtnPathGeomerty}}" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Path.Style>
+			</Path>
+
+		</Button>
+
+		<Button  x:Name="StopButton"
+				 Grid.Column="1"
+				 Command="{Binding CommandViewModel.StopButtonCommand}"
+				 Margin="0,0,0,15"
+				 ToolTip="Stop capturing log from device"
+				 Background="#eb2838"
+				 HorizontalAlignment="Left"
+				 Template="{DynamicResource CircleBtnTmpl}">
+			<Path Fill="#FFF0F0F0"
+				  Margin="5"
+				  Data="{Binding Source={StaticResource StopBtnPathGeomerty}}"
+				  Stretch="Uniform" />
+		</Button>
+
+		<Button  x:Name="CaptureButton"
+				 Grid.Column="2"
+				 ToolTip="Capture current log watcher to other view"
+				 Margin="0,0,0,15"
+				 Background="{StaticResource ButtonBackground_Level1}"
+				 HorizontalAlignment="Left"
+				 Template="{StaticResource CircleBtnTmpl}">
+			<Path Fill="#FFF0F0F0"
+				  Margin="5"
+				  Data="{Binding Source={StaticResource CaptureBtnPathGeomerty}}"
+				  Stretch="Uniform" />
+		</Button>
+
+		<Button  x:Name="ClearButton"
+				 Command="{Binding CommandViewModel.ClearButtonCommand}"
+				 Grid.Column="3"
+				 ToolTip="Clean all log lines"
+				 Margin="0,0,0,15"
+				 Background="{StaticResource ButtonBackground_Level1}"
+				 HorizontalAlignment="Left"
+				 Template="{StaticResource CircleBtnTmpl}">
+			<Path Fill="#FFF0F0F0"
+				  Margin="5"
+				  Data="{Binding Source={StaticResource ClearButtonIcon}}"
+				  Stretch="Uniform" />
+		</Button>
+
+		<Button  x:Name="ZoomButton"
+				 Command="{Binding CommandViewModel.ZoomButtonCommand}"
+				 Grid.Column="4"
+				 tvh:LogGuardViewHelper.ViewKey="{x:Static def:LogGuardViewKeyDefinition.LogWatcherZoomButton}"
+				 ToolTip="Extend log watcher view"
+				 Margin="0,0,0,15"
+				 Background="{StaticResource ButtonBackground_Level1}"
+				 HorizontalAlignment="Left"
+				 Template="{StaticResource CircleBtnTmpl}">
+			<Path Fill="#FFF0F0F0"
+				  Margin="5"
+				  Data="{Binding Source={StaticResource ZoomLogGuardBtnPathGeomerty}}"
+				  Stretch="Uniform" />
+		</Button>
+
+		<Button  x:Name="ImportButton"
+				 Command="{Binding CommandViewModel.ImportLogFileButtonCommand}"
+				 ToolTip="Import log file"
+				 Grid.Column="5"
+				 Margin="0,0,0,15"
+				 Background="{StaticResource ButtonBackground_Level1}"
+				 HorizontalAlignment="Left"
+				 Template="{StaticResource CircleBtnTmpl}">
+			<Path Fill="#FFF0F0F0"
+				  Margin="7,5,5,5"
+				  Data="{Binding Source={StaticResource ImportLogIcon}}"
+				  Stretch="Uniform" />
+		</Button>
+	</Grid>
+</UserControl>

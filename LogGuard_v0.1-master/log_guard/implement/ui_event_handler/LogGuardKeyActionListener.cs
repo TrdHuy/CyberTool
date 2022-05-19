@@ -15,7 +15,6 @@ namespace log_guard.implement.ui_event_handler
 {
     public class LogGuardKeyActionListener : BaseKeyActionListener, ILogGuardModule
     {
-        private LogGuardCommandExecuterFactory _commandExecuterFactory;
 
         public static LogGuardKeyActionListener Current
         {
@@ -25,13 +24,8 @@ namespace log_guard.implement.ui_event_handler
             }
         }
 
-        public void OnModuleInit()
-        {
-        }
-
         public void OnModuleStart()
         {
-            _commandExecuterFactory = LogGuardCommandExecuterFactory.Current;
         }
 
         protected override IAction GetAction(string keyTag, string builderID, BaseViewModel viewModel = null, ILogger logger = null)
@@ -48,7 +42,9 @@ namespace log_guard.implement.ui_event_handler
 
             if (action == null)
             {
-                action = _commandExecuterFactory.CreateAction(builderID, keyTag, viewModel, logger);
+                action = LogGuardCommandExecuterFactory
+                    .Current
+                    .CreateAction(builderID, keyTag, viewModel, logger);
             }
 
             return action;
@@ -57,7 +53,9 @@ namespace log_guard.implement.ui_event_handler
         protected override IAction GetKeyActionAndLockFactory(string windowTag, string keytag, bool isLock = false, BuilderStatus status = BuilderStatus.Default, BaseViewModel viewModel = null, ILogger logger = null)
         {
             var action = GetAction(keytag, windowTag, viewModel, logger);
-            _commandExecuterFactory.LockBuilder(builderID: windowTag, isLock, status);
+            LogGuardCommandExecuterFactory
+                    .Current
+                    .LockBuilder(builderID: windowTag, isLock, status);
 
             return action;
         }

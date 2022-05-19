@@ -42,9 +42,6 @@ namespace log_guard.implement.flow.source_filter_manager
                 _filterConditionChanged -= value;
             }
         }
-        public void OnModuleInit()
-        {
-        }
 
         public void OnModuleStart()
         {

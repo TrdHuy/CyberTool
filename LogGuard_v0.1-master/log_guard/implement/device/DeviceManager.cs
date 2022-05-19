@@ -24,18 +24,18 @@ namespace log_guard.implement.device
     {
         private List<IDeviceHolder> _deviceHolders;
         private RangeObservableCollection<IDeviceItem> _deviceSource;
-        private Thread _scanDeviceThread;
-        private Process _process;
-        private IDeviceItem _selectedDevice;
+        private Thread? _scanDeviceThread;
+        private Process? _process;
+        private IDeviceItem? _selectedDevice;
 
-        public event FinishScanDeviceHandler FinishScanDevice;
-        public event SelectedDeviceChangedHandler SelectedDeviceChanged;
-        public event SerialPortChangedHandler SerialPortChanged;
-        public event SelectedDeviceUnplugedHandler SelectedDeviceUnpluged;
+        public event FinishScanDeviceHandler? FinishScanDevice;
+        public event SelectedDeviceChangedHandler? SelectedDeviceChanged;
+        public event SerialPortChangedHandler? SerialPortChanged;
+        public event SelectedDeviceUnplugedHandler? SelectedDeviceUnpluged;
 
         public RangeObservableCollection<IDeviceItem> DeviceSource => _deviceSource;
         public List<IDeviceHolder> DeviceHolders => _deviceHolders;
-        public IDeviceItem SelectedDevice
+        public IDeviceItem? SelectedDevice
         {
             get => _selectedDevice;
             set
@@ -53,19 +53,19 @@ namespace log_guard.implement.device
             }
         }
 
-        public void OnModuleInit()
+        public DeviceManager()
         {
             _deviceHolders = new List<IDeviceHolder>();
             _deviceSource = new RangeObservableCollection<IDeviceItem>();
-            SerialPortService.PortsChanged -= OnSerialPortChanged;
-            SerialPortService.PortsChanged += OnSerialPortChanged;
         }
 
         public void OnModuleStart()
         {
+            SerialPortService.PortsChanged -= OnSerialPortChanged;
+            SerialPortService.PortsChanged += OnSerialPortChanged;
         }
 
-        private void OnSerialPortChanged(object sender, PortsChangedArgs e)
+        private void OnSerialPortChanged(object? sender, PortsChangedArgs e)
         {
             var selectedDevice = SelectedDevice;
             DeviceSource.Clear();

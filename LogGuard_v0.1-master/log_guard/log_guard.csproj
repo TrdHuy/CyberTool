@@ -59,13 +59,31 @@
     <Page Update="views\others\animations\LoadingAnimation.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="views\others\header_label\HeaderLabel.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="views\others\loading_list\LoadingListView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="views\others\log_watcher\_item\HanzaTreeViewItem.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="views\others\log_watcher\_radial_bar\RadialProgressBar.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="views\others\log_watcher\_tree_viewer\HanzaTreeViewer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="views\others\tripple_toggle\TrippleToggle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="views\usercontrols\elements\control_panel\CaptureControlPanel.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="views\usercontrols\elements\filter\LevelFilter.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="views\usercontrols\elements\log_manager\LogManager.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

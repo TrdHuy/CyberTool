@@ -17,13 +17,17 @@ namespace log_guard.view_models.log_manager.message_manager
         private IMechanicalSourceFilter _messageShowFilter;
         private IMechanicalSourceFilter _messageRemoveFilter;
 
-        private ISeparableSourceFilterEngine _messageShowFilterEngineCache;
-        private ISeparableSourceFilterEngine _messageRemoveFilterEngineCache;
+        private ISeparableSourceFilterEngine? _messageShowFilterEngineCache;
+        private ISeparableSourceFilterEngine? _messageRemoveFilterEngineCache;
 
         public MessageManagerItemViewModel(BaseViewModel parents, TrippleToggleItemVO vo) : base(parents, vo)
         {
-            LMUCViewModelGenerated(ViewModelManager.Current.LogManagerUCViewModel);
-            AFUCViewModelGenerated(ViewModelManager.Current.AdvanceFilterUCViewModel);
+            EditContentItemCommand = ViewModelManager.Current.LogManagerUCViewModel.CommandViewModel.EditMessageItemButtonCommand;
+            DeleteContentItemCommand = ViewModelManager.Current.LogManagerUCViewModel.CommandViewModel.DeleteMessageItemButtonCommand;
+            _messageShowFilter = ViewModelManager.Current.AdvanceFilterUCViewModel.MessageFilterContent;
+            _messageRemoveFilter = ViewModelManager.Current.AdvanceFilterUCViewModel.MessageRemoveFilterContent;
+
+            OnTagItemStatChanged(TrippleToggleItemVO.Status.None, itemVO.Stat);
         }
 
         protected override void OnTagItemStatChanged(TrippleToggleItemVO.Status oldStat, TrippleToggleItemVO.Status newStat)
@@ -79,20 +83,6 @@ namespace log_guard.view_models.log_manager.message_manager
                     }
                     break;
             }
-        }
-        private void LMUCViewModelGenerated(LogManagerUCViewModel vm)
-        {
-            EditContentItemCommand = vm.CommandViewModel.EditMessageItemButtonCommand;
-            DeleteContentItemCommand = vm.CommandViewModel.DeleteMessageItemButtonCommand;
-
-        }
-
-        private void AFUCViewModelGenerated(AdvanceFilterUCViewModel vm)
-        {
-            _messageShowFilter = vm.MessageFilterContent;
-            _messageRemoveFilter = vm.MessageRemoveFilterContent;
-
-            OnTagItemStatChanged(TrippleToggleItemVO.Status.None, itemVO.Stat);
         }
     }
 }

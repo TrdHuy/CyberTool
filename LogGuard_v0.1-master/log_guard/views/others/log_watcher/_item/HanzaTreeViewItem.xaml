@@ -1,0 +1,319 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:ctrl="clr-namespace:log_guard.views.others.log_watcher._item">
+
+	<Style x:Key="ExpandCollapseToggleStyle"
+		   TargetType="ToggleButton">
+		<Setter Property="Focusable"
+				Value="False" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ToggleButton">
+					<Grid Width="15"
+						  Height="13"
+						  Background="Transparent">
+						<Path x:Name="PART_expandPath"
+							  Fill="#FFC6C5C5"
+							  Stretch="Uniform"
+							  Height="8"
+							  Width="8"
+							  Data="M 69.552844,9.2780434 136.88068,90.248943 149.91937,105.92972 136.88035,121.61092 69.552504,202.58184 56.513813,186.90104 123.84166,105.93012 56.513823,24.959233 Z">
+						</Path>
+					</Grid>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver"
+								 Value="True">
+							<Setter TargetName="PART_expandPath"
+									Property="Fill"
+									Value="Aqua" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style x:Key="TreeViewItemFocusVisual">
+		<Setter Property="Control.Template">
+			<Setter.Value>
+				<ControlTemplate>
+					<Border>
+						<Rectangle Margin="0,0,0,0"
+								   StrokeThickness="5"
+								   Stroke="Black"
+								   StrokeDashArray="1 2"
+								   Opacity="0" />
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style x:Key="{x:Type ctrl:HanzaTreeViewItem}"
+		   TargetType="TreeViewItem">
+		<Setter Property="Background"
+				Value="{StaticResource Background_Level3}" />
+		<Setter Property="HorizontalContentAlignment"
+				Value="{Binding Path=HorizontalContentAlignment,
+    RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+		<Setter Property="VerticalContentAlignment"
+				Value="{Binding Path=VerticalContentAlignment,
+    RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+		<Setter Property="Padding"
+				Value="5,0,5,0" />
+		<Setter Property="Foreground"
+				Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+		<Setter Property="FocusVisualStyle"
+				Value="{StaticResource TreeViewItemFocusVisual}" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type ctrl:HanzaTreeViewItem}">
+					<Grid Background="{TemplateBinding Background}"
+						  x:Name="MainGrid">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition MinWidth="19"
+											  Width="Auto" />
+							<ColumnDefinition Width="*"
+											  MinWidth="130" />
+							<ColumnDefinition Width="30" />
+							<ColumnDefinition Width="30" />
+							<ColumnDefinition Width="10" />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition />
+						</Grid.RowDefinitions>
+						<!--<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="ExpansionStates">
+								<VisualState x:Name="Expanded">
+									<Storyboard>
+										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+																	   Storyboard.TargetName="ItemsHost">
+											<DiscreteObjectKeyFrame KeyTime="0"
+																	Value="{x:Static Visibility.Visible}" />
+										</ObjectAnimationUsingKeyFrames>
+										<DoubleAnimation Storyboard.TargetName="ItemsHost"
+														 Storyboard.TargetProperty="LayoutTransform.ScaleY"
+														 From="0"
+														 To="1"
+														 Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="Collapsed">
+									<Storyboard>
+										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+																	   Storyboard.TargetName="ItemsHost">
+											<DiscreteObjectKeyFrame KeyTime="0:0:0.1"
+																	Value="{x:Static Visibility.Collapsed}" />
+										</ObjectAnimationUsingKeyFrames>
+										<DoubleAnimation Storyboard.TargetName="ItemsHost"
+														 Storyboard.TargetProperty="LayoutTransform.ScaleY"
+														 From="1"
+														 To="0"
+														 Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>-->
+						<ToggleButton x:Name="Expander"
+									  RenderTransformOrigin="0.5,0.5"
+									  Style="{StaticResource ExpandCollapseToggleStyle}"
+									  ClickMode="Press"
+									  IsChecked="{Binding IsExpanded, 
+            RelativeSource={RelativeSource TemplatedParent}}">
+							<ToggleButton.RenderTransform>
+								<RotateTransform x:Name="PART_ToggleButtonRotateTransform" />
+							</ToggleButton.RenderTransform>
+						</ToggleButton>
+						<Border x:Name="Bd"
+								Grid.Column="1"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								BorderThickness="{TemplateBinding BorderThickness}"
+								Padding="{TemplateBinding Padding}">
+							<ContentPresenter x:Name="PART_Header"
+											  ContentSource="Header"
+											  Height="37.5"
+											  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+						</Border>
+
+
+						<Button x:Name="PART_addBtn"
+								Width="30"
+								Height="30"
+								Grid.Column="2">
+							<Button.Template>
+								<ControlTemplate TargetType="Button">
+									<Border Background="Transparent"
+											x:Name="MainGrid"
+											CornerRadius="30">
+										<Path Fill="#FFC6C5C5"
+											  Width="12"
+											  x:Name="pathContent"
+											  Stretch="Uniform">
+											<Path.Data>
+												M 293.82812 107.66797 A 243.81459 243.81459 0 0 0 50.013672 351.48242 A 243.81459 243.81459 0 0 0 293.82812 595.29688 A 243.81459 243.81459 0 0 0 537.64258 351.48242 A 243.81459 243.81459 0 0 0 293.82812 107.66797 z M 293.82812 146.56641 A 204.91541 204.91541 0 0 1 498.74414 351.48242 A 204.91541 204.91541 0 0 1 293.82812 556.39648 A 204.91541 204.91541 0 0 1 88.912109 351.48242 A 204.91541 204.91541 0 0 1 293.82812 146.56641 z M 266.73633 194.91016 L 266.73633 324.39062 L 137.25781 324.39062 L 137.25781 378.57227 L 266.73633 378.57227 L 266.73633 508.05273 L 320.91992 508.05273 L 320.91992 378.57227 L 450.39844 378.57227 L 450.39844 324.39062 L 320.91992 324.39062 L 320.91992 194.91016 L 266.73633 194.91016 z
+											</Path.Data>
+										</Path>
+									</Border>
+
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsMouseOver"
+												 Value="True">
+											<Setter TargetName="MainGrid"
+													Property="Background"
+													Value="#19B8E7F9" />
+											<Setter TargetName="MainGrid"
+													Property="BorderThickness"
+													Value="1" />
+											<Setter TargetName="MainGrid"
+													Property="BorderBrush"
+													Value="#FFB8EAF9" />
+										</Trigger>
+
+										<Trigger Property="IsPressed"
+												 Value="True">
+											<Setter TargetName="MainGrid"
+													Property="Background"
+													Value="#44B8E7F9" />
+											<Setter TargetName="pathContent"
+													Property="Fill"
+													Value="#009a76" />
+											<Setter TargetName="MainGrid"
+													Property="BorderThickness"
+													Value="0" />
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Button.Template>
+						</Button>
+
+						<Button x:Name="PART_removeBtn"
+								Grid.Column="3"
+								Height="30"
+								Width="30">
+							<Button.Template>
+								<ControlTemplate TargetType="Button">
+									<Border Background="Transparent"
+											x:Name="MainGrid"
+											CornerRadius="30">
+										<Path Fill="#FFC6C5C5"
+											  Width="12"
+											  x:Name="pathContent"
+											  Stretch="Uniform">
+											<Path.Data>
+												M 293.82812 107.66797 A 243.81459 243.81459 0 0 0 50.013672 351.48242 A 243.81459 243.81459 0 0 0 293.82812 595.29688 A 243.81459 243.81459 0 0 0 537.64258 351.48242 A 243.81459 243.81459 0 0 0 293.82812 107.66797 z M 293.82812 146.56641 A 204.91541 204.91541 0 0 1 498.74414 351.48242 A 204.91541 204.91541 0 0 1 293.82812 556.39648 A 204.91541 204.91541 0 0 1 88.912109 351.48242 A 204.91541 204.91541 0 0 1 293.82812 146.56641 z M 137.25781 324.39062 L 137.25781 378.57422 L 450.39844 378.57422 L 450.39844 324.39062 L 137.25781 324.39062 z
+											</Path.Data>
+										</Path>
+									</Border>
+
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsMouseOver"
+												 Value="True">
+											<Setter TargetName="MainGrid"
+													Property="Background"
+													Value="#19B8E7F9" />
+											<Setter TargetName="MainGrid"
+													Property="BorderThickness"
+													Value="1" />
+											<Setter TargetName="MainGrid"
+													Property="BorderBrush"
+													Value="#FFB8EAF9" />
+										</Trigger>
+
+										<Trigger Property="IsPressed"
+												 Value="True">
+											<Setter TargetName="MainGrid"
+													Property="Background"
+													Value="#44B8E7F9" />
+											<Setter TargetName="pathContent"
+													Property="Fill"
+													Value="#009a76" />
+											<Setter TargetName="MainGrid"
+													Property="BorderThickness"
+													Value="0" />
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Button.Template>
+						</Button>
+
+						<Rectangle x:Name="FeedbackRec"
+								   Fill="#19B8E7F9"
+								   Stroke="#FFB8EAF9"
+								   IsHitTestVisible="False"
+								   StrokeThickness="1"
+								   Grid.ColumnSpan="5"
+								   Visibility="Hidden" />
+
+						<ItemsPresenter x:Name="ItemsHost"
+										Grid.Row="1"
+										Grid.Column="1"
+										VirtualizingPanel.CacheLength="1"
+										VirtualizingPanel.CacheLengthUnit="Pixel"
+										VirtualizingPanel.IsContainerVirtualizable="True"
+										VirtualizingPanel.IsVirtualizing="True"
+										VirtualizingPanel.VirtualizationMode="Recycling"
+										VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+										Grid.ColumnSpan="5"
+										Visibility="Collapsed">
+							<ItemsPresenter.LayoutTransform>
+								<ScaleTransform x:Name="PART_ItemHostScaleTransform"
+												ScaleY="1" />
+							</ItemsPresenter.LayoutTransform>
+						</ItemsPresenter>
+					</Grid>
+					<ControlTemplate.Triggers>
+						<Trigger Property="HasItems"
+								 Value="false">
+							<Setter TargetName="Expander"
+									Property="Visibility"
+									Value="Hidden" />
+						</Trigger>
+						<!--<MultiTrigger>
+								<MultiTrigger.Conditions>
+									<Condition Property="HasHeader"
+											   Value="false" />
+									<Condition Property="Width"
+											   Value="Auto" />
+								</MultiTrigger.Conditions>
+								<Setter TargetName="PART_Header"
+										Property="MinWidth"
+										Value="150" />
+							</MultiTrigger>-->
+						<MultiTrigger>
+							<MultiTrigger.Conditions>
+								<Condition Property="HasHeader"
+										   Value="false" />
+								<Condition Property="Height"
+										   Value="Auto" />
+							</MultiTrigger.Conditions>
+							<Setter TargetName="PART_Header"
+									Property="MinHeight"
+									Value="19" />
+						</MultiTrigger>
+
+						<Trigger Property="IsSelected"
+								 Value="True">
+							<Setter TargetName="FeedbackRec"
+									Property="Visibility"
+									Value="Visible" />
+							<Setter TargetName="FeedbackRec"
+									Property="StrokeThickness"
+									Value="0" />
+						</Trigger>
+
+						<MultiTrigger>
+							<MultiTrigger.Conditions>
+								<!--<Condition Property="IsSelected"
+											   Value="false" />-->
+								<Condition Property="IsMouseOver"
+										   Value="true" />
+							</MultiTrigger.Conditions>
+							<Setter TargetName="FeedbackRec"
+									Property="Visibility"
+									Value="Visible" />
+						</MultiTrigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+</ResourceDictionary>

@@ -20,20 +20,20 @@ namespace log_guard.view_models.device
         }
 
         [Bindable(true)]
-        public object BuildNumber
+        public string BuildNumber
         {
             get
             {
-                return _deviceInfo[DeviceInfo.KEY_BUILD_NUMBER];
+                return _deviceInfo[DeviceInfo.KEY_BUILD_NUMBER].ToString();
             }
         }
 
         [Bindable(true)]
-        public object SerialNumber
+        public string SerialNumber
         {
             get
             {
-                return _deviceInfo[DeviceInfo.KEY_SERIAL_NUMBER];
+                return _deviceInfo[DeviceInfo.KEY_SERIAL_NUMBER].ToString();
             }
         }
 

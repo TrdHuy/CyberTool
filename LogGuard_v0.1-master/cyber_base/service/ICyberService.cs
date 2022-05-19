@@ -11,7 +11,7 @@ namespace cyber_base.service
         /// <summary>
         /// 
         /// </summary>
-        ICyberServiceManager ServiceManager { get; }
+        ICyberServiceManager? ServiceManager { get; }
 
         /// <summary>
         /// 

@@ -22,8 +22,8 @@ namespace cyber_tool.windows
     public class WindowDirector
     {
         private Dictionary<ContentControl, CyberIPopWindow> _IPopWindowMap;
-        private CyberIFaceWindow _IFaceWindow;
-        private CyberIPopWindow _IPopWindow;
+        private CyberIFaceWindow? _IFaceWindow;
+        private CyberIPopWindow? _IPopWindow;
 
         public CyberIFaceWindow IFaceWindow
         {

@@ -9,7 +9,8 @@
 			<ResourceDictionary.MergedDictionaries>
 				<!--Base resource such as string, color,.. define here-->
 				<ResourceDictionary Source="app_resources/ResourceThemes.xaml" />
-				
+				<ResourceDictionary Source="app_resources/MenuThemes.xaml" />
+
 				<ResourceDictionary Source="app_resources/controls/cyber_window/CyberWindow.xaml" />
 
 				<ResourceDictionary Source="app_resources/Themes.xaml" />

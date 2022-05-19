@@ -16,7 +16,7 @@ namespace log_guard.implement.flow.view_model
 {
     internal class ViewModelManager : ILogGuardModule
     {
-        public ObservableDictionary<Type, object>? DataContextCache { get; private set; }
+        public ObservableDictionary<Type, object> DataContextCache { get; }
 
         public static ViewModelManager Current
         {
@@ -26,28 +26,29 @@ namespace log_guard.implement.flow.view_model
             }
         }
 
-        public LogGuardViewModel? LogGuardViewModel
+        public LogGuardViewModel LogGuardViewModel
         {
             get
             {
-                return DataContextCache?[typeof(LogGuardViewModel)] as LogGuardViewModel;
+                return (LogGuardViewModel)DataContextCache[typeof(LogGuardViewModel)];
             }
         }
-        public AdvanceFilterUCViewModel? AdvanceFilterUCViewModel
+        public AdvanceFilterUCViewModel AdvanceFilterUCViewModel
         {
             get
             {
-                return DataContextCache?[typeof(AdvanceFilterUCViewModel)] as AdvanceFilterUCViewModel;
+                return (AdvanceFilterUCViewModel)DataContextCache[typeof(AdvanceFilterUCViewModel)];
             }
         }
-        public LogManagerUCViewModel? LogManagerUCViewModel
+        public LogManagerUCViewModel LogManagerUCViewModel
         {
             get
             {
-                return DataContextCache?[typeof(LogManagerUCViewModel)] as LogManagerUCViewModel;
+                return (LogManagerUCViewModel)DataContextCache[typeof(LogManagerUCViewModel)];
             }
         }
-        public void OnModuleInit()
+
+        public ViewModelManager()
         {
             DataContextCache = new ObservableDictionary<Type, object>();
             DataContextCache.CollectionChanged -= OnContextCollectionsChanged;
@@ -60,9 +61,8 @@ namespace log_guard.implement.flow.view_model
 
         private void OnContextCollectionsChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-
         }
 
-        
+
     }
 }

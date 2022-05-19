@@ -13,7 +13,7 @@ namespace log_guard.implement.flow.view_helper
 {
     public class LogGuardViewHelper : ILogGuardModule
     {
-        private static Dictionary<LogGuardViewKeyDefinition, object> ViewMap;
+        private Dictionary<LogGuardViewKeyDefinition, object> ViewMap;
 
         #region ViewKey
         public static readonly DependencyProperty ViewKeyProperty = DependencyProperty.RegisterAttached(
@@ -24,12 +24,20 @@ namespace log_guard.implement.flow.view_helper
 
         private static void OnViewKeyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var key = (LogGuardViewKeyDefinition)e.NewValue;
-            if (ViewMap.ContainsKey(key))
+            try
             {
-                ViewMap.Remove(key);
+                var key = (LogGuardViewKeyDefinition)e.NewValue;
+                if (Current.ViewMap.ContainsKey(key))
+                {
+                    Current.ViewMap.Remove(key);
+                }
+                Current.ViewMap.Add(key, d);
             }
-            ViewMap.Add(key, d);
+            catch
+            {
+
+            }
+
         }
 
         public static LogGuardViewKeyDefinition GetViewKey(UIElement obj)
@@ -51,7 +59,7 @@ namespace log_guard.implement.flow.view_helper
             }
         }
 
-        public void OnModuleInit()
+        public LogGuardViewHelper()
         {
             ViewMap = new Dictionary<LogGuardViewKeyDefinition, object>();
         }

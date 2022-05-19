@@ -36,10 +36,6 @@ namespace log_guard.implement.process
             }
         }
 
-        public void OnModuleInit()
-        {
-        }
-
         public void OnModuleStart()
         {
         }
