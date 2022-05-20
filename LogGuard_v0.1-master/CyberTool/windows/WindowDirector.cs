@@ -56,7 +56,7 @@ namespace cyber_tool.windows
         {
             CyberIMesWindow mesBox = new CyberIMesWindow(
                 "Error",
-                Application.Current.Resources["QuestionPathGeomerty"] as string,
+                Application.Current.Resources["QuestionPathGeomerty"] as string ?? "",
                 error,
                 "",
                 "",
@@ -71,7 +71,7 @@ namespace cyber_tool.windows
         {
             CyberIMesWindow mesBox = new CyberIMesWindow(
                 "Warning",
-                Application.Current.Resources["QuestionPathGeomerty"] as string,
+                Application.Current.Resources["QuestionPathGeomerty"] as string ?? "",
                 warning,
                 "",
                 "",
@@ -92,7 +92,7 @@ namespace cyber_tool.windows
         }
 
 
-        public CyberContactMessage OpenWaitingTaskBox(string content, string title, Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask, Func<bool> canExecute = null, Action<object, AsyncTaskResult> callback = null, long delayTime = 0)
+        public CyberContactMessage OpenWaitingTaskBox(string content, string title, Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask, Func<bool>? canExecute = null, Action<object, AsyncTaskResult>? callback = null, long delayTime = 0)
         {
             var newWaitingBox = new CyberIStandWindow(content, title, asyncTask, canExecute, callback, delayTime, IFaceWindow);
             var message = newWaitingBox.Show();
@@ -105,8 +105,8 @@ namespace cyber_tool.windows
             , CyberOwnerWindow ownerWindow = CyberOwnerWindow.Default
             , double width = 500
             , double height = 400
-            , object dataContext = null
-            , Action<object> windowShowedCallback = null
+            , object? dataContext = null
+            , Action<object>? windowShowedCallback = null
             , string title = "Floating window")
         {
             if (_IPopWindowMap.ContainsKey(cc))
@@ -132,12 +132,16 @@ namespace cyber_tool.windows
                     _IPopWindow.Title = title;
                     break;
             }
-            _IPopWindow.Height = height;
-            _IPopWindow.Width = width;
 
-            _IPopWindowMap.Add(cc, _IPopWindow);
+            if(_IPopWindow != null)
+            {
+                _IPopWindow.Height = height;
+                _IPopWindow.Width = width;
 
-            StartDispandCCAnim(cc, _IPopWindow, 200, windowShowedCallback);
+                _IPopWindowMap.Add(cc, _IPopWindow);
+
+                StartDispandCCAnim(cc, _IPopWindow, 200, windowShowedCallback);
+            }
 
         }
 
@@ -165,7 +169,7 @@ namespace cyber_tool.windows
         private void StartDispandCCAnim(ContentControl cc
             , CyberIPopWindow floatWindow
             , int animTime
-            , Action<object> windowShowedCallback = null)
+            , Action<object>? windowShowedCallback = null)
         {
             Storyboard dispand = new Storyboard();
             DoubleAnimation scaleXAnim = new DoubleAnimation();

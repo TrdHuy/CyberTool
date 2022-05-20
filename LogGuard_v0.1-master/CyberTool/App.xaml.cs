@@ -74,7 +74,7 @@ namespace cyber_tool
             , string title
             , Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask
             , Func<bool>? canExecute = null
-            , Action<object, AsyncTaskResult> callback = null
+            , Action<object, AsyncTaskResult>? callback = null
             , long delayTime = 0)
         {
             return _WindowDirector.OpenWaitingTaskBox(content, title, asyncTask, canExecute, callback, delayTime);
@@ -91,8 +91,8 @@ namespace cyber_tool
            , CyberOwner ownerType = CyberOwner.Default
            , double width = 500
            , double height = 400
-           , object dataContext = null
-           , Action<object> windowShowedCallback = null
+           , object? dataContext = null
+           , Action<object>? windowShowedCallback = null
            , string title = "Floating window")
         {
             switch (ownerType)

@@ -13,20 +13,17 @@ namespace cyber_tool.utils
     public class CyberToolModuleManager
     {
         private static Collection<ICyberModule> _CyberModules;
-        private static ICyberModule? _CPM_Instance;
-        private static ICyberModule? _CSM_Insatace;
-        private static ICyberModule? _CSC_Insatace;
+        private static ICyberModule _CPM_Instance;
+        private static ICyberModule _CSM_Insatace;
+        private static ICyberModule _CSC_Insatace;
 
         public static void Init()
         {
             _CyberModules = new Collection<ICyberModule>();
-            var CyberPluginsManager = CPM_Instance;
-            var CyberServiceManager = CSM_Insatace;
-            var CyberServiceController = CSC_Insatace;
 
-            _CyberModules.Add(CyberPluginsManager);
-            _CyberModules.Add(CyberServiceManager);
-            _CyberModules.Add(CyberServiceController);
+            _CyberModules.Add(CPM_Instance);
+            _CyberModules.Add(CSM_Insatace);
+            _CyberModules.Add(CSC_Insatace);
 
 
             foreach (var module in _CyberModules)
@@ -48,7 +45,7 @@ namespace cyber_tool.utils
             }
         }
 
-        public static CyberPluginsManager? CPM_Instance
+        public static CyberPluginsManager CPM_Instance
         {
             get
             {
@@ -56,12 +53,12 @@ namespace cyber_tool.utils
                 {
                     _CPM_Instance = Activator.CreateInstance(typeof(CyberPluginsManager), true) as ICyberModule;
                 }
-                return _CPM_Instance as CyberPluginsManager;
+                return (CyberPluginsManager)_CPM_Instance;
             }
         }
 
 
-        public static CyberServiceManager? CSM_Insatace
+        public static CyberServiceManager CSM_Insatace
         {
             get
             {
@@ -69,11 +66,11 @@ namespace cyber_tool.utils
                 {
                     _CSM_Insatace = Activator.CreateInstance(typeof(CyberServiceManager), true) as ICyberModule;
                 }
-                return _CSM_Insatace as CyberServiceManager;
+                return (CyberServiceManager)_CSM_Insatace;
             }
         }
 
-        internal static CyberServiceController? CSC_Insatace
+        internal static CyberServiceController CSC_Insatace
         {
             get
             {
@@ -81,7 +78,7 @@ namespace cyber_tool.utils
                 {
                     _CSC_Insatace = Activator.CreateInstance(typeof(CyberServiceController), true) as ICyberModule;
                 }
-                return _CSC_Insatace as CyberServiceController;
+                return (CyberServiceController)_CSC_Insatace;
             }
         }
     }

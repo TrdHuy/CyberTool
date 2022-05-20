@@ -41,7 +41,7 @@ namespace cyber_tool.windows.cyber_ipop.views
             _toY = toY;
         }
 
-        public CyberIPopWindow(UIElement opener, UIElement owner, double offsetOwnerX, double offsetOwnerY)
+        public CyberIPopWindow(UIElement opener, UIElement? owner, double offsetOwnerX, double offsetOwnerY)
         {
             InitializeComponent();
             _opener = opener;
@@ -59,19 +59,19 @@ namespace cyber_tool.windows.cyber_ipop.views
             }
         }
 
-        private UIElement _opener;
+        private UIElement? _opener;
         private double _offsetOwnerX;
         private double _offsetOwnerY;
-        private UIElement _owner;
+        private UIElement? _owner;
         private double _startX = 1200;
         private double _startY = 1200;
         private double _toX = 300;
         private double _toY = 300;
-        private Button _minimizeBtn;
-        private Button _maximizeBtn;
-        private Button _closeBtn;
-        private Button _smallmizeBtn;
-        private Border _mainBorder;
+        private Button? _minimizeBtn;
+        private Button? _maximizeBtn;
+        private Button? _closeBtn;
+        private Button? _smallmizeBtn;
+        private Border? _mainBorder;
 
         public override void OnApplyTemplate()
         {
@@ -83,6 +83,10 @@ namespace cyber_tool.windows.cyber_ipop.views
             _mainBorder = GetTemplateChild(MainBorderName) as Border;
             var animTime = 200;
 
+            if (_mainBorder == null || _closeBtn == null || _minimizeBtn == null)
+            {
+                return;
+            }
             _mainBorder.Loaded += (s, e) =>
             {
                 StartOpenAnimation(animTime);

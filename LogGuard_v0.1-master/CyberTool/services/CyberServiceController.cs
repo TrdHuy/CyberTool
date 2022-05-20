@@ -25,15 +25,14 @@ namespace cyber_tool.services
             }
         }
 
-        private CyberServiceManager _ServiceManager;
-        public ICyberService CurrentService { get; private set; }
-        public ICyberService PreviousService { get; private set; }
+        public ICyberService? CurrentService { get; private set; }
+        public ICyberService? PreviousService { get; private set; }
         public FrameworkElement? CurrentServiceView { get; private set; }
 
-        public event BeforeServiceChangeHandler BeforeServiceChange;
-        public event ServiceChangeHandler ServiceChange;
-        public event ServiceChangedHandler ServiceChanged;
-        public event ServiceViewLoadedHandler ServiceLoaded;
+        public event BeforeServiceChangeHandler? BeforeServiceChange;
+        public event ServiceChangeHandler? ServiceChange;
+        public event ServiceChangedHandler? ServiceChanged;
+        public event ServiceViewLoadedHandler? ServiceLoaded;
 
         private CyberServiceController()
         {
@@ -45,8 +44,7 @@ namespace cyber_tool.services
 
         public void OnModuleStart()
         {
-            _ServiceManager = CyberServiceManager.Current;
-            CurrentService = _ServiceManager.LogGuardSvc;
+            CurrentService = CyberServiceManager.Current.LogGuardSvc;
         }
 
         public void OnIFaceWindowShowed()
@@ -57,15 +55,15 @@ namespace cyber_tool.services
         public void UpdateCurrentServiceByID(string id)
         {
             if (string.IsNullOrEmpty(id)
-                || id == CurrentService.ServiceID)
+                || id == CurrentService?.ServiceID)
             {
                 return;
             }
 
-            if (_ServiceManager.CyberServiceMaper[id] != null)
+            if (CyberServiceManager.Current.CyberServiceMaper[id] != null)
             {
                 PreviousService = CurrentService;
-                CurrentService = _ServiceManager.CyberServiceMaper[id];
+                CurrentService = CyberServiceManager.Current.CyberServiceMaper[id];
                 var arg = new ServiceEventArgs(CurrentService, PreviousService);
 
                 UpdateCurrentServiceView(arg);
@@ -78,25 +76,33 @@ namespace cyber_tool.services
 
             BeforeServiceChange?.Invoke(this, args);
 
-            if (CurrentService.IsUnderconstruction)
+            if(CurrentService == null)
             {
                 CurrentServiceView = new Underconstruction();
             }
             else
             {
-                CurrentServiceView = CurrentService.GetServiceView() as FrameworkElement;
-
-                if (CurrentServiceView != null)
+                if (CurrentService.IsUnderconstruction)
                 {
-                    var onloaded = new Action<object, RoutedEventArgs>((s, e) =>
-                    {
-                        ServiceLoaded?.Invoke(this, args);
-                    });
-                    CurrentServiceView.Loaded -= new RoutedEventHandler(onloaded);
-                    CurrentServiceView.Loaded += new RoutedEventHandler(onloaded);
+                    CurrentServiceView = new Underconstruction();
                 }
+                else
+                {
+                    CurrentServiceView = CurrentService.GetServiceView() as FrameworkElement;
 
+                    if (CurrentServiceView != null)
+                    {
+                        var onloaded = new Action<object, RoutedEventArgs>((s, e) =>
+                        {
+                            ServiceLoaded?.Invoke(this, args);
+                        });
+                        CurrentServiceView.Loaded -= new RoutedEventHandler(onloaded);
+                        CurrentServiceView.Loaded += new RoutedEventHandler(onloaded);
+                    }
+
+                }
             }
+            
 
             if (!args.Handled)
             {
@@ -117,10 +123,10 @@ namespace cyber_tool.services
         internal class ServiceEventArgs
         {
             public bool Handled { get; set; }
-            public ICyberService Previous { get; }
-            public ICyberService Current { get; }
+            public ICyberService? Previous { get; }
+            public ICyberService? Current { get; }
 
-            public ServiceEventArgs(ICyberService cur, ICyberService pre)
+            public ServiceEventArgs(ICyberService? cur, ICyberService? pre)
             {
                 Current = cur;
                 Previous = pre;

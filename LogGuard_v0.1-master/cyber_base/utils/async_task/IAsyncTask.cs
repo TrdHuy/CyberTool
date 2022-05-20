@@ -17,38 +17,38 @@ namespace cyber_base.utils.async_task
         /// <summary>
         /// Kết quả trả về sau khi triển khai async action
         /// </summary
-        AsyncTaskResult Result { get; }
+        AsyncTaskResult? Result { get; }
 
         /// <summary>
         /// Xác định xem liệu task này có thể triển khai được hay không
         /// </summary>
-        Func<bool> CanExecute { get; }
+        Func<bool>? CanExecute { get; }
 
         /// <summary>
         /// Triển khai task cho 1 đối tượng  được định nghĩa trước
         /// </summary>
-        Func<Task<AsyncTaskResult>> Execute { get; }
+        Func<Task<AsyncTaskResult>>? Execute { get; }
 
         /// <summary>
         /// Triển khai task cho 1 đối tượng  được định nghĩa trước
         /// </summary>
-        Func<CancellationToken, Task<AsyncTaskResult>> CancelableExecute { get; }
+        Func<CancellationToken, Task<AsyncTaskResult>>? CancelableExecute { get; }
 
         /// <summary>
         /// Triển khai task cho 1 đối tượng  được định nghĩa trước
         /// </summary>
-        Func<object, CancellationToken, Task<AsyncTaskResult>> ParamExecute { get; }
+        Func<object, CancellationToken, Task<AsyncTaskResult>>? ParamExecute { get; }
 
 
         /// <summary>
         /// Xử lý call back sau khi async task được triển khai 
         /// </summary>
-        Action<AsyncTaskResult> CallbackHandler { get; }
+        Action<AsyncTaskResult?>? CallbackHandler { get; }
 
         /// <summary>
         /// Xử lý call back sau khi async task được triển khai 
         /// </summary>
-        Action<object, AsyncTaskResult> ParamExecuteCallbackHandler { get; }
+        Action<object, AsyncTaskResult>? ParamExecuteCallbackHandler { get; }
 
         /// <summary>
         /// Task chính đã được thực hiện xong chưa

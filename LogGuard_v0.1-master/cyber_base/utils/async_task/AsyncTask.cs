@@ -11,32 +11,32 @@ namespace cyber_base.utils.async_task
     public class AsyncTask : IAsyncTask
     {
         private long _delayTime;
-        private AsyncTaskResult _result;
+        private AsyncTaskResult? _result;
         private bool _isCompleted;
         private bool _isCompletedCallback;
         private bool _isCanceled;
 
-        private Action<object, AsyncTaskResult> _paramExecuteCallback;
-        private Action<AsyncTaskResult> _callback;
-        private Func<Task<AsyncTaskResult>> _execute;
-        private Func<CancellationToken, Task<AsyncTaskResult>> _cancelableExecute;
-        private Func<object, CancellationToken, Task<AsyncTaskResult>> _paramExecute;
-        private Func<bool> _canExecute;
-        private CancellationTokenSource _cancellationTokenSource;
+        private Action<object, AsyncTaskResult>? _paramExecuteCallback;
+        private Action<AsyncTaskResult?>? _callback;
+        private Func<Task<AsyncTaskResult>>? _execute;
+        private Func<CancellationToken, Task<AsyncTaskResult>>? _cancelableExecute;
+        private Func<object, CancellationToken, Task<AsyncTaskResult>>? _paramExecute;
+        private Func<bool>? _canExecute;
+        private CancellationTokenSource? _cancellationTokenSource;
 
         public long DelayTime { get => _delayTime; }
-        public AsyncTaskResult Result { get => _result; }
+        public AsyncTaskResult? Result { get => _result; }
 
-        public Func<bool> CanExecute => _canExecute;
+        public Func<bool>? CanExecute => _canExecute;
 
-        public Func<Task<AsyncTaskResult>> Execute => _execute;
+        public Func<Task<AsyncTaskResult>>? Execute => _execute;
 
-        public Func<CancellationToken, Task<AsyncTaskResult>> CancelableExecute => _cancelableExecute;
+        public Func<CancellationToken, Task<AsyncTaskResult>>? CancelableExecute => _cancelableExecute;
 
-        public Func<object, CancellationToken, Task<AsyncTaskResult>> ParamExecute => _paramExecute;
+        public Func<object, CancellationToken, Task<AsyncTaskResult>>? ParamExecute => _paramExecute;
 
-        public Action<AsyncTaskResult> CallbackHandler => _callback;
-        public Action<object, AsyncTaskResult> ParamExecuteCallbackHandler => _paramExecuteCallback;
+        public Action<AsyncTaskResult?>? CallbackHandler => _callback;
+        public Action<object, AsyncTaskResult>? ParamExecuteCallbackHandler => _paramExecuteCallback;
 
         public bool IsCompletedCallback { get => _isCompletedCallback; private set => _isCompletedCallback = value; }
 
@@ -81,18 +81,19 @@ namespace cyber_base.utils.async_task
             InitializeAsyncTask(execute, canExecute);
         }
 
-        public AsyncTask(Func<Task<AsyncTaskResult>> execute, Func<bool> canExecute, Action<AsyncTaskResult> callback)
+        public AsyncTask(Func<Task<AsyncTaskResult>> execute, Func<bool> canExecute, Action<AsyncTaskResult?> callback)
         {
             InitializeAsyncTask(execute, canExecute, callback);
         }
 
-        public AsyncTask(Func<Task<AsyncTaskResult>> execute, Func<bool> canExecute, Action<AsyncTaskResult> callback, long delayTime)
+        public AsyncTask(Func<Task<AsyncTaskResult>> execute, Func<bool> canExecute, Action<AsyncTaskResult?> callback, long delayTime)
         {
             InitializeAsyncTask(execute, canExecute, callback, delayTime);
         }
 
-        public AsyncTask(Func<CancellationToken, Task<AsyncTaskResult>> cancelablExecute, Func<bool> canExecute, Action<AsyncTaskResult> callback, long delayTime, CancellationTokenSource cancellationTokenSource)
+        public AsyncTask(Func<CancellationToken, Task<AsyncTaskResult>> cancelablExecute, Func<bool> canExecute, Action<AsyncTaskResult?> callback, long delayTime, CancellationTokenSource cancellationTokenSource)
         {
+
             InitializeAsyncTask(cancelablExecute, canExecute, callback, delayTime, cancellationTokenSource);
         }
 
@@ -103,8 +104,8 @@ namespace cyber_base.utils.async_task
 
         private void InitializeAsyncTask(
             Func<Task<AsyncTaskResult>> execute,
-            Func<bool> canExecute = null,
-            Action<AsyncTaskResult> callback = null,
+            Func<bool>? canExecute = null,
+            Action<AsyncTaskResult?>? callback = null,
             long delayTime = 0)
         {
             _execute = execute;
@@ -116,10 +117,10 @@ namespace cyber_base.utils.async_task
 
         private void InitializeAsyncTask(
             Func<CancellationToken, Task<AsyncTaskResult>> cancelablExecute,
-            Func<bool> canExecute = null,
-            Action<AsyncTaskResult> callback = null,
+            Func<bool>? canExecute = null,
+            Action<AsyncTaskResult?>? callback = null,
             long delayTime = 0,
-            CancellationTokenSource cancellationTokenSource = null)
+            CancellationTokenSource? cancellationTokenSource = null)
         {
             _cancelableExecute = cancelablExecute;
             _canExecute = canExecute;
@@ -131,10 +132,10 @@ namespace cyber_base.utils.async_task
 
         private void InitializeAsyncTask(
             Func<object, CancellationToken, Task<AsyncTaskResult>> paramExecute,
-            Func<bool> canExecute = null,
-            Action<object, AsyncTaskResult> callback = null,
+            Func<bool>? canExecute = null,
+            Action<object, AsyncTaskResult>? callback = null,
             long delayTime = 0,
-            CancellationTokenSource cancellationTokenSource = null)
+            CancellationTokenSource? cancellationTokenSource = null)
         {
             _paramExecute = paramExecute;
             _canExecute = canExecute;
@@ -144,12 +145,13 @@ namespace cyber_base.utils.async_task
             _cancellationTokenSource = cancellationTokenSource;
         }
 
-        public event IsCompletedChangedHandler OnCompletedChanged;
-        public event IscanceldChangedHandler OncanceldChanged;
+        public event IsCompletedChangedHandler? OnCompletedChanged;
+        public event IscanceldChangedHandler? OncanceldChanged;
 
         public static async void AsyncExecute(AsyncTask asyncTask, CancellationToken token)
         {
-            if (asyncTask == null)
+            if (asyncTask == null
+                || asyncTask.Execute == null)
                 return;
 
             var asyncTaskResult = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
@@ -158,7 +160,7 @@ namespace cyber_base.utils.async_task
             {
                 var asynTaskExecuteWatcher = Stopwatch.StartNew();
 
-                var canExecute = asyncTask.CanExecute == null ? true : (bool)asyncTask.CanExecute?.Invoke();
+                var canExecute = asyncTask.CanExecute?.Invoke() ?? true;
 
                 if (canExecute)
                 {
@@ -209,11 +211,10 @@ namespace cyber_base.utils.async_task
             }
         }
 
-        // TODO: Cần viết lại method này ngoài UI thread
-        // Có thể sử dụng Task.Run để đạt được
         public static async void AsyncExecute(AsyncTask asyncTask)
         {
-            if (asyncTask == null)
+            if (asyncTask == null
+                || asyncTask.Execute == null)
                 return;
 
             var asyncTaskResult = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
@@ -222,7 +223,7 @@ namespace cyber_base.utils.async_task
             {
                 var asynTaskExecuteWatcher = Stopwatch.StartNew();
 
-                var canExecute = asyncTask.CanExecute == null ? true : (bool)asyncTask.CanExecute?.Invoke();
+                var canExecute = asyncTask.CanExecute?.Invoke() ?? true;
 
                 if (canExecute)
                 {
@@ -265,7 +266,9 @@ namespace cyber_base.utils.async_task
         // Có thể sử dụng Task.Run để đạt được
         public static async void CancelableAsyncExecute(AsyncTask asyncTask)
         {
-            if (asyncTask == null)
+            if (asyncTask == null
+                || asyncTask.CancelableExecute == null
+                || asyncTask._cancellationTokenSource == null)
                 return;
 
             var asyncTaskResult = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
@@ -274,7 +277,7 @@ namespace cyber_base.utils.async_task
             {
                 var asynTaskExecuteWatcher = Stopwatch.StartNew();
 
-                var canExecute = asyncTask.CanExecute == null ? true : (bool)asyncTask.CanExecute?.Invoke();
+                var canExecute = asyncTask.CanExecute?.Invoke() ?? true;
 
                 if (canExecute)
                 {
@@ -342,7 +345,7 @@ namespace cyber_base.utils.async_task
             try
             {
                 var asynTaskExecuteWatcher = Stopwatch.StartNew();
-                var canExecute = asyncTask.CanExecute == null ? true : (bool)asyncTask.CanExecute?.Invoke();
+                var canExecute = asyncTask.CanExecute?.Invoke() ?? true;
 
                 if (canExecute)
                 {
@@ -356,6 +359,7 @@ namespace cyber_base.utils.async_task
                             var res = await asyncTask.ParamExecute?.Invoke(param, asyncTask._cancellationTokenSource.Token);
                             return res;
                         }, asyncTask._cancellationTokenSource.Token);
+
 
                         if (asyncTask._cancellationTokenSource.Token.IsCancellationRequested)
                         {

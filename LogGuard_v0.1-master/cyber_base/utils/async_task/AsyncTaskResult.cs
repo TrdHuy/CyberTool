@@ -33,18 +33,18 @@ namespace cyber_base.utils.async_task
 
     public class AsyncTaskResult
     {
-        private object _result;
+        private object? _result;
         private MessageAsyncTaskResult _mesResult;
         private string _messageToString;
 
-        public AsyncTaskResult(object result, MessageAsyncTaskResult mesResult, string messageToString = "")
+        public AsyncTaskResult(object? result, MessageAsyncTaskResult mesResult, string messageToString = "")
         {
             _result = result;
             _mesResult = mesResult;
             _messageToString = messageToString;
         }
 
-        public object Result
+        public object? Result
         {
             get { return _result; }
             set { _result = value; }

@@ -20,14 +20,12 @@ namespace cyber_tool.services
     /// </summary>
     public class CyberServiceManager : ICyberServiceManager, ICyberModule
     {
-        private CyberServiceController _ServiceController;
-
-        public ICyberService LogGuardSvc { get; private set; }
-        public ICyberService DashboardService { get; private set; }
-        public ICyberService IssueManagerService { get; private set; }
-        public ICyberService ExtensionService { get; private set; }
-        public ICyberService AboutService { get; private set; }
-        public ICyberService LogoutService { get; private set; }
+        public ICyberService? LogGuardSvc { get; private set; }
+        public ICyberService? DashboardSvc { get; private set; }
+        public ICyberService? IssueManagerService { get; private set; }
+        public ICyberService? ExtensionService { get; private set; }
+        public ICyberService? AboutService { get; private set; }
+        public ICyberService? LogoutService { get; private set; }
 
         public Dictionary<string, ICyberService> CyberServiceMaper { get; }
 
@@ -59,51 +57,48 @@ namespace cyber_tool.services
             CyberServiceMaper.Clear();
 
             LogGuardSvc = LogGuardService.Current;
-            DashboardService = new DashboardService();
+            DashboardSvc = DashboardService.Current;
 
             LogGuardSvc.OnServiceCreate(this);
-            DashboardService.OnServiceCreate(this);
+            DashboardSvc.OnServiceCreate(this);
 
-            CyberServiceMaper.Add(DashboardService.ServiceID, DashboardService);
+            CyberServiceMaper.Add(DashboardSvc.ServiceID, DashboardSvc);
             CyberServiceMaper.Add(LogGuardSvc.ServiceID, LogGuardSvc);
         }
 
         public void OnModuleStart()
         {
-            _ServiceController = CyberServiceController.Current;
+            CyberServiceController.Current.BeforeServiceChange -= OnBeforeServiceChange;
+            CyberServiceController.Current.BeforeServiceChange += OnBeforeServiceChange;
 
-            _ServiceController.BeforeServiceChange -= OnBeforeServiceChange;
-            _ServiceController.BeforeServiceChange += OnBeforeServiceChange;
+            CyberServiceController.Current.ServiceChange -= OnServiceChange;
+            CyberServiceController.Current.ServiceChange += OnServiceChange;
 
-            _ServiceController.ServiceChange -= OnServiceChange;
-            _ServiceController.ServiceChange += OnServiceChange;
+            CyberServiceController.Current.ServiceLoaded -= OnServiceLoaded;
+            CyberServiceController.Current.ServiceLoaded += OnServiceLoaded;
 
-            _ServiceController.ServiceLoaded -= OnServiceLoaded;
-            _ServiceController.ServiceLoaded += OnServiceLoaded;
-
-            _ServiceController.ServiceChanged -= OnServiceChanged;
-            _ServiceController.ServiceChanged += OnServiceChanged;
-
+            CyberServiceController.Current.ServiceChanged -= OnServiceChanged;
+            CyberServiceController.Current.ServiceChanged += OnServiceChanged;
         }
 
-       
+
         public void OnIFaceWindowShowed()
         {
         }
 
         private void OnBeforeServiceChange(object sender, CyberServiceController.ServiceEventArgs args)
         {
-            args.Current.OnPreServiceViewInit(this);
+            args.Current?.OnPreServiceViewInit(this);
         }
 
         private void OnServiceChange(object sender, CyberServiceController.ServiceEventArgs args)
         {
-            args.Current.OnServiceViewInstantiated(this);
+            args.Current?.OnServiceViewInstantiated(this);
         }
 
         private void OnServiceLoaded(object sender, CyberServiceController.ServiceEventArgs args)
         {
-            args.Current.OnServiceViewLoaded(this);
+            args.Current?.OnServiceViewLoaded(this);
         }
 
         private void OnServiceChanged(object sender, CyberServiceController.ServiceEventArgs args)

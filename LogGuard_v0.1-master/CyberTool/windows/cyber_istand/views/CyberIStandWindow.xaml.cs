@@ -34,10 +34,10 @@ namespace cyber_tool.windows.cyber_istand.views
         public CyberIStandWindow(string content
             , string title
             , Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask
-            , Func<bool> canExecute = null
-            , Action<object, AsyncTaskResult> callback = null
+            , Func<bool>? canExecute = null
+            , Action<object, AsyncTaskResult>? callback = null
             , long delayTime = 0
-            , Window owner = null)
+            , Window? owner = null)
         {
             InitializeComponent();
             if (owner != null)
