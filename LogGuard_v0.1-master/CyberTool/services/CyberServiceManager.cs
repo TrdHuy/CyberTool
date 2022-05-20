@@ -3,6 +3,9 @@ using cyber_base.service;
 using cyber_tool.@base.module;
 using cyber_tool.utils;
 using dashboard_service;
+using extension_manager_service;
+using faq_service;
+using issue_tracker_service;
 using log_guard;
 using System;
 using System.Collections.Generic;
@@ -22,10 +25,9 @@ namespace cyber_tool.services
     {
         public ICyberService? LogGuardSvc { get; private set; }
         public ICyberService? DashboardSvc { get; private set; }
-        public ICyberService? IssueManagerService { get; private set; }
-        public ICyberService? ExtensionService { get; private set; }
-        public ICyberService? AboutService { get; private set; }
-        public ICyberService? LogoutService { get; private set; }
+        public ICyberService? IssueTrackerSvc { get; private set; }
+        public ICyberService? EMSvc { get; private set; }
+        public ICyberService? FAQSvc { get; private set; }
 
         public Dictionary<string, ICyberService> CyberServiceMaper { get; }
 
@@ -58,12 +60,20 @@ namespace cyber_tool.services
 
             LogGuardSvc = LogGuardService.Current;
             DashboardSvc = DashboardService.Current;
-
-            LogGuardSvc.OnServiceCreate(this);
-            DashboardSvc.OnServiceCreate(this);
+            IssueTrackerSvc = IssueTrackerService.Current;
+            EMSvc = ExtensionManagerService.Current;
+            FAQSvc = FAQService.Current;
 
             CyberServiceMaper.Add(DashboardSvc.ServiceID, DashboardSvc);
             CyberServiceMaper.Add(LogGuardSvc.ServiceID, LogGuardSvc);
+            CyberServiceMaper.Add(IssueTrackerSvc.ServiceID, IssueTrackerSvc);
+            CyberServiceMaper.Add(EMSvc.ServiceID, EMSvc);
+            CyberServiceMaper.Add(FAQSvc.ServiceID, FAQSvc);
+
+            foreach(var service in CyberServiceMaper.Values)
+            {
+                service.OnServiceCreate(this);
+            }
         }
 
         public void OnModuleStart()

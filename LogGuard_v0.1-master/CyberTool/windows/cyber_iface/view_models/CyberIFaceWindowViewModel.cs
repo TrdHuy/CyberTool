@@ -32,10 +32,13 @@ namespace cyber_tool.windows.cyber_iface.view_models
             }
             set
             {
-                if (IsShouldChangePage(_selectedHeaderItem, value))
+                if (value.IsService && value.Service != null)
                 {
-                    _selectedHeaderItem = value;
-                    _ServiceController.UpdateCurrentServiceByID(value.Service.ServiceID);
+                    if (IsShouldChangePage(_selectedHeaderItem, value))
+                    {
+                        _selectedHeaderItem = value;
+                        _ServiceController.UpdateCurrentServiceByID(value.Service.ServiceID);
+                    }
                 }
                 InvalidateOwn();
             }

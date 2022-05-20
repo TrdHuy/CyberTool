@@ -27,6 +27,9 @@
   <ItemGroup>
     <ProjectReference Include="..\cyber_extension\cyber_extension.csproj" />
     <ProjectReference Include="..\dashboard_service\dashboard_service.csproj" />
+    <ProjectReference Include="..\extension_manager_service\extension_manager_service.csproj" />
+    <ProjectReference Include="..\faq_service\faq_service.csproj" />
+    <ProjectReference Include="..\issue_tracker_service\issue_tracker_service.csproj" />
     <ProjectReference Include="..\log_guard\log_guard.csproj" />
   </ItemGroup>
 

@@ -7,12 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\cyber_base\cyber_base.csproj" />
-    <ProjectReference Include="..\cyber_extension\cyber_extension.csproj" />
+    <Compile Remove="view_models\**" />
+    <EmbeddedResource Remove="view_models\**" />
+    <None Remove="view_models\**" />
+    <Page Remove="view_models\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="view_models\" />
+    <ProjectReference Include="..\cyber_base\cyber_base.csproj" />
+    <ProjectReference Include="..\cyber_extension\cyber_extension.csproj" />
   </ItemGroup>
 
 </Project>
