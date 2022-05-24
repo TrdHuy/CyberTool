@@ -42,62 +42,8 @@
 						Background="{StaticResource Background_Level2}"
 						Grid.Row="1">
 				<TabControl.Resources>
-					<Style TargetType="{x:Type TabItem}">
-						<Setter Property="Template">
-							<Setter.Value>
-								<ControlTemplate TargetType="{x:Type TabItem}">
-									<Grid>
-										<Border Name="Border"
-												CornerRadius="5,5,0,0"
-												BorderThickness="1,1,1,0"
-												BorderBrush="Transparent"
-												Background="Transparent">
-											<TextBlock x:Name="TextContent"
-													   VerticalAlignment="Center"
-													   HorizontalAlignment="Center"
-													   FontSize="9"
-													   FontFamily="Calibri"
-													   Foreground="{StaticResource Foreground_Level1}"
-													   Text="{TemplateBinding Header}"
-													   Margin="7,3,7,2">
-											</TextBlock>
-										</Border>
-									</Grid>
-									<ControlTemplate.Triggers>
-										<Trigger Property="IsSelected"
-												 Value="True">
-											<Setter TargetName="Border"
-													Property="Background"
-													Value="{StaticResource ButtonBackground_Level1}" />
-											<Setter TargetName="TextContent"
-													Property="FontWeight"
-													Value="Bold" />
-											<Setter TargetName="TextContent"
-													Property="Foreground"
-													Value="{StaticResource Foreground_Level3}" />
-
-										</Trigger>
-										<MultiTrigger>
-											<MultiTrigger.Conditions>
-												<Condition Property="IsMouseOver"
-														   Value="True" />
-												<Condition Property="IsSelected"
-														   Value="False" />
-											</MultiTrigger.Conditions>
-
-											<Setter TargetName="Border"
-													Property="BorderBrush"
-													Value="{StaticResource BorderbrushEffect_Level1}" />
-											<Setter TargetName="Border"
-													Property="CornerRadius"
-													Value="0" />
-										</MultiTrigger>
-
-									</ControlTemplate.Triggers>
-								</ControlTemplate>
-							</Setter.Value>
-						</Setter>
-					</Style>
+					<Style TargetType="{x:Type TabItem}"
+						   BasedOn="{StaticResource CyberTabItemStyle}" />
 				</TabControl.Resources>
 				<TabItem Header="Tags manager">
 					<TabItem.ContextMenu>

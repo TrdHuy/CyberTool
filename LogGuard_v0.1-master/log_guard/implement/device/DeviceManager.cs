@@ -257,14 +257,17 @@ namespace log_guard.implement.device
                         ProcessManager.Current.AddNewProcessID(_process.Id);
 
                         string tmp = _process.StandardOutput.ReadLine();
-                        string[] buildNumber = tmp.Split(stringSeparators, StringSplitOptions.None);
+                        if (tmp != null)
+                        {
+                            string[] buildNumber = tmp.Split(stringSeparators, StringSplitOptions.None);
 
-                        DeviceBuilder dvBuilder = new DeviceBuilder();
-                        var dvInfo = dvBuilder.BuildBNumber(buildNumber[0])
-                                .BuildSerialNumber(serialNumber)
-                                .Build();
-                        var deviceVM = new DeviceItemViewModel(dvInfo);
-                        dIVMs.Add(deviceVM);
+                            DeviceBuilder dvBuilder = new DeviceBuilder();
+                            var dvInfo = dvBuilder.BuildBNumber(buildNumber[0])
+                                    .BuildSerialNumber(serialNumber)
+                                    .Build();
+                            var deviceVM = new DeviceItemViewModel(dvInfo);
+                            dIVMs.Add(deviceVM);
+                        }
                     }
                 }
 
