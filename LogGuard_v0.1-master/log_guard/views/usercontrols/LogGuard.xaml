@@ -65,7 +65,7 @@
 
 		<uc_lm:LogManager Grid.Column="13"
 						  Grid.Row="1"
-						  Margin="0,0,15,15"
+						  Margin="0,0,0,15"
 						  Grid.RowSpan="3" />
 
 		<ComboBox Grid.Row="3"
