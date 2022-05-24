@@ -5,6 +5,7 @@ using cyber_tool.utils;
 using dashboard_service;
 using extension_manager_service;
 using faq_service;
+using honeyboard_release_service;
 using issue_tracker_service;
 using log_guard;
 using System;
@@ -28,6 +29,7 @@ namespace cyber_tool.services
         public ICyberService? IssueTrackerSvc { get; private set; }
         public ICyberService? EMSvc { get; private set; }
         public ICyberService? FAQSvc { get; private set; }
+        public ICyberService? HBDRelSvc { get; private set; }
 
         public Dictionary<string, ICyberService> CyberServiceMaper { get; }
 
@@ -63,12 +65,14 @@ namespace cyber_tool.services
             IssueTrackerSvc = IssueTrackerService.Current;
             EMSvc = ExtensionManagerService.Current;
             FAQSvc = FAQService.Current;
+            HBDRelSvc = HoneyboardReleaseService.Current;
 
             CyberServiceMaper.Add(DashboardSvc.ServiceID, DashboardSvc);
             CyberServiceMaper.Add(LogGuardSvc.ServiceID, LogGuardSvc);
             CyberServiceMaper.Add(IssueTrackerSvc.ServiceID, IssueTrackerSvc);
             CyberServiceMaper.Add(EMSvc.ServiceID, EMSvc);
             CyberServiceMaper.Add(FAQSvc.ServiceID, FAQSvc);
+            CyberServiceMaper.Add(HBDRelSvc.ServiceID, HBDRelSvc);
 
             foreach(var service in CyberServiceMaper.Values)
             {

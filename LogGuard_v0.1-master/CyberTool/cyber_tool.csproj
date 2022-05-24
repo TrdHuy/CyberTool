@@ -29,12 +29,9 @@
     <ProjectReference Include="..\dashboard_service\dashboard_service.csproj" />
     <ProjectReference Include="..\extension_manager_service\extension_manager_service.csproj" />
     <ProjectReference Include="..\faq_service\faq_service.csproj" />
+    <ProjectReference Include="..\honeyboard_release_service\honeyboard_release_service.csproj" />
     <ProjectReference Include="..\issue_tracker_service\issue_tracker_service.csproj" />
     <ProjectReference Include="..\log_guard\log_guard.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="app_resources\controls\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +48,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="app_resources\controls\cyber_scroll\CyberScrollView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="app_resources\MenuThemes.xaml">
       <SubType>Designer</SubType>
     </Page>

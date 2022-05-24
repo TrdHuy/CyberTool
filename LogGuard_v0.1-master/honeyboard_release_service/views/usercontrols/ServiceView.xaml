@@ -1,0 +1,129 @@
+﻿<UserControl x:Class="honeyboard_release_service.views.usercontrols.ServiceView"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="clr-namespace:honeyboard_release_service.views.usercontrols"
+			 xmlns:vm="clr-namespace:honeyboard_release_service.view_models"
+			 mc:Ignorable="d"
+			 Background="{StaticResource Background_Level1}"
+			 d:DesignHeight="820"
+			 d:DesignWidth="883.714"
+			 FontFamily="Calibri"
+			 xmlns:uc_ti="clr-namespace:honeyboard_release_service.views.elements.tab_items">
+
+	<UserControl.DataContext>
+		<vm:HoneyReleaseServiceViewModel />
+	</UserControl.DataContext>
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="10" />
+			<ColumnDefinition Width="2.1*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="8.525*" />
+			<RowDefinition Height="10" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="10" />
+			<RowDefinition Height="8.75*" />
+		</Grid.RowDefinitions>
+
+		<TabControl Grid.Column="2"
+					Style="{StaticResource RT_TabControlStyle}"
+					BorderThickness="0"
+					Background="{StaticResource Background_Level2}"
+					Grid.Row="0">
+			<TabControl.Resources>
+				<Style TargetType="{x:Type TabItem}"
+					   BasedOn="{StaticResource CyberTabItemStyle}" />
+			</TabControl.Resources>
+			<TabItem Header="Release">
+				<TabItem.ContextMenu>
+					<ContextMenu>
+						<MenuItem Header="Add" />
+						<MenuItem Header="Clear" />
+						<MenuItem Header="Explore" />
+					</ContextMenu>
+				</TabItem.ContextMenu>
+				<uc_ti:ReleaseTab />
+			</TabItem>
+			<TabItem Header="Merge">
+
+			</TabItem>
+			<TabItem Header="Merge &amp; Release">
+
+			</TabItem>
+			<TabItem Header="Version manager">
+
+			</TabItem>
+		</TabControl>
+
+	</Grid>
+	<!--<Grid Visibility="Hidden"
+		Background="{StaticResource Background_Level1}">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="3*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="3*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<ScrollViewer>
+			<TextBlock x:Name="DBox"
+					   Text="{Binding DisplayData}"
+					   Foreground="White" />
+		</ScrollViewer>
+		
+
+		<Grid Grid.Column="1"
+			  Grid.ColumnSpan="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			<TextBox x:Name="PathBox"
+					 Grid.ColumnSpan="5"
+					 Text="{Binding ProjectPath}"
+					 Height="30"
+					 Grid.Row="0" />
+			<TextBox x:Name="CmdBox"
+					 Grid.ColumnSpan="5"
+					 Text="{Binding Cmd}"
+					 Height="30"
+					 Grid.Row="1"/>
+			<Button Height="30"
+					Width="60"
+					Content="Exct"
+					Command="{Binding ExecuteCmd}"
+					Grid.Row="2"/>
+			<Button Height="30"
+					Width="60"
+					Content="Stop"
+					Command="{Binding StopCmd}"
+					Grid.Row="3" />
+			<Button Height="30"
+					Width="60"
+					Content="Clr"
+					Command="{Binding ClearCmd}"
+					Grid.Row="2"
+					Grid.Column="1"/>
+		</Grid>
+	</Grid>-->
+</UserControl>
