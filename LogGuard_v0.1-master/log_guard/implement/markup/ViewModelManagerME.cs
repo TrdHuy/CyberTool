@@ -34,7 +34,11 @@ namespace log_guard.implement.markup
             {
                 if (GeneratorType == DataContextGeneratorType.Reuse)
                 {
-                    return DataContextCache?[DataContextType];
+                    if (DataContextCache.ContainsKey(DataContextType))
+                    {
+                        return DataContextCache[DataContextType];
+                    }
+                    return null;
                 }
                 else
                 {
