@@ -5,6 +5,53 @@
 	
 	<Color x:Key="ButtonColor_Level1">#009a76</Color>
 	<Color x:Key="ButtonColor_Level2">#eb2838</Color>
+
+	<LinearGradientBrush x:Key="HorizontalFench1pixel_Background"
+						 EndPoint="0.5,1"
+						 StartPoint="0.5,0">
+		<LinearGradientBrush.RelativeTransform>
+			<TransformGroup>
+				<ScaleTransform CenterY="0.5"
+								CenterX="0.5" />
+				<SkewTransform CenterX="0.5"
+							   CenterY="0.5" />
+				<RotateTransform Angle="90"
+								 CenterX="0.5"
+								 CenterY="0.5" />
+				<TranslateTransform />
+			</TransformGroup>
+		</LinearGradientBrush.RelativeTransform>
+		<GradientStop Color="#1e2024"
+					  Offset="0.138" />
+		<GradientStop Color="#FFA7A7A7"
+					  Offset="0.554" />
+		<GradientStop Color="#FFD0D0D1"
+					  Offset="0.49" />
+		<GradientStop Color="#1e2024"
+					  Offset="0.86" />
+	</LinearGradientBrush>
+
+	<LinearGradientBrush x:Key="VerticalFench1pixel_Background"
+						 EndPoint="0.5,1"
+						 StartPoint="0.5,0">
+		<LinearGradientBrush.RelativeTransform>
+			<TransformGroup>
+				<ScaleTransform CenterY="0.5"
+								CenterX="0.5" />
+				<SkewTransform CenterX="0.5"
+							   CenterY="0.5" />
+				<TranslateTransform />
+			</TransformGroup>
+		</LinearGradientBrush.RelativeTransform>
+		<GradientStop Color="#1e2024"
+					  Offset="0.138" />
+		<GradientStop Color="#FFA7A7A7"
+					  Offset="0.554" />
+		<GradientStop Color="#FFD0D0D1"
+					  Offset="0.49" />
+		<GradientStop Color="#1e2024"
+					  Offset="0.86" />
+	</LinearGradientBrush>
 	
 	<SolidColorBrush Color="#7f7f7f"
 					 x:Key="Foreground_Level1" />

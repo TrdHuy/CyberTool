@@ -167,6 +167,8 @@
 				<ControlTemplate TargetType="{x:Type TabItem}">
 					<Grid>
 						<Border Name="Border"
+								MinHeight="20"
+								MinWidth="50"
 								CornerRadius="5,5,0,0"
 								BorderThickness="1,1,1,0"
 								BorderBrush="Transparent"
@@ -582,6 +584,29 @@
 										ThumbBackground="{TemplateBinding BorderBrush}"
 										ScrollBarBackground="Transparent">
 						
+					</cs:CyberScrollView>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="CyberCollapsibleScrollStyle"
+		   TargetType="ContentControl">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ContentControl">
+					<ControlTemplate.Resources>
+						<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
+						<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
+					</ControlTemplate.Resources>
+					<cs:CyberScrollView Content="{TemplateBinding Content}"
+										SnapsToDevicePixels="True"
+										IsMouseOverExpandScrollbar="True"
+										Background="{TemplateBinding Background}"
+										ScrollHeaderHeight="0"
+										ThumbBackground="{TemplateBinding BorderBrush}"
+										ScrollBarBackground="Transparent"
+										Style="{StaticResource OverlapScrollbarStyle}">
 					</cs:CyberScrollView>
 				</ControlTemplate>
 			</Setter.Value>
