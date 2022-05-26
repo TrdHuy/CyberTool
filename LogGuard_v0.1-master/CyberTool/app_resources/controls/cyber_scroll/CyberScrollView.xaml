@@ -20,7 +20,7 @@
 								Margin="{TemplateBinding Padding}">
 							<ScrollContentPresenter Name="PART_ScrollContentPresenter"
 													KeyboardNavigation.DirectionalNavigation="Local"
-													CanContentScroll="True"
+													CanContentScroll="False"
 													CanHorizontallyScroll="False"
 													CanVerticallyScroll="False" />
 
@@ -280,7 +280,7 @@
 								Grid.ColumnSpan="2">
 							<ScrollContentPresenter Name="PART_ScrollContentPresenter"
 													KeyboardNavigation.DirectionalNavigation="Local"
-													CanContentScroll="True"
+													CanContentScroll="False"
 													CanHorizontallyScroll="False"
 													CanVerticallyScroll="False" />
 

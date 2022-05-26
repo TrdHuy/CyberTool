@@ -30,30 +30,30 @@
 												  VerticalScrollBarVisibility="Hidden"
 												  Grid.Column="1"
 												  Focusable="false">
-										<GridViewHeaderRowPresenter Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ScrollViewWatcher}
-										,Mode=FindAncestor},Path=ScrollHeaderHeight}"
+										<GridViewHeaderRowPresenter Height="{Binding 
+																		RelativeSource={RelativeSource AncestorType={x:Type local:ScrollViewWatcher},
+																		Mode=FindAncestor},Path=ScrollHeaderHeight}"
 																	Columns="{Binding Path=TemplatedParent.View.Columns,
-                                            RelativeSource={RelativeSource TemplatedParent}}"
+																		RelativeSource={RelativeSource TemplatedParent}}"
 																	ColumnHeaderContainerStyle="{Binding
-                                            Path=TemplatedParent.View.ColumnHeaderContainerStyle,
-                                            RelativeSource={RelativeSource TemplatedParent}}"
+																		Path=TemplatedParent.View.ColumnHeaderContainerStyle,
+																		RelativeSource={RelativeSource TemplatedParent}}"
 																	ColumnHeaderTemplate="{Binding
-                                            Path=TemplatedParent.View.ColumnHeaderTemplate,
-                                            RelativeSource={RelativeSource TemplatedParent}}"
+																		Path=TemplatedParent.View.ColumnHeaderTemplate,
+																		RelativeSource={RelativeSource TemplatedParent}}"
 																	ColumnHeaderTemplateSelector="{Binding 
-                                            Path=TemplatedParent.View.ColumnHeaderTemplateSelector,
-                                            RelativeSource={RelativeSource TemplatedParent}}"
+																		Path=TemplatedParent.View.ColumnHeaderTemplateSelector,
+																		RelativeSource={RelativeSource TemplatedParent}}"
 																	AllowsColumnReorder="{Binding
-                                            Path=TemplatedParent.View.AllowsColumnReorder,
-                                            RelativeSource={RelativeSource TemplatedParent}}"
+																		Path=TemplatedParent.View.AllowsColumnReorder,
+																		RelativeSource={RelativeSource TemplatedParent}}"
 																	ColumnHeaderContextMenu="{Binding
-                                            Path=TemplatedParent.View.ColumnHeaderContextMenu,
-                                            RelativeSource={RelativeSource TemplatedParent}}"
+																		Path=TemplatedParent.View.ColumnHeaderContextMenu,
+																		RelativeSource={RelativeSource TemplatedParent}}"
 																	ColumnHeaderToolTip="{Binding
-                                            Path=TemplatedParent.View.ColumnHeaderToolTip,
-                                            RelativeSource={RelativeSource TemplatedParent}}"
+																		Path=TemplatedParent.View.ColumnHeaderToolTip,
+																		RelativeSource={RelativeSource TemplatedParent}}"
 																	SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-
 										</GridViewHeaderRowPresenter>
 									</ScrollViewer>
 								</Grid>
