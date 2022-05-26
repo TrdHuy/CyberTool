@@ -46,7 +46,6 @@
 			<RowDefinition Height="1.8*" />
 			<RowDefinition Height="0.37*" />
 			<RowDefinition Height="3.72*" />
-			<RowDefinition Height="0.1*" />
 		</Grid.RowDefinitions>
 
 		<uc_ld:ListOfDevice Grid.Column="0"
