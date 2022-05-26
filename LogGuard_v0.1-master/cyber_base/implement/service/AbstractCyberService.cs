@@ -53,7 +53,10 @@ namespace cyber_base.implement.service
 
         public abstract void OnPreServiceViewInit(ICyberServiceManager cyberServiceManager);
 
-        public abstract void OnServiceViewInstantiated(ICyberServiceManager cyberServiceManager);
+        public virtual void OnServiceViewInstantiated(ICyberServiceManager cyberServiceManager)
+        {
+            (ServiceViewContext as BaseViewModel)?.OnViewInstantiated();
+        }
 
         public virtual void OnServiceViewLoaded(ICyberServiceManager cyberServiceManager)
         {

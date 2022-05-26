@@ -81,6 +81,14 @@ namespace cyber_base.view_model
             }
         }
 
+        public virtual void OnViewInstantiated()
+        {
+            foreach (var child in ChildModels)
+            {
+                child.OnViewInstantiated();
+            }
+        }
+
         private void AddChild(BaseViewModel child)
         {
             if (child != null)
