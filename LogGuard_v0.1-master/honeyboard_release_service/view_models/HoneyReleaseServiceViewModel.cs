@@ -1,6 +1,7 @@
 ﻿using cyber_base.implement.command;
 using cyber_base.utils.async_task;
 using cyber_base.view_model;
+using honeyboard_release_service.view_models.calendar_notebook;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,6 +18,22 @@ namespace honeyboard_release_service.view_models
         private string _displayData = "";
         private string _projectPath = "";
         private string _cmd = "";
+        private CalendarNoteBookViewModel _calendarNoteBookContext;
+
+        [Bindable(true)]
+        public CalendarNoteBookViewModel CalendarNoteBookContext
+        {
+            get
+            {
+                return _calendarNoteBookContext;
+            }
+            set
+            {
+                _calendarNoteBookContext = value;
+                InvalidateOwn();
+            }
+
+        }
 
         [Bindable(true)]
         public string Cmd
@@ -69,11 +86,13 @@ namespace honeyboard_release_service.view_models
 
         [Bindable(true)]
         public BaseDotNetCommandImpl StopCmd { get; set; }
+
         public HoneyReleaseServiceViewModel()
         {
             ExecuteCmd = new BaseDotNetCommandImpl(OnExecuteCmd);
             ClearCmd = new BaseDotNetCommandImpl(OnClearCmd);
             StopCmd = new BaseDotNetCommandImpl(OnStopCmd);
+            _calendarNoteBookContext = new CalendarNoteBookViewModel(this);
         }
 
         private void OnStopCmd(object obj)
@@ -88,8 +107,8 @@ namespace honeyboard_release_service.view_models
             DisplayData = "";
         }
 
-        CancellationTokenSource _TokenCache;
-        AsyncTask _TaskCache;
+        CancellationTokenSource? _TokenCache;
+        AsyncTask? _TaskCache;
 
         private void OnExecuteCmd(object obj)
         {

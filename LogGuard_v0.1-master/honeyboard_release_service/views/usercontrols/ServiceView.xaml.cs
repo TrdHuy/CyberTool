@@ -27,7 +27,7 @@ namespace honeyboard_release_service.views.usercontrols
         public ServiceView()
         {
             InitializeComponent();
-
         }
+
     }
 }

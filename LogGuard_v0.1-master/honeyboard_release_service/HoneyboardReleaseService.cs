@@ -1,6 +1,8 @@
 using cyber_base.implement.service;
 using cyber_base.service;
+using cyber_base.view_model;
 using honeyboard_release_service.definitions;
+using honeyboard_release_service.implement.module;
 using honeyboard_release_service.views.usercontrols;
 using System;
 
@@ -30,9 +32,9 @@ namespace honeyboard_release_service
         public HoneyboardReleaseService()
         {
             Header = "HBD Release";
-            HeaderGeometryData = ServiceDefinition.SERVICE_PAGE_HEADER_GEOMETRY_DATA;
-            ServiceID = ServiceDefinition.SERVICE_PAGE_URI_ORIGINAL_STRING;
-            ServicePageLoadingDelayTime = ServiceDefinition.SERVICE_PAGE_LOADING_DELAY_TIME;
+            HeaderGeometryData = PublisherDefinition.SERVICE_PAGE_HEADER_GEOMETRY_DATA;
+            ServiceID = PublisherDefinition.SERVICE_PAGE_URI_ORIGINAL_STRING;
+            ServicePageLoadingDelayTime = PublisherDefinition.SERVICE_PAGE_LOADING_DELAY_TIME;
             ServiceResourceUri = new Uri("pack://application:,,,/honeyboard_release_service;component/themes/Themes.xaml",
                    UriKind.Absolute);
         }
@@ -44,10 +46,13 @@ namespace honeyboard_release_service
 
         public override void OnPreServiceViewInit(ICyberServiceManager cyberServiceManager)
         {
+            PublisherModuleManager.Init();
         }
 
         public override void OnServiceViewInstantiated(ICyberServiceManager cyberServiceManager)
         {
+            PublisherModuleManager.OnViewInstantiated();
+            (ServiceViewContext as BaseViewModel)?.OnViewInstantiated();
         }
 
         public override void OnServiceViewLoaded(ICyberServiceManager cyberServiceManager)
@@ -58,6 +63,7 @@ namespace honeyboard_release_service
         public override void OnServiceUnloaded(ICyberServiceManager cyberServiceManager)
         {
             base.OnServiceUnloaded(cyberServiceManager);
+            PublisherModuleManager.Destroy();
         }
 
         protected override object? GenerateServiceView()

@@ -6,9 +6,9 @@
 		<ResourceDictionary Source="pack://application:,,,/honeyboard_release_service;component/themes/RawSource.xaml" />
 
 	</ResourceDictionary.MergedDictionaries>
-	
+
 	<Style TargetType="{x:Type TabControl}"
-		x:Key="RT_TabControlStyle">
+		   x:Key="RT_TabControlStyle">
 		<Setter Property="SnapsToDevicePixels"
 				Value="True" />
 		<Setter Property="Template">
@@ -48,12 +48,70 @@
 								KeyboardNavigation.TabNavigation="Local"
 								KeyboardNavigation.DirectionalNavigation="Contained"
 								KeyboardNavigation.TabIndex="2">
-							
+
 							<ContentPresenter x:Name="PART_SelectedContentHost"
 											  ContentSource="SelectedContent" />
 						</Border>
 					</Grid>
 				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style TargetType="ListView"
+		   x:Key="NotebookDayVersionPresenterStyle">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ListView">
+					<Grid>
+						<Border x:Name="RecMask"
+								CornerRadius="10"
+								Background="{TemplateBinding Background}" />
+						<Border Name="Border"
+								Background="{TemplateBinding Background}">
+							<Border.OpacityMask>
+								<VisualBrush Visual="{Binding ElementName=RecMask}" />
+							</Border.OpacityMask>
+							<ContentControl BorderBrush="{StaticResource ButtonBackground_Level1}"
+											VerticalAlignment="Top"
+											VerticalContentAlignment="Center"
+											Style="{StaticResource CyberCollapsibleScrollStyle}">
+								<ItemsPresenter />
+							</ContentControl>
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+
+		<Setter Property="ItemContainerStyle">
+			<Setter.Value>
+				<Style TargetType="ListViewItem">
+					<Setter Property="Height"
+							Value="30" />
+					
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate TargetType="ListViewItem">
+								<Grid>
+									<TextBlock Text="{Binding Name}"
+											   Margin="7,0,0,0"
+											   VerticalAlignment="Center"/>
+									<Rectangle x:Name="FeedBackRec"
+											   IsHitTestVisible="False"/>
+								</Grid>
+								<ControlTemplate.Triggers>
+									<Trigger Property="IsMouseOver"
+											 Value="True">
+										<Setter Property="Fill"
+												TargetName="FeedBackRec"
+												Value="{DynamicResource MouseOverFillEffect_Level1}" />
+									</Trigger>
+								</ControlTemplate.Triggers>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+				</Style>
 			</Setter.Value>
 		</Setter>
 	</Style>
