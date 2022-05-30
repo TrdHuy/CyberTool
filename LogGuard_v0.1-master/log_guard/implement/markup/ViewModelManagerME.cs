@@ -14,8 +14,8 @@ namespace log_guard.implement.markup
     {
         private ObservableDictionary<Type, object> DataContextCache = ViewModelManager.Current.DataContextCache;
 
-        public static event OnDataContextGeneratedHandler DataContextGenerated;
-        public static event OnDataContextDestroyedHandler DataContextDestroyed;
+        public static event OnDataContextGeneratedHandler? DataContextGenerated;
+        public static event OnDataContextDestroyedHandler? DataContextDestroyed;
 
         public Type? DataContextType { get; set; }
 
@@ -70,14 +70,16 @@ namespace log_guard.implement.markup
                             var parentInCache = DataContextCache[ParentDataContextType];
                             var childContext = Activator.CreateInstance(DataContextType, parentInCache);
 
-                            var parentVM = parentInCache as BaseViewModel;
-                            if (DataContextCache.ContainsKey(DataContextType))
+                            if(childContext != null)
                             {
-                                DataContextCache.Remove(DataContextType);
+                                var parentVM = parentInCache as BaseViewModel;
+                                if (DataContextCache.ContainsKey(DataContextType))
+                                {
+                                    DataContextCache.Remove(DataContextType);
+                                }
+                                DataContextCache.Add(DataContextType, childContext);
+                                DataContextGenerated?.Invoke(this, new DataContextGeneratedArgs(childContext));
                             }
-                            DataContextCache.Add(DataContextType, childContext);
-                            DataContextGenerated?.Invoke(this, new DataContextGeneratedArgs(childContext));
-
                             return childContext;
                         }
                     }
