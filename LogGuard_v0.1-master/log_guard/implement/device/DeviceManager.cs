@@ -84,7 +84,7 @@ namespace log_guard.implement.device
         {
             var resMes = LogGuardService
                 .Current
-                .ServiceManager
+                .ServiceManager?
                 .App
                 .OpenWaitingTaskBox("Finding your device(s)!"
                            , "Scanning"
