@@ -166,6 +166,20 @@ namespace cyber_tool.windows
             return "";
         }
 
+        public string OpenFolderChooserDialogWindow()
+        {
+            using (var fbd = new  System.Windows.Forms.FolderBrowserDialog())
+            {
+                System.Windows.Forms.DialogResult result = fbd.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    return fbd.SelectedPath;
+                }
+            }
+            return "";
+        }
+
         private void StartDispandCCAnim(ContentControl cc
             , CyberIPopWindow floatWindow
             , int animTime

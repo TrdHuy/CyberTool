@@ -5,6 +5,7 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="clr-namespace:honeyboard_release_service.views.elements.project_manager"
 			 xmlns:vmm="clr-namespace:honeyboard_release_service.implement.markup"
+			 xmlns:atp="clr-namespace:honeyboard_release_service.prop.attached_properties"
 			 xmlns:vm="clr-namespace:honeyboard_release_service.view_models.project_manager"
 			 xmlns:vmp="clr-namespace:honeyboard_release_service.view_models"
 			 mc:Ignorable="d"
@@ -25,9 +26,10 @@
 				<RowDefinition Height="30" />
 				<RowDefinition />
 				<RowDefinition />
-				<RowDefinition Height="0.5*" />
-				<RowDefinition Height="*" />
-				<RowDefinition Height="5.5*" />
+				<RowDefinition />
+				<RowDefinition Height="0.2*" />
+				<RowDefinition Height="0.8*" />
+				<RowDefinition Height="6*" />
 				<RowDefinition Height="10" />
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
@@ -52,26 +54,38 @@
 			<TextBox Grid.Row="1"
 					 Tag="Project path"
 					 Margin="0,0,0,10"
+					 atp:ElementAttProperties.PathSelected="{Binding GestureCommandVM.PathSelectedGestureCommand}"
+					 atp:ElementAttProperties.DialogBoxTitle="Choose project folder"
 					 Foreground="{StaticResource Foreground_Level3}"
 					 Grid.Column="1"
 					 Background="{StaticResource Background_Level3}"
-					 Template="{StaticResource RoundedCommonTextBoxTmpl}" />
+					 Template="{StaticResource RT_FolderPathTextBoxTmpl}" />
 
 			<TextBox Grid.Row="2"
+					 Tag="Version properties path"
+					 Margin="0,0,0,10"
+					 atp:ElementAttProperties.DialogBoxTitle="Choose project version properties file"
+					 atp:ElementAttProperties.FileBoxFilter="Properties file(*.properties)|*.properties|Gradle files (*.gradle)|*.gradle"
+					 Foreground="{StaticResource Foreground_Level3}"
+					 Grid.Column="1"
+					 Background="{StaticResource Background_Level3}"
+					 Template="{StaticResource RT_FilePathTextBoxTmpl}" />
+
+			<ComboBox Grid.Row="3"
 					 Tag="Branch"
 					 Margin="0,0,0,10"
 					 Foreground="{StaticResource Foreground_Level3}"
 					 Grid.Column="1"
 					 Background="{StaticResource Background_Level3}"
-					 Template="{StaticResource RoundedCommonTextBoxTmpl}" />
-
-			<Rectangle Grid.Row="3"
+					 Template="{StaticResource CyberNoEditComboboxTmpl}" />
+			
+			<Rectangle Grid.Row="4"
 					   Height="1"
 					   Fill="{StaticResource HorizontalFench1pixel_Background}"
 					   Grid.Column="1" />
 
 			<StackPanel Orientation="Horizontal"
-						Grid.Row="4"
+						Grid.Row="5"
 						Grid.ColumnSpan="2">
 				<TextBlock Text="Version history"
 						   VerticalAlignment="Center"
@@ -85,7 +99,7 @@
 					  Stretch="Uniform" />
 			</StackPanel>
 
-			<Grid Grid.Row="5"
+			<Grid Grid.Row="6"
 				  Grid.Column="1"
 				  Grid.ColumnSpan="2">
 				<Grid.RowDefinitions>

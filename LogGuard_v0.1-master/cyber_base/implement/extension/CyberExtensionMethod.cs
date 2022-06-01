@@ -52,5 +52,44 @@ namespace cyber_base.implement.extension
             return val;
         }
 
+        public static T? FindParent<T>(this DependencyObject dO, string parentsName) where T : DependencyObject
+        {
+            if (dO == null)
+            {
+                return null;
+            }
+
+            T? val = null;
+            var parentDO = VisualTreeHelper.GetParent(dO);
+
+            if (parentDO != null && !string.IsNullOrEmpty(parentsName))
+            {
+                FrameworkElement frameworkElement = parentDO as FrameworkElement;
+                if (frameworkElement != null && frameworkElement.Name == parentsName)
+                {
+                    val = (T)parentDO;
+                }
+                else if(frameworkElement != null)
+                {
+                    val = FindParent<T>(frameworkElement, parentsName);
+                }
+
+            }
+
+            return val;
+        }
+
+        public static T? FindParent<T>(this DependencyObject child) where T : DependencyObject
+        {
+            DependencyObject parentObject = VisualTreeHelper.GetParent(child);
+
+            if (parentObject == null) return null;
+
+            T parent = parentObject as T;
+            if (parent != null)
+                return parent;
+            else
+                return FindParent<T>(parentObject);
+        }
     }
 }

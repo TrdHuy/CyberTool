@@ -18,8 +18,8 @@ namespace cyber_base.app
         CyberContactMessage OpenWaitingTaskBox(string content
             , string title
             , Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask
-            , Func<bool> canExecute = null
-            , Action<object, AsyncTaskResult> callback = null
+            , Func<bool>? canExecute = null
+            , Action<object, AsyncTaskResult>? callback = null
             , long delayTime = 0);
 
         CyberContactMessage ShowWaringBox(string warning
@@ -33,8 +33,11 @@ namespace cyber_base.app
            , CyberOwner ownerWindow = CyberOwner.Default
            , double width = 500
            , double height = 400
-           , object dataContext = null
-           , Action<object> windowShowedCallback = null
+           , object? dataContext = null
+           , Action<object>? windowShowedCallback = null
            , string title = "Floating window");
+
+        string OpenFolderChooserDialogWindow();
+
     }
 }

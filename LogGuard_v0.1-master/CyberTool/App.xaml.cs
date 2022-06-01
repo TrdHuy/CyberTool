@@ -130,5 +130,10 @@ namespace cyber_tool
             return _WindowDirector.OpenFileChooserDialogWindow(title, filter);
         }
 
+        public string OpenFolderChooserDialogWindow()
+        {
+            return _WindowDirector.OpenFolderChooserDialogWindow();
+        }
+
     }
 }

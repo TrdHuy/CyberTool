@@ -11,6 +11,8 @@ namespace honeyboard_release_service.definitions
         public const string SERVICE_PAGE_URI_ORIGINAL_STRING = "pack://application:,,,/honeyboard_release_service;component/views/usercontrols/ServiceView.xaml";
         public static readonly long SERVICE_PAGE_LOADING_DELAY_TIME = 500;
         public const string SERVICE_PAGE_HEADER_GEOMETRY_DATA = "";
+        public const string PUBLISHER_PLUGIN_TAG = "SWPublisherPlugin";
+
     }
 
     internal struct CalendarNotebookSizeDefinition
@@ -32,6 +34,18 @@ namespace honeyboard_release_service.definitions
         public static float ItemCornerRad { get; } = 5;
         public static float ItemMargin { get; } = 5;
         public static float ItemFontSize { get; } = 10;
+
+    }
+
+    internal class PublisherKeyFeatureTag
+    {
+        public const string KEY_TAG_PRT_QUICK_RELEASE_FEATURE = "KEY_TAG_PRT_QUICK_RELEASE_FEATURE";
+        public const string KEY_TAG_PRT_CREATE_CL_AND_COMMIT_FEATURE = "KEY_TAG_PRT_CREATE_CL_AND_COMMIT_FEATURE";
+        public const string KEY_TAG_PRT_CLEAN_RELEASE_INFORMATION_FEATURE = "KEY_TAG_PRT_CLEAN_RELEASE_INFORMATION_FEATURE";
+        public const string KEY_TAG_PRT_SAVE_RELEASE_TEMPLATE_FEATURE = "KEY_TAG_PRT_SAVE_RELEASE_TEMPLATE_FEATURE";
+        public const string KEY_TAG_PRT_RESTORE_LATEST_RELEASE_FEATURE = "KEY_TAG_PRT_RESTORE_LATEST_RELEASE_FEATURE";
+
+        public const string KEY_TAG_PRT_PM_PROJECT_PATH_SELECTED_FEATURE = "KEY_TAG_PRT_PM_PROJECT_PATH_SELECTED_FEATURE";
 
     }
 

@@ -1,5 +1,6 @@
 ﻿using cyber_base.view_model;
 using honeyboard_release_service.utils;
+using honeyboard_release_service.view_models.command.project_manager;
 using honeyboard_release_service.view_models.project_manager.items;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,10 @@ namespace honeyboard_release_service.view_models.project_manager
     internal class ProjectManagerViewModel : BaseViewModel
     {
         private FirstLastObservableCollection<VersionHistoryItemViewModel> _versionHistoryItemContexts;
-
+        
+        [Bindable(true)]
+        public PM_GestureCommandVM GestureCommandVM { get; set; }
+        
         [Bindable(true)]
         public FirstLastObservableCollection<VersionHistoryItemViewModel> VersionHistoryItemContexts
         {
@@ -37,6 +41,8 @@ namespace honeyboard_release_service.view_models.project_manager
             _versionHistoryItemContexts.FirstChanged += HandleHistoryItemFirstChanged;
             _versionHistoryItemContexts.LastChanged -= HandleHistoryItemLastChanged;
             _versionHistoryItemContexts.LastChanged += HandleHistoryItemLastChanged;
+
+            GestureCommandVM = new PM_GestureCommandVM(this);
 
             //Test data
             _versionHistoryItemContexts.Add(new VersionHistoryItemViewModel());

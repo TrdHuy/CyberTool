@@ -1,4 +1,5 @@
 ﻿using honeyboard_release_service.@base.module;
+using honeyboard_release_service.implement.ui_event_handler;
 using honeyboard_release_service.implement.view_helper;
 using honeyboard_release_service.implement.view_manager.notebook_header;
 using honeyboard_release_service.implement.view_manager.notebook_item;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace honeyboard_release_service.implement.module
 {
-   
+
     internal class PublisherModuleManager
     {
         private static Collection<IPublisherModule> _Modules;
@@ -21,7 +22,9 @@ namespace honeyboard_release_service.implement.module
         private static IPublisherModule? _CNHVM_Instance;
         private static IPublisherModule? _CNIVM_Instance;
         private static IPublisherModule? _PVH_Instance;
-
+        private static IPublisherModule? _SPCEF_Instance;
+        private static IPublisherModule? _PKAL_Instance;
+        
         static PublisherModuleManager()
         {
             _Modules = new Collection<IPublisherModule>();
@@ -35,6 +38,8 @@ namespace honeyboard_release_service.implement.module
             _Modules.Add(PVH_Instance);
             _Modules.Add(CNIVM_Instance);
             _Modules.Add(CNHVM_Instance);
+            _Modules.Add(SPCEF_Instance);
+            _Modules.Add(PKAL_Instance);
 
             foreach (var module in _Modules)
             {
@@ -57,6 +62,8 @@ namespace honeyboard_release_service.implement.module
             _PVH_Instance = null;
             _CNHVM_Instance = null;
             _CNIVM_Instance = null;
+            _SPCEF_Instance = null;
+            _PKAL_Instance = null;
         }
 
         public static ViewModelManager VMM_Instance
@@ -70,6 +77,7 @@ namespace honeyboard_release_service.implement.module
                 return (ViewModelManager)_VMM_Instance;
             }
         }
+
         public static CalendarNotebookHeaderViewManager CNHVM_Instance
         {
             get
@@ -91,6 +99,30 @@ namespace honeyboard_release_service.implement.module
                     _CNIVM_Instance = Activator.CreateInstance(typeof(CalendarNotebookItemViewManager), true) as CalendarNotebookItemViewManager;
                 }
                 return (CalendarNotebookItemViewManager)_CNIVM_Instance;
+            }
+        }
+
+        public static SwPublisherCommandExecuterFactory SPCEF_Instance
+        {
+            get
+            {
+                if (_SPCEF_Instance == null)
+                {
+                    _SPCEF_Instance = Activator.CreateInstance(typeof(SwPublisherCommandExecuterFactory), true) as SwPublisherCommandExecuterFactory;
+                }
+                return (SwPublisherCommandExecuterFactory)_SPCEF_Instance;
+            }
+        }
+
+        public static PublisherKeyActionListener PKAL_Instance
+        {
+            get
+            {
+                if (_PKAL_Instance == null)
+                {
+                    _PKAL_Instance = Activator.CreateInstance(typeof(PublisherKeyActionListener), true) as PublisherKeyActionListener;
+                }
+                return (PublisherKeyActionListener)_PKAL_Instance;
             }
         }
 
