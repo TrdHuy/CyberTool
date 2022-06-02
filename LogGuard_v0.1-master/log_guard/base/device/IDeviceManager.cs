@@ -16,7 +16,7 @@ namespace log_guard.@base.device
         /// </summary>
         void ForceUpdateListDevices();
 
-        IDeviceItem SelectedDevice { get; set; }
+        IDeviceItem? SelectedDevice { get; set; }
 
         RangeObservableCollection<IDeviceItem> DeviceSource { get; }
 

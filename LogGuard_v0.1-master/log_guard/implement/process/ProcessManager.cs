@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace log_guard.implement.process
 {
-    internal class ProcessManager : ILogGuardModule
+    internal class ProcessManager : BaseLogGuardModule
     {
         private List<int> _processIDList = new List<int>();
 
@@ -34,10 +34,6 @@ namespace log_guard.implement.process
             {
                 KillProcessAndChildren(p);
             }
-        }
-
-        public void OnModuleStart()
-        {
         }
 
         private void KillProcessAndChildren(int pid)

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cyber_base.utils.async_task
+namespace cyber_base.async_task
 {
     public enum MessageAsyncTaskResult
     {

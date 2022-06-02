@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace log_guard.implement.flow.run_thread_config
 {
-    internal class RunThreadConfigManager : IRunThreadConfigManager, ILogGuardModule
+    internal class RunThreadConfigManager : BaseLogGuardModule, IRunThreadConfigManager
     {
         private static Logger logger = new Logger("RunThreadConfigManager");
         private const string _configPath = @"\config.json";
@@ -103,10 +103,6 @@ namespace log_guard.implement.flow.run_thread_config
             {
                 MessageEmployees = new List<TrippleToggleItemVO>();
             }
-        }
-
-        public void OnModuleStart()
-        {
         }
 
         private class RunThreadConfigImpl : IRunThreadConfig

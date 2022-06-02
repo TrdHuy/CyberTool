@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace log_guard.implement.flow.state_controller
 {
-    internal abstract class StateController : IStateController, ILogGuardModule
+    internal abstract class StateController : BaseLogGuardModule, IStateController
     {
         private LogGuardState _currentState;
         private LogGuardState _previousState;
@@ -50,7 +50,7 @@ namespace log_guard.implement.flow.state_controller
 
         }
 
-        public void OnModuleStart()
+        public override void OnModuleStart()
         {
 
             if (LogGuardService.Current.ServiceManager != null)

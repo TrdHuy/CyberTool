@@ -1,5 +1,5 @@
-﻿using cyber_base.implement.utils;
-using cyber_base.utils.async_task;
+﻿using cyber_base.async_task;
+using cyber_base.implement.utils;
 using cyber_base.view.window;
 using log_guard.@base.device;
 using log_guard.@base.module;
@@ -20,12 +20,12 @@ using System.Windows;
 
 namespace log_guard.implement.device
 {
-    internal class DeviceManager : IDeviceManager, ILogGuardModule
+    internal class DeviceManager : BaseLogGuardModule, IDeviceManager
     {
+        private static CancellationTokenSource? _scanDeviceCTS;
+
         private List<IDeviceHolder> _deviceHolders;
         private RangeObservableCollection<IDeviceItem> _deviceSource;
-        private Thread? _scanDeviceThread;
-        private Process? _process;
         private IDeviceItem? _selectedDevice;
 
         public event FinishScanDeviceHandler? FinishScanDevice;
@@ -35,6 +35,7 @@ namespace log_guard.implement.device
 
         public RangeObservableCollection<IDeviceItem> DeviceSource => _deviceSource;
         public List<IDeviceHolder> DeviceHolders => _deviceHolders;
+
         public IDeviceItem? SelectedDevice
         {
             get => _selectedDevice;
@@ -59,10 +60,15 @@ namespace log_guard.implement.device
             _deviceSource = new RangeObservableCollection<IDeviceItem>();
         }
 
-        public void OnModuleStart()
+        public override void OnModuleStart()
         {
             SerialPortService.PortsChanged -= OnSerialPortChanged;
             SerialPortService.PortsChanged += OnSerialPortChanged;
+        }
+
+        public override void OnModuleDestroy()
+        {
+            _scanDeviceCTS?.Cancel();
         }
 
         private void OnSerialPortChanged(object? sender, PortsChangedArgs e)
@@ -70,7 +76,7 @@ namespace log_guard.implement.device
             var selectedDevice = SelectedDevice;
             DeviceSource.Clear();
             SerialPortChanged?.Invoke(this, e);
-            if (e.EventType == EventType.Removal)
+            if (e.EventType == EventType.Removal && selectedDevice != null)
             {
                 UpdateListDevicesWhenSerialPortRemoved(selectedDevice);
             }
@@ -88,10 +94,9 @@ namespace log_guard.implement.device
                 .App
                 .OpenWaitingTaskBox("Finding your device(s)!"
                            , "Scanning"
-                           , async (param, token) =>
+                           , async (param, result, token) =>
                            {
-                               var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
-
+                               var waitingBox = param as IStandBox;
                                var res = StartScanDevice();
                                if (token.IsCancellationRequested)
                                {
@@ -102,19 +107,30 @@ namespace log_guard.implement.device
                                    result.Result = res;
                                    result.MesResult = MessageAsyncTaskResult.Done;
                                }
+                               DeviceSource.Clear();
+
+                               var sourceChangedCallback = new Action(() =>
+                               {
+                                   waitingBox?.UpdateMessageAndTitle("Found " + DeviceSource?.Count() + " device(s)", "Scanning!");
+                               });
+
+                               if (res != null)
+                               {
+                                   await DeviceSource.AsyncAddNewRange(res, sourceChangedCallback);
+                               }
+
                                return result;
                            }
                            , null
-                           , (param, result) =>
+                           , async (param, result) =>
                            {
                                var waitingBox = param as IStandBox;
-                               var lstDevice = result.Result as IEnumerable<DeviceItemViewModel>;
+                               var lstDevice = result.Result as IAsyncEnumerable<IDeviceItem>;
                                if (result.MesResult == MessageAsyncTaskResult.Done)
                                {
-                                   DeviceSource.Clear();
-                                   DeviceSource.AddNewRange(lstDevice);
-                                   waitingBox?.UpdateMessageAndTitle("Found " + lstDevice?.Count() + " device(s)", "Done");
+                                   waitingBox?.UpdateMessageAndTitle("Found " + DeviceSource?.Count() + " device(s)", "Done!");
                                }
+                               return result;
                            }
                            , 5000);
         }
@@ -130,33 +146,32 @@ namespace log_guard.implement.device
             _deviceHolders.Remove(holder);
         }
 
-        public void ForceUpdateListDevices()
+        public async void ForceUpdateListDevices()
         {
-            CleanUp();
-            _scanDeviceThread = new Thread(() =>
+            DeviceSource.Clear();
+            var devices = StartScanDevice();
+            if (devices != null)
             {
-                DeviceSource.Clear();
-                var devices = StartScanDevice();
-                DeviceSource.AddNewRange(devices);
-            });
-            _scanDeviceThread.Start();
+                await DeviceSource.AsyncAddNewRange(devices);
+            }
         }
 
-        private void UpdateListDevicesWhenSerialPortRemoved(IDeviceItem selectedDevice)
+        private async void UpdateListDevicesWhenSerialPortRemoved(IDeviceItem selectedDevice)
         {
-            CleanUp();
-            _scanDeviceThread = new Thread(() =>
+            var devices = StartScanDevice();
+            var shouldNotifySelectedDeviceUnplug = false;
+            if (selectedDevice == null)
             {
-                var devices = StartScanDevice();
-                bool shouldNotifySelectedDeviceUnplug = false;
-                if (selectedDevice == null)
+                shouldNotifySelectedDeviceUnplug = false;
+            }
+            else
+            {
+                shouldNotifySelectedDeviceUnplug = true;
+                if (devices != null)
                 {
-                    shouldNotifySelectedDeviceUnplug = false;
-                }
-                else
-                {
-                    shouldNotifySelectedDeviceUnplug = true;
-                    foreach (var device in devices)
+                    await DeviceSource.AsyncAddNewRange(devices);
+
+                    foreach (var device in DeviceSource)
                     {
                         if (device.SerialNumber.Equals(selectedDevice.SerialNumber))
                         {
@@ -165,29 +180,23 @@ namespace log_guard.implement.device
                         }
                     }
                 }
-                if (shouldNotifySelectedDeviceUnplug)
-                {
-                    SelectedDeviceUnpluged?.Invoke(this, EventArgs.Empty);
-                }
-
-                DeviceSource.AddNewRange(devices);
-
-            });
-            _scanDeviceThread.Start();
+            }
+            if (shouldNotifySelectedDeviceUnplug)
+            {
+                SelectedDeviceUnpluged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
-        private void UpdateListDevicesWhenSerialPortInserted()
+        private async void UpdateListDevicesWhenSerialPortInserted()
         {
-            CleanUp();
-            _scanDeviceThread = new Thread(() =>
-            {
-                // Pause for port loading
-                Thread.Sleep(300);
-                var devices = StartScanDevice();
-                DeviceSource.AddNewRange(devices);
+            // Pause for port loading
+            await Task.Delay(300);
 
-            });
-            _scanDeviceThread.Start();
+            var devices = StartScanDevice();
+            if (devices != null)
+            {
+                await DeviceSource.AsyncAddNewRange(devices);
+            }
         }
 
         public static DeviceManager Current
@@ -198,65 +207,92 @@ namespace log_guard.implement.device
             }
         }
 
-        private void CleanUp()
+        private IAsyncEnumerable<IDeviceItem>? StartScanDevice()
         {
-            if (_scanDeviceThread != null && _scanDeviceThread.IsAlive)
+            _scanDeviceCTS?.Cancel();
+            _scanDeviceCTS = new CancellationTokenSource();
+            IAsyncEnumerable<IDeviceItem>? list = null;
+            if (_scanDeviceCTS != null)
             {
-                _scanDeviceThread.Interrupt();
-                _scanDeviceThread.Abort();
+                list = StartScanDevice(_scanDeviceCTS);
             }
-            if (_process != null)
-            {
-                try
-                {
-                    if (!_process.HasExited)
-                    {
-                        _process.Kill();
-                    }
-                }
-                catch { }
-                finally
-                {
-                    _process.Dispose();
-                    _process.Close();
-                }
-
-            }
+            return list;
         }
 
-        private IEnumerable<IDeviceItem> StartScanDevice()
+        private async IAsyncEnumerable<IDeviceItem> StartScanDevice(CancellationTokenSource token)
         {
             string[] stringSeparators = new string[] { "\r\n" };
             List<string> serialNumbers = new List<string>();
-            var dIVMs = new List<DeviceItemViewModel>();
 
-            try
+            using (var process = DeviceCmdExecuter
+                .Current
+                .CreateProcess(DeviceCmdContact.CMD_DEVICES))
             {
-                _process = DeviceCmdExecuter.Current.CreateProcess(DeviceCmdContact.CMD_DEVICES);
-                _process.Start();
-                _process.WaitForExit();
-                ProcessManager.Current.AddNewProcessID(_process.Id);
-
-
-                string line;
-                _process.StandardOutput.ReadLine();
-                while ((line = _process.StandardOutput.ReadLine()) != null)
+                process.Start();
+                try
                 {
+                    await process.WaitForExitAsync(token.Token);
+                }
+                catch (OperationCanceledException e)
+                {
+                    HandleAbortDeviceScanRequest();
+                    throw e;
+                }
+                ProcessManager.Current.AddNewProcessID(process.Id);
+                string? line;
+                process.StandardOutput.ReadLine();
+                while ((line = process.StandardOutput.ReadLine()) != null)
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        HandleAbortDeviceScanRequest();
+                        throw new OperationCanceledException();
+                    }
+
                     string tmp = line.Split('\t')[0];
                     if (tmp != "")
                         serialNumbers.Add(tmp);
                 }
-                if (serialNumbers != null && serialNumbers.Count > 0)
-                {
-                    for (int i = 0; i < serialNumbers.Count; i++)
-                    {
-                        string serialNumber = serialNumbers[i];
-                        _process.StartInfo.Arguments = DeviceCmdExecuter.Current.CreateCommandADB(DeviceCmdContact.CMD_BUILD_NUMBER, DeviceCmdContact.ADB_SHELL_COMMAND_TYPE, false, true, serialNumber);
-                        _process.Start();
-                        _process.WaitForExit();
-                        ProcessManager.Current.AddNewProcessID(_process.Id);
+            }
 
-                        string tmp = _process.StandardOutput.ReadLine();
+            if (serialNumbers != null && serialNumbers.Count > 0)
+            {
+                for (int i = 0; i < serialNumbers.Count; i++)
+                {
+                    string serialNumber = serialNumbers[i];
+                    using (var process = DeviceCmdExecuter
+                        .Current
+                        .CreateProcess(
+                            DeviceCmdExecuter
+                            .Current
+                            .CreateCommandADB(
+                                DeviceCmdContact.CMD_BUILD_NUMBER
+                                , DeviceCmdContact.ADB_SHELL_COMMAND_TYPE
+                                , false
+                                , true
+                                , serialNumber)))
+                    {
+                        if (token.IsCancellationRequested)
+                        {
+                            HandleAbortDeviceScanRequest();
+                            throw new OperationCanceledException();
+                        }
+
+                        process.StartInfo.Arguments = DeviceCmdExecuter.Current.CreateCommandADB(DeviceCmdContact.CMD_BUILD_NUMBER, DeviceCmdContact.ADB_SHELL_COMMAND_TYPE, false, true, serialNumber);
+                        process.Start();
+
+                        try
+                        {
+                            await process.WaitForExitAsync(token.Token);
+                        }
+                        catch (OperationCanceledException e)
+                        {
+                            HandleAbortDeviceScanRequest();
+                            throw e;
+                        }
+                        ProcessManager.Current.AddNewProcessID(process.Id);
+
+                        var tmp = process.StandardOutput.ReadLine();
                         if (tmp != null)
                         {
                             string[] buildNumber = tmp.Split(stringSeparators, StringSplitOptions.None);
@@ -266,38 +302,34 @@ namespace log_guard.implement.device
                                     .BuildSerialNumber(serialNumber)
                                     .Build();
                             var deviceVM = new DeviceItemViewModel(dvInfo);
-                            dIVMs.Add(deviceVM);
+                            yield return deviceVM;
                         }
+
                     }
+
                 }
+                
+            }
 
-                if (!_process.HasExited)
-                    _process.Kill();
-            }
-            catch { }
-            finally
-            {
-                _process.Dispose();
-                _process.Close();
-                FinishScanDevice?.Invoke(this, EventArgs.Empty);
-            }
-            return dIVMs;
+            FinishScanDevice?.Invoke(this, EventArgs.Empty);
         }
 
-
-        ~DeviceManager()
+        private void HandleAbortDeviceScanRequest()
         {
-            SerialPortService.CleanUp();
+            FinishScanDevice?.Invoke(this, EventArgs.Empty);
         }
+
 
         #region SerialPortService
         private static class SerialPortService
         {
+            private static Logger SPSLogger = new Logger("SerialPortService");
+
             private static string[] _serialPorts;
 
-            private static ManagementEventWatcher arrival;
+            private static ManagementEventWatcher? arrival;
 
-            private static ManagementEventWatcher removal;
+            private static ManagementEventWatcher? removal;
 
             static SerialPortService()
             {
@@ -320,11 +352,11 @@ namespace log_guard.implement.device
             /// </summary>
             public static void CleanUp()
             {
-                arrival.Stop();
-                removal.Stop();
+                arrival?.Stop();
+                removal?.Stop();
             }
 
-            public static event EventHandler<PortsChangedArgs> PortsChanged;
+            public static event EventHandler<PortsChangedArgs>? PortsChanged;
 
             private static void MonitorDeviceChanges()
             {
@@ -345,7 +377,7 @@ namespace log_guard.implement.device
                 }
                 catch (ManagementException err)
                 {
-
+                    SPSLogger.E(err.ToString());
                 }
             }
 
@@ -362,10 +394,10 @@ namespace log_guard.implement.device
                         if (!_serialPorts.SequenceEqual(availableSerialPorts))
                         {
                             _serialPorts = availableSerialPorts;
-                            PortsChanged.Invoke(null, new PortsChangedArgs(eventType, _serialPorts));
+                            PortsChanged?.Invoke(null, new PortsChangedArgs(eventType, _serialPorts));
                         }
                     }
-                    catch (Exception ex)
+                    catch
                     {
 
                     }

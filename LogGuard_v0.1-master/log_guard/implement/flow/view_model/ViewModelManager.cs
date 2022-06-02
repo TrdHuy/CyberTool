@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace log_guard.implement.flow.view_model
 {
-    internal class ViewModelManager : ILogGuardModule
+    internal class ViewModelManager : BaseLogGuardModule
     {
         public ObservableDictionary<Type, object> DataContextCache { get; }
 
@@ -53,10 +53,6 @@ namespace log_guard.implement.flow.view_model
             DataContextCache = new ObservableDictionary<Type, object>();
             DataContextCache.CollectionChanged -= OnContextCollectionsChanged;
             DataContextCache.CollectionChanged += OnContextCollectionsChanged;
-        }
-
-        public void OnModuleStart()
-        {
         }
 
         private void OnContextCollectionsChanged(object? sender, NotifyCollectionChangedEventArgs e)

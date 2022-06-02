@@ -1,7 +1,8 @@
 ﻿
+using cyber_base.async_task;
+using cyber_base.implement.async_task;
 using cyber_base.implement.command;
 using cyber_base.implement.utils;
-using cyber_base.utils.async_task;
 using log_guard.@base.flow;
 using log_guard.@base.flow.highlight;
 using log_guard.@base.flow.source_filter;
@@ -27,7 +28,7 @@ using System.Threading.Tasks;
 
 namespace log_guard.implement.flow.source_manager
 {
-    internal class SourceManager : ISourceManager, ILogGuardModule
+    internal class SourceManager : BaseLogGuardModule, ISourceManager
     {
         private static Logger Logger { get; } = new Logger("SourceManager");
         private object stateLockObject = new Object();
@@ -70,7 +71,7 @@ namespace log_guard.implement.flow.source_manager
             ResetLogLevelCountMap();
         }
 
-        public void OnModuleStart()
+        public override void OnModuleStart()
         {
             _sourceFilter = SourceFilterManager.Current;
             _sourceHighlighter = SourceHighlightManager.Current;
@@ -228,33 +229,29 @@ namespace log_guard.implement.flow.source_manager
         }
 
         #region Filter area
-        private CancellationTokenSource? SourceFilterCancellationTokenCache { get; set; }
-        private AsyncTask? FilterTaskCache { get; set; }
+        private CancelableAsyncTask? FilterTaskCache { get; set; }
 
-        private void OnFilterConditionChanged(object sender, ConditionChangedEventArgs e)
+        private async void OnFilterConditionChanged(object sender, ConditionChangedEventArgs e)
         {
             if (FilterTaskCache != null)
             {
-                if (!FilterTaskCache.IsCompleted)
+                if (!FilterTaskCache.IsCompleted && !FilterTaskCache.IsCanceled)
                 {
-                    AsyncTask.CancelAsyncExecute(FilterTaskCache);
+                    FilterTaskCache.Cancel();
                 }
             }
-
-            SourceFilterCancellationTokenCache = new CancellationTokenSource();
-            FilterTaskCache = new AsyncTask(OnDoFilterSource
+            var cts = new CancellationTokenSource();
+            FilterTaskCache = new CancelableAsyncTask(OnDoFilterSource
+                   , cts
                    , null
-                   , OnFinishFilterSource
-                   , 0
-                   , SourceFilterCancellationTokenCache);
-            AsyncTask.CancelableAsyncExecute(FilterTaskCache);
+                   , OnFinishFilterSource);
+            await FilterTaskCache.Execute();
         }
 
-        private async Task<AsyncTaskResult> OnDoFilterSource(CancellationToken token)
+        private async Task<AsyncTaskResult> OnDoFilterSource(
+            CancellationTokenSource token
+            , AsyncTaskResult result)
         {
-            var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
-
-
             var filterLst = new List<ILogWatcherElements>();
 
             lock (RawSource.ThreadSafeLock)
@@ -266,7 +263,7 @@ namespace log_guard.implement.flow.source_manager
 
                     if (token.IsCancellationRequested)
                     {
-                        token.ThrowIfCancellationRequested();
+                        throw new OperationCanceledException();
                     }
 
                     if (SrcFilterManager.Filter(item))
@@ -289,61 +286,52 @@ namespace log_guard.implement.flow.source_manager
             return result;
         }
 
-        private void OnFinishFilterSource(AsyncTaskResult result)
+        private async Task<AsyncTaskResult> OnFinishFilterSource(AsyncTaskResult result)
         {
             if (result.MesResult == MessageAsyncTaskResult.Done)
             {
                 lock (DisplaySource.ThreadSafeLock)
                 {
-                    _displaySource.AddNewRange((IEnumerable<LogWatcherItemViewModel>)result.Result);
+                    _displaySource.AddNewRange((IEnumerable<ILogWatcherElements>)result.Result);
                     SourceFilteredAndDisplayed?.Invoke(this);
                 }
             }
+
+            return result;
         }
 
         #endregion
 
         #region Highlight area
-        private CancellationTokenSource? SourceHighlightCancellationTokenCache { get; set; }
-        private AsyncTask? HighlightTaskCache { get; set; }
+        private CancelableAsyncTask? HighlightTaskCache { get; set; }
 
         private void OnHighlightConditionChanged(object sender, ConditionChangedEventArgs e)
         {
             if (HighlightTaskCache != null)
             {
-                if (!HighlightTaskCache.IsCompleted)
+                if (!HighlightTaskCache.IsCompleted && !HighlightTaskCache.IsCanceled)
                 {
-                    AsyncTask.CancelAsyncExecute(HighlightTaskCache);
+                    HighlightTaskCache.Cancel();
                 }
             }
 
-            SourceHighlightCancellationTokenCache = new CancellationTokenSource();
-            HighlightTaskCache = new AsyncTask(OnDoHighlight
+            var cts = new CancellationTokenSource();
+            HighlightTaskCache = new CancelableAsyncTask(OnDoHighlight
+                   , cts
                    , null
-                   , OnFinishHighlightSource
-                   , 0
-                   , SourceHighlightCancellationTokenCache);
-            AsyncTask.CancelableAsyncExecute(HighlightTaskCache);
+                   , null);
+            HighlightTaskCache.Execute();
         }
 
-        private void OnFinishHighlightSource(AsyncTaskResult result)
+        private async Task<AsyncTaskResult> OnDoHighlight(CancellationTokenSource token, AsyncTaskResult result)
         {
-
-        }
-
-        private async Task<AsyncTaskResult> OnDoHighlight(CancellationToken token)
-        {
-            var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
-
-
-
             lock (DisplaySource.ThreadSafeLock)
             {
                 foreach (var item in DisplaySource)
                 {
                     if (token.IsCancellationRequested)
                     {
-                        token.ThrowIfCancellationRequested();
+                        throw new OperationCanceledException();
                     }
 
                     SrcHighlightManager.FinderHighlight(item);
@@ -370,8 +358,7 @@ namespace log_guard.implement.flow.source_manager
         /// but re-create only: O(n)
         /// </summary>
         #region Delete display log area
-        private CancellationTokenSource? SourceDeleteCancellationTokenCache { get; set; }
-        private AsyncTask? DeleteTaskCache { get; set; }
+        private ParamAsyncTask? DeleteTaskCache { get; set; }
         private INotifyCollectionChanged? SelectedItemNotifierCache { get; set; }
         public void DeleteSeletedLogLine(IEnumerable<LogWatcherItemViewModel> selectedItem, INotifyCollectionChanged selectedItemNotifier)
         {
@@ -390,41 +377,33 @@ namespace log_guard.implement.flow.source_manager
             {
                 if (!DeleteTaskCache.IsCompleted)
                 {
-                    AsyncTask.CancelAsyncExecute(DeleteTaskCache);
+                    DeleteTaskCache.Cancel();
                 }
             }
 
-            SourceDeleteCancellationTokenCache = new CancellationTokenSource();
-            DeleteTaskCache = new AsyncTask(DeleteSelectedItems
-                   , null
-                   , OnFinishDeleteSource
-                   , 0
-                   , SourceDeleteCancellationTokenCache);
-            AsyncTask.ParamAsyncExecute(DeleteTaskCache
-                , param: selectedItem
-                , isAsyncCallback: true);
+            var cts = new CancellationTokenSource();
+            DeleteTaskCache = new ParamAsyncTask(mainFunc: DeleteSelectedItems
+                   , cancellationTokenSource: cts
+                   , param: selectedItem
+                   , canExecute: null
+                   , callback: OnFinishDeleteSource);
+            DeleteTaskCache.Execute();
 
         }
 
         private void OnSelectedItemChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-#if DEBUG
-            Console.WriteLine("Selected collection changed!");
-#endif
             if (DeleteTaskCache != null)
             {
                 if (!DeleteTaskCache.IsCompleted)
                 {
-
-                    AsyncTask.CancelAsyncExecute(DeleteTaskCache);
+                    DeleteTaskCache.Cancel();
                     if (SelectedItemNotifierCache != null)
                     {
                         SelectedItemNotifierCache.CollectionChanged -= OnSelectedItemChanged;
                         SelectedItemNotifierCache = null;
                     }
-#if DEBUG
-                    Console.WriteLine("Selected collection changed during deleting, abort the process!");
-#endif
+                    Logger.D("Selected collection changed during deleting, abort the process!");
                 }
             }
 
@@ -435,9 +414,8 @@ namespace log_guard.implement.flow.source_manager
             }
         }
 
-        private async Task<AsyncTaskResult> DeleteSelectedItems(object? data, CancellationToken token)
+        private async Task<AsyncTaskResult> DeleteSelectedItems(object data, AsyncTaskResult result, CancellationTokenSource token)
         {
-            var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
             var selectedItem = data as IEnumerable<LogWatcherItemViewModel>;
             GetNewExpandableList(selectedItem, token, result);
 
@@ -446,7 +424,7 @@ namespace log_guard.implement.flow.source_manager
 
         private void GetNewExpandableList(
             IEnumerable<LogWatcherItemViewModel> selectedItem
-            , CancellationToken token
+            , CancellationTokenSource token
             , AsyncTaskResult result)
         {
 #if DEBUG
@@ -622,16 +600,17 @@ namespace log_guard.implement.flow.source_manager
             result.MesResult = MessageAsyncTaskResult.Done;
         }
 
-        private void OnFinishDeleteSource(object data, AsyncTaskResult obj)
+        private async Task<AsyncTaskResult> OnFinishDeleteSource(object data, AsyncTaskResult result)
         {
-            if (obj.MesResult == MessageAsyncTaskResult.Done)
+            if (result.MesResult == MessageAsyncTaskResult.Done)
             {
                 lock (DisplaySource.ThreadSafeLock)
                 {
-                    _displaySource.AddNewRange((IEnumerable<LogWatcherItemViewModel>)obj.Result);
+                    _displaySource.AddNewRange((IEnumerable<ILogWatcherElements>)result.Result);
                     SourceCollectionChanged?.Invoke(this);
                 }
             }
+            return result;
         }
 
         private BaseDotNetCommandImpl GetExpandButtonCommand(RangeObservableCollection<ILogWatcherElements> displaySource)
@@ -668,8 +647,7 @@ namespace log_guard.implement.flow.source_manager
         ///     +) SourceRedoDeleteCancellationTokenCache: Cancellation token for RedoDeleteTaskCache
         /// </summary>
         #region Redo delete source
-        private CancellationTokenSource? SourceRedoDeleteCancellationTokenCache { get; set; }
-        private AsyncTask? RedoDeleteTaskCache { get; set; }
+        private ParamAsyncTask? RedoDeleteTaskCache { get; set; }
 
         public void RedoDeleteLogLine(LogWatcherItemViewModel expandableViewModel)
         {
@@ -681,42 +659,39 @@ namespace log_guard.implement.flow.source_manager
 
             if (RedoDeleteTaskCache != null)
             {
-                if (!RedoDeleteTaskCache.IsCompleted)
+                if (!RedoDeleteTaskCache.IsCompleted && !RedoDeleteTaskCache.IsCanceled)
                 {
-                    AsyncTask.CancelAsyncExecute(RedoDeleteTaskCache);
+                    RedoDeleteTaskCache.Cancel();
                 }
             }
 
-            SourceRedoDeleteCancellationTokenCache = new CancellationTokenSource();
-            RedoDeleteTaskCache = new AsyncTask(OnRedoDeleteSource
+            var cts = new CancellationTokenSource();
+            RedoDeleteTaskCache = new ParamAsyncTask(OnRedoDeleteSource
+                  , cts
+                  , expandableViewModel
                   , null
-                  , OnFinishRedoDeleteSource
-                  , 0
-                  , SourceRedoDeleteCancellationTokenCache);
+                  , OnFinishRedoDeleteSource);
 
-            AsyncTask.ParamAsyncExecute(RedoDeleteTaskCache
-                , param: expandableViewModel
-                , isAsyncCallback: true);
-
+            RedoDeleteTaskCache.Execute();
         }
 
-        private void OnFinishRedoDeleteSource(object data, AsyncTaskResult obj)
+        private async Task<AsyncTaskResult> OnFinishRedoDeleteSource(object data, AsyncTaskResult result)
         {
-            if (obj.MesResult == MessageAsyncTaskResult.Done)
+            if (result.MesResult == MessageAsyncTaskResult.Done)
             {
                 lock (DisplaySource.ThreadSafeLock)
                 {
-                    _displaySource.AddNewRange((IEnumerable<LogWatcherItemViewModel>)obj.Result);
+                    _displaySource.AddNewRange((IEnumerable<ILogWatcherElements>)result.Result);
                     SourceCollectionChanged?.Invoke(this);
                 }
             }
+            return result;
         }
 
-        private async Task<AsyncTaskResult> OnRedoDeleteSource(object data, CancellationToken token)
+        private async Task<AsyncTaskResult> OnRedoDeleteSource(object data, AsyncTaskResult result, CancellationTokenSource token)
         {
             var vmodel = data as LWI_ExpandableViewModel;
             var newExpandedList = new List<ILogWatcherElements>();
-            var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
             lock (DisplaySource.ThreadSafeLock)
             {
                 int oldDisplaySourceCount = DisplaySource.Count;
@@ -758,7 +733,7 @@ namespace log_guard.implement.flow.source_manager
         /// </summary>
         #region Completely delete expandble log view
         private CancellationTokenSource? SourceCompletelyDeleteCancellationTokenCache { get; set; }
-        private AsyncTask? CompletelyDeleteTaskCache { get; set; }
+        private ParamAsyncTask? CompletelyDeleteTaskCache { get; set; }
 
         public void CompletelyDeleteExpandableLogLine(LogWatcherItemViewModel expandableViewModel)
         {
@@ -770,42 +745,39 @@ namespace log_guard.implement.flow.source_manager
 
             if (CompletelyDeleteTaskCache != null)
             {
-                if (!CompletelyDeleteTaskCache.IsCompleted)
+                if (!CompletelyDeleteTaskCache.IsCompleted
+                    && !CompletelyDeleteTaskCache.IsCanceled)
                 {
-                    AsyncTask.CancelAsyncExecute(CompletelyDeleteTaskCache);
+                    CompletelyDeleteTaskCache.Cancel();
                 }
             }
 
-            SourceCompletelyDeleteCancellationTokenCache = new CancellationTokenSource();
-            CompletelyDeleteTaskCache = new AsyncTask(OnCompletelyDeleteSource
+            var cts = new CancellationTokenSource();
+            CompletelyDeleteTaskCache = new ParamAsyncTask(OnCompletelyDeleteSource
+                  , cts
+                  , expandableViewModel
                   , null
-                  , OnFinishCompletelyDeleteSource
-                  , 0
-                  , SourceCompletelyDeleteCancellationTokenCache);
-
-            AsyncTask.ParamAsyncExecute(CompletelyDeleteTaskCache
-                , param: expandableViewModel
-                , isAsyncCallback: true);
-
+                  , OnFinishCompletelyDeleteSource);
+            CompletelyDeleteTaskCache.Execute();
         }
 
-        private void OnFinishCompletelyDeleteSource(object data, AsyncTaskResult obj)
+        private async Task<AsyncTaskResult> OnFinishCompletelyDeleteSource(object data, AsyncTaskResult result)
         {
-            if (obj.MesResult == MessageAsyncTaskResult.Done)
+            if (result.MesResult == MessageAsyncTaskResult.Done)
             {
                 lock (DisplaySource.ThreadSafeLock)
                 {
-                    _displaySource.AddNewRange((IEnumerable<LogWatcherItemViewModel>)obj.Result);
+                    _displaySource.AddNewRange((IEnumerable<ILogWatcherElements>)result.Result);
                     SourceCollectionChanged?.Invoke(this);
                 }
             }
+            return result;
         }
 
-        private async Task<AsyncTaskResult> OnCompletelyDeleteSource(object data, CancellationToken token)
+        private async Task<AsyncTaskResult> OnCompletelyDeleteSource(object data, AsyncTaskResult result, CancellationTokenSource token)
         {
             var vmodel = data as LogWatcherItemViewModel;
             var newExpandedList = new List<ILogWatcherElements>();
-            var result = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
             lock (DisplaySource.ThreadSafeLock)
             {
                 int oldDisplaySourceCount = DisplaySource.Count;

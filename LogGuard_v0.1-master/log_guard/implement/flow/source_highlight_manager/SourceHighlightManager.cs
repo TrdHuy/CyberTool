@@ -11,47 +11,30 @@ using System.Threading.Tasks;
 
 namespace log_guard.implement.flow.source_highlight_manager
 {
-    internal class SourceHighlightManager : ISourceHighlightManager, ILogGuardModule
+    internal class SourceHighlightManager : BaseLogGuardModule, ISourceHighlightManager
     {
-        private ISourceHighlightor _logMessHighlightor;
-        private ISourceHighlightor _logMessFilterHighlightor;
-        private ISourceHighlightor _logTagFilterHighlightor;
-        private Thread NotifyHighlightConditionChangedMessage { get; set; }
+        private ISourceHighlightor? _logMessHighlightor;
+        private ISourceHighlightor? _logMessFilterHighlightor;
+        private ISourceHighlightor? _logTagFilterHighlightor;
 
-        public event SourceHighlightConditionChangedHandler HighlightConditionChanged;
-        public ISourceHighlightor FinderHighlightor { get => _logMessHighlightor; set => _logMessHighlightor = value; }
-        public ISourceHighlightor MessageFilterHighlightor { get => _logMessFilterHighlightor; set => _logMessFilterHighlightor = value; }
-        public ISourceHighlightor TagFilterHighlightor { get => _logTagFilterHighlightor; set => _logTagFilterHighlightor = value; }
+        public event SourceHighlightConditionChangedHandler? HighlightConditionChanged;
+        public ISourceHighlightor? FinderHighlightor { get => _logMessHighlightor; set => _logMessHighlightor = value; }
+        public ISourceHighlightor? MessageFilterHighlightor { get => _logMessFilterHighlightor; set => _logMessFilterHighlightor = value; }
+        public ISourceHighlightor? TagFilterHighlightor { get => _logTagFilterHighlightor; set => _logTagFilterHighlightor = value; }
 
         public void NotifyHighlightPropertyChanged(ISourceHighlightor sender, object e)
         {
-            if (NotifyHighlightConditionChangedMessage != null
-                && NotifyHighlightConditionChangedMessage.IsAlive)
-            {
-                NotifyHighlightConditionChangedMessage.Interrupt();
-                NotifyHighlightConditionChangedMessage.Abort();
-            }
-
-            NotifyHighlightConditionChangedMessage = new Thread(() =>
-            {
-                HighlightConditionChanged?.Invoke(sender, new ConditionChangedEventArgs());
-            });
-            NotifyHighlightConditionChangedMessage.Start();
+            HighlightConditionChanged?.Invoke(sender, new ConditionChangedEventArgs());
         }
-
-        public void OnModuleStart()
-        {
-        }
-
         public void FilterHighlight(object obj)
         {
-            MessageFilterHighlightor.Highlight(obj);
-            TagFilterHighlightor.Highlight(obj);
+            MessageFilterHighlightor?.Highlight(obj);
+            TagFilterHighlightor?.Highlight(obj);
         }
 
         public void FinderHighlight(object obj)
         {
-            FinderHighlightor.Highlight(obj);
+            FinderHighlightor?.Highlight(obj);
         }
 
         public void Clean(object obj)
@@ -61,7 +44,7 @@ namespace log_guard.implement.flow.source_highlight_manager
             MessageFilterHighlightor?.Clean(obj);
         }
 
-       
+
         public static SourceHighlightManager Current
         {
             get

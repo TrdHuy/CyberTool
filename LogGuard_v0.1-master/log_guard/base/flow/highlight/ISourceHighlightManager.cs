@@ -32,9 +32,9 @@ namespace log_guard.@base.flow.highlight
         /// <returns></returns>
         void Clean(object obj);
 
-        ISourceHighlightor MessageFilterHighlightor { get; set; }
-        ISourceHighlightor FinderHighlightor { get; set; }
-        ISourceHighlightor TagFilterHighlightor { get; set; }
+        ISourceHighlightor? MessageFilterHighlightor { get; set; }
+        ISourceHighlightor? FinderHighlightor { get; set; }
+        ISourceHighlightor? TagFilterHighlightor { get; set; }
 
         void NotifyHighlightPropertyChanged(ISourceHighlightor sender, object e);
 

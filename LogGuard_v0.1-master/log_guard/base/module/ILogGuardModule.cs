@@ -13,5 +13,10 @@ namespace log_guard.@base.module
         /// Sự kiện xảy ra sau khi khởi tạo module
         /// </summary>
         void OnModuleStart();
+
+        /// <summary>
+        /// Sự kiện xảy ra khi service unload
+        /// </summary>
+        void OnModuleDestroy();
     }
 }

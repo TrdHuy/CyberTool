@@ -1,5 +1,5 @@
-﻿using cyber_base.definition;
-using cyber_base.utils.async_task;
+﻿using cyber_base.async_task;
+using cyber_base.definition;
 using cyber_tool.definitions;
 using cyber_tool.windows.cyber_iface.views;
 using cyber_tool.windows.cyber_imes.views;
@@ -18,7 +18,7 @@ using System.Windows.Media.Animation;
 
 namespace cyber_tool.windows
 {
-    
+
     public class WindowDirector
     {
         private Dictionary<ContentControl, CyberIPopWindow> _IPopWindowMap;
@@ -92,9 +92,25 @@ namespace cyber_tool.windows
         }
 
 
-        public CyberContactMessage OpenWaitingTaskBox(string content, string title, Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask, Func<bool>? canExecute = null, Action<object, AsyncTaskResult>? callback = null, long delayTime = 0)
+        public CyberContactMessage OpenWaitingTaskBox(string content
+            , string title
+            , Func<object, AsyncTaskResult, CancellationTokenSource, Task<AsyncTaskResult>> asyncTask
+            , Func<object, bool>? canExecute = null
+            , Func<object, AsyncTaskResult, Task<AsyncTaskResult>>? callback = null
+            , ulong delayTime = 0
+            , ulong estimatedTime = 0
+            , string taskName = "")
         {
-            var newWaitingBox = new CyberIStandWindow(content, title, asyncTask, canExecute, callback, delayTime, IFaceWindow);
+            var newWaitingBox = new CyberIStandWindow(content
+                , title
+                , asyncTask
+                , canExecute
+                , callback
+                , delayTime
+                , taskName
+                , estimatedTime
+                , IFaceWindow);
+
             var message = newWaitingBox.Show();
 
             return ConvertToContactMessage(message);
@@ -133,7 +149,7 @@ namespace cyber_tool.windows
                     break;
             }
 
-            if(_IPopWindow != null)
+            if (_IPopWindow != null)
             {
                 _IPopWindow.Height = height;
                 _IPopWindow.Width = width;
@@ -168,7 +184,7 @@ namespace cyber_tool.windows
 
         public string OpenFolderChooserDialogWindow()
         {
-            using (var fbd = new  System.Windows.Forms.FolderBrowserDialog())
+            using (var fbd = new System.Windows.Forms.FolderBrowserDialog())
             {
                 System.Windows.Forms.DialogResult result = fbd.ShowDialog();
 

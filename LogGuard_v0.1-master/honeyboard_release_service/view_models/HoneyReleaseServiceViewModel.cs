@@ -1,13 +1,11 @@
-﻿using cyber_base.implement.command;
-using cyber_base.utils.async_task;
+﻿using cyber_base.async_task;
+using cyber_base.implement.async_task;
+using cyber_base.implement.command;
 using cyber_base.view_model;
 using honeyboard_release_service.view_models.calendar_notebook;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -97,9 +95,11 @@ namespace honeyboard_release_service.view_models
 
         private void OnStopCmd(object obj)
         {
-            if (_TaskCache != null && !_TaskCache.IsCompleted)
+            if (_TaskCache != null
+                && !_TaskCache.IsCompleted
+                && !_TaskCache.IsCanceled)
             {
-                AsyncTask.CancelAsyncExecute(_TaskCache);
+                _TaskCache?.Cancel();
             }
         }
         private void OnClearCmd(object obj)
@@ -108,41 +108,44 @@ namespace honeyboard_release_service.view_models
         }
 
         CancellationTokenSource? _TokenCache;
-        AsyncTask? _TaskCache;
+        ParamAsyncTask? _TaskCache;
 
         private void OnExecuteCmd(object obj)
         {
             Debug.WriteLine("Current task id:" + Task.CurrentId);
 
-            if (_TaskCache != null && !_TaskCache.IsCompleted)
+            if (_TaskCache != null
+                && !_TaskCache.IsCompleted
+                && !_TaskCache.IsCanceled)
             {
-                AsyncTask.CancelAsyncExecute(_TaskCache);
+                _TaskCache.Cancel();
                 Debug.WriteLine("Task canceled");
 
             }
 
             _TokenCache = new CancellationTokenSource();
 
-            _TaskCache = new AsyncTask(OnDoCommand
+            _TaskCache = new ParamAsyncTask(OnDoCommand
+                    , _TokenCache
+                    , this
                     , null
-                    , OnCallback
-                    , 0
-                    , _TokenCache);
-            AsyncTask.ParamAsyncExecute(_TaskCache
-               , param: null
-               , isAsyncCallback: true);
+                    , OnCallback);
+            _TaskCache.Execute();
         }
 
 
-        private void OnCallback(object data, AsyncTaskResult obj)
+        private async Task<AsyncTaskResult> OnCallback(object data, AsyncTaskResult obj)
         {
             if (obj.MesResult == MessageAsyncTaskResult.Done)
             {
                 Debug.WriteLine("Async Task completed:" + Task.CurrentId);
             }
+            return obj;
         }
 
-        private async Task<AsyncTaskResult> OnDoCommand(object? data, CancellationToken token)
+        private async Task<AsyncTaskResult> OnDoCommand(object data
+            , AsyncTaskResult result
+            , CancellationTokenSource token)
         {
             var res = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
 

@@ -69,6 +69,11 @@ namespace log_guard.implement.module
 
         public static void Destroy()
         {
+            foreach (var module in _Modules)
+            {
+                module.OnModuleDestroy();
+            }
+
             _Modules.Clear();
             _PM_Instance = null;
             _LGVH_Instance = null;

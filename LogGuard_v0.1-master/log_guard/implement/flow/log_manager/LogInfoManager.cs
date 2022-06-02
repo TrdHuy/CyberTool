@@ -8,7 +8,7 @@ using log_guard.models.info;
 
 namespace log_guard.implement.flow.log_manager
 {
-    internal class LogInfoManager : ILogInfoManager, ILogGuardModule
+    internal class LogInfoManager : BaseLogGuardModule, ILogInfoManager
     {
 
         private AbstractLogParser _logParser;
@@ -56,7 +56,7 @@ namespace log_guard.implement.flow.log_manager
             }
         }
 
-        public void OnModuleStart()
+        public override void OnModuleStart()
         {
             ResetLogInfos();
         }

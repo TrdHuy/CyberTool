@@ -11,7 +11,7 @@ using System.Windows.Markup;
 
 namespace log_guard.implement.flow.view_helper
 {
-    public class LogGuardViewHelper : ILogGuardModule
+    public class LogGuardViewHelper : BaseLogGuardModule
     {
         private Dictionary<LogGuardViewKeyDefinition, object> ViewMap;
 
@@ -62,10 +62,6 @@ namespace log_guard.implement.flow.view_helper
         public LogGuardViewHelper()
         {
             ViewMap = new Dictionary<LogGuardViewKeyDefinition, object>();
-        }
-
-        public void OnModuleStart()
-        {
         }
 
         public object GetViewByKey(LogGuardViewKeyDefinition key)

@@ -1,5 +1,5 @@
-﻿using cyber_base.definition;
-using cyber_base.utils.async_task;
+﻿using cyber_base.async_task;
+using cyber_base.definition;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +17,12 @@ namespace cyber_base.app
 
         CyberContactMessage OpenWaitingTaskBox(string content
             , string title
-            , Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask
-            , Func<bool>? canExecute = null
-            , Action<object, AsyncTaskResult>? callback = null
-            , long delayTime = 0);
+            , Func<object, AsyncTaskResult, CancellationTokenSource, Task<AsyncTaskResult>> asyncTask
+            , Func<object, bool>? canExecute = null
+            , Func<object, AsyncTaskResult, Task<AsyncTaskResult>>? callback = null
+            , ulong delayTime = 0
+            , ulong estimatedTime = 0
+            , string taskName = "");
 
         CyberContactMessage ShowWaringBox(string warning
             , bool isDialog = true);

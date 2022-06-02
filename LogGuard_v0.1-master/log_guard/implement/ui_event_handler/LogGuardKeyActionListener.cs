@@ -24,6 +24,10 @@ namespace log_guard.implement.ui_event_handler
             }
         }
 
+        public void OnModuleDestroy()
+        {
+        }
+
         public void OnModuleStart()
         {
         }

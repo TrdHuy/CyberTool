@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace log_guard.implement.device
 {
-    internal class DeviceCmdExecuter : IDeviceCmdExecuter, ILogGuardModule
+    internal class DeviceCmdExecuter : BaseLogGuardModule, IDeviceCmdExecuter
     {
         public static DeviceCmdExecuter Current
         {
@@ -53,10 +53,6 @@ namespace log_guard.implement.device
             }
 
             return cmd;
-        }
-
-        public void OnModuleStart()
-        {
         }
     }
 }

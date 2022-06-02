@@ -2,12 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using cyber_base.utils.async_task;
-using cyber_tool.app_resources.controls.cyber_window;
 using cyber_tool.definitions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,6 +15,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using cyber_base.view.window;
+using cyber_base.async_task;
+using cyber_base.implement.async_task;
+using cyber_tool.windows.cyber_istand.view_models;
 
 namespace cyber_tool.windows.cyber_istand.views
 {
@@ -29,17 +27,21 @@ namespace cyber_tool.windows.cyber_istand.views
     public partial class CyberIStandWindow : CyberWindow, IStandBox
     {
         public CyberIStandBoxResult MesResult { get; private set; } = CyberIStandBoxResult.None;
-        private AsyncTask MainTask { get; set; }
-        private CancellationToken cancelToken { get; set; }
+        private BaseAsyncTask MainTask { get; set; }
+        private CyberIStandWindowViewModel _context;
+
         public CyberIStandWindow(string content
             , string title
-            , Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask
-            , Func<bool>? canExecute = null
-            , Action<object, AsyncTaskResult>? callback = null
-            , long delayTime = 0
+            , Func<object, AsyncTaskResult, CancellationTokenSource, Task<AsyncTaskResult>> asyncTask
+            , Func<object, bool>? canExecute = null
+            , Func<object, AsyncTaskResult, Task<AsyncTaskResult>>? callback = null
+            , ulong delayTime = 0
+            , string taskName = ""
+            , ulong estimatedTime = 0
             , Window? owner = null)
         {
             InitializeComponent();
+            _context = (CyberIStandWindowViewModel)DataContext;
             if (owner != null)
             {
                 Owner = owner;
@@ -50,17 +52,20 @@ namespace cyber_tool.windows.cyber_istand.views
                 WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
 
-            MainContent.Content = content;
-            Title = title;
+            _context.Content = content;
+            _context.Title = title;
             ContinueBtn.Visibility = Visibility.Collapsed;
 
             var cts = new CancellationTokenSource();
-            cancelToken = cts.Token;
-            var task = new AsyncTask(asyncTask
-                   , canExecute
-                   , callback
-                   , delayTime
-                   , cts);
+            var task = new ParamAsyncTask(asyncTask
+                , cts
+                , this
+                , canExecute
+                , callback
+                , taskName
+                , estimatedTime
+                , delayTime
+                , 100);
             task.OnCompletedChanged -= Task_OnCompletedChanged;
             task.OnCompletedChanged += Task_OnCompletedChanged;
 
@@ -69,14 +74,14 @@ namespace cyber_tool.windows.cyber_istand.views
 
             cancelBtn.Click += (s, e) =>
             {
-                cts.Cancel();
+                MainTask.Cancel();
                 MesResult = CyberIStandBoxResult.Cancel;
                 CancelIconPath.Visibility = Visibility.Visible;
                 IconPath.Visibility = Visibility.Collapsed;
                 ContinueBtn.Visibility = Visibility.Visible;
                 cancelBtn.Visibility = Visibility.Collapsed;
-                Title = "Canceled!";
-                MainContent.Content = "Your process is canceled!~";
+                _context.Title = "Canceled!";
+                _context.Content = "Your process is canceled!~";
             };
 
             ContinueBtn.Click += (s, e) =>
@@ -86,9 +91,9 @@ namespace cyber_tool.windows.cyber_istand.views
 
             Closing += (s, e) =>
             {
-                if (!MainTask.IsCompleted)
+                if (!MainTask.IsCompleted && !MainTask.IsCanceled)
                 {
-                    cts.Cancel();
+                    MainTask.Cancel();
                     MesResult = CyberIStandBoxResult.Cancel;
                 }
             };
@@ -112,15 +117,15 @@ namespace cyber_tool.windows.cyber_istand.views
 
         public new CyberIStandBoxResult Show()
         {
-            AsyncTask.ParamAsyncExecute(MainTask, this);
+            MainTask.Execute();
             base.ShowDialog();
             return MesResult;
         }
 
         public void UpdateMessageAndTitle(string message, string title)
         {
-            Title = title;
-            MainContent.Content = message;
+            _context.Title = title;
+            _context.Content = message;
         }
     }
 }

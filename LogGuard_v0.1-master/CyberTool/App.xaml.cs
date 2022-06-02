@@ -1,6 +1,6 @@
 ﻿using cyber_base.app;
+using cyber_base.async_task;
 using cyber_base.definition;
-using cyber_base.utils.async_task;
 using cyber_extension.dll_base.extension;
 using cyber_tool.definitions;
 using cyber_tool.plugins;
@@ -72,10 +72,12 @@ namespace cyber_tool
 
         public CyberContactMessage OpenWaitingTaskBox(string content
             , string title
-            , Func<object, CancellationToken, Task<AsyncTaskResult>> asyncTask
-            , Func<bool>? canExecute = null
-            , Action<object, AsyncTaskResult>? callback = null
-            , long delayTime = 0)
+            , Func<object, AsyncTaskResult, CancellationTokenSource, Task<AsyncTaskResult>> asyncTask
+            , Func<object, bool>? canExecute = null
+            , Func<object, AsyncTaskResult, Task<AsyncTaskResult>>? callback = null
+            , ulong delayTime = 0
+            , ulong estimatedTime = 0
+            , string taskName = "")
         {
             return _WindowDirector.OpenWaitingTaskBox(content, title, asyncTask, canExecute, callback, delayTime);
 
