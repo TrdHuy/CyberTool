@@ -522,6 +522,7 @@
 
 					</Rectangle>
 					<cs:CyberScrollView Margin="5,10,5,10"
+										CanContentScroll="False"
 										SnapsToDevicePixels="True"
 										Background="Transparent"
 										ScrollHeaderHeight="0"
@@ -568,6 +569,51 @@
 		</Setter>
 	</Style>
 
+	<Style x:Key="RoundedProgressBar"
+		   TargetType="{x:Type ProgressBar}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type ProgressBar}">
+					<Grid MinHeight="14"
+						  MinWidth="200">
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="CommonStates">
+								<VisualState x:Name="Determinate" />
+								<VisualState x:Name="Indeterminate">
+									<Storyboard>
+										<ObjectAnimationUsingKeyFrames Duration="00:00:00"
+																	   Storyboard.TargetName="PART_Indicator"
+																	   Storyboard.TargetProperty="Background">
+											<DiscreteObjectKeyFrame KeyTime="00:00:00">
+												<DiscreteObjectKeyFrame.Value>
+													<SolidColorBrush>Transparent</SolidColorBrush>
+												</DiscreteObjectKeyFrame.Value>
+											</DiscreteObjectKeyFrame>
+										</ObjectAnimationUsingKeyFrames>
+
+									</Storyboard>
+								</VisualState>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+
+						<Border x:Name="PART_Track"
+								CornerRadius="5"
+								BorderThickness="0"
+								Background="{TemplateBinding Background}" />
+
+						<Border x:Name="PART_Indicator"
+								CornerRadius="5"
+								HorizontalAlignment="Left"
+								Background="{TemplateBinding Foreground}">
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+
+	</Style>
+
+	<!--none virtualizing panel-->
 	<Style x:Key="CyberScrollStyle"
 		   TargetType="ContentControl">
 		<Setter Property="Template">
@@ -579,17 +625,19 @@
 					</ControlTemplate.Resources>
 					<cs:CyberScrollView Content="{TemplateBinding Content}"
 										SnapsToDevicePixels="True"
+										CanContentScroll="False"
 										Background="{TemplateBinding Background}"
 										ScrollHeaderHeight="0"
 										ThumbBackground="{TemplateBinding BorderBrush}"
 										ScrollBarBackground="Transparent">
-						
+
 					</cs:CyberScrollView>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
 	</Style>
 
+	<!--none virtualizing panel-->
 	<Style x:Key="CyberCollapsibleScrollStyle"
 		   TargetType="ContentControl">
 		<Setter Property="Template">
@@ -600,6 +648,7 @@
 						<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
 					</ControlTemplate.Resources>
 					<cs:CyberScrollView Content="{TemplateBinding Content}"
+										CanContentScroll="False"
 										SnapsToDevicePixels="True"
 										IsMouseOverExpandScrollbar="True"
 										Background="{TemplateBinding Background}"

@@ -24,7 +24,7 @@
 								Margin="{TemplateBinding Padding}">
 							<ScrollContentPresenter Name="PART_ScrollContentPresenter"
 													KeyboardNavigation.DirectionalNavigation="Local"
-													CanContentScroll="False"
+													CanContentScroll="{TemplateBinding CanContentScroll}"
 													CanHorizontallyScroll="False"
 													CanVerticallyScroll="False" />
 
@@ -256,10 +256,8 @@
 		</Setter>
 	</Style>
 
-	
 	<Style x:Key="{x:Type ctrl:HanzaTreeViewer}"
 		   TargetType="TreeView">
-
 		<Setter Property="SnapsToDevicePixels"
 				Value="True" />
 		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
@@ -280,7 +278,7 @@
 							Background="{TemplateBinding Background}"
 							SnapsToDevicePixels="True">
 						<lwsc:ScrollViewWatcher Focusable="False"
-												CanContentScroll="False"
+												CanContentScroll="True"
 												Style="{StaticResource HanzaScrollViewWatcherStyle}"
 												Background="Transparent"
 												ScrollHeaderHeight="0"

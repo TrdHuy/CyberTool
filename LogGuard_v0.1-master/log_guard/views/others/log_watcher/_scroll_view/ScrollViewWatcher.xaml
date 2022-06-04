@@ -60,7 +60,7 @@
 
 								<ScrollContentPresenter Name="PART_ScrollContentPresenter"
 														KeyboardNavigation.DirectionalNavigation="Local"
-														CanContentScroll="True"
+														CanContentScroll="{TemplateBinding CanContentScroll}"
 														CanHorizontallyScroll="False"
 														CanVerticallyScroll="False" />
 

@@ -103,7 +103,8 @@
 						</Grid.RowDefinitions>
 						<Border Grid.Row="1"
 								Grid.Column="0">
-							<ScrollContentPresenter Margin="{TemplateBinding Padding}" />
+							<ScrollContentPresenter Margin="{TemplateBinding Padding}"
+													CanContentScroll="{TemplateBinding CanContentScroll}"/>
 						</Border>
 						<RepeatButton Grid.Row="0"
 									  Grid.Column="0"

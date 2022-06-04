@@ -32,6 +32,7 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+	
 	<Style x:Key="TreeViewItemFocusVisual">
 		<Setter Property="Control.Template">
 			<Setter.Value>
@@ -47,6 +48,7 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+	
 	<Style x:Key="{x:Type ctrl:HanzaTreeViewItem}"
 		   TargetType="TreeViewItem">
 		<Setter Property="Background"
@@ -246,12 +248,6 @@
 						<ItemsPresenter x:Name="ItemsHost"
 										Grid.Row="1"
 										Grid.Column="1"
-										VirtualizingPanel.CacheLength="1"
-										VirtualizingPanel.CacheLengthUnit="Pixel"
-										VirtualizingPanel.IsContainerVirtualizable="True"
-										VirtualizingPanel.IsVirtualizing="True"
-										VirtualizingPanel.VirtualizationMode="Recycling"
-										VirtualizingPanel.IsVirtualizingWhenGrouping="True"
 										Grid.ColumnSpan="5"
 										Visibility="Collapsed">
 							<ItemsPresenter.LayoutTransform>

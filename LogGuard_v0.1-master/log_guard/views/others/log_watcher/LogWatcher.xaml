@@ -134,7 +134,7 @@
 							 x:Key="VerboseLevelForeground_Level2" />
 			<SolidColorBrush Color="#FFF0ADF1"
 							 x:Key="FatalLevelForeground_Level2" />
-			
+
 			<Style x:Key="{x:Type GridViewColumnHeader}"
 				   TargetType="GridViewColumnHeader"
 				   BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
@@ -273,7 +273,7 @@
 									</ControlTemplate>
 								</Setter.Value>
 							</Setter>
-							
+
 						</DataTrigger>
 
 						<!--Expandable view template-->
@@ -316,7 +316,7 @@
 													<Rectangle.InputBindings>
 														<MouseBinding Command="{Binding ExpandButtonCommand}"
 																	  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type item:LogWatcherItem}}}"
-																	  MouseAction="LeftClick"/>
+																	  MouseAction="LeftClick" />
 													</Rectangle.InputBindings>
 												</Rectangle>
 
@@ -494,16 +494,16 @@
 								  Grid.RowSpan="3" />
 
 							<mb:LogMappingBorder Grid.Row="1"
-												   Grid.Column="6"
-												   x:Name="PART_BookmarkMappingBorder" />
+												 Grid.Column="6"
+												 x:Name="PART_BookmarkMappingBorder" />
 
 							<mb:LogMappingBorder Grid.Row="1"
-												   Grid.Column="2"
-												   x:Name="PART_LevelMappingBorder" />
+												 Grid.Column="2"
+												 x:Name="PART_LevelMappingBorder" />
 
 							<mb:LogMappingBorder Grid.Row="1"
-												   Grid.Column="4"
-												   x:Name="PART_ErrorMappingBorder" />
+												 Grid.Column="4"
+												 x:Name="PART_ErrorMappingBorder" />
 
 							<Border Grid.Column="0"
 									Margin="0,0,0,5"
@@ -511,11 +511,12 @@
 									Grid.RowSpan="3"
 									x:Name="ExtrusionBorder">
 								<sc:ScrollViewWatcher x:Name="PART_MainScrollViewer"
-														ScrollHeaderHeight="{DynamicResource GridViewWatcherHeaderHeight}"
-														HeaderBackground="{DynamicResource HeaderBackground}"
-														Background="{StaticResource Background_Level2 }"
-														ThumbBackground="{DynamicResource ThumbBackground}"
-														ScrollBarBackground="{DynamicResource ScrollBarBackground}">
+													  CanContentScroll="True"
+													  ScrollHeaderHeight="{DynamicResource GridViewWatcherHeaderHeight}"
+													  HeaderBackground="{DynamicResource HeaderBackground}"
+													  Background="{StaticResource Background_Level2 }"
+													  ThumbBackground="{DynamicResource ThumbBackground}"
+													  ScrollBarBackground="{DynamicResource ScrollBarBackground}">
 									<ItemsPresenter />
 								</sc:ScrollViewWatcher>
 							</Border>
