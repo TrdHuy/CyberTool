@@ -268,12 +268,25 @@
 									Value="Collapsed" />
 						</MultiDataTrigger>
 
-						<Trigger Property="IsMouseOver"
+						<!--<Trigger Property="IsMouseOver"
 								 Value="True">
 							<Setter TargetName="FeedbackRec"
 									Property="Fill"
 									Value="{DynamicResource MouseOverFillEffect_Level1}"/>
-						</Trigger>
+						</Trigger>-->
+
+						<MultiDataTrigger>
+							<MultiDataTrigger.Conditions>
+								<Condition Binding="{Binding Path=IsMouseOver, ElementName=MainGrid}"
+										   Value="True" />
+								<Condition Binding="{Binding Path=IsSelectable}"
+										   Value="True" />
+							</MultiDataTrigger.Conditions>
+							<Setter TargetName="FeedbackRec"
+									Property="Fill"
+									Value="{DynamicResource MouseOverFillEffect_Level1}" />
+						</MultiDataTrigger>
+						
 					</ControlTemplate.Triggers>
 
 				</ControlTemplate>

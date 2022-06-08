@@ -230,6 +230,8 @@ namespace cyber_base.implement.views.cyber_treeview
 
         bool IsSelected { get; set; }
 
+        bool IsSelectable { get; set; }
+
         object? Parent { get; }
 
         ICyberTreeViewItem? Last { get; set; }

@@ -20,6 +20,7 @@ namespace honeyboard_release_service.view_models.project_manager.items
             : base(new BranchVO(path, title, isNode, isRemote))
         {
             _newVO = (BranchVO)_vo;
+            IsSelectable = isNode;
         }
 
         public override string ToString()

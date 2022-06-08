@@ -87,6 +87,8 @@ namespace cyber_base.implement.view_models.cyber_treeview
             }
         }
 
+        public bool IsSelectable { get; set; }
+
         public BaseCyberTreeItemViewModel(BaseCyberTreeItemVO vo)
         {
             _vo = vo;

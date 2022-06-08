@@ -54,7 +54,14 @@ namespace cyber_base.implement.views.cyber_treeview
         protected override void OnSelectedItemChanged(RoutedPropertyChangedEventArgs<object> e)
         {
             base.OnSelectedItemChanged(e);
-            SelectedCyberItem = e.NewValue;
+            var cyberTreeItem = e.NewValue as ICyberTreeViewItem;
+            if (cyberTreeItem != null)
+            {
+                if (cyberTreeItem.IsSelectable)
+                {
+                    SelectedCyberItem = e.NewValue;
+                }
+            }
         }
 
         public void OnChildNotify()
