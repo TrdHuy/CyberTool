@@ -73,10 +73,10 @@
 
 
 		<Border Grid.Column="4"
-				Grid.Row="1"
+				Grid.Row="0"
 				Grid.ColumnSpan="2"
 				Grid.RowSpan="10"
-				CornerRadius="0,0,10,0"
+				CornerRadius="0,10,10,0"
 				Background="{StaticResource ButtonBackground_Level1}" />
 
 		<Border Grid.Column="3"

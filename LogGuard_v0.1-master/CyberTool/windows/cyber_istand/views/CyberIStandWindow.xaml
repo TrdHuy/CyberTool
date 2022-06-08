@@ -5,6 +5,7 @@
 				 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 				 xmlns:vm="clr-namespace:cyber_tool.windows.cyber_istand.view_models"
 				 xmlns:local="clr-namespace:cyber_tool.windows.cyber_istand.views"
+				 xmlns:ccp="clr-namespace:cyber_base.implement.views.circle_progress;assembly=cyber_base"
 				 Background="{DynamicResource Background_Level2}"
 				 Style="{DynamicResource DefaultCyberStyle}"
 				 xmlns:cyw="clr-namespace:cyber_tool.app_resources.controls.cyber_window"
@@ -20,7 +21,7 @@
 	</Window.DataContext>
 	<Grid Background="{DynamicResource Background_Level3}"
 		  Width="auto"
-		  Margin="5,0,5,5"
+		  Margin="1,0,1,1"
 		  x:Name="MainGrid"
 		  Height="auto">
 		<Grid.RowDefinitions>
@@ -29,8 +30,10 @@
 			<RowDefinition Height="40" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<StackPanel Orientation="Horizontal"
+		<StackPanel x:Name="SingleTaskDisplayPanel"
+					Orientation="Horizontal"
 					Grid.Row="1"
+					Visibility="Collapsed"
 					Margin="0,0,5,0">
 			<Path x:Name="CancelIconPath"
 				  Fill="{DynamicResource ButtonBackground_Level2}"
@@ -69,13 +72,76 @@
 				   MinHeight="50"
 				   VerticalContentAlignment="Center"
 				   Content="{Binding Content}" />
+
+
 		</StackPanel>
+		<Grid x:Name="MultiTaskDisplayPanel"
+			  Grid.Row="1"
+			  Visibility="Visible"
+			  Margin="5,0,5,0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+			<TextBlock x:Name="MainTaskLabel"
+					   Text="Total"
+					   Foreground="{StaticResource Foreground_Level2}"
+					   FontSize="10"
+					   FontWeight="Bold" />
+			<ccp:CircleProgress x:Name="MainTaskProgress"
+								StrokeThickness="15"
+								Value="{Binding TotalPercent}"
+								Width="60"
+								Margin="0,0,10,0"
+								Maximum="100"
+								Grid.Row="1"
+								Height="70"
+								Foreground="{StaticResource ButtonBackground_Level1}"
+								Background="#33009A76" />
+
+			<StackPanel x:Name="SubTaskContentPanel"
+						Grid.RowSpan="2"
+						Grid.Column="2"
+						VerticalAlignment="Center">
+				<TextBlock Text="{Binding Content}"
+						   Margin="0,0,0,5"
+						   Foreground="{DynamicResource Foreground_Level2}"
+						   FontSize="10" />
+				<Grid>
+					<ProgressBar Grid.Row="1"
+								 Height="15"
+								 Maximum="100"
+								 Style="{DynamicResource RoundedProgressBar}"
+								 Width="260"
+								 Value="{Binding CurrentTaskPercent}"
+								 Foreground="{DynamicResource ButtonBackground_Level1}"
+								 Background="#33009A76"
+								 BorderThickness="0"
+								 Grid.Column="2">
+					</ProgressBar>
+
+					<TextBlock Text="{Binding CurrentTaskPercentToString}"
+							   Foreground="{DynamicResource Foreground_Level2}"
+							   FontWeight="Bold"
+							   FontSize="8"
+							   VerticalAlignment="Center"
+							   HorizontalAlignment="Center"/>
+				</Grid>
+				
+			</StackPanel>
+
+		</Grid>
+
 		<StackPanel Orientation="Horizontal"
 					HorizontalAlignment="Right"
 					Margin="0,0,5,10"
 					Grid.Row="3">
 
-			<Button x:Name="cancelBtn"
+			<Button x:Name="CancelBtn"
 					Height="24"
 					Content="Cancel"
 					Foreground="{DynamicResource Foreground_Level3}"
@@ -95,7 +161,8 @@
 		</StackPanel>
 
 		<Grid.Triggers>
-			<EventTrigger RoutedEvent="Grid.Loaded">
+			<EventTrigger RoutedEvent="StackPanel.Loaded"
+						  SourceName="SingleTaskDisplayPanel">
 				<BeginStoryboard x:Name="WatingStoryBoard">
 					<Storyboard RepeatBehavior="Forever">
 						<DoubleAnimation Storyboard.TargetName="MyAnimatedTransform"
@@ -108,7 +175,7 @@
 			</EventTrigger>
 
 			<EventTrigger RoutedEvent="Button.Click"
-						  SourceName="cancelBtn">
+						  SourceName="CancelBtn">
 				<StopStoryboard BeginStoryboardName="WatingStoryBoard" />
 			</EventTrigger>
 

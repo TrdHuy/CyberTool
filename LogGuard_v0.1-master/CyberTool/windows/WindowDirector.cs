@@ -1,5 +1,6 @@
 ﻿using cyber_base.async_task;
 using cyber_base.definition;
+using cyber_base.implement.async_task;
 using cyber_tool.definitions;
 using cyber_tool.windows.cyber_iface.views;
 using cyber_tool.windows.cyber_imes.views;
@@ -109,6 +110,18 @@ namespace cyber_tool.windows
                 , delayTime
                 , taskName
                 , estimatedTime
+                , IFaceWindow);
+
+            var message = newWaitingBox.Show();
+
+            return ConvertToContactMessage(message);
+        }
+
+        public CyberContactMessage OpenMultiTaskBox(string title
+            , MultiAsyncTask tasks)
+        {
+            var newWaitingBox = new CyberIStandWindow(title
+                , tasks
                 , IFaceWindow);
 
             var message = newWaitingBox.Show();

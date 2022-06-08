@@ -10,11 +10,11 @@ namespace cyber_base.implement.async_task
 {
     public class ParamAsyncTask : BaseAsyncTask
     {
-        private Func<object, AsyncTaskResult, Task<AsyncTaskResult>>? _callback;
-        private Func<object, AsyncTaskResult, CancellationTokenSource, Task<AsyncTaskResult>> _mainFunc;
-        private Func<object, bool>? _canExecute;
-        private CancellationTokenSource _cancellationTokenSource;
-        private object _param;
+        protected Func<object, AsyncTaskResult, Task<AsyncTaskResult>>? _callback;
+        protected Func<object, AsyncTaskResult, CancellationTokenSource, Task<AsyncTaskResult>> _mainFunc;
+        protected Func<object, bool>? _canExecute;
+        protected CancellationTokenSource _cancellationTokenSource;
+        protected object _param;
 
         public Func<object, AsyncTaskResult, Task<AsyncTaskResult>>? CallbackHandler => _callback;
         public Func<object, AsyncTaskResult, CancellationTokenSource, Task<AsyncTaskResult>> MainFunc => _mainFunc;

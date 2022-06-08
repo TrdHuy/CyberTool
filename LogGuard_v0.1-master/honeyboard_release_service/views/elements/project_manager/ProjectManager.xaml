@@ -6,6 +6,7 @@
 			 xmlns:local="clr-namespace:honeyboard_release_service.views.elements.project_manager"
 			 xmlns:vmm="clr-namespace:honeyboard_release_service.implement.markup"
 			 xmlns:atp="clr-namespace:honeyboard_release_service.prop.attached_properties"
+			 xmlns:ptb="clr-namespace:honeyboard_release_service.views.controls.path_text_box"
 			 xmlns:vm="clr-namespace:honeyboard_release_service.view_models.project_manager"
 			 xmlns:vmp="clr-namespace:honeyboard_release_service.view_models"
 			 mc:Ignorable="d"
@@ -17,7 +18,7 @@
 								ParentDataContextType="{x:Type vmp:HoneyReleaseServiceViewModel}"
 								GeneratorType="CreateNew" />
 	</UserControl.DataContext>
-	
+
 	<Border Background="{StaticResource Background_Level2}"
 			CornerRadius="10"
 			Grid.RowSpan="3">
@@ -51,34 +52,39 @@
 					  Stretch="Uniform" />
 			</StackPanel>
 
-			<TextBox Grid.Row="1"
-					 Tag="Project path"
-					 Margin="0,0,0,10"
-					 atp:ElementAttProperties.PathSelected="{Binding GestureCommandVM.PathSelectedGestureCommand}"
-					 atp:ElementAttProperties.DialogBoxTitle="Choose project folder"
-					 Foreground="{StaticResource Foreground_Level3}"
-					 Grid.Column="1"
-					 Background="{StaticResource Background_Level3}"
-					 Template="{StaticResource RT_FolderPathTextBoxTmpl}" />
+			<ptb:PathTextBox Grid.Row="1"
+							 PathType="Folder"
+							 IconGeometry="{Binding Source={StaticResource RT_OpenFileIconPathGeomerty}}"
+							 PathSelected="{Binding GestureCommandVM.PathSelectedGestureCommand}"
+							 Tag="Project path"
+							 Margin="0,0,0,10"
+							 Text="{Binding ProjectPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							 Foreground="{StaticResource Foreground_Level3}"
+							 Grid.Column="1"
+							 Background="{StaticResource Background_Level3}" />
 
-			<TextBox Grid.Row="2"
-					 Tag="Version properties path"
-					 Margin="0,0,0,10"
-					 atp:ElementAttProperties.DialogBoxTitle="Choose project version properties file"
-					 atp:ElementAttProperties.FileBoxFilter="Properties file(*.properties)|*.properties|Gradle files (*.gradle)|*.gradle"
-					 Foreground="{StaticResource Foreground_Level3}"
-					 Grid.Column="1"
-					 Background="{StaticResource Background_Level3}"
-					 Template="{StaticResource RT_FilePathTextBoxTmpl}" />
+			<ptb:PathTextBox Grid.Row="2"
+							 PathType="File"
+							 IconGeometry="{Binding Source={StaticResource RT_OpenFileIconPathGeomerty}}"
+							 Text="{Binding VersionPropertiesPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							 Tag="Version properties file"
+							 Margin="0,0,0,10"
+							 Grid.Column="1"
+							 Background="{StaticResource Background_Level3}"
+							 Foreground="{StaticResource Foreground_Level3}" />
 
 			<ComboBox Grid.Row="3"
-					 Tag="Branch"
-					 Margin="0,0,0,10"
-					 Foreground="{StaticResource Foreground_Level3}"
-					 Grid.Column="1"
-					 Background="{StaticResource Background_Level3}"
-					 Template="{StaticResource CyberNoEditComboboxTmpl}" />
-			
+					  Tag="Branch"
+					  Margin="0,0,0,10"
+					  Foreground="{StaticResource Foreground_Level3}"
+					  Grid.Column="1"
+					  atp:ElementAttProperties.Proxy="{Binding SelectedBranch}"
+					  SelectedItem="{Binding SelectedItem}"
+					  Background="{StaticResource Background_Level3}"
+					  ItemsSource="{Binding BranchsSource}"
+					  Style="{StaticResource RT_BranchsComboboxStyle}">
+			</ComboBox>
+
 			<Rectangle Grid.Row="4"
 					   Height="1"
 					   Fill="{StaticResource HorizontalFench1pixel_Background}"

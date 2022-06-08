@@ -14,6 +14,9 @@
 				<!--Custom controller resource-->
 				<ResourceDictionary Source="app_resources/controls/cyber_window/CyberWindow.xaml" />
 				<ResourceDictionary Source="app_resources/controls/cyber_scroll/CyberScrollView.xaml" />
+				<ResourceDictionary Source="app_resources/controls/cyber_circle_progress/CircleProgress.xaml" />
+				<ResourceDictionary Source="app_resources/controls/cyber_treeview/CyberTreeViewItem.xaml" />
+				<ResourceDictionary Source="app_resources/controls/cyber_treeview/CyberTreeViewer.xaml" />
 
 				<!--Variable controller styles-->
 				<ResourceDictionary Source="app_resources/Themes.xaml" />

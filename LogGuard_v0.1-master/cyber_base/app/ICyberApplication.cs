@@ -1,5 +1,6 @@
 ﻿using cyber_base.async_task;
 using cyber_base.definition;
+using cyber_base.implement.async_task;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,9 @@ namespace cyber_base.app
             , ulong delayTime = 0
             , ulong estimatedTime = 0
             , string taskName = "");
+
+        CyberContactMessage OpenMultiTaskBox(string title
+            , MultiAsyncTask task);
 
         CyberContactMessage ShowWaringBox(string warning
             , bool isDialog = true);

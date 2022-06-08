@@ -12,6 +12,49 @@ namespace cyber_tool.windows.cyber_istand.view_models
     {
         private string _title = "Please wait!";
         private string _content = "Resource not available!";
+        private double _totalPercent = 0d;
+        private double _currentTaskPercent = 0d;
+        private string _currentTaskPercentToString = "0%";
+
+        [Bindable(true)]
+        public double TotalPercent
+        {
+            get
+            {
+                return _totalPercent;
+            }
+            set
+            {
+
+                _totalPercent = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public string CurrentTaskPercentToString
+        {
+            get
+            {
+                return _currentTaskPercentToString;
+            }
+        }
+
+        [Bindable(true)]
+        public double CurrentTaskPercent
+        {
+            get
+            {
+                return _currentTaskPercent;
+            }
+            set
+            {
+                _currentTaskPercentToString = Math.Round(value, 2) + "%";
+                _currentTaskPercent = value;
+                InvalidateOwn();
+                Invalidate("CurrentTaskPercentToString");
+            }
+        }
 
         [Bindable(true)]
         public string Title

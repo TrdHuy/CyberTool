@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace cyber_tool.app_resources.controls.cyber_scroll
+namespace cyber_base.implement.views.cyber_scroll
 {
     public class CyberScrollView: ScrollViewer
     {

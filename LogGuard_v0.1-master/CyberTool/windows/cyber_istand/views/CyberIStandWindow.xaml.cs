@@ -30,6 +30,7 @@ namespace cyber_tool.windows.cyber_istand.views
         private BaseAsyncTask MainTask { get; set; }
         private CyberIStandWindowViewModel _context;
 
+        #region SingleTaskWindow
         public CyberIStandWindow(string content
             , string title
             , Func<object, AsyncTaskResult, CancellationTokenSource, Task<AsyncTaskResult>> asyncTask
@@ -41,6 +42,9 @@ namespace cyber_tool.windows.cyber_istand.views
             , Window? owner = null)
         {
             InitializeComponent();
+            SingleTaskDisplayPanel.Visibility = Visibility.Visible;
+            MultiTaskDisplayPanel.Visibility = Visibility.Collapsed;
+
             _context = (CyberIStandWindowViewModel)DataContext;
             if (owner != null)
             {
@@ -66,20 +70,19 @@ namespace cyber_tool.windows.cyber_istand.views
                 , estimatedTime
                 , delayTime
                 , 100);
-            task.OnCompletedChanged -= Task_OnCompletedChanged;
-            task.OnCompletedChanged += Task_OnCompletedChanged;
+            task.OnCompletedChanged -= SingleTaskCompletedChanged;
+            task.OnCompletedChanged += SingleTaskCompletedChanged;
 
             MainTask = task;
 
-
-            cancelBtn.Click += (s, e) =>
+            CancelBtn.Click += (s, e) =>
             {
                 MainTask.Cancel();
                 MesResult = CyberIStandBoxResult.Cancel;
                 CancelIconPath.Visibility = Visibility.Visible;
                 IconPath.Visibility = Visibility.Collapsed;
                 ContinueBtn.Visibility = Visibility.Visible;
-                cancelBtn.Visibility = Visibility.Collapsed;
+                CancelBtn.Visibility = Visibility.Collapsed;
                 _context.Title = "Canceled!";
                 _context.Content = "Your process is canceled!~";
             };
@@ -99,7 +102,7 @@ namespace cyber_tool.windows.cyber_istand.views
             };
         }
 
-        private void Task_OnCompletedChanged(object sender, bool oldValue, bool newValue)
+        private void SingleTaskCompletedChanged(object sender, bool oldValue, bool newValue)
         {
             if (newValue)
             {
@@ -111,9 +114,124 @@ namespace cyber_tool.windows.cyber_istand.views
                     SuccessIconPath.Visibility = Visibility.Visible;
                 }
                 ContinueBtn.Visibility = Visibility.Visible;
-                cancelBtn.Visibility = Visibility.Collapsed;
+                CancelBtn.Visibility = Visibility.Collapsed;
             }
         }
+
+        #endregion
+
+        #region MultiTaskWindow
+        public CyberIStandWindow(string title
+            , MultiAsyncTask tasks
+            , Window? owner = null)
+        {
+            InitializeComponent();
+            MainTask = tasks;
+            SingleTaskDisplayPanel.Visibility = Visibility.Collapsed;
+            MultiTaskDisplayPanel.Visibility = Visibility.Visible;
+
+            _context = (CyberIStandWindowViewModel)DataContext;
+            _context.Title = title;
+            _context.Content = "Waiting to be assigned!";
+
+            if (owner != null)
+            {
+                Owner = owner;
+                WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            }
+            else
+            {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
+
+            if (tasks.TaskCount <= 1)
+            {
+                MainTaskProgress.Visibility = Visibility.Collapsed;
+                MainTaskLabel.Visibility = Visibility.Collapsed;
+                SubTaskContentPanel.Margin = new Thickness(20, 0, 20, 0);
+            }
+            else
+            {
+                tasks.ProgressChanged -= OnMultiTaskProgressChanged;
+                tasks.ProgressChanged += OnMultiTaskProgressChanged;
+            }
+            tasks.CurrentTaskChanged -= OnCurrentTaskChanged;
+            tasks.CurrentTaskChanged += OnCurrentTaskChanged;
+
+            tasks.OnCompletedChanged -= MultiTaskCompletedChanged;
+            tasks.OnCompletedChanged += MultiTaskCompletedChanged;
+
+            CancelBtn.Click += (s, e) =>
+            {
+                MainTask.Cancel();
+                MesResult = CyberIStandBoxResult.Cancel;
+                CancelIconPath.Visibility = Visibility.Visible;
+                IconPath.Visibility = Visibility.Collapsed;
+                ContinueBtn.Visibility = Visibility.Visible;
+                CancelBtn.Visibility = Visibility.Collapsed;
+                _context.Title = "Canceled!";
+                _context.Content = "Your process is canceled!~";
+            };
+
+            ContinueBtn.Click += (s, e) =>
+            {
+                this.Close();
+            };
+
+            Closing += (s, e) =>
+            {
+                if (!MainTask.IsCompleted && !MainTask.IsCanceled)
+                {
+                    MainTask.Cancel();
+                    MesResult = CyberIStandBoxResult.Cancel;
+                }
+            };
+        }
+
+        private void MultiTaskCompletedChanged(object sender, bool oldValue, bool newValue)
+        {
+            if (newValue)
+            {
+                MesResult = MainTask.IsCanceled ? CyberIStandBoxResult.Cancel : CyberIStandBoxResult.Done;
+                if (MesResult == CyberIStandBoxResult.Done)
+                {
+                    _context.Title = "Done";
+                }
+                else if (MesResult == CyberIStandBoxResult.Cancel)
+                {
+                    _context.Title = "Aborted";
+                }
+                ContinueBtn.Visibility = Visibility.Visible;
+                CancelBtn.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void OnMultiTaskProgressChanged(object sender, double currentProgress)
+        {
+            _context.TotalPercent = currentProgress;
+        }
+
+        private void OnCurrentTaskChanged(object sender, BaseAsyncTask? oldTask, BaseAsyncTask? newTask)
+        {
+            if (oldTask != null)
+            {
+                oldTask.ProgressChanged -= OnCurrentTaskProgressChanged;
+            }
+            if (newTask != null)
+            {
+                newTask.ProgressChanged -= OnCurrentTaskProgressChanged;
+                newTask.ProgressChanged += OnCurrentTaskProgressChanged;
+                _context.Content = newTask.Name ?? "An anonymous task is being executed";
+            }
+        }
+
+        private void OnCurrentTaskProgressChanged(object sender, double currentProgress)
+        {
+            _context.CurrentTaskPercent = currentProgress;
+        }
+
+        #endregion
+
 
         public new CyberIStandBoxResult Show()
         {

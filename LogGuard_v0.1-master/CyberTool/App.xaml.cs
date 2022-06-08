@@ -1,6 +1,7 @@
 ﻿using cyber_base.app;
 using cyber_base.async_task;
 using cyber_base.definition;
+using cyber_base.implement.async_task;
 using cyber_extension.dll_base.extension;
 using cyber_tool.definitions;
 using cyber_tool.plugins;
@@ -81,6 +82,12 @@ namespace cyber_tool
         {
             return _WindowDirector.OpenWaitingTaskBox(content, title, asyncTask, canExecute, callback, delayTime);
 
+        }
+
+        public CyberContactMessage OpenMultiTaskBox(string title
+            , MultiAsyncTask tasks)
+        {
+            return _WindowDirector.OpenMultiTaskBox(title, tasks);
         }
 
         public CyberContactMessage ShowWaringBox(string warning, bool isDialog = true)

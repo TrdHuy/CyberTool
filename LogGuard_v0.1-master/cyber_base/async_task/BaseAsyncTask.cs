@@ -10,12 +10,13 @@ namespace cyber_base.async_task
 {
     public abstract class BaseAsyncTask : IAsyncTask
     {
-        private ulong _delayTime;
         private bool _isCompleted;
+        private bool _isFaulted;
         private bool _isCompletedCallback;
         private bool _isCanceled;
         protected AsyncTaskResult _result;
-        private string _name;
+        protected string _name;
+        protected ulong _delayTime = 0;
         protected ulong _estimatedTime = 0;
         protected double _progress = 0d;
         protected int _reportDelay = 0;
@@ -27,10 +28,18 @@ namespace cyber_base.async_task
             get => _isCompletedCallback;
             protected set => _isCompletedCallback = value;
         }
+        public bool IsFaulted
+        {
+            get => _isFaulted;
+            private set
+            {
+                _isFaulted = value;
+            }
+        }
         public bool IsCompleted
         {
             get => _isCompleted;
-            protected set
+            private set
             {
                 var oldVal = _isCompleted;
                 _isCompleted = value;
@@ -44,7 +53,7 @@ namespace cyber_base.async_task
         public bool IsCanceled
         {
             get => _isCanceled;
-            protected set
+            private set
             {
                 var oldVal = _isCanceled;
                 _isCanceled = value;
@@ -94,21 +103,38 @@ namespace cyber_base.async_task
         public async Task<BaseAsyncTask> Execute(bool isAsyncCallback = false)
         {
             var asynTaskExecuteWatcher = Stopwatch.StartNew();
-            var reportTask = Task.Run(() => DoReportTask(asynTaskExecuteWatcher));
+            //var reportTask = Task.Run(() => DoReportTask(asynTaskExecuteWatcher
+            DoReportTask();
             try
             {
+                // do main task
                 await Task.Run(DoMainFunc)
                 .ContinueWith((t) =>
                 {
+                    // stop clock
                     asynTaskExecuteWatcher.Stop();
+
+                    // handle task exception
+                    // only handle operation cancel exception
+                    // exception will be thrown here
                     HandleMainTaskException(t);
                 });
                 long restLoadingTime = (long)DelayTime - asynTaskExecuteWatcher.ElapsedMilliseconds;
                 if (restLoadingTime > 0)
                 {
+                    // delay the task if its execution duration smaller than inited delay time
                     await DoWaitRestDelay(restLoadingTime);
                 }
+
+                // set completed flag
                 IsCompleted = true;
+
+                // default set message result if it was not handled
+                if(_result.MesResult == MessageAsyncTaskResult.Non)
+                {
+                    _result.MesResult = MessageAsyncTaskResult.Finished;
+                }
+                // update progress when it completed
                 CurrentProgress = 100;
 
                 if (isAsyncCallback)
@@ -123,8 +149,12 @@ namespace cyber_base.async_task
             }
             catch (OperationCanceledException oce)
             {
+                // when the task was canceled by user
+                // the callback will be triggered
+                _result.Messsage = oce.ToString();
                 _result.MesResult = MessageAsyncTaskResult.Aborted;
                 IsCompleted = false;
+                IsFaulted = false;
                 IsCanceled = true;
                 if (isAsyncCallback)
                 {
@@ -136,10 +166,15 @@ namespace cyber_base.async_task
                 }
                 IsCompletedCallback = true;
             }
-            catch
+            catch (Exception ex)
             {
+                // when the task was canceled due to function exception
+                // callback will not be triggered
+                _result.Messsage = ex.ToString();
+                _result.MesResult = MessageAsyncTaskResult.Aborted;
                 IsCompleted = false;
-                IsCanceled = true;
+                IsFaulted = true;
+                IsCanceled = false;
                 IsCompletedCallback = false;
             }
             return this;
@@ -149,23 +184,37 @@ namespace cyber_base.async_task
         protected abstract Task DoCallback();
         protected abstract Task DoWaitRestDelay(long rest);
 
-        protected virtual async Task DoReportTask(Stopwatch taskWatcher)
+        protected virtual async Task DoReportTask()
         {
+            var reportWatch = Stopwatch.StartNew();
+
             if (EstimatedTime == 0)
             {
+                CurrentProgress = 100;
                 return;
             }
 
-            while (IsCompleted == false
+            try
+            {
+                while (IsCompleted == false
                 && IsCanceled == false
                 && CurrentProgress < 100)
+                {
+                    var per = Math.Round
+                        ((double)(reportWatch.ElapsedMilliseconds
+                        / (double)EstimatedTime), 2);
+                    per = per > 1 ? 1 : per;
+                    CurrentProgress = per * 100;
+                    await DoDelayForReportTask();
+                }
+            }
+            catch
             {
-                var per = Math.Round
-                    ((double)(taskWatcher.ElapsedMilliseconds
-                    / (double)EstimatedTime), 2);
-                per = per > 1 ? 1 : per;
-                CurrentProgress = per * 100;
-                await DoDelayForReportTask();
+
+            }
+            finally
+            {
+                reportWatch.Stop();
             }
         }
 
@@ -184,98 +233,6 @@ namespace cyber_base.async_task
         }
 
         public abstract void Cancel();
-
-        //public static async IAsyncEnumerable<AsyncTaskResult> MultiCancelableExecute(
-        //     BaseAsyncTask[] tasks
-        //    , bool isAsyncCallback = false)
-        //{
-        //    foreach (var asyncTask in tasks)
-        //    {
-        //        var asyncTaskResult = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
-        //        try
-        //        {
-        //            var asynTaskExecuteWatcher = Stopwatch.StartNew();
-        //            var canExecute = asyncTask.CanExecute?.Invoke() ?? true;
-
-        //            if (canExecute)
-        //            {
-        //                try
-        //                {
-        //                    ///====================
-        //                    /// Execute task
-        //                    ///====================
-        //                    asyncTaskResult = await Task.Run(async () =>
-        //                    {
-        //                        var res = await asyncTask.CancelableExecute?.Invoke(asyncTask._cancellationTokenSource.Token);
-        //                        return res;
-        //                    }, asyncTask._cancellationTokenSource.Token);
-
-
-        //                    if (asyncTask._cancellationTokenSource.Token.IsCancellationRequested)
-        //                    {
-        //                        throw new OperationCanceledException();
-        //                    }
-
-        //                    if (asyncTaskResult != null && asyncTaskResult.MesResult == MessageAsyncTaskResult.Aborted)
-        //                    {
-        //                        throw new OperationCanceledException(asyncTaskResult.Messsage);
-        //                    }
-        //                }
-        //                catch (Exception ex)
-        //                {
-        //                    asyncTask.IsCanceled = true;
-        //                    asyncTaskResult.MesResult = MessageAsyncTaskResult.Aborted;
-        //                }
-
-        //                asynTaskExecuteWatcher.Stop();
-
-        //                //
-        //                //Console.WriteLine("Execute time = " + asynTaskExecuteWatcher.ElapsedMilliseconds + "(ms)");
-
-        //                long restLoadingTime = asyncTask.DelayTime - asynTaskExecuteWatcher.ElapsedMilliseconds;
-        //                if (restLoadingTime > 0 && !asyncTask.IsCanceled)
-        //                {
-        //                    try
-        //                    {
-        //                        await Task.Delay(Convert.ToInt32(restLoadingTime), asyncTask._cancellationTokenSource.Token);
-        //                    }
-        //                    catch
-        //                    {
-        //                        asyncTask.IsCanceled = true;
-        //                    }
-        //                }
-        //                asyncTask.IsCompleted = true;
-
-        //                ///====================
-        //                /// Callback method
-        //                ///====================
-        //                if (isAsyncCallback)
-        //                {
-        //                    await Task.Run(() =>
-        //                    {
-        //                        asyncTask.CallbackHandler?.Invoke(asyncTaskResult);
-        //                    });
-        //                }
-        //                else
-        //                {
-        //                    asyncTask.CallbackHandler?.Invoke(asyncTaskResult);
-        //                }
-
-        //                asyncTask.IsCompletedCallback = true;
-
-        //            }
-
-        //        }
-        //        catch (OperationCanceledException)
-        //        {
-        //            asyncTask.IsCompletedCallback = false;
-        //            asyncTask.IsCompleted = false;
-        //            asyncTask.IsCanceled = true;
-        //        }
-
-        //        yield return asyncTaskResult;
-        //    }
-        //}
 
         public static string GetCurrentThreadInformation()
         {

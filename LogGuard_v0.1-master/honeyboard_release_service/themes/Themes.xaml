@@ -1,15 +1,18 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:sys="clr-namespace:System;assembly=mscorlib"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-					xmlns:atp="clr-namespace:honeyboard_release_service.prop.attached_properties">
+					xmlns:atp="clr-namespace:honeyboard_release_service.prop.attached_properties"
+					xmlns:ctv="clr-namespace:cyber_base.implement.views.cyber_treeview;assembly=cyber_base">
 
 	<ResourceDictionary.MergedDictionaries>
 
 		<ResourceDictionary Source="pack://application:,,,/honeyboard_release_service;component/themes/RawSource.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/honeyboard_release_service;component/views/controls/path_text_box/PathTextBox.xaml" />
 
 	</ResourceDictionary.MergedDictionaries>
 
-	<Style TargetType="{x:Type TabControl}"
-		   x:Key="RT_TabControlStyle">
+	<Style x:Key="RT_TabControlStyle"
+		   TargetType="{x:Type TabControl}">
 		<Setter Property="SnapsToDevicePixels"
 				Value="True" />
 		<Setter Property="Template">
@@ -59,8 +62,8 @@
 		</Setter>
 	</Style>
 
-	<Style TargetType="ListView"
-		   x:Key="NotebookDayVersionPresenterStyle">
+	<Style  x:Key="NotebookDayVersionPresenterStyle"
+			TargetType="ListView">
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="ListView">
@@ -117,160 +120,252 @@
 		</Setter>
 	</Style>
 
-	<ControlTemplate TargetType="{x:Type TextBox}"
-					 x:Key="RT_FilePathTextBoxTmpl">
-		<Grid>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition />
-				<ColumnDefinition Width="25" />
-			</Grid.ColumnDefinitions>
+	<Style x:Key="RT_BranchsComboboxStyle"
+		   TargetType="ComboBox">
 
-			<Rectangle x:Name="BackgroundRec"
-					   Grid.ColumnSpan="2"
-					   RadiusX="5"
-					   RadiusY="5"
-					   Fill="{TemplateBinding Background}"
-					   StrokeThickness="0" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type ComboBox}">
+					<ControlTemplate.Resources>
+						<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
+						<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
 
-			<ScrollViewer Margin="5,0,0,0"
-						  VerticalContentAlignment="Center"
-						  VerticalAlignment="Center"
-						  VerticalScrollBarVisibility="Disabled"
-						  HorizontalScrollBarVisibility="Disabled"
-						  x:Name="PART_ContentHost" />
+						<ControlTemplate x:Key="ComboBoxToggleButton"
+										 TargetType="{x:Type ToggleButton}">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition />
+									<ColumnDefinition Width="25" />
+								</Grid.ColumnDefinitions>
+								<VisualStateManager.VisualStateGroups>
+									<VisualStateGroup x:Name="CommonStates">
+										<VisualState x:Name="Normal" />
+										<VisualState x:Name="MouseOver" />
+										<VisualState x:Name="Pressed" />
+										<VisualState x:Name="Disabled" />
 
-			<TextBlock x:Name="TagTextBox"
-					   Margin="7,0,0,0"
-					   Text="{TemplateBinding Tag}"
-					   Background="Transparent"
-					   VerticalAlignment="Center"
-					   IsHitTestVisible="False"
-					   Foreground="{StaticResource Foreground_Level1}"
-					   FontSize="{TemplateBinding FontSize}">
-				<TextBlock.Style>
-					<Style TargetType="{x:Type TextBlock}">
-						<Setter Property="Visibility"
-								Value="Collapsed" />
-						<Style.Triggers>
-							<DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
-										 Value="">
-								<Setter Property="Visibility"
-										Value="Visible" />
-							</DataTrigger>
-						</Style.Triggers>
-					</Style>
-				</TextBlock.Style>
-			</TextBlock>
+									</VisualStateGroup>
+									<VisualStateGroup x:Name="CheckStates">
+										<VisualState x:Name="Checked">
+											<Storyboard>
+												<ThicknessAnimation Storyboard.TargetProperty="BorderThickness"
+																	Storyboard.TargetName="Border"
+																	From="0"
+																	To="1"
+																	Duration="0:0:0.1" />
+												<DoubleAnimation Storyboard.TargetProperty="(RotateTransform.Angle)"
+																 Storyboard.TargetName="AnimRotateTransfrom"
+																 From="0"
+																 To="-90"
+																 Duration="0:0:0.1" />
+											</Storyboard>
+										</VisualState>
+										<VisualState x:Name="Unchecked">
+											<Storyboard>
+												<ThicknessAnimation Storyboard.TargetProperty="BorderThickness"
+																	Storyboard.TargetName="Border"
+																	From="1"
+																	To="0"
+																	Duration="0:0:0.1" />
+												<DoubleAnimation Storyboard.TargetProperty="(RotateTransform.Angle)"
+																 Storyboard.TargetName="AnimRotateTransfrom"
+																 From="-90"
+																 To="0"
+																 Duration="0:0:0.1" />
+											</Storyboard>
+										</VisualState>
+										<VisualState x:Name="Indeterminate" />
+									</VisualStateGroup>
+								</VisualStateManager.VisualStateGroups>
+								<Border x:Name="Border"
+										Grid.ColumnSpan="2"
+										BorderBrush="{StaticResource BorderbrushEffect_Level1}"
+										CornerRadius="5"
+										BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource AncestorType=ComboBox, Mode=FindAncestor}}"
+										Background="{Binding Background, RelativeSource={RelativeSource AncestorType=ComboBox, Mode=FindAncestor}}" />
 
-			<Rectangle x:Name="RecogRec"
-					   Fill="Transparent"
-					   atp:ElementAttProperties.PathTextBox="File"
-					   Grid.Column="1" />
-			<Path x:Name="FilePathIcon"
-				  Grid.Column="1"
-				  Height="12"
-				  Width="12"
-				  IsHitTestVisible="False"
-				  Fill="{StaticResource Foreground_Level3}"
-				  HorizontalAlignment="Center"
-				  VerticalAlignment="Center"
-				  Stretch="Uniform"
-				  RenderTransformOrigin="0.5,0.5"
-				  Data="{Binding Source={StaticResource RT_OpenFileIconPathGeomerty}}">
-			</Path>
+								<Path x:Name="Arrow"
+									  Grid.Column="1"
+									  Height="9"
+									  Width="9"
+									  Fill="{StaticResource Foreground_Level3}"
+									  HorizontalAlignment="Center"
+									  VerticalAlignment="Center"
+									  Stretch="Uniform"
+									  RenderTransformOrigin="0.5,0.5"
+									  Data="{Binding Source={StaticResource DropDownIcon}}">
+									<Path.RenderTransform>
+										<RotateTransform x:Name="AnimRotateTransfrom"
+														 Angle="0" />
+									</Path.RenderTransform>
+								</Path>
+							</Grid>
+						</ControlTemplate>
 
-		</Grid>
-		<ControlTemplate.Triggers>
-			<Trigger Value="True"
-					 SourceName="RecogRec"
-					 Property="IsMouseOver">
-				<Setter Property="Fill"
-						Value="{StaticResource ButtonBackground_Level1}"
-						TargetName="FilePathIcon" />
-				<Setter Property="Cursor"
-						Value="Hand" />
-			</Trigger>
+						<ControlTemplate x:Key="ComboBoxTextBox"
+										 TargetType="{x:Type TextBox}">
+							<Border x:Name="PART_ContentHost"
+									Focusable="False"
+									Background="{TemplateBinding Background}" />
+						</ControlTemplate>
 
-		</ControlTemplate.Triggers>
+						<Style x:Key="{x:Type ComboBoxItem}"
+							   TargetType="{x:Type ComboBoxItem}">
+							<Setter Property="Foreground"
+									Value="{StaticResource Foreground_Level3}" />
+							<Setter Property="SnapsToDevicePixels"
+									Value="true" />
+							<Setter Property="Height"
+									Value="30" />
+							<Setter Property="OverridesDefaultStyle"
+									Value="true" />
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="{x:Type ComboBoxItem}">
+										<Border x:Name="Border"
+												Padding="2"
+												BorderThickness="1"
+												BorderBrush="Transparent"
+												SnapsToDevicePixels="true"
+												Background="Transparent">
+											<Border.InputBindings>
+												<MouseBinding MouseAction="LeftClick"
+															  CommandParameter="{Binding .}"
+															  Command="{Binding OnComboBoxItemSelected}" />
+											</Border.InputBindings>
+											<ContentPresenter VerticalAlignment="Center" />
+										</Border>
 
-	</ControlTemplate>
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsMouseOver"
+													 Value="True">
+												<Setter TargetName="Border"
+														Property="BorderBrush"
+														Value="{StaticResource BorderbrushEffect_Level1}" />
+											</Trigger>
 
-	<ControlTemplate TargetType="{x:Type TextBox}"
-					 x:Key="RT_FolderPathTextBoxTmpl">
-		<Grid>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition />
-				<ColumnDefinition Width="25" />
-			</Grid.ColumnDefinitions>
+											<Trigger Property="IsSelected"
+													 Value="True">
+												<Setter TargetName="Border"
+														Property="Background"
+														Value="{StaticResource ButtonBackground_Level1}" />
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
 
-			<Rectangle x:Name="BackgroundRec"
-					   Grid.ColumnSpan="2"
-					   RadiusX="5"
-					   RadiusY="5"
-					   Fill="{TemplateBinding Background}"
-					   StrokeThickness="0" />
+						</Style>
+					</ControlTemplate.Resources>
+					<Grid>
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="CommonStates">
+								<VisualState x:Name="Normal" />
+								<VisualState x:Name="MouseOver" />
+								<VisualState x:Name="Disabled" />
 
-			<ScrollViewer Margin="5,0,0,0"
-						  VerticalContentAlignment="Center"
-						  VerticalAlignment="Center"
-						  VerticalScrollBarVisibility="Disabled"
-						  HorizontalScrollBarVisibility="Disabled"
-						  x:Name="PART_ContentHost" />
+							</VisualStateGroup>
+							<VisualStateGroup x:Name="EditStates">
+								<VisualState x:Name="Editable" />
+								<VisualState x:Name="Uneditable" />
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
 
-			<TextBlock x:Name="TagTextBox"
-					   Margin="7,0,0,0"
-					   Text="{TemplateBinding Tag}"
-					   Background="Transparent"
-					   VerticalAlignment="Center"
-					   IsHitTestVisible="False"
-					   Foreground="{StaticResource Foreground_Level1}"
-					   FontSize="{TemplateBinding FontSize}">
-				<TextBlock.Style>
-					<Style TargetType="{x:Type TextBlock}">
-						<Setter Property="Visibility"
-								Value="Collapsed" />
-						<Style.Triggers>
-							<DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
-										 Value="">
-								<Setter Property="Visibility"
-										Value="Visible" />
-							</DataTrigger>
-						</Style.Triggers>
-					</Style>
-				</TextBlock.Style>
-			</TextBlock>
+						<ToggleButton x:Name="ToggleButton"
+									  Template="{StaticResource ComboBoxToggleButton}"
+									  Grid.Column="2"
+									  Focusable="false"
+									  ClickMode="Press"
+									  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, 
+              RelativeSource={RelativeSource TemplatedParent}}" />
+						<TextBlock x:Name="ContentSite"
+								   IsHitTestVisible="False"
+								   Text="{Binding Path=(atp:ElementAttProperties.Proxy),RelativeSource={RelativeSource TemplatedParent}}"
+								   Margin="8,0,0,0"
+								   VerticalAlignment="Center"
+								   HorizontalAlignment="Left">
+						</TextBlock>
+						<TextBlock x:Name="TagTextBox"
+								   Margin="8,0,0,0"
+								   Text="{TemplateBinding Tag}"
+								   Background="Transparent"
+								   VerticalAlignment="Center"
+								   IsHitTestVisible="False"
+								   Foreground="{StaticResource Foreground_Level1}"
+								   FontSize="{TemplateBinding FontSize}">
+							<TextBlock.Style>
+								<Style TargetType="{x:Type TextBlock}">
+									<Setter Property="Visibility"
+											Value="Hidden" />
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding Path=(atp:ElementAttProperties.Proxy),RelativeSource={RelativeSource TemplatedParent}}"
+													 Value="">
+											<Setter Property="Visibility"
+													Value="Visible" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</TextBlock.Style>
+						</TextBlock>
 
-			<Rectangle x:Name="RecogRec"
-					   Fill="Transparent"
-					   atp:ElementAttProperties.PathTextBox="Folder"
-					   Grid.Column="1" />
-			<Path x:Name="FilePathIcon"
-				  Grid.Column="1"
-				  Height="12"
-				  Width="12"
-				  IsHitTestVisible="False"
-				  Fill="{StaticResource Foreground_Level3}"
-				  HorizontalAlignment="Center"
-				  VerticalAlignment="Center"
-				  Stretch="Uniform"
-				  RenderTransformOrigin="0.5,0.5"
-				  Data="{Binding Source={StaticResource RT_OpenFileIconPathGeomerty}}">
-			</Path>
+						<TextBox x:Name="PART_EditableTextBox"
+								 Style="{x:Null}"
+								 Template="{StaticResource ComboBoxTextBox}"
+								 HorizontalAlignment="Left"
+								 VerticalAlignment="Bottom"
+								 Margin="3,3,23,3"
+								 Focusable="True"
+								 Background="Transparent"
+								 Visibility="Hidden"
+								 IsReadOnly="{TemplateBinding IsReadOnly}" />
+						<Popup x:Name="Popup"
+							   Placement="Bottom"
+							   IsOpen="{TemplateBinding IsDropDownOpen}"
+							   AllowsTransparency="True"
+							   Focusable="False"
+							   PopupAnimation="Slide">
+							<Grid x:Name="DropDown"
+								  SnapsToDevicePixels="True"
+								  MinWidth="{TemplateBinding ActualWidth}"
+								  MaxHeight="{TemplateBinding MaxDropDownHeight}">
+								<Rectangle x:Name="DropDownBorder"
+										   StrokeThickness="10"
+										   Stroke="Transparent"
+										   RadiusX="5"
+										   RadiusY="5"
+										   Fill="{StaticResource Background_Level3}">
 
-		</Grid>
-		<ControlTemplate.Triggers>
-			<Trigger Value="True"
-					 SourceName="RecogRec"
-					 Property="IsMouseOver">
-				<Setter Property="Fill"
-						Value="{StaticResource ButtonBackground_Level1}"
-						TargetName="FilePathIcon" />
-				<Setter Property="Cursor"
-						Value="Hand" />
-			</Trigger>
+								</Rectangle>
 
-		</ControlTemplate.Triggers>
+								<ctv:CyberTreeViewer x:Name="TreeViewItemLst"
+													 ItemsSource="{TemplateBinding ItemsSource}"
+													 BorderThickness="0"
+													 SelectedCyberItem="{Binding Path=SelectedItem,Mode=OneWayToSource,RelativeSource={RelativeSource TemplatedParent}}"
+													 Margin="5,0,5,10"
+													 Padding="10,5,0,0"
+													 Background="Transparent" />
+							</Grid>
+						</Popup>
+					</Grid>
+					<ControlTemplate.Triggers>
+						<Trigger Property="HasItems"
+								 Value="false">
+							<Setter TargetName="DropDownBorder"
+									Property="MinHeight"
+									Value="95" />
+						</Trigger>
+						<Trigger Property="IsGrouping"
+								 Value="true">
+							<Setter Property="ScrollViewer.CanContentScroll"
+									Value="false" />
+						</Trigger>
 
-	</ControlTemplate>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+
 
 </ResourceDictionary>
