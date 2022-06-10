@@ -24,14 +24,11 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.io_t
             _reportDelay = 100;
         }
 
-        protected async override Task DoCallback(object param, AsyncTaskResult result)
-        {
-        }
-
-        protected async override Task DoMainTask(object param
+        protected override void DoMainTask(object param
             , AsyncTaskResult result
             , CancellationTokenSource token)
         {
+            var id = GetCurrentThreadInformation();
             var folderPath = param.ToString();
             if (Directory.Exists(folderPath))
             {
@@ -51,7 +48,6 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.io_t
                     }
                 }
             }
-            await Task.Delay(1, token.Token);
         }
 
         protected override bool IsTaskPossible(object param)

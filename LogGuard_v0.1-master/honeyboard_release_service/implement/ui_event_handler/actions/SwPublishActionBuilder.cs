@@ -5,6 +5,7 @@ using cyber_base.utils;
 using cyber_base.view_model;
 using honeyboard_release_service.definitions;
 using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.gesture;
+using honeyboard_release_service.implement.ui_event_handler.actions.release_tab.button;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,12 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions
             {
                 case PublisherKeyFeatureTag.KEY_TAG_PRT_PM_PROJECT_PATH_SELECTED_FEATURE:
                     viewModelCommandExecuter = new PRT_PM_ProjectPathFileSelectedAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_QUICK_RELEASE_FEATURE:
+                    viewModelCommandExecuter = new PRT_RT_QuickReleaseButtonAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_RESTORE_LATEST_RELEASE_FEATURE:
+                    viewModelCommandExecuter = new PRT_RT_RestoreLatestReleaseCommitAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
                     break;
                 default:
                     break;

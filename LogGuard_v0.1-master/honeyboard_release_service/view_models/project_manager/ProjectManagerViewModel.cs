@@ -22,7 +22,7 @@ namespace honeyboard_release_service.view_models.project_manager
         private FirstLastObservableCollection<VersionHistoryItemViewModel> _versionHistoryItemContexts;
         private string _projectPath = "";
         private string _versionPropertiesPath = "";
-        private CyberTreeViewObservableCollection<ICyberTreeViewItem> _branchsSource;
+        private CyberTreeViewObservableCollection<ICyberTreeViewItem> _branchsSource = new CyberTreeViewObservableCollection<ICyberTreeViewItem>();
         private object? _selectedItem;
         private string _selectedBranch = "";
 
@@ -143,8 +143,6 @@ namespace honeyboard_release_service.view_models.project_manager
 
         private void LoadData()
         {
-            BranchsSource = new CyberTreeViewObservableCollection<ICyberTreeViewItem>();
-
             var perForItem = new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("P4"));
 
             perForItem.AddItem(new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("Setting")));

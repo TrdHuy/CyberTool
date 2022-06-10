@@ -21,4 +21,8 @@
     </Page>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="implement\ui_event_handler\actions\project_manager\button\" />
+  </ItemGroup>
+
 </Project>

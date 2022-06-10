@@ -13,7 +13,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks
     internal abstract class BaseRTParamAsyncTask : ParamAsyncTask
     {
         private Action<AsyncTaskResult>? _completedCallback;
-        
+
         public BaseRTParamAsyncTask(object param
             , string name
             , [Optional] Action<AsyncTaskResult>? completedCallback
@@ -35,14 +35,16 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks
 
         private async Task<AsyncTaskResult> _DoCallback(object param, AsyncTaskResult result)
         {
-            await DoCallback(param, result);
+            DoCallback(param, result);
+            await DoAsyncCallback(param, result);
             _completedCallback?.Invoke(result);
             return result;
         }
 
         private async Task<AsyncTaskResult> _DoMainTask(object param, AsyncTaskResult result, CancellationTokenSource token)
         {
-            await DoMainTask(param, result, token);
+            DoMainTask(param, result, token);
+            await DoAsyncMainTask(param, result, token);
             return result;
         }
 
@@ -51,8 +53,22 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks
             return IsTaskPossible(param);
         }
 
-        protected abstract Task DoCallback(object param, AsyncTaskResult result);
-        protected abstract Task DoMainTask(object param, AsyncTaskResult result, CancellationTokenSource token);
+        protected virtual void DoCallback(object param, AsyncTaskResult result) { }
+        protected virtual void DoMainTask(object param, AsyncTaskResult result, CancellationTokenSource token) { }
+
+        protected virtual Task DoAsyncCallback(object param, AsyncTaskResult result)
+        {
+            var t = new Task(() => { });
+            t.RunSynchronously();
+            return t;
+        }
+        protected virtual Task DoAsyncMainTask(object param, AsyncTaskResult result, CancellationTokenSource token)
+        {
+            var t = new Task(() => { });
+            t.RunSynchronously();
+            return t;
+        }
+
         protected abstract bool IsTaskPossible(object param);
     }
 }

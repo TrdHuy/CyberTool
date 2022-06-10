@@ -131,7 +131,7 @@ namespace cyber_tool.windows.cyber_istand.views
             MultiTaskDisplayPanel.Visibility = Visibility.Visible;
 
             _context = (CyberIStandWindowViewModel)DataContext;
-            _context.Title = title;
+            _context.Title = string.IsNullOrEmpty(title) ? tasks.Name : title;
             _context.Content = "Waiting to be assigned!";
 
             if (owner != null)

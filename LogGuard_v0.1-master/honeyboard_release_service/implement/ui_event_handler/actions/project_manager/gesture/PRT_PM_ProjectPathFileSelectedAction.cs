@@ -110,7 +110,6 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
                 source.Add(parents);
             }
 
-
             string branchPath = "";
             for (int i = startFolderIndex; i < lenght; i++)
             {

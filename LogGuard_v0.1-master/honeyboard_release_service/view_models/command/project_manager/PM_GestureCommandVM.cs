@@ -13,7 +13,7 @@ namespace honeyboard_release_service.view_models.command.project_manager
     {
         public CommandExecuterModel PathSelectedGestureCommand { get; set; }
 
-        public PM_GestureCommandVM(BaseViewModel parentsModel, string commandVMTag = "PM_ButtonCommandVM")
+        public PM_GestureCommandVM(BaseViewModel parentsModel, string commandVMTag = "PM_GestureCommandVM")
             : base(parentsModel, commandVMTag)
         {
             PathSelectedGestureCommand = new  CommandExecuterModel((paramaters) =>

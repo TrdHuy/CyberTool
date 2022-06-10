@@ -28,13 +28,8 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
             _onReadBranchCallback = readBranchCallback;
         }
 
-        protected async override Task DoCallback(object param, AsyncTaskResult result)
+        protected override void DoMainTask(object param, AsyncTaskResult result, CancellationTokenSource token)
         {
-        }
-
-        protected async override Task DoMainTask(object param, AsyncTaskResult result, CancellationTokenSource token)
-        {
-            var res = new AsyncTaskResult(null, MessageAsyncTaskResult.Non);
             dynamic tmp = new ExpandoObject();
             tmp.Data = "";
             tmp.OnBranch = "";
@@ -51,7 +46,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
                 pSI.RedirectStandardInput = true;
                 pSI.RedirectStandardOutput = true;
                 pSI.RedirectStandardError = true;
-                pSI.CreateNoWindow = false;
+                pSI.CreateNoWindow = true;
                 pSI.UseShellExecute = false;
                 pSI.StandardOutputEncoding = Encoding.UTF8;
                 using (Process? process = Process.Start(pSI))
@@ -64,15 +59,16 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
                         process.ErrorDataReceived += OnDataReceived;
                         process.BeginOutputReadLine();
                         process.BeginErrorReadLine();
-                        await process.WaitForExitAsync();
+                        process.WaitForExit();
                     }
                 }
 
-                res.MesResult = MessageAsyncTaskResult.Done;
+                _result.MesResult = MessageAsyncTaskResult.Done;
             }
-            catch
+            catch (Exception e)
             {
-                res.MesResult = MessageAsyncTaskResult.Aborted;
+                _result.MesResult = MessageAsyncTaskResult.Aborted;
+                throw new InvalidOperationException(e.Message);
             }
             finally
             {
