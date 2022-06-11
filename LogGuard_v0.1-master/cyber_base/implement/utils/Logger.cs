@@ -42,12 +42,12 @@ namespace cyber_base.implement.utils
         private static readonly SemaphoreSlim Mutex = new SemaphoreSlim(1);
 
         private static ObservableQueue<Task<bool>> TaskQueue { get; set; }
-        private static StringBuilder _logBuilder { get; set; }
-        private static StringBuilder _userLogBuilder { get; set; }
-        private static string filePath { get; set; }
-        private static string fileName { get; set; }
-        private static string directory { get; set; }
-        private static string folderName { get; set; }
+        private static StringBuilder? _logBuilder { get; set; }
+        private static StringBuilder? _userLogBuilder { get; set; }
+        private static string filePath { get; set; } = "";
+        private static string fileName { get; set; } = "";
+        private static string directory { get; set; } = "";
+        private static string folderName { get; set; } = "";
 
         private string className { get; set; }
         private int PId { get; set; }
@@ -100,7 +100,7 @@ namespace cyber_base.implement.utils
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             }
-            catch (Exception e)
+            catch
             {
                 try
                 {
@@ -110,7 +110,7 @@ namespace cyber_base.implement.utils
                     Assembly.GetCallingAssembly().GetName().Version + "_" +
                     dateTimeNow + ".txt";
 
-                    directory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + @"\" + "Data";
+                    directory = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) + @"\" + "Data";
 
                     if (!Directory.Exists(directory))
                     {
@@ -153,7 +153,7 @@ namespace cyber_base.implement.utils
                     }
                 }
             }
-            catch (Exception e)
+            catch
             {
 
             }
@@ -165,7 +165,7 @@ namespace cyber_base.implement.utils
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private static void TaskQueueChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private static void TaskQueueChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
@@ -209,42 +209,42 @@ namespace cyber_base.implement.utils
             _logBuilder = new StringBuilder();
         }
 
-        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        private static void CurrentDomain_ProcessExit(object? sender, EventArgs e)
         {
             ExportLogFile();
         }
 
-        public void I(string message, [CallerMemberName] string callMemberName = null)
+        public void I(string message, [CallerMemberName] string callMemberName = "")
         {
             var task = GenerateTask("I", TAG, className, callMemberName, message);
             TaskQueue.Enqueue(task);
         }
 
-        public void D(string message, [CallerMemberName] string callMemberName = null)
+        public void D(string message, [CallerMemberName] string callMemberName = "")
         {
             var task = GenerateTask("D", TAG, className, callMemberName, message);
             TaskQueue.Enqueue(task);
         }
 
-        public void E(string message, [CallerMemberName] string callMemberName = null)
+        public void E(string message, [CallerMemberName] string callMemberName = "")
         {
             var task = GenerateTask("E", TAG, className, callMemberName, message);
             TaskQueue.Enqueue(task);
         }
 
-        public void W(string message, [CallerMemberName] string callMemberName = null)
+        public void W(string message, [CallerMemberName] string callMemberName = "")
         {
             var task = GenerateTask("W", TAG, className, callMemberName, message);
             TaskQueue.Enqueue(task);
         }
 
-        public void F(string message, [CallerMemberName] string callMemberName = null)
+        public void F(string message, [CallerMemberName] string callMemberName = "")
         {
             var task = GenerateTask("F", TAG, className, callMemberName, message);
             TaskQueue.Enqueue(task);
         }
 
-        public void V(string message, [CallerMemberName] string callMemberName = null)
+        public void V(string message, [CallerMemberName] string callMemberName = "")
         {
             var task = GenerateTask("V", TAG, className, callMemberName, message);
             TaskQueue.Enqueue(task);
@@ -460,7 +460,7 @@ namespace cyber_base.implement.utils
                     File.AppendAllText(filePath, _userLogBuilder.ToString());
                 }
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }
@@ -480,7 +480,7 @@ namespace cyber_base.implement.utils
 
     internal class ObservableQueue<T> : Queue<T>, INotifyCollectionChanged
     {
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         public new void Enqueue(T item)
         {
