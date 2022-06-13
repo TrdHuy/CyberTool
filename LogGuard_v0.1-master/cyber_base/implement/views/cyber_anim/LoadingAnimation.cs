@@ -1,34 +1,22 @@
-﻿using HPSolutionCCDevPackage.netFramework.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace log_guard.views.others.animations
+namespace cyber_base.implement.views.cyber_anim
 {
-
-    /// <summary>
-    /// Represents a control that displays a Chart.
-    /// </summary>
-    /// <QualityBand>Preview</QualityBand>
     public class LoadingAnimation : Control
     {
+        private StackPanel? _mainPanel;
+        private Storyboard? _animationCache;
 
-        private StackPanel _mainPanel;
-        private Storyboard _animationCache;
-
-        /// <summary>
-        /// Specifies the name of the TabSelectorGrid.
-        /// </summary>
         protected const string MainPanelName = "PART_MainPanel";
 
         #region IsBusy
@@ -120,7 +108,6 @@ namespace log_guard.views.others.animations
 
         #endregion
 
-
         public override void OnApplyTemplate()
         {
             _mainPanel = GetTemplateChild(MainPanelName) as StackPanel;
@@ -150,6 +137,10 @@ namespace log_guard.views.others.animations
 
         private void InitLoadingAnimation()
         {
+            if (_mainPanel == null)
+            {
+                return;
+            }
             var defaultElipseName = "ElipseVO_";
             var defaultTransformElipseName = "TransElipseVO_";
             _mainPanel.Children.Clear();
@@ -250,7 +241,5 @@ namespace log_guard.views.others.animations
                 _mainPanel.Children.Add(e);
             }
         }
-
-
     }
 }

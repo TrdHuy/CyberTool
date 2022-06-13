@@ -3,7 +3,7 @@
 					xmlns:sys="clr-namespace:System;assembly=mscorlib"
 					xmlns:lwsc="clr-namespace:log_guard.views.others.log_watcher._scroll_view"
 					xmlns:atp="clr-namespace:log_guard.prop.attached_properties"
-					xmlns:anim="clr-namespace:log_guard.views.others.animations">
+					xmlns:anim="clr-namespace:cyber_base.implement.views.cyber_anim;assembly=cyber_base">
 
 
 
@@ -21,7 +21,6 @@
 
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/tripple_toggle/TrippleToggle.xaml" />
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/loading_list/LoadingListView.xaml" />
-		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/animations/LoadingAnimation.xaml" />
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/header_label/HeaderLabel.xaml" />
 		<ResourceDictionary Source="pack://application:,,,/log_guard;component/views/others/calendar/DateTimeSeker.xaml" />
 

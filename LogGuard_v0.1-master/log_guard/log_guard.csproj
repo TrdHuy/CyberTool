@@ -51,9 +51,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="views\others\animations\LoadingAnimation.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="views\others\header_label\HeaderLabel.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -81,6 +78,10 @@
     <Page Update="views\usercontrols\elements\log_manager\LogManager.xaml">
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="views\others\animations\" />
   </ItemGroup>
 
 </Project>
