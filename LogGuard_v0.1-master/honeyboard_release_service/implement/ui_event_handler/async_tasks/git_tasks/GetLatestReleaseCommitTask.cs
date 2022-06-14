@@ -153,7 +153,8 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
                     {
                         return !string.IsNullOrEmpty(data[0])
                        && Directory.Exists(data[0])
-                       && !string.IsNullOrEmpty(data[1]);
+                       && !string.IsNullOrEmpty(data[1])
+                       && File.Exists(data[0] + "\\" + data[1]);
                     }
                     return false;
 

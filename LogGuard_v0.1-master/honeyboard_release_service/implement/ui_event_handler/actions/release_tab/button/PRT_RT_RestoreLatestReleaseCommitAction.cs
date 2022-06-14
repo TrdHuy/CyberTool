@@ -50,7 +50,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
                    RTViewModel.CommitTitle = res.Subject;
                    RTViewModel.TaskID = res.TaskId;
                });
-            BaseAsyncTask parseVersionPropFromFile = new ParseVersionPropertiesFromFile(versionPropertiesFileName
+            BaseAsyncTask parseVersionPropFromFile = new ParseVersionPropertiesFromFile(pathsParam
                , (result) =>
                {
                    var dict = result.Result as Dictionary<string, string>;

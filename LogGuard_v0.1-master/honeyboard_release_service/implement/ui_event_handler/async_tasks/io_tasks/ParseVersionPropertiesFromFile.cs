@@ -14,6 +14,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.io_t
 {
     internal class ParseVersionPropertiesFromFile : BaseRTParamAsyncTask
     {
+        private string _folderPath;
         private string _versionFileName;
         private static readonly Regex _majorRegex = new Regex(@"\s*(?<property>major)=(?<value>\d+)");
         private static readonly Regex _minorRegex = new Regex(@"\s*(?<property>minor)=(?<value>\d+)");
@@ -29,11 +30,15 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.io_t
             _versionFileName = "";
             switch (param)
             {
-                case string data:
-                    _versionFileName = data;
+                case string[] data:
+                    if (data.Length == 2)
+                    {
+                        _folderPath = data[0];
+                        _versionFileName = data[1];
+                    }
                     break;
                 default:
-                    throw new InvalidDataException("Param must be a version file path");
+                    throw new InvalidDataException("Param must be an array of string has 2 elements");
             }
 
             _estimatedTime = 300;
@@ -49,9 +54,9 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.io_t
 
         protected override void DoMainTask(object param, AsyncTaskResult result, CancellationTokenSource token)
         {
-            if (File.Exists(_versionFileName))
+            if (File.Exists(_folderPath + "\\" + _versionFileName))
             {
-                foreach (string line in File.ReadLines(_versionFileName))
+                foreach (string line in File.ReadLines(_folderPath + "\\" + _versionFileName))
                 {
                     Regex? selectedRegex = null;
                     if (_majorRegex.IsMatch(line))
@@ -84,9 +89,16 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.io_t
         {
             switch (param)
             {
-                case string data:
-                    return !string.IsNullOrEmpty(data)
-                   && File.Exists(data);
+                case string[] data:
+                    if (data.Length == 2)
+                    {
+                        return !string.IsNullOrEmpty(data[0])
+                       && Directory.Exists(data[0])
+                       && !string.IsNullOrEmpty(data[1])
+                       && File.Exists(data[0] + "\\" + data[1]);
+                    }
+                    return false;
+
                 default:
                     return false;
             }
