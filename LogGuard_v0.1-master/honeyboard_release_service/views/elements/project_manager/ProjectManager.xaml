@@ -3,12 +3,16 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 			 xmlns:local="clr-namespace:honeyboard_release_service.views.elements.project_manager"
+			 xmlns:anim="clr-namespace:cyber_base.implement.views.cyber_anim;assembly=cyber_base"
+			 xmlns:csv="clr-namespace:cyber_base.implement.views.cyber_scroll;assembly=cyber_base"
 			 xmlns:vmm="clr-namespace:honeyboard_release_service.implement.markup"
 			 xmlns:atp="clr-namespace:honeyboard_release_service.prop.attached_properties"
 			 xmlns:ptb="clr-namespace:honeyboard_release_service.views.controls.path_text_box"
 			 xmlns:vm="clr-namespace:honeyboard_release_service.view_models.project_manager"
 			 xmlns:vmp="clr-namespace:honeyboard_release_service.view_models"
+			 xmlns:vhl="clr-namespace:honeyboard_release_service.views.controls.version_history_list"
 			 mc:Ignorable="d"
 			 d:DesignHeight="450"
 			 d:DesignWidth="800">
@@ -145,15 +149,203 @@
 						   VerticalAlignment="Center"
 						   FontWeight="Bold"
 						   Foreground="{StaticResource Foreground_Level2}" />
-				<ListView Grid.Row="2"
-						  Grid.ColumnSpan="3"
-						  BorderThickness="0"
-						  ItemsSource="{Binding VersionHistoryItemContexts}"
-						  ScrollViewer.CanContentScroll="False"
-						  AlternationCount="2"
-						  Background="{StaticResource Background_Level3}">
+				<vhl:VersionHistoryListView Grid.Row="2"
+											Grid.ColumnSpan="3"
+											BorderThickness="0"
+											ItemsSource="{Binding VersionHistoryItemContexts}"
+											VirtualizingPanel.CacheLength="1"
+											VirtualizingPanel.CacheLengthUnit="Pixel"
+											VirtualizingPanel.IsContainerVirtualizable="True"
+											VirtualizingPanel.IsVirtualizing="True"
+											VirtualizingPanel.VirtualizationMode="Recycling"
+											VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+											AlternationCount="2"
+											ScrollViewer.CanContentScroll="{Binding IsVirtualizingVersionHistoryList}"
+											Background="{StaticResource Background_Level3}"
+											atp:ElementAttProperties.Proxy="{Binding IsLoadingProjectVersionHistory}">
 					<ListView.Template>
 						<ControlTemplate TargetType="ListView">
+							<ControlTemplate.Resources>
+								<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
+								<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
+
+								<Style TargetType="{x:Type csv:CyberScrollView}"
+									   x:Key="RT_OverlapScrollbarStyle">
+									<Setter Property="Template">
+										<Setter.Value>
+											<ControlTemplate TargetType="{x:Type csv:CyberScrollView}">
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="*" />
+														<ColumnDefinition Width="Auto" />
+													</Grid.ColumnDefinitions>
+													<Grid.RowDefinitions>
+														<RowDefinition Height="*" />
+														<RowDefinition Height="Auto" />
+													</Grid.RowDefinitions>
+
+													<Border x:Name="Bd"
+															Background="{TemplateBinding Background}"
+															Margin="{TemplateBinding Padding}"
+															Grid.ColumnSpan="2">
+														<Grid>
+															<Grid.RowDefinitions>
+																<RowDefinition Height="*" />
+																<RowDefinition Height="Auto" />
+															</Grid.RowDefinitions>
+															<ScrollContentPresenter Name="PART_ScrollContentPresenter"
+																					Width="{Binding ElementName=Bd, Path=ActualWidth}"
+																					KeyboardNavigation.DirectionalNavigation="Local"
+																					CanContentScroll="{TemplateBinding CanContentScroll}"
+																					CanHorizontallyScroll="False"
+																					HorizontalAlignment="Left"
+																					CanVerticallyScroll="False"
+																					Grid.RowSpan="2" />
+															<anim:LoadingAnimation IsBusy="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(atp:ElementAttProperties.Proxy)}"
+																				   Grid.Row="1"
+																				   Margin="0,30,0,0"
+																				   ElipseFill="{DynamicResource Foreground_Level3}"
+																				   Width="60"
+																				   Height="20" />
+														</Grid>
+													</Border>
+
+													<ScrollBar Name="PART_VerticalScrollBar"
+															   Grid.Column="1"
+															   Grid.RowSpan="2"
+															   Maximum="{TemplateBinding ScrollableHeight}"
+															   ViewportSize="{TemplateBinding ViewportHeight}"
+															   Value="{TemplateBinding VerticalOffset}"
+															   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+															   Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type csv:CyberScrollView}, Mode=FindAncestor}, Path=ScrollBarBackground}">
+														<ScrollBar.Template>
+															<ControlTemplate TargetType="{x:Type ScrollBar}">
+																<Grid x:Name="Bg"
+																	  SnapsToDevicePixels="True">
+																	<Border x:Name="border"
+																			BorderBrush="{TemplateBinding BorderBrush}"
+																			BorderThickness="0"
+																			Background="{TemplateBinding Background}"
+																			Grid.Row="1" />
+																	<Track x:Name="PART_Track"
+																		   IsDirectionReversed="True"
+																		   IsEnabled="True"
+																		   Grid.Row="1">
+																		<Track.DecreaseRepeatButton>
+																			<RepeatButton Command="ScrollBar.PageUpCommand">
+																				<RepeatButton.Style>
+																					<Style TargetType="{x:Type RepeatButton}">
+																						<Setter Property="OverridesDefaultStyle"
+																								Value="True" />
+																						<Setter Property="Background"
+																								Value="Transparent" />
+																						<Setter Property="Focusable"
+																								Value="False" />
+																						<Setter Property="IsTabStop"
+																								Value="False" />
+																						<Setter Property="Template">
+																							<Setter.Value>
+																								<ControlTemplate TargetType="{x:Type RepeatButton}">
+																									<Rectangle Fill="{TemplateBinding Background}"
+																											   Height="{TemplateBinding Height}"
+																											   Width="{TemplateBinding Width}" />
+																								</ControlTemplate>
+																							</Setter.Value>
+																						</Setter>
+																					</Style>
+																				</RepeatButton.Style>
+																			</RepeatButton>
+																		</Track.DecreaseRepeatButton>
+																		<Track.IncreaseRepeatButton>
+																			<RepeatButton Command="ScrollBar.PageDownCommand">
+																				<RepeatButton.Style>
+																					<Style TargetType="{x:Type RepeatButton}">
+																						<Setter Property="OverridesDefaultStyle"
+																								Value="True" />
+																						<Setter Property="Background"
+																								Value="Transparent" />
+																						<Setter Property="Focusable"
+																								Value="False" />
+																						<Setter Property="IsTabStop"
+																								Value="False" />
+																						<Setter Property="Template">
+																							<Setter.Value>
+																								<ControlTemplate TargetType="{x:Type RepeatButton}">
+																									<Rectangle Fill="{TemplateBinding Background}"
+																											   Height="{TemplateBinding Height}"
+																											   Width="{TemplateBinding Width}" />
+																								</ControlTemplate>
+																							</Setter.Value>
+																						</Setter>
+																					</Style>
+																				</RepeatButton.Style>
+																			</RepeatButton>
+																		</Track.IncreaseRepeatButton>
+																		<Track.Thumb>
+																			<Thumb>
+																				<Thumb.Style>
+																					<Style TargetType="{x:Type Thumb}">
+																						<Setter Property="OverridesDefaultStyle"
+																								Value="True" />
+																						<Setter Property="IsTabStop"
+																								Value="False" />
+																						<Setter Property="Template">
+																							<Setter.Value>
+																								<ControlTemplate TargetType="{x:Type Thumb}">
+																									<Rectangle x:Name="rectangle"
+																											   Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type csv:CyberScrollView},Mode=FindAncestor},Path=ThumbBackground}"
+																											   Height="{TemplateBinding Height}"
+																											   SnapsToDevicePixels="True"
+																											   Width="{TemplateBinding Width}" />
+																									<ControlTemplate.Triggers>
+																										<Trigger Property="IsEnabled"
+																												 Value="False">
+																											<Setter Property="Width"
+																													TargetName="rectangle"
+																													Value="2" />
+																											<Setter Property="HorizontalAlignment"
+																													TargetName="rectangle"
+																													Value="Right" />
+																										</Trigger>
+																									</ControlTemplate.Triggers>
+																								</ControlTemplate>
+																							</Setter.Value>
+																						</Setter>
+																					</Style>
+																				</Thumb.Style>
+																			</Thumb>
+																		</Track.Thumb>
+																	</Track>
+																</Grid>
+																<ControlTemplate.Triggers>
+																	<MultiDataTrigger>
+																		<MultiDataTrigger.Conditions>
+																			<Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=csv:CyberScrollView, Mode=FindAncestor}, Path=IsMouseOverExpandScrollbar}"
+																					   Value="True" />
+																			<Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}"
+																					   Value="False" />
+																		</MultiDataTrigger.Conditions>
+																		<Setter TargetName="border"
+																				Property="Background"
+																				Value="Transparent" />
+																		<Setter TargetName="PART_Track"
+																				Property="IsEnabled"
+																				Value="False" />
+																	</MultiDataTrigger>
+
+
+																</ControlTemplate.Triggers>
+															</ControlTemplate>
+														</ScrollBar.Template>
+													</ScrollBar>
+
+												</Grid>
+											</ControlTemplate>
+										</Setter.Value>
+									</Setter>
+								</Style>
+
+							</ControlTemplate.Resources>
 							<Grid>
 								<Border x:Name="RecMask"
 										CornerRadius="0,0,10,10"
@@ -163,12 +355,15 @@
 									<Border.OpacityMask>
 										<VisualBrush Visual="{Binding ElementName=RecMask}" />
 									</Border.OpacityMask>
-									<ContentControl BorderBrush="{StaticResource ButtonBackground_Level1}"
-													VerticalAlignment="Top"
-													VerticalContentAlignment="Center"
-													Style="{StaticResource CyberCollapsibleScrollStyle}">
+									<csv:CyberScrollView ThumbBackground="{StaticResource ButtonBackground_Level1}"
+														 CanContentScroll="{TemplateBinding ScrollViewer.CanContentScroll}"
+														 IsMouseOverExpandScrollbar="True"
+														 atp:ElementAttProperties.Proxy="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(atp:ElementAttProperties.Proxy)}"
+														 Style="{StaticResource RT_OverlapScrollbarStyle}"
+														 VerticalAlignment="Top"
+														 VerticalContentAlignment="Center">
 										<ItemsPresenter />
-									</ContentControl>
+									</csv:CyberScrollView>
 								</Border>
 							</Grid>
 
@@ -176,15 +371,32 @@
 						</ControlTemplate>
 					</ListView.Template>
 					<ListView.ItemContainerStyle>
-						<Style TargetType="{x:Type ListViewItem}">
+						<Style TargetType="{x:Type vhl:VersionHistoryListViewItem}">
 							<Setter Property="Height"
 									Value="63" />
 							<Setter Property="Template">
 								<Setter.Value>
-									<ControlTemplate>
+									<ControlTemplate TargetType="vhl:VersionHistoryListViewItem">
 										<Grid x:Name="MainGrid"
 											  Background="{StaticResource Background_Level3}"
 											  Width="{Binding RelativeSource={RelativeSource AncestorType=ItemsPresenter, Mode=FindAncestor}, Path=ActualWidth}">
+											<Grid.ContextMenu>
+												<ContextMenu>
+													<MenuItem Header="Sync version"
+															  CommandParameter="{Binding .}"
+															  Command="{Binding SyncVersionCommand}">
+														<MenuItem.Icon>
+															<Path Width="12"
+																  Height="12"
+																  Fill="{StaticResource Background_Level2}"
+																  Data="{Binding Source={StaticResource RT_SyncVersionIconPathGeomerty}}"
+																  Stretch="Uniform" />
+														</MenuItem.Icon>
+													</MenuItem>
+
+												</ContextMenu>
+											</Grid.ContextMenu>
+
 											<Grid.ColumnDefinitions>
 												<ColumnDefinition />
 												<ColumnDefinition Width="10" />
@@ -218,38 +430,45 @@
 														HorizontalAlignment="Center"
 														Margin="0,1,0,0"
 														Orientation="Vertical">
-												<TextBlock Text="23"
+												<TextBlock Text="{Binding DayOfMonth}"
 														   FontSize="20"
 														   Foreground="{DynamicResource Foreground_Level3}" />
-												<TextBlock Text="MON"
+												<TextBlock Text="{Binding DayOfWeek}"
 														   FontWeight="Bold"
 														   FontSize="10"
 														   Foreground="{DynamicResource Foreground_Level3}" />
 											</StackPanel>
 
-											<TextBlock Grid.Row="1"
+
+											<TextBlock FontSize="10"
+													   Grid.Row="1"
 													   Grid.Column="2"
-													   FontSize="10"
 													   VerticalAlignment="Center"
+													   MaxWidth="120"
 													   Margin="15,0,0,0"
+													   HorizontalAlignment="Left"
 													   Foreground="{DynamicResource Foreground_Level3}"
-													   Text="5.5.00.14" />
+													   Text="{Binding Version}" />
 
 											<StackPanel Grid.Row="2"
-														Margin="0,0,10,0"
+														Margin="0,7,10,0"
 														Grid.Column="2"
 														VerticalAlignment="Top"
 														HorizontalAlignment="Right"
 														Orientation="Vertical">
-												<TextBlock Text="so@samsung.com"
+
+												<TextBlock Text="{Binding Email}"
 														   FontSize="9"
 														   Foreground="{DynamicResource Foreground_Level3}" />
 												<TextBlock x:Name="HourTextBlock"
-														   Text="10:20 am"
+														   Text="{Binding Hour}"
 														   FontSize="8"
 														   Margin="0,0,7,0"
 														   HorizontalAlignment="Right"
 														   Foreground="{DynamicResource Foreground_Level1}" />
+												<anim:LoadingAnimation Height="7"
+																	   HorizontalAlignment="Right"
+																	   IsBusy="{Binding IsLoadingVersionTitle}" />
 											</StackPanel>
 										</Grid>
 										<ControlTemplate.Triggers>
@@ -305,8 +524,30 @@
 
 						</Style>
 					</ListView.ItemContainerStyle>
-				</ListView>
+				</vhl:VersionHistoryListView>
+
+
 			</Grid>
+
+			<StackPanel Grid.Row="6"
+						Grid.Column="0"
+						Grid.ColumnSpan="3"
+						VerticalAlignment="Center"
+						HorizontalAlignment="Center"
+						Visibility="{Binding VersionHistoryListTipVisibility}"
+						Margin="10">
+				<Path MaxWidth="50"
+					  MaxHeight="50"
+					  Data="{Binding Source={StaticResource RT_ImportProjectIconPathGeomerty}}"
+					  Fill="{DynamicResource Foreground_Level2}"
+					  Stretch="Uniform" />
+
+				<TextBlock Text="Import your project to display version history"
+						   Foreground="{DynamicResource Foreground_Level2}"
+						   FontFamily="Calibri"
+						   TextWrapping="Wrap"
+						   Margin="0,15,0,0" />
+			</StackPanel>
 		</Grid>
 
 	</Border>

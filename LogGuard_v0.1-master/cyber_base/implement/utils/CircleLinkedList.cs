@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cyber_base.implement.utils.converter
+namespace cyber_base.implement.utils
 {
     public class CircleLinkedList<T>
     {

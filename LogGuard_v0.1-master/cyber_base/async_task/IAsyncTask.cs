@@ -52,6 +52,16 @@ namespace cyber_base.async_task
         bool IsCanceled { get; }
 
         /// <summary>
+        /// Kiểm tra Task có đang chạy hay không
+        /// </summary>
+        bool IsExecuting { get; }
+
+        /// <summary>
+        /// Kiểm tra Task chính có bị lỗi hay không
+        /// </summary>
+        bool IsFaulted { get; }
+
+        /// <summary>
         /// Trigger a notify when IsCompleted changed
         /// </summary>
         event IsCompletedChangedHandler OnCompletedChanged;
@@ -59,10 +69,22 @@ namespace cyber_base.async_task
         /// <summary>
         /// Trigger a notify when Iscanceld changed
         /// </summary>
-        event IscanceldChangedHandler OncanceledChanged;
+        event IsCanceldChangedHandler OnCanceledChanged;
+
+        /// <summary>
+        /// Trigger a notify when Iscanceld changed
+        /// </summary>
+        event IsFaultedChangedHandler OnFaultedChanged;
+
+        /// <summary>
+        /// Trigger a notify when IsExecuting changed
+        /// </summary>
+        event IsExecutingChangedHandler OnExecutingChanged;
     }
 
     public delegate void IsCompletedChangedHandler(object sender, bool oldValue, bool newValue);
-    public delegate void IscanceldChangedHandler(object sender, bool oldValue, bool newValue);
+    public delegate void IsCanceldChangedHandler(object sender, bool oldValue, bool newValue);
+    public delegate void IsFaultedChangedHandler(object sender, bool oldValue, bool newValue);
+    public delegate void IsExecutingChangedHandler(object sender, bool oldValue, bool newValue);
     public delegate void ProgressChangedHandler(object sender, double currentProgress);
 }

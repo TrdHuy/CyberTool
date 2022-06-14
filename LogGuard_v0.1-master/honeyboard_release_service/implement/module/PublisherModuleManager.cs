@@ -1,4 +1,5 @@
 ﻿using honeyboard_release_service.@base.module;
+using honeyboard_release_service.implement.async_task_execute_helper;
 using honeyboard_release_service.implement.ui_event_handler;
 using honeyboard_release_service.implement.view_helper;
 using honeyboard_release_service.implement.view_manager.notebook_header;
@@ -24,6 +25,7 @@ namespace honeyboard_release_service.implement.module
         private static IPublisherModule? _PVH_Instance;
         private static IPublisherModule? _SPCEF_Instance;
         private static IPublisherModule? _PKAL_Instance;
+        private static IPublisherModule? _ATM_Instance;
         
         static PublisherModuleManager()
         {
@@ -64,6 +66,18 @@ namespace honeyboard_release_service.implement.module
             _CNIVM_Instance = null;
             _SPCEF_Instance = null;
             _PKAL_Instance = null;
+        }
+
+        public static AsyncTaskManager? ATM_Instance
+        {
+            get
+            {
+                if (_ATM_Instance == null)
+                {
+                    _ATM_Instance = Activator.CreateInstance(typeof(AsyncTaskManager), true) as AsyncTaskManager; ;
+                }
+                return _ATM_Instance as AsyncTaskManager;
+            }
         }
 
         public static ViewModelManager VMM_Instance

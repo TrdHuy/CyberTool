@@ -1,4 +1,12 @@
-﻿using cyber_base.view_model;
+﻿using cyber_base.async_task;
+using cyber_base.implement.command;
+using cyber_base.view_model;
+using honeyboard_release_service.@base.view_model;
+using honeyboard_release_service.implement.async_task_execute_helper;
+using honeyboard_release_service.implement.ui_event_handler.async_tasks.git_tasks;
+using honeyboard_release_service.implement.view_model;
+using honeyboard_release_service.models.VOs;
+using honeyboard_release_service.utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,10 +16,106 @@ using System.Threading.Tasks;
 
 namespace honeyboard_release_service.view_models.project_manager.items
 {
-    internal class VersionHistoryItemViewModel : BaseViewModel
+    internal class VersionHistoryItemViewModel : BaseViewModel, IFirstLastElement, IVirtualizingViewModel
     {
         private bool _isFirst;
         private bool _isLast;
+        private string _version = "5.5.5.5";
+        private string _email = "huy.td1@samsung.com";
+        private string _hour = "10:20:30";
+        private string _dayOfWeek = "MON";
+        private string _dayOfMonth = "23";
+        private VersionVO _versionVO;
+        private bool _isVersionTitleLoaded = false;
+        private bool _isLoadingVersionTitle;
+        private BaseAsyncTask? _loadingTaskCache;
+
+        [Bindable(true)]
+        public BaseDotNetCommandImpl SyncVersionCommand { get; set; }
+
+        [Bindable(true)]
+        public bool IsLoadingVersionTitle
+        {
+            get
+            {
+                return _isLoadingVersionTitle;
+            }
+            set
+            {
+                _isLoadingVersionTitle = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public string DayOfMonth
+        {
+            get
+            {
+                return _dayOfMonth;
+            }
+            set
+            {
+                _dayOfMonth = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public string DayOfWeek
+        {
+            get
+            {
+                return _dayOfWeek;
+            }
+            set
+            {
+                _dayOfWeek = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public string Hour
+        {
+            get
+            {
+                return _hour;
+            }
+            set
+            {
+                _hour = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public string Email
+        {
+            get
+            {
+                return _email;
+            }
+            set
+            {
+                _email = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public string Version
+        {
+            get
+            {
+                return _version;
+            }
+            set
+            {
+                _version = value;
+                InvalidateOwn();
+            }
+        }
 
         [Bindable(true)]
         public bool IsFirst
@@ -27,7 +131,6 @@ namespace honeyboard_release_service.view_models.project_manager.items
             }
         }
 
-
         [Bindable(true)]
         public bool IsLast
         {
@@ -42,9 +145,119 @@ namespace honeyboard_release_service.view_models.project_manager.items
             }
         }
 
-        public VersionHistoryItemViewModel()
+        public VersionHistoryItemViewModel(VersionVO vo)
         {
+            _dayOfMonth = vo.ReleaseDateTime.ToString("dd");
+            _dayOfWeek = vo.ReleaseDateTime.ToString("ddd").ToUpper();
+            _hour = vo.ReleaseDateTime.ToString("hh:mm tt");
+            _version = vo.Name;
+            _email = vo.AuthorEmail;
+            _versionVO = vo;
 
+
+            SyncVersionCommand = new BaseDotNetCommandImpl((arg) =>
+            {
+                if (!_isVersionTitleLoaded)
+                {
+                    if (_loadingTaskCache != null)
+                    {
+                        _loadingTaskCache.Dispose();
+                    }
+                    _loadingTaskCache = GetUpdateVersionTitleTask();
+                    if (_loadingTaskCache != null)
+                    {
+                        IsLoadingVersionTitle = true;
+                        AsyncTaskManager.Current?.ForceAddVersionPropertiesLoadingTask(_loadingTaskCache);
+                    }
+                }
+            });
+        }
+
+        public override string ToString()
+        {
+            return Version;
+        }
+
+        public BaseAsyncTask? GetUpdateVersionTitleTask()
+        {
+            if (_versionVO != null
+                && _versionVO?.Properties?.Version == ""
+                && !_isVersionTitleLoaded)
+            {
+                BaseAsyncTask getVersionPropFromCommit = new GetReleasedCommitVersionPropertiesTask(
+                new string[] { ViewModelManager.Current.PMViewModel.ProjectPath
+                    ,ViewModelManager.Current.PMViewModel.VersionPropertiesPath
+                    , _versionVO.CommitId}
+                , callback: (result) =>
+                {
+                    if (result.MesResult != MessageAsyncTaskResult.Aborted)
+                    {
+                        if (_versionVO.Properties.Major != "")
+                        {
+                            _version = _versionVO.Properties.Major;
+                            if (_versionVO.Properties.Minor != "")
+                            {
+                                _version += "." + _versionVO.Properties.Minor;
+                            }
+                            if (_versionVO.Properties.Patch != "")
+                            {
+                                _version += "." + _versionVO.Properties.Patch;
+                            }
+                            if (_versionVO.Properties.Revision != "")
+                            {
+                                _version += "." + _versionVO.Properties.Revision;
+                            }
+
+                            Invalidate("Version");
+                        }
+                        _isVersionTitleLoaded = true;
+                        IsLoadingVersionTitle = false;
+                    }
+
+                }
+                , versionPropertiesFoundCallback: (property, value, task) =>
+                {
+                    if (property.ToString()
+                        == VersionPropertiesVO.VERSION_MAJOR_PROPERTY_NAME)
+                    {
+                        _versionVO.Properties.Major = value.ToString() ?? "";
+                    }
+                    else if (property.ToString()
+                        == VersionPropertiesVO.VERSION_MINOR_PROPERTY_NAME)
+                    {
+                        _versionVO.Properties.Minor = value.ToString() ?? "";
+                    }
+                    else if (property.ToString()
+                        == VersionPropertiesVO.VERSION_PATCH_PROPERTY_NAME)
+                    {
+                        _versionVO.Properties.Patch = value.ToString() ?? "";
+                    }
+                    else if (property.ToString()
+                        == VersionPropertiesVO.VERSION_REVISION_PROPERTY_NAME)
+                    {
+                        _versionVO.Properties.Revision = value.ToString() ?? "";
+                    }
+                });
+
+                getVersionPropFromCommit.Name = Version;
+                getVersionPropFromCommit.OnExecutingChanged += (s, o, n) =>
+                {
+                    IsLoadingVersionTitle = n;
+                };
+
+                return getVersionPropFromCommit;
+            }
+
+            return null;
+        }
+
+        public void OnVirtualizingViewModelLoaded()
+        {
+            _loadingTaskCache = GetUpdateVersionTitleTask();
+            if (_loadingTaskCache != null)
+            {
+                AsyncTaskManager.Current?.AddVersionPropertiesLoadingTask(_loadingTaskCache);
+            }
         }
     }
 }

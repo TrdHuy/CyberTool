@@ -10,16 +10,19 @@ namespace cyber_base.async_task
 {
     public abstract class BaseAsyncTask : IAsyncTask
     {
+        private bool _isDisposed = false;
         private bool _isCompleted;
         private bool _isFaulted;
         private bool _isCompletedCallback;
         private bool _isCanceled;
+        private bool _isExecuting;
         protected AsyncTaskResult _result;
         protected string _name;
         protected ulong _delayTime = 0;
         protected ulong _estimatedTime = 0;
         protected double _progress = 0d;
         protected int _reportDelay = 0;
+        protected bool _isEnableReport = true;
 
         public ulong DelayTime => _delayTime;
         public AsyncTaskResult Result => _result;
@@ -28,12 +31,32 @@ namespace cyber_base.async_task
             get => _isCompletedCallback;
             protected set => _isCompletedCallback = value;
         }
+        public bool IsExecuting
+        {
+            get => _isExecuting;
+            private set
+            {
+                var oldVal = _isExecuting;
+                _isExecuting = value;
+
+                if (oldVal != value)
+                {
+                    OnExecutingChanged?.Invoke(this, oldVal, value);
+                }
+            }
+        }
         public bool IsFaulted
         {
             get => _isFaulted;
             private set
             {
+                var oldVal = _isFaulted;
                 _isFaulted = value;
+
+                if (oldVal != value)
+                {
+                    OnFaultedChanged?.Invoke(this, oldVal, value);
+                }
             }
         }
         public bool IsCompleted
@@ -60,11 +83,11 @@ namespace cyber_base.async_task
 
                 if (oldVal != value)
                 {
-                    OncanceledChanged?.Invoke(this, oldVal, value);
+                    OnCanceledChanged?.Invoke(this, oldVal, value);
                 }
             }
         }
-        public string Name => _name;
+        public string Name { get => _name; set => _name = value; }
         public ulong EstimatedTime => _estimatedTime;
         public double CurrentProgress
         {
@@ -97,14 +120,26 @@ namespace cyber_base.async_task
 
 
         public event IsCompletedChangedHandler? OnCompletedChanged;
-        public event IscanceldChangedHandler? OncanceledChanged;
+        public event IsCanceldChangedHandler? OnCanceledChanged;
+        public event IsFaultedChangedHandler? OnFaultedChanged;
+        public event IsExecutingChangedHandler? OnExecutingChanged;
         public event ProgressChangedHandler? ProgressChanged;
 
         public async Task<BaseAsyncTask> Execute(bool isAsyncCallback = false)
         {
+            if (_isDisposed) throw new InvalidOperationException("Can not exectue a disposed task");
+
             var asynTaskExecuteWatcher = Stopwatch.StartNew();
-            //var reportTask = Task.Run(() => DoReportTask(asynTaskExecuteWatcher
-            DoReportTask();
+            if (IsCanceled || IsCompleted || IsFaulted) return this;
+
+            // Cập nhật cờ executing
+            IsExecuting = true;
+
+            // Thực hiện report tiến độ nếu cần thiết
+            if (_isEnableReport)
+            {
+                DoReportTask();
+            }
             try
             {
                 // do main task
@@ -130,7 +165,7 @@ namespace cyber_base.async_task
                 IsCompleted = true;
 
                 // default set message result if it was not handled
-                if(_result.MesResult == MessageAsyncTaskResult.Non)
+                if (_result.MesResult == MessageAsyncTaskResult.Non)
                 {
                     _result.MesResult = MessageAsyncTaskResult.Finished;
                 }
@@ -177,14 +212,51 @@ namespace cyber_base.async_task
                 IsCanceled = false;
                 IsCompletedCallback = false;
             }
+            finally
+            {
+                // Cập nhật cờ executing khi thực hiện toàn bộ
+                // công việc chính và callback
+                IsExecuting = false;
+            }
             return this;
+        }
+
+        public void Dispose()
+        {
+            if (_isDisposed) return;
+            foreach (Delegate d in OnExecutingChanged?.GetInvocationList() ?? new Delegate[0])
+            {
+                OnExecutingChanged -= (IsExecutingChangedHandler)d;
+            }
+            foreach (Delegate d in OnCompletedChanged?.GetInvocationList() ?? new Delegate[0])
+            {
+                OnCompletedChanged -= (IsCompletedChangedHandler)d;
+            }
+            foreach (Delegate d in OnCanceledChanged?.GetInvocationList() ?? new Delegate[0])
+            {
+                OnCanceledChanged -= (IsCanceldChangedHandler)d;
+            }
+            foreach (Delegate d in OnFaultedChanged?.GetInvocationList() ?? new Delegate[0])
+            {
+                OnFaultedChanged -= (IsFaultedChangedHandler)d;
+            }
+            foreach (Delegate d in ProgressChanged?.GetInvocationList() ?? new Delegate[0])
+            {
+                ProgressChanged -= (ProgressChangedHandler)d;
+            }
+
+            if (IsExecuting)
+            {
+                Cancel();
+            }
+            _isDisposed = true;
         }
 
         protected abstract Task DoMainFunc();
         protected abstract Task DoCallback();
         protected abstract Task DoWaitRestDelay(long rest);
 
-        protected virtual async Task DoReportTask()
+        protected virtual async void DoReportTask()
         {
             var reportWatch = Stopwatch.StartNew();
 

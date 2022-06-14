@@ -13,6 +13,8 @@ namespace honeyboard_release_service.models.VOs
         public DateTime ReleaseDateTime { get; set; }
         public Uri? RetriverLink { get; set; }
         public Uri? QuickBuildLink { get; set; }
+        public string AuthorEmail { get; set; } = "";
+        public VersionPropertiesVO? Properties { get; set; }
 
         public static VersionVO GetTestData(string version, DateTime releaseDate)
         {

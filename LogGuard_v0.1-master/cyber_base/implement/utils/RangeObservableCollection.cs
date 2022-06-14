@@ -1,4 +1,5 @@
-﻿using System;
+﻿using cyber_base.async_task;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -67,19 +68,20 @@ namespace cyber_base.implement.utils
             SendNotifications();
         }
 
-        public async Task AsyncAddNewRange(IAsyncEnumerable<T> list
+        public async Task AddNewRangeAsync(IAsyncEnumerable<T> list
             , Action? asyncCollectionChangedCallback = null)
         {
             if (list == null)
                 return;
 
             await _addAsyncNewRangeSemaphore.WaitAsync();
-            
+
             Items.Clear();
             try
             {
                 await foreach (T item in list)
                 {
+                    var id = BaseAsyncTask.GetCurrentThreadInformation();
                     Items.Add(item);
                     asyncCollectionChangedCallback?.Invoke();
                     SendNotifications();

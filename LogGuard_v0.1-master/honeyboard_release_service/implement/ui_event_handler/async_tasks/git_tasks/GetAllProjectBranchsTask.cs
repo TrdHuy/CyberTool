@@ -104,7 +104,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
                     if (res.OnBranch == ""
                          && raw.StartsWith("*"))
                     {
-                        var match = Regex.Match(raw, @"\* \((?<head>HEAD detached at )(?<branch>\S+)\)");
+                        var match = Regex.Match(raw, @"\* \((?<head>HEAD detached (from|at) )(?<branch>\S+)\)");
                         string branch = "";
                         if (match.Length > 0)
                         {

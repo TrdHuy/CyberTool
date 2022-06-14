@@ -24,9 +24,6 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
         }
 
         private static readonly Regex _releaseCLSubjectRegex = new Regex(@"huy.td1_hashid:(?<hashid>[a-z0-9]{10}) huy.td1_subject:\[(?<taskid>\S+)\](?<subject>.*) huy.td1_description:(?<description>.*)");
-        private static readonly Regex _hashIDRegex = new Regex(@"(?<hashid>[a-z0-9]{10})");
-        private static readonly Regex _titleRegex = new Regex(@"\[(?<taskid>\S+)\](?<subject>.*)");
-        private static readonly Regex _descriptionRegex = new Regex(@"(?<description>.*)");
 
         private string _folderPath;
         private string _versionFileName;

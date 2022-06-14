@@ -5,13 +5,16 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace honeyboard_release_service.utils
 {
     internal class FirstLastObservableCollection<T> : ObservableCollection<T>
+        where T : IFirstLastElement
     {
         private T? _first;
         private T? _last;
+        private object ThreadSafeLock = new object();
 
         public event FirstChangedHandler<T>? FirstChanged;
         public event LastChangedHandler<T>? LastChanged;
@@ -25,7 +28,16 @@ namespace honeyboard_release_service.utils
             set
             {
                 var oldVal = _first;
+                if (oldVal != null)
+                {
+                    oldVal.IsFirst = false;
+                }
                 _first = value;
+                if (_first != null)
+                {
+                    _first.IsFirst = true;
+                }
+
                 if (oldVal == null && _first != null)
                 {
                     FirstChanged?.Invoke(this, oldVal, value);
@@ -46,7 +58,16 @@ namespace honeyboard_release_service.utils
             set
             {
                 var oldVal = _last;
+                if (oldVal != null)
+                {
+                    oldVal.IsLast = false;
+                }
                 _last = value;
+                if (_last != null)
+                {
+                    _last.IsLast = true;
+                }
+
                 if (oldVal == null && _last != null)
                 {
                     LastChanged?.Invoke(this, oldVal, value);
@@ -62,15 +83,33 @@ namespace honeyboard_release_service.utils
         {
             CollectionChanged -= HandleFirstLast;
             CollectionChanged += HandleFirstLast;
+            BindingOperations.EnableCollectionSynchronization(this, ThreadSafeLock);
+
         }
 
         private void HandleFirstLast(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            First = this[0];
-            Last = this[Count - 1];
+            if (Count > 0)
+            {
+                First = this[0];
+                Last = this[Count - 1];
+            }
+        }
+
+        public new void Clear()
+        {
+            _first = default(T);
+            _last = default(T);
+            base.Clear();
         }
     }
 
     internal delegate void FirstChangedHandler<T>(object sender, T? oldFirst, T? newFirst);
     internal delegate void LastChangedHandler<T>(object sender, T? oldLast, T? newLast);
+
+    internal interface IFirstLastElement
+    {
+        bool IsFirst { get; set; }
+        bool IsLast { get; set; }
+    }
 }

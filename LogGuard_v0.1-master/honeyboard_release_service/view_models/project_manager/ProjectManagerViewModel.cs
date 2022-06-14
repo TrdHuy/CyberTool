@@ -1,4 +1,5 @@
-﻿using cyber_base.implement.models.cyber_treeview;
+﻿using cyber_base.implement.async_task;
+using cyber_base.implement.models.cyber_treeview;
 using cyber_base.implement.utils;
 using cyber_base.implement.view_models.cyber_treeview;
 using cyber_base.implement.views.cyber_treeview;
@@ -14,6 +15,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace honeyboard_release_service.view_models.project_manager
 {
@@ -25,6 +27,47 @@ namespace honeyboard_release_service.view_models.project_manager
         private CyberTreeViewObservableCollection<ICyberTreeViewItem> _branchsSource = new CyberTreeViewObservableCollection<ICyberTreeViewItem>();
         private object? _selectedItem;
         private string _selectedBranch = "";
+        private bool _isLoadingProjectVersionHistory = false;
+        private Visibility _versionHistoryListTipVisibility = Visibility.Visible;
+
+        [Bindable(true)]
+        public Visibility VersionHistoryListTipVisibility
+        {
+            get
+            {
+                return _versionHistoryListTipVisibility;
+            }
+            set
+            {
+                _versionHistoryListTipVisibility = value;
+                InvalidateOwn();
+            }
+
+
+        }
+        [Bindable(true)]
+        public bool IsLoadingProjectVersionHistory
+        {
+            get
+            {
+                return _isLoadingProjectVersionHistory;
+            }
+            set
+            {
+                _isLoadingProjectVersionHistory = value;
+                InvalidateOwn();
+            }
+
+        }
+
+        [Bindable(true)]
+        public bool IsVirtualizingVersionHistoryList
+        {
+            get
+            {
+                return _versionHistoryItemContexts.Count > 20;
+            }
+        }
 
         [Bindable(true)]
         public string SelectedBranch
@@ -68,6 +111,11 @@ namespace honeyboard_release_service.view_models.project_manager
             set
             {
                 _versionPropertiesPath = value;
+                if (value.IndexOf(ProjectPath) != -1)
+                {
+                    _versionPropertiesPath = value.Substring(ProjectPath.Length + 1);
+                }
+
                 InvalidateOwn();
             }
         }
@@ -125,21 +173,16 @@ namespace honeyboard_release_service.view_models.project_manager
         public ProjectManagerViewModel(BaseViewModel parents)
         {
             _versionHistoryItemContexts = new FirstLastObservableCollection<VersionHistoryItemViewModel>();
-            _versionHistoryItemContexts.FirstChanged -= HandleHistoryItemFirstChanged;
-            _versionHistoryItemContexts.FirstChanged += HandleHistoryItemFirstChanged;
-            _versionHistoryItemContexts.LastChanged -= HandleHistoryItemLastChanged;
-            _versionHistoryItemContexts.LastChanged += HandleHistoryItemLastChanged;
 
             GestureCommandVM = new PM_GestureCommandVM(this);
 
-            //Test data
-            _versionHistoryItemContexts.Add(new VersionHistoryItemViewModel());
-            _versionHistoryItemContexts.Add(new VersionHistoryItemViewModel());
-            _versionHistoryItemContexts.Add(new VersionHistoryItemViewModel());
-            _versionHistoryItemContexts.Add(new VersionHistoryItemViewModel());
-
             LoadData();
+            _versionHistoryItemContexts.CollectionChanged += (s, e) =>
+            {
+                Invalidate("IsVirtualizingVersionHistoryList");
+            };
         }
+
 
         private void LoadData()
         {
@@ -175,30 +218,5 @@ namespace honeyboard_release_service.view_models.project_manager
 
         }
 
-        private void HandleHistoryItemLastChanged(object sender, VersionHistoryItemViewModel? oldLast, VersionHistoryItemViewModel? newLast)
-        {
-            if (oldLast != null)
-            {
-                oldLast.IsLast = false;
-            }
-
-            if (newLast != null)
-            {
-                newLast.IsLast = true;
-            }
-        }
-
-        private void HandleHistoryItemFirstChanged(object sender, VersionHistoryItemViewModel? oldFirst, VersionHistoryItemViewModel? newFirst)
-        {
-            if (oldFirst != null)
-            {
-                oldFirst.IsFirst = false;
-            }
-
-            if (newFirst != null)
-            {
-                newFirst.IsFirst = true;
-            }
-        }
     }
 }

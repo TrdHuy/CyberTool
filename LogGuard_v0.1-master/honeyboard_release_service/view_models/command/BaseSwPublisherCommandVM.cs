@@ -15,7 +15,7 @@ namespace honeyboard_release_service.view_models.command
 {
     internal class BaseSwPublisherCommandVM : CommandViewModel
     {
-        private static Logger _logger;
+        private Logger _logger;
 
         protected override Logger logger => _logger;
 

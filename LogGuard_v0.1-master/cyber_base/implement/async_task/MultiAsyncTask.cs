@@ -132,11 +132,11 @@ namespace cyber_base.implement.async_task
             }
         }
 
-        protected override async Task DoReportTask()
+        protected override void DoReportTask()
         {
             if (_rpType == MultiAsyncTaskReportType.EstimatedTime)
             {
-                await base.DoReportTask();
+                base.DoReportTask();
             }
         }
 

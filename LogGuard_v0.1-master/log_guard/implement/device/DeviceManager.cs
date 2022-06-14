@@ -116,7 +116,7 @@ namespace log_guard.implement.device
 
                                if (res != null)
                                {
-                                   await DeviceSource.AsyncAddNewRange(res, sourceChangedCallback);
+                                   await DeviceSource.AddNewRangeAsync(res, sourceChangedCallback);
                                }
 
                                return result;
@@ -152,7 +152,7 @@ namespace log_guard.implement.device
             var devices = StartScanDevice();
             if (devices != null)
             {
-                await DeviceSource.AsyncAddNewRange(devices);
+                await DeviceSource.AddNewRangeAsync(devices);
             }
         }
 
@@ -169,7 +169,7 @@ namespace log_guard.implement.device
                 shouldNotifySelectedDeviceUnplug = true;
                 if (devices != null)
                 {
-                    await DeviceSource.AsyncAddNewRange(devices);
+                    await DeviceSource.AddNewRangeAsync(devices);
 
                     foreach (var device in DeviceSource)
                     {
@@ -195,7 +195,7 @@ namespace log_guard.implement.device
             var devices = StartScanDevice();
             if (devices != null)
             {
-                await DeviceSource.AsyncAddNewRange(devices);
+                await DeviceSource.AddNewRangeAsync(devices);
             }
         }
 
