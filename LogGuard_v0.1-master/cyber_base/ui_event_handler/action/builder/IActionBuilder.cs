@@ -9,9 +9,9 @@ namespace cyber_base.ui_event_handler.action.builder
 {
     public interface IActionBuilder
     {
-        IAction BuildAlternativeActionWhenFactoryIsLock(string keyTag);
+        IAction? BuildAlternativeActionWhenFactoryIsLock(string keyTag);
 
-        IAction BuildMainAction(string keyTag);
+        IAction? BuildMainAction(string keyTag);
 
         void LockBuilder(BuilderStatus status = BuilderStatus.Default);
         void UnlockBuilder(BuilderStatus status = BuilderStatus.Default);

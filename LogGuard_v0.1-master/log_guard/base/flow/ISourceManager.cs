@@ -20,8 +20,8 @@ namespace log_guard.@base.flow
         RangeObservableCollection<ILogWatcherElements> RawSource { get; }
         RangeObservableCollection<ILogWatcherElements> DisplaySource { get; }
         ILogInfoManager LogManager { get; }
-        ISourceFilterManager SrcFilterManager { get; }
-        ISourceHighlightManager SrcHighlightManager { get; }
+        ISourceFilterManager? SrcFilterManager { get; }
+        ISourceHighlightManager? SrcHighlightManager { get; }
         RangeObservableCollection<string> RawLog { get; }
 
         int RawItemsCount();

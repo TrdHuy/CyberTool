@@ -12,7 +12,7 @@ namespace cyber_base.ui_event_handler.action
         /// <summary>
         /// Triển khai action cho 1 đối tượng  được định nghĩa trước
         /// </summary>
-        bool Execute(object dataTransfer);
+        bool Execute(object? dataTransfer);
 
         /// <summary>
         /// ID of Action
@@ -32,6 +32,6 @@ namespace cyber_base.ui_event_handler.action
         /// <summary>
         /// action logger
         /// </summary>
-        ILogger Logger { get; }
+        ILogger? Logger { get; }
     }
 }

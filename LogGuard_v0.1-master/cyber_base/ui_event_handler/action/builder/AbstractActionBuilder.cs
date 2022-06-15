@@ -12,9 +12,9 @@ namespace cyber_base.ui_event_handler.action.builder
 
         public virtual BuilderLocker Locker { get => _locker; set => _locker = value; }
 
-        public abstract IAction BuildAlternativeActionWhenFactoryIsLock(string keyTag);
+        public abstract IAction? BuildAlternativeActionWhenFactoryIsLock(string keyTag);
 
-        public abstract IAction BuildMainAction(string keyTag);
+        public abstract IAction? BuildMainAction(string keyTag);
 
         public void LockBuilder(BuilderStatus status)
         {

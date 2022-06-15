@@ -10,7 +10,7 @@ namespace cyber_base.ui_event_handler.listener
 {
     public class ActionExecuteHelper
     {
-        private static ActionExecuteHelper _instance;
+        private static ActionExecuteHelper? _instance;
 
         /// <summary>
         /// The capacity of action executer
@@ -67,13 +67,13 @@ namespace cyber_base.ui_event_handler.listener
         /// if it was canceled or completed, unregister it from the cache
         /// </summary>
         /// <param name="action"></param>
-        private void HelperUpdate(IAction action)
+        private void HelperUpdate(IAction? action)
         {
             if (action is ICommandExecuter)
             {
                 var cmdEx = action as ICommandExecuter;
 
-                if (cmdEx.IsCompleted || cmdEx.IsCanceled)
+                if (cmdEx != null && (cmdEx.IsCompleted || cmdEx.IsCanceled))
                 {
                     try
                     {
@@ -98,7 +98,7 @@ namespace cyber_base.ui_event_handler.listener
         /// <param name="action"></param>
         /// <param name="dataTransfer"></param>
         /// <returns></returns>
-        public ExecuteStatus ExecuteAction(IAction action, object dataTransfer)
+        public ExecuteStatus ExecuteAction(IAction action, object? dataTransfer)
         {
             var provider = action as ICommandExecuter;
 
@@ -218,7 +218,7 @@ namespace cyber_base.ui_event_handler.listener
             }
         }
 
-        public IAction GetActionInCache(string builderID, string keyID)
+        public IAction? GetActionInCache(string builderID, string keyID)
         {
             try
             {

@@ -11,15 +11,15 @@ namespace cyber_base.ui_event_handler.action.executer
     {
         private bool _isCompleted = false;
         private bool _isCanceled = false;
-        private List<object> _dataTransfer;
-        private string _actionID;
-        private string _actionName;
-        private string _builderID;
+        private List<object>? _dataTransfer;
+        private string _actionID = "";
+        private string _actionName = "";
+        private string _builderID = "";
 
-        public event NotifyIsCanceledChangedHandler IsCanceledChanged;
-        public event NotifyIsCompletedChangedHandler IsCompletedChanged;
+        public event NotifyIsCanceledChangedHandler? IsCanceledChanged;
+        public event NotifyIsCompletedChangedHandler? IsCompletedChanged;
 
-        public ILogger Logger { get; private set; }
+        public ILogger? Logger { get; private set; }
 
         public bool IsCompleted
         {
@@ -54,20 +54,20 @@ namespace cyber_base.ui_event_handler.action.executer
             }
         }
 
-        public IList<object> DataTransfer { get => _dataTransfer; }
+        public IList<object>? DataTransfer { get => _dataTransfer; }
 
         public string ActionID { get => _actionID; }
         public string BuilderID { get => _builderID; }
         public string ActionName { get => _actionName; }
 
-        public AbstractCommandExecuter(string actionID, string builderID, ILogger logger)
+        public AbstractCommandExecuter(string actionID, string builderID, ILogger? logger)
         {
             this.Logger = logger;
             _actionID = actionID;
             _builderID = builderID;
         }
 
-        public AbstractCommandExecuter(string actionName, string actionID, string builderID, ILogger logger)
+        public AbstractCommandExecuter(string actionName, string actionID, string builderID, ILogger? logger)
         {
             this.Logger = logger;
             _actionID = actionID;
@@ -90,9 +90,10 @@ namespace cyber_base.ui_event_handler.action.executer
             }
         }
 
-        public bool Execute(object dataTransfer)
+        public bool Execute(object? dataTransfer)
         {
-            AssignDataTransfer(dataTransfer);
+            if (dataTransfer != null)
+                AssignDataTransfer(dataTransfer);
 
             if (CanExecute(dataTransfer))
             {
@@ -122,9 +123,10 @@ namespace cyber_base.ui_event_handler.action.executer
             }
         }
 
-        public bool AlterExecute(object dataTransfer)
+        public bool AlterExecute(object? dataTransfer)
         {
-            AssignDataTransfer(dataTransfer);
+            if (dataTransfer != null)
+                AssignDataTransfer(dataTransfer);
 
             if (CanExecute(dataTransfer))
             {
@@ -170,7 +172,7 @@ namespace cyber_base.ui_event_handler.action.executer
         /// </summary>
         /// <param name="dataTransfer">data passed into executer</param>
         /// <returns>true if meet condition and execute the command</returns>
-        protected abstract bool CanExecute(object dataTransfer);
+        protected abstract bool CanExecute(object? dataTransfer);
 
 
         /// <summary>

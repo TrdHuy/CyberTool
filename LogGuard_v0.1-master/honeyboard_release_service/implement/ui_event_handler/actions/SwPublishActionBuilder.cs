@@ -18,24 +18,24 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions
     {
         private static Logger logger = new Logger("SwPublishActionBuilder");
 
-        public override ICommandExecuter BuildAlternativeCommandExecuterWhenBuilderIsLock(string keyTag, ILogger logger = null)
+        public override ICommandExecuter? BuildAlternativeCommandExecuterWhenBuilderIsLock(string keyTag, ILogger? logger = null)
         {
             return null;
         }
 
-        public override IViewModelCommandExecuter BuildAlternativeViewModelCommandExecuterWhenBuilderIsLock(string keyTag, BaseViewModel viewModel, ILogger logger = null)
+        public override IViewModelCommandExecuter? BuildAlternativeViewModelCommandExecuterWhenBuilderIsLock(string keyTag, BaseViewModel viewModel, ILogger? logger = null)
         {
             return null;
         }
 
-        public override ICommandExecuter BuildCommandExecuter(string keyTag, ILogger logger = null)
+        public override ICommandExecuter? BuildCommandExecuter(string keyTag, ILogger? logger = null)
         {
             return null;
         }
 
-        public override IViewModelCommandExecuter BuildViewModelCommandExecuter(string keyTag, BaseViewModel viewModel, ILogger logger = null)
+        public override IViewModelCommandExecuter? BuildViewModelCommandExecuter(string keyTag, BaseViewModel viewModel, ILogger? logger = null)
         {
-            IViewModelCommandExecuter viewModelCommandExecuter = null;
+            IViewModelCommandExecuter? viewModelCommandExecuter = null;
             switch (keyTag)
             {
                 case PublisherKeyFeatureTag.KEY_TAG_PRT_PM_PROJECT_PATH_SELECTED_FEATURE:

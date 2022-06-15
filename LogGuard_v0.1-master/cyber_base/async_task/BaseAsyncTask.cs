@@ -224,23 +224,23 @@ namespace cyber_base.async_task
         public void Dispose()
         {
             if (_isDisposed) return;
-            foreach (Delegate d in OnExecutingChanged?.GetInvocationList() ?? new Delegate[0])
+            foreach (Delegate d in OnExecutingChanged?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 OnExecutingChanged -= (IsExecutingChangedHandler)d;
             }
-            foreach (Delegate d in OnCompletedChanged?.GetInvocationList() ?? new Delegate[0])
+            foreach (Delegate d in OnCompletedChanged?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 OnCompletedChanged -= (IsCompletedChangedHandler)d;
             }
-            foreach (Delegate d in OnCanceledChanged?.GetInvocationList() ?? new Delegate[0])
+            foreach (Delegate d in OnCanceledChanged?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 OnCanceledChanged -= (IsCanceldChangedHandler)d;
             }
-            foreach (Delegate d in OnFaultedChanged?.GetInvocationList() ?? new Delegate[0])
+            foreach (Delegate d in OnFaultedChanged?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 OnFaultedChanged -= (IsFaultedChangedHandler)d;
             }
-            foreach (Delegate d in ProgressChanged?.GetInvocationList() ?? new Delegate[0])
+            foreach (Delegate d in ProgressChanged?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 ProgressChanged -= (ProgressChangedHandler)d;
             }
@@ -309,7 +309,7 @@ namespace cyber_base.async_task
         public static string GetCurrentThreadInformation()
         {
             var taskName = "Main Task(Task #" + Task.CurrentId.ToString() + ")";
-            String msg = null;
+            String msg = "";
             Thread thread = Thread.CurrentThread;
             msg = String.Format("{0} thread information\n", taskName) +
                   String.Format("   Background: {0}\n", thread.IsBackground) +

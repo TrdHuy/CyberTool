@@ -11,11 +11,11 @@ namespace cyber_base.ui_event_handler.action.factory
 {
     public abstract class BaseActionFactory : AbstractActionFactory
     {
-        public override IAction CreateAction(string builderID, string keyID, BaseViewModel viewModel = null, ILogger logger = null)
+        public override IAction? CreateAction(string builderID, string keyID, BaseViewModel? viewModel = null, ILogger? logger = null)
         {
 
             //try to get the registered builder
-            IActionBuilder builder = null;
+            IActionBuilder? builder = null;
             try
             {
                 builder = _builders[builderID];

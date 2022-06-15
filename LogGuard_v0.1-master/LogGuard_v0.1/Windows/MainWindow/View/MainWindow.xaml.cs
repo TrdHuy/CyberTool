@@ -15,25 +15,18 @@ namespace LogGuard_v0._1.Windows.MainWindow.View
 
         private void mainFrame_SourceUpdated(object sender, System.Windows.Data.DataTransferEventArgs e)
         {
-            int a = 1;
         }
 
         private void mainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-            int a = 1;
-
         }
 
         private void mainFrame_Navigating(object sender, System.Windows.Navigation.NavigatingCancelEventArgs e)
         {
-            int a = 1;
-
         }
 
         private void mainFrame_NavigationProgress(object sender, System.Windows.Navigation.NavigationProgressEventArgs e)
         {
-            int a = 1;
-
         }
     }
 }

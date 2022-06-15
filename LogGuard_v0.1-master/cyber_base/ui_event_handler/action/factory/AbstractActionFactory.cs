@@ -22,7 +22,7 @@ namespace cyber_base.ui_event_handler.action.factory
 
         public abstract ILogger Logger { get; }
 
-        public abstract IAction CreateAction(string builderID, string keyID, BaseViewModel viewModel = null, ILogger logger = null);
+        public abstract IAction? CreateAction(string builderID, string keyID, BaseViewModel? viewModel = null, ILogger? logger = null);
 
         public void LockBuilder(string builderID, bool key, BuilderStatus status)
         {

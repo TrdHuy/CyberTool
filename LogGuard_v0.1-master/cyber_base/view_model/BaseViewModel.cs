@@ -13,8 +13,8 @@ namespace cyber_base.view_model
 {
     public class BaseViewModel : BaseObservable<object>, INotifyPropertyChanged, IDestroyable, IBeginable
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public BaseViewModel ParentsModel { get; private set; }
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public BaseViewModel? ParentsModel { get; private set; }
         public List<BaseViewModel> ChildModels { get; private set; } = new List<BaseViewModel>();
 
         public BaseViewModel()
@@ -45,7 +45,7 @@ namespace cyber_base.view_model
             OnChanged(this, propName);
         }
 
-        public void InvalidateOwn([CallerMemberName()] string propName = null)
+        public void InvalidateOwn([CallerMemberName()] string propName = "")
         {
             OnChanged(this, propName);
         }
@@ -58,7 +58,7 @@ namespace cyber_base.view_model
             {
                 var attr = property.Attributes;
 
-                if (attr[typeof(BindableAttribute)].Equals(BindableAttribute.Yes))
+                if (attr[typeof(BindableAttribute)]?.Equals(BindableAttribute.Yes) ?? false)
                 {
                     Invalidate(property.Name);
                 }

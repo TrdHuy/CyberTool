@@ -28,6 +28,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.io_t
              : base(param, name, completedCallback)
         {
             _versionFileName = "";
+            _folderPath = "";
             switch (param)
             {
                 case string[] data:

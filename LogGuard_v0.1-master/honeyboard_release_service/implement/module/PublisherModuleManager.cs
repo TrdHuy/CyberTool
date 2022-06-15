@@ -100,6 +100,7 @@ namespace honeyboard_release_service.implement.module
                 {
                     _CNHVM_Instance = Activator.CreateInstance(typeof(CalendarNotebookHeaderViewManager), true) as CalendarNotebookHeaderViewManager;
                 }
+                ArgumentNullException.ThrowIfNull(_CNHVM_Instance);
                 return (CalendarNotebookHeaderViewManager)_CNHVM_Instance;
             }
         }
@@ -112,6 +113,7 @@ namespace honeyboard_release_service.implement.module
                 {
                     _CNIVM_Instance = Activator.CreateInstance(typeof(CalendarNotebookItemViewManager), true) as CalendarNotebookItemViewManager;
                 }
+                ArgumentNullException.ThrowIfNull(_CNIVM_Instance);
                 return (CalendarNotebookItemViewManager)_CNIVM_Instance;
             }
         }
@@ -124,6 +126,7 @@ namespace honeyboard_release_service.implement.module
                 {
                     _SPCEF_Instance = Activator.CreateInstance(typeof(SwPublisherCommandExecuterFactory), true) as SwPublisherCommandExecuterFactory;
                 }
+                ArgumentNullException.ThrowIfNull(_SPCEF_Instance);
                 return (SwPublisherCommandExecuterFactory)_SPCEF_Instance;
             }
         }
@@ -136,6 +139,7 @@ namespace honeyboard_release_service.implement.module
                 {
                     _PKAL_Instance = Activator.CreateInstance(typeof(PublisherKeyActionListener), true) as PublisherKeyActionListener;
                 }
+                ArgumentNullException.ThrowIfNull(_PKAL_Instance);
                 return (PublisherKeyActionListener)_PKAL_Instance;
             }
         }

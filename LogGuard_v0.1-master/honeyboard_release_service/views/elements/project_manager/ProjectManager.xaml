@@ -201,7 +201,7 @@
 																					HorizontalAlignment="Left"
 																					CanVerticallyScroll="False"
 																					Grid.RowSpan="2" />
-															<anim:LoadingAnimation IsBusy="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(atp:ElementAttProperties.Proxy)}"
+															<anim:LoadingAnimation IsBusy="{Binding RelativeSource={RelativeSource AncestorType=vhl:VersionHistoryListView, Mode=FindAncestor}, Path=(atp:ElementAttProperties.Proxy)}"
 																				   Grid.Row="1"
 																				   Margin="0,30,0,0"
 																				   ElipseFill="{DynamicResource Foreground_Level3}"
@@ -358,7 +358,6 @@
 									<csv:CyberScrollView ThumbBackground="{StaticResource ButtonBackground_Level1}"
 														 CanContentScroll="{TemplateBinding ScrollViewer.CanContentScroll}"
 														 IsMouseOverExpandScrollbar="True"
-														 atp:ElementAttProperties.Proxy="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(atp:ElementAttProperties.Proxy)}"
 														 Style="{StaticResource RT_OverlapScrollbarStyle}"
 														 VerticalAlignment="Top"
 														 VerticalContentAlignment="Center">

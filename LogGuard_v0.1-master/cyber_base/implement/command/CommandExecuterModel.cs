@@ -12,16 +12,16 @@ namespace cyber_base.implement.command
 {
     public class CommandExecuterModel : ICommand, IDestroyable
     {
-        public event EventHandler CanExecuteChanged;
-        public event NotifyIsCompletedChangedHandler CompletedChanged;
-        public event NotifyIsCanceledChangedHandler CanceledChanged;
+        public event EventHandler? CanExecuteChanged;
+        public event NotifyIsCompletedChangedHandler? CompletedChanged;
+        public event NotifyIsCanceledChangedHandler? CanceledChanged;
 
-        private Func<object, ICommandExecuter> _action;
-        private ICommandExecuter _commandExecuterCache;
+        private Func<object?, ICommandExecuter> _action;
+        private ICommandExecuter? _commandExecuterCache;
 
         protected ActionExecuteHelper ActionExecuteHelper { get; set; }
 
-        protected virtual ICommandExecuter CommandExecuterCache
+        protected virtual ICommandExecuter? CommandExecuterCache
         {
             get
             {
@@ -49,18 +49,18 @@ namespace cyber_base.implement.command
             }
         }
 
-        public CommandExecuterModel(Func<object, ICommandExecuter> hpssAction)
+        public CommandExecuterModel(Func<object?, ICommandExecuter> hpssAction)
         {
             _action = hpssAction;
             ActionExecuteHelper = ActionExecuteHelper.Current;
         }
 
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object? parameter)
         {
             return true;
         }
 
-        public void Execute(object parameter)
+        public void Execute(object? parameter)
         {
             if (CommandExecuterCache != null)
             {
@@ -107,7 +107,7 @@ namespace cyber_base.implement.command
 
 
 
-        protected virtual void ExetcuteAction(object dataTransfer)
+        protected virtual void ExetcuteAction(object? dataTransfer)
         {
             if (CommandExecuterCache == null)
             {

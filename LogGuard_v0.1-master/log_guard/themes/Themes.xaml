@@ -420,41 +420,36 @@
 		</Grid>
 
 		<ControlTemplate.Triggers>
-			<DataTrigger Binding="{Binding Path=(atp:TextBoxAttProperties.IsFilterEnable),
-									RelativeSource={RelativeSource Self}}"
-						 Value="true">
+			<Trigger Property="atp:TextBoxAttProperties.IsFilterEnable"
+					 Value="true">
 				<Setter TargetName="FilterPath"
 						Property="Fill"
 						Value="{StaticResource ButtonBackground_Level1}" />
-			</DataTrigger>
+			</Trigger>
 
-			<DataTrigger Binding="{Binding Path=(atp:TextBoxAttProperties.Filter),
-									RelativeSource={RelativeSource Self}}"
-						 Value="Simple">
+			<Trigger Property="atp:TextBoxAttProperties.Filter"
+					 Value="Simple">
 				<Setter TargetName="CheckPath"
 						Property="Data"
 						Value="{Binding Source={StaticResource SearchPathGeomerty}}" />
-			</DataTrigger>
+			</Trigger>
 
-			<DataTrigger Binding="{Binding Path=(atp:TextBoxAttProperties.Filter),
-									RelativeSource={RelativeSource Self}}"
-						 Value="Syntax">
+			<Trigger Property="atp:TextBoxAttProperties.Filter"
+					 Value="Syntax">
 				<Setter TargetName="CheckPath"
 						Property="Data"
 						Value="{Binding Source={StaticResource SyntaxIconPathGeomerty}}" />
-			</DataTrigger>
+			</Trigger>
 
-			<DataTrigger Binding="{Binding Path=(atp:TextBoxAttProperties.Filter),
-									RelativeSource={RelativeSource Self}}"
-						 Value="Advance">
+			<Trigger Property="atp:TextBoxAttProperties.Filter"
+					 Value="Advance">
 				<Setter TargetName="CheckPath"
 						Property="Data"
 						Value="{Binding Source={StaticResource AdvanceSearchIconPathGeomerty}}" />
-			</DataTrigger>
+			</Trigger>
 
-			<DataTrigger Binding="{Binding Path=(atp:TextBoxAttProperties.IsSupportMultiFilterEngine),
-									RelativeSource={RelativeSource Self}}"
-						 Value="False">
+			<Trigger Property="atp:TextBoxAttProperties.IsSupportMultiFilterEngine"
+					 Value="False">
 				<Setter TargetName="CheckPath"
 						Property="Visibility"
 						Value="Collapsed" />
@@ -462,11 +457,10 @@
 						Property="Visibility"
 						Value="Collapsed" />
 
-			</DataTrigger>
+			</Trigger>
 
-			<DataTrigger Binding="{Binding Path=(atp:TextBoxAttProperties.IsFilterTextBox),
-									RelativeSource={RelativeSource Self}}"
-						 Value="False">
+			<Trigger Property="atp:TextBoxAttProperties.IsFilterTextBox"
+					 Value="False">
 				<Setter TargetName="FilterPath"
 						Property="Visibility"
 						Value="Collapsed" />
@@ -474,7 +468,7 @@
 						Property="Visibility"
 						Value="Collapsed" />
 
-			</DataTrigger>
+			</Trigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
 
@@ -593,13 +587,12 @@
 			</Popup>
 		</Grid>
 		<ControlTemplate.Triggers>
-			<DataTrigger Binding="{Binding Path=(atp:TextBoxAttProperties.IsFilterEnable),
-									RelativeSource={RelativeSource Self}}"
-						 Value="true">
+			<Trigger Property="atp:TextBoxAttProperties.IsFilterEnable"
+					 Value="true">
 				<Setter TargetName="CheckPath"
 						Property="Fill"
 						Value="{StaticResource ButtonBackground_Level1}" />
-			</DataTrigger>
+			</Trigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
 

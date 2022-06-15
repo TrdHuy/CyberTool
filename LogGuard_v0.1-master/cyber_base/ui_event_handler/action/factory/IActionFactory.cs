@@ -15,7 +15,7 @@ namespace cyber_base.ui_event_handler.action.factory
 
         Dictionary<string, IActionBuilder> Builders { get; }
 
-        IAction CreateAction(string builderID, string keyID, BaseViewModel viewModel = null, ILogger logger = null);
+        IAction? CreateAction(string builderID, string keyID, BaseViewModel? viewModel = null, ILogger? logger = null);
 
         void RegisterBuilder(string builderID, IActionBuilder builder);
 

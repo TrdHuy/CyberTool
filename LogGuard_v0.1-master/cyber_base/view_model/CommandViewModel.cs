@@ -27,7 +27,7 @@ namespace cyber_base.view_model
         /// <param name="isViewModelOnKey"> True if create a command executer with a view model</param>
         /// <param name="builderTag"></param>
         /// <returns></returns>
-        protected virtual ICommandExecuter OnKey(string keyTag, object paramaters, bool isViewModelOnKey, string builderTag)
+        protected virtual ICommandExecuter? OnKey(string keyTag, object paramaters, bool isViewModelOnKey, string builderTag)
         {
             logger.I("OnKey: keyTag = " + keyTag + " builderTag = " + builderTag);
 
@@ -60,7 +60,7 @@ namespace cyber_base.view_model
         /// <param name="isViewModelOnKey"> True if create a command executer with a view model</param>
         /// <param name="windowTag"></param>
         /// <returns></returns>
-        protected virtual ICommandExecuter OnKey(string keyTag, object paramaters, BuilderLocker locker, bool isViewModelOnKey, string windowTag)
+        protected virtual ICommandExecuter? OnKey(string keyTag, object paramaters, BuilderLocker locker, bool isViewModelOnKey, string windowTag)
         {
             logger.I("OnKey: keyTag = " + keyTag + " builderTag = " + windowTag);
 

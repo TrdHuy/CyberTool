@@ -12,13 +12,13 @@ namespace cyber_base.ui_event_handler.action.executer
     {
         public virtual BaseViewModel ViewModel { get; protected set; }
 
-        public AbstractViewModelCommandExecuter(string actionID, string builderID, BaseViewModel viewModel, ILogger logger)
+        public AbstractViewModelCommandExecuter(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger)
             : base(actionID, builderID, logger)
         {
             this.ViewModel = viewModel;
         }
 
-        public AbstractViewModelCommandExecuter(string actionName, string actionID, string builderID, BaseViewModel viewModel, ILogger logger)
+        public AbstractViewModelCommandExecuter(string actionName, string actionID, string builderID, BaseViewModel viewModel, ILogger? logger)
             : base(actionName, actionID, builderID, logger)
         {
             this.ViewModel = viewModel;
@@ -42,7 +42,7 @@ namespace cyber_base.ui_event_handler.action.executer
         /// </summary>
         /// <param name="dataTransfer">data passed into executer</param>
         /// <returns>true if meet condition and execute the command</returns>
-        protected override bool CanExecute(object dataTransfer)
+        protected override bool CanExecute(object? dataTransfer)
         {
             return true;
         }
