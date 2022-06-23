@@ -13,7 +13,8 @@ namespace honeyboard_release_service.view_models.command.tab_items.release_tab
     {
         public CommandExecuterModel RestoreLatestReleaseCLButtonCommand { get; set; }
         public CommandExecuterModel QuickReleaseButtonCommand { get; set; }
-
+        public CommandExecuterModel CreateReleaseCLButtonCommand { get; set; }
+        
         public RT_ButtonCommandVM(BaseViewModel parentsModel, string commandVMTag = "RT_ButtonCommandVM")
             : base(parentsModel, commandVMTag)
         {
@@ -27,6 +28,12 @@ namespace honeyboard_release_service.view_models.command.tab_items.release_tab
             {
                 return OnKey(PublisherKeyFeatureTag.KEY_TAG_PRT_RESTORE_LATEST_RELEASE_FEATURE
                         , paramaters);
+            });
+
+            CreateReleaseCLButtonCommand = new CommandExecuterModel((paramaters) =>
+            {
+                return OnKey(PublisherKeyFeatureTag.KEY_TAG_PRT_CREATE_CL_AND_COMMIT_FEATURE
+                    , paramaters);
             });
         }
     }

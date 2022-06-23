@@ -69,6 +69,7 @@
 					<VisualBrush Visual="{Binding ElementName=ClipRec}" />
 				</ContentPresenter.OpacityMask>
 			</ContentPresenter>
+			
 		</Grid>
 		<ControlTemplate.Triggers>
 			<Trigger Property="IsMouseOver"
@@ -87,7 +88,19 @@
 						TargetName="FeedBackRec"
 						Value="#AAB8E7F9" />
 			</Trigger>
-
+			
+			<Trigger Property="IsEnabled"
+					 Value="False">
+				<Setter Property="Visibility"
+						TargetName="FeedBackRec"
+						Value="Visible" />
+				<Setter Property="Fill"
+						TargetName="FeedBackRec"
+                        Value="#AA9B9B9B" />
+				<Setter Property="StrokeThickness"
+						TargetName="FeedBackRec"
+						Value="0" />
+			</Trigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
 

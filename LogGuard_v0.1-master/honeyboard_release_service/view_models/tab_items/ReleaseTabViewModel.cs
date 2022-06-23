@@ -1,4 +1,5 @@
 ﻿using cyber_base.view_model;
+using honeyboard_release_service.models.VOs;
 using honeyboard_release_service.view_models.command.tab_items.release_tab;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,15 @@ namespace honeyboard_release_service.view_models.tab_items
         private string _taskID = "";
         private string _commitTitle = "";
         private string _commitDescription = "";
-        private string _major = "";
-        private string _minor = "";
-        private string _patch = "";
-        private string _revision = "";
+        private VersionPropertiesVO _modifiedVersionPropVO;
+
+        public VersionPropertiesVO ModifiedVersionPropVO
+        {
+            get
+            {
+                return _modifiedVersionPropVO;
+            }
+        }
 
         [Bindable(true)]
         public RT_ButtonCommandVM ButtonCommandVM { get; set; }
@@ -89,11 +95,11 @@ namespace honeyboard_release_service.view_models.tab_items
         {
             get
             {
-                return _major;
+                return _modifiedVersionPropVO.Major;
             }
             set
             {
-                _major = value;
+                _modifiedVersionPropVO.Major = value;
                 InvalidateOwn();
             }
         }
@@ -103,11 +109,11 @@ namespace honeyboard_release_service.view_models.tab_items
         {
             get
             {
-                return _minor;
+                return _modifiedVersionPropVO.Minor;
             }
             set
             {
-                _minor = value;
+                _modifiedVersionPropVO.Minor = value;
                 InvalidateOwn();
             }
         }
@@ -117,11 +123,11 @@ namespace honeyboard_release_service.view_models.tab_items
         {
             get
             {
-                return _patch;
+                return _modifiedVersionPropVO.Patch;
             }
             set
             {
-                _patch = value;
+                _modifiedVersionPropVO.Patch = value;
                 InvalidateOwn();
             }
         }
@@ -131,11 +137,11 @@ namespace honeyboard_release_service.view_models.tab_items
         {
             get
             {
-                return _revision;
+                return _modifiedVersionPropVO.Revision;
             }
             set
             {
-                _revision = value;
+                _modifiedVersionPropVO.Revision = value;
                 InvalidateOwn();
             }
         }
@@ -143,6 +149,7 @@ namespace honeyboard_release_service.view_models.tab_items
         public ReleaseTabViewModel(BaseViewModel parents)
         {
             ButtonCommandVM = new RT_ButtonCommandVM(this);
+            _modifiedVersionPropVO = new VersionPropertiesVO();
         }
     }
 }

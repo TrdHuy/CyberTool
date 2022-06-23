@@ -525,7 +525,6 @@
 					</ListView.ItemContainerStyle>
 				</vhl:VersionHistoryListView>
 
-
 			</Grid>
 
 			<StackPanel Grid.Row="6"

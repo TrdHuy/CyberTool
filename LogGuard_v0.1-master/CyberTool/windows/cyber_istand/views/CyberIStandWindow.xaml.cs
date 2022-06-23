@@ -123,7 +123,8 @@ namespace cyber_tool.windows.cyber_istand.views
         #region MultiTaskWindow
         public CyberIStandWindow(string title
             , MultiAsyncTask tasks
-            , Window? owner = null)
+            , Window? owner = null
+            , bool isCancelable = true)
         {
             InitializeComponent();
             MainTask = tasks;
@@ -178,14 +179,23 @@ namespace cyber_tool.windows.cyber_istand.views
                 this.Close();
             };
 
-            Closing += (s, e) =>
+            if (isCancelable)
             {
-                if (!MainTask.IsCompleted && !MainTask.IsCanceled)
+                Closing += (s, e) =>
                 {
-                    MainTask.Cancel();
-                    MesResult = CyberIStandBoxResult.Cancel;
-                }
-            };
+                    if (!MainTask.IsCompleted && !MainTask.IsCanceled)
+                    {
+                        MainTask.Cancel();
+                        MesResult = CyberIStandBoxResult.Cancel;
+                    }
+                };
+            }
+            else
+            {
+                CancelBtn.Visibility = Visibility.Collapsed;
+                ContinueBtn.Visibility = Visibility.Collapsed;
+                IsWindowButtonEnabled = false;
+            }
         }
 
         private void MultiTaskCompletedChanged(object sender, bool oldValue, bool newValue)
@@ -203,6 +213,11 @@ namespace cyber_tool.windows.cyber_istand.views
                 }
                 ContinueBtn.Visibility = Visibility.Visible;
                 CancelBtn.Visibility = Visibility.Collapsed;
+
+                if (!IsWindowButtonEnabled)
+                {
+                    Close();
+                }
             }
         }
 

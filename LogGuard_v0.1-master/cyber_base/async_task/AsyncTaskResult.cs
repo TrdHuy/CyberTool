@@ -29,6 +29,11 @@ namespace cyber_base.async_task
         /// The task was aborted
         /// </summary>
         Aborted = 4,
+
+        /// <summary>
+        /// The task was faulted
+        /// </summary>
+        Faulted = 5,
     }
 
     public class AsyncTaskResult

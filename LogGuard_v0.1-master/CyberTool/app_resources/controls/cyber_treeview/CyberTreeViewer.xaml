@@ -316,12 +316,17 @@
 							   Foreground="{DynamicResource Foreground_Level3}"
 							   VerticalAlignment="Center" />
 					<HierarchicalDataTemplate.Triggers>
-						<Trigger Property="IsMouseOver"
-								 Value="True">
+						<MultiDataTrigger>
+							<MultiDataTrigger.Conditions>
+								<Condition Binding="{Binding Path=IsMouseOver, ElementName=mainContent}"
+										   Value="True" />
+								<Condition Binding="{Binding Path=IsSelectable}"
+										   Value="True" />
+							</MultiDataTrigger.Conditions>
 							<Setter Property="TextDecorations"
 									TargetName="mainContent"
 									Value="Underline" />
-						</Trigger>
+						</MultiDataTrigger>
 					</HierarchicalDataTemplate.Triggers>
 				</HierarchicalDataTemplate>
 			</Setter.Value>

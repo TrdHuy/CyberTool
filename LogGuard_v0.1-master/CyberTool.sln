@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "faq_service", "faq_service\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "issue_tracker_service", "issue_tracker_service\issue_tracker_service.csproj", "{905622F4-FC48-4C22-9206-09425B8D58ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "honeyboard_release_service", "honeyboard_release_service\honeyboard_release_service.csproj", "{2B780E1A-4951-469A-A028-B9A4F79EA6E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "honeyboard_release_service", "honeyboard_release_service\honeyboard_release_service.csproj", "{2B780E1A-4951-469A-A028-B9A4F79EA6E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

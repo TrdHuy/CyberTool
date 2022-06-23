@@ -9,9 +9,10 @@ namespace honeyboard_release_service.models.VOs
 {
     internal class BranchVO : BaseCyberTreeItemVO
     {
-        public string BranchPath;
-        public bool IsRemote = false;
-        public bool IsNode = false;
+        public string BranchPath { get; }
+        public bool IsRemote { get; } = false;
+        public bool IsNode { get; } = false;
+
         public BranchVO(string path, string title, bool isNode = false, bool isRemote = false) : base(title)
         {
             BranchPath = path;

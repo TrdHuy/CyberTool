@@ -31,9 +31,9 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
         private Action<object, GetVersionHistoryTask>? _versionPropertiesFoundCallback;
 
         public GetVersionHistoryTask(object param
-            , Action<AsyncTaskResult>? callback = null
+            , Action<AsyncTaskResult>? taskFinishedCallback = null
             , Action<object, GetVersionHistoryTask>? versionPropertiesFoundCallback = null
-            , string name = "Getting version history") : base(param, name, callback)
+            , string name = "Getting version history") : base(param, name, taskFinishedCallback)
         {
             switch (param)
             {
@@ -96,7 +96,6 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
                             var email = match.Groups["email"].Value ?? "";
                             var subjectId = match.Groups["subjectid"].Value ?? "";
                             var title = match.Groups["title"].Value ?? "";
-                            var properties = GetPatchVersion("", token);
 
                             dynamic ele = new ExpandoObject();
                             ele.HashId = hashID;
@@ -106,98 +105,12 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
                             ele.Title = title;
                             ele.Version = "";
 
-                            if (properties != null)
-                            {
-                                if (properties.ContainsKey("major"))
-                                {
-                                    ele.Major = properties["major"];
-                                    ele.Version += properties["major"];
-                                }
-                                if (properties.ContainsKey("minor"))
-                                {
-                                    ele.Minor = properties["minor"];
-                                    ele.Version += "." + properties["minor"];
-                                }
-                                if (properties.ContainsKey("patch"))
-                                {
-                                    ele.Patch = properties["patch"];
-                                    ele.Version += "." + properties["patch"];
-                                }
-                                if (properties.ContainsKey("revision"))
-                                {
-                                    ele.Revision = properties["revision"];
-                                    ele.Version += "." + properties["revision"];
-                                }
-                            }
-
                             _versionPropertiesFoundCallback?.Invoke(ele, this);
 
                         }
                     }
-
                 }
             }
-        }
-
-        private Dictionary<string, string>? GetPatchVersion(string hashID, CancellationTokenSource token)
-        {
-            if (string.IsNullOrEmpty(hashID)) return null;
-
-            var propertiesMap = new Dictionary<string, string>();
-            string gitShowCommitCmd = "git show " + hashID + ":" + _versionFileName;
-            var pSI = new ProcessStartInfo("cmd", "/c" + gitShowCommitCmd);
-            pSI.WorkingDirectory = _projectPath;
-            pSI.RedirectStandardInput = true;
-            pSI.RedirectStandardOutput = true;
-            pSI.RedirectStandardError = true;
-            pSI.CreateNoWindow = true;
-            pSI.UseShellExecute = false;
-            pSI.StandardOutputEncoding = Encoding.UTF8;
-
-            using (var process = Process.Start(pSI))
-            {
-                if (process != null)
-                {
-                    string? line;
-                    while ((line = process.StandardOutput.ReadLine()) != null)
-                    {
-                        if (token.IsCancellationRequested)
-                        {
-                            throw new OperationCanceledException();
-                        }
-
-                        if (!line.StartsWith("#"))
-                        {
-                            Regex? selectedRegex = null;
-                            if (_majorRegex.IsMatch(line))
-                            {
-                                selectedRegex = _majorRegex;
-                            }
-                            else if (_minorRegex.IsMatch(line))
-                            {
-                                selectedRegex = _minorRegex;
-                            }
-                            else if (_patchRegex.IsMatch(line))
-                            {
-                                selectedRegex = _patchRegex;
-                            }
-                            else if (_revisionRegex.IsMatch(line))
-                            {
-                                selectedRegex = _revisionRegex;
-                            }
-
-                            if (selectedRegex != null)
-                            {
-                                var match = selectedRegex.Match(line);
-                                propertiesMap.Add(match.Groups["property"].ToString(), match.Groups["value"].ToString());
-                            }
-                        }
-                    }
-
-                }
-            }
-
-            return propertiesMap;
         }
 
         protected override bool IsTaskPossible(object param)

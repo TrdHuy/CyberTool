@@ -19,7 +19,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
             }
         }
 
-        public PM_ViewModelCommandExecuter(string actionID, string builderID, BaseViewModel viewModel, ILogger logger) : base(actionID, builderID, viewModel, logger)
+        public PM_ViewModelCommandExecuter(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger) : base(actionID, builderID, viewModel, logger)
         {
         }
     }

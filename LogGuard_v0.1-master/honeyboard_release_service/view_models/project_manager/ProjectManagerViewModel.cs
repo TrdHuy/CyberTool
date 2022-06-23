@@ -4,6 +4,7 @@ using cyber_base.implement.utils;
 using cyber_base.implement.view_models.cyber_treeview;
 using cyber_base.implement.views.cyber_treeview;
 using cyber_base.view_model;
+using honeyboard_release_service.models.VOs;
 using honeyboard_release_service.utils;
 using honeyboard_release_service.view_models.command.project_manager;
 using honeyboard_release_service.view_models.project_manager.items;
@@ -22,13 +23,15 @@ namespace honeyboard_release_service.view_models.project_manager
     internal class ProjectManagerViewModel : BaseViewModel
     {
         private FirstLastObservableCollection<VersionHistoryItemViewModel> _versionHistoryItemContexts;
-        private string _projectPath = "";
-        private string _versionPropertiesPath = "";
-        private CyberTreeViewObservableCollection<ICyberTreeViewItem> _branchsSource = new CyberTreeViewObservableCollection<ICyberTreeViewItem>();
         private object? _selectedItem;
-        private string _selectedBranch = "";
         private bool _isLoadingProjectVersionHistory = false;
         private Visibility _versionHistoryListTipVisibility = Visibility.Visible;
+        private ProjectVO? _currentProjectVO;
+        private CommitVO? _latestCommitVO;
+        private CyberTreeViewObservableCollection<ICyberTreeViewItem> _branchsSource;
+
+        public ProjectVO? CurrentProjectVO { get => _currentProjectVO; }
+        public CommitVO? LatestCommitVO { get => _latestCommitVO; set => _latestCommitVO = value; }
 
         [Bindable(true)]
         public Visibility VersionHistoryListTipVisibility
@@ -42,9 +45,8 @@ namespace honeyboard_release_service.view_models.project_manager
                 _versionHistoryListTipVisibility = value;
                 InvalidateOwn();
             }
-
-
         }
+
         [Bindable(true)]
         public bool IsLoadingProjectVersionHistory
         {
@@ -74,12 +76,22 @@ namespace honeyboard_release_service.view_models.project_manager
         {
             get
             {
-                return _selectedBranch;
+                return _currentProjectVO?.OnBranch?.BranchPath ?? "";
             }
             set
             {
-                _selectedBranch = value;
-                InvalidateOwn();
+                var isShouldExecuteBranchChanged = !string.IsNullOrEmpty(_currentProjectVO?.OnBranch?.BranchPath);
+                if (_currentProjectVO?.OnBranch?.BranchPath != value)
+                {
+                    if (_currentProjectVO != null)
+                    {
+                        _currentProjectVO.SetOnBranch(value);
+                        InvalidateOwn();
+
+                        if (isShouldExecuteBranchChanged)
+                            GestureCommandVM.SelectedBranchChangedCommand.Execute(this);
+                    }
+                }
             }
         }
 
@@ -92,10 +104,14 @@ namespace honeyboard_release_service.view_models.project_manager
             }
             set
             {
-                _selectedItem = value;
-                if (value != null)
+                var branchPath = value?.ToString();
+                if (value != null 
+                    && !string.IsNullOrEmpty(branchPath)
+                    && value != _selectedItem)
                 {
-                    SelectedBranch = value.ToString() ?? "";
+                    HandlePreSelectedItemChange(branchPath);
+                    _selectedItem = value;
+                    SelectedBranch = branchPath;
                 }
                 InvalidateOwn();
             }
@@ -106,17 +122,20 @@ namespace honeyboard_release_service.view_models.project_manager
         {
             get
             {
-                return _versionPropertiesPath;
+                return _currentProjectVO?.VersionFilePath ?? "";
             }
             set
             {
-                _versionPropertiesPath = value;
-                if (value.IndexOf(ProjectPath) != -1)
+                if (_currentProjectVO != null)
                 {
-                    _versionPropertiesPath = value.Substring(ProjectPath.Length + 1);
-                }
+                    _currentProjectVO.VersionFilePath = value;
+                    if (value.IndexOf(ProjectPath) != -1)
+                    {
+                        _currentProjectVO.VersionFilePath = value.Substring(ProjectPath.Length + 1);
+                    }
 
-                InvalidateOwn();
+                    InvalidateOwn();
+                }
             }
         }
 
@@ -125,12 +144,15 @@ namespace honeyboard_release_service.view_models.project_manager
         {
             get
             {
-                return _projectPath;
+                return _currentProjectVO?.Path ?? "";
             }
             set
             {
-                _projectPath = value;
-                InvalidateOwn();
+                if (!string.IsNullOrEmpty(value))
+                {
+                    _currentProjectVO = new ProjectVO(value);
+                    InvalidateOwn();
+                }
             }
         }
 
@@ -158,7 +180,6 @@ namespace honeyboard_release_service.view_models.project_manager
             {
                 return _branchsSource;
             }
-
             set
             {
                 if (_branchsSource == value)
@@ -170,53 +191,35 @@ namespace honeyboard_release_service.view_models.project_manager
             }
         }
 
-        public ProjectManagerViewModel(BaseViewModel parents)
+        public ProjectManagerViewModel(BaseViewModel parents) : base(parents)
         {
             _versionHistoryItemContexts = new FirstLastObservableCollection<VersionHistoryItemViewModel>();
-
+            _branchsSource = new CyberTreeViewObservableCollection<ICyberTreeViewItem>();
             GestureCommandVM = new PM_GestureCommandVM(this);
-
-            LoadData();
             _versionHistoryItemContexts.CollectionChanged += (s, e) =>
             {
                 Invalidate("IsVirtualizingVersionHistoryList");
             };
         }
 
-
-        private void LoadData()
+        private bool HandlePreSelectedItemChange(string newBranchPath)
         {
-            var perForItem = new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("P4"));
-
-            perForItem.AddItem(new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("Setting")));
-            perForItem.AddItem(new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("Config")));
-
-            for (int i = 0; i < 2; i++)
-            {
-                perForItem.AddItem(new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("" + i)));
-            }
-
-            var item1 = new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("SIP team"));
-
-            item1.AddItem(new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("1")));
-
-            item1.AddItem(new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("Performance"))
-                    .AddItem(new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("1")))
-                    .AddItem(new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("2")))
-                    .AddItem(new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("3"))));
-
-            item1.AddItem(new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("View"))
-                    .AddItem(new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("1")))
-                    .AddItem(new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("2"))));
-            item1.AddItem(new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("4")));
-
-            item1.IsSelected = true;
-            BranchsSource.Add(new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("1")));
-            BranchsSource.Add(item1);
-            BranchsSource.Add(perForItem);
-            BranchsSource.Add(new BaseCyberTreeItemViewModel(new BaseCyberTreeItemVO("4")));
-
+            var res = HoneyboardReleaseService.Current
+                .ServiceManager?
+                .App
+                .ShowWaringBox("You are about to checkout \"" + newBranchPath + "\"");
+            return res == cyber_base.definition.CyberContactMessage.Yes;
         }
 
+        public void ForceSetSelectedBranch(BranchItemViewModel parents)
+        {
+            _selectedItem = parents;
+            var branchPath = parents.ToString();
+            if (!string.IsNullOrEmpty(branchPath))
+            {
+                SelectedBranch = branchPath;
+            }
+            Invalidate("SelectedItem");
+        }
     }
 }

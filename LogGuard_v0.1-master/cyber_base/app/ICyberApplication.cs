@@ -26,9 +26,13 @@ namespace cyber_base.app
             , string taskName = "");
 
         CyberContactMessage OpenMultiTaskBox(string title
-            , MultiAsyncTask task);
+            , MultiAsyncTask task
+            , bool isCancelable = true);
 
         CyberContactMessage ShowWaringBox(string warning
+            , bool isDialog = true);
+
+        CyberContactMessage ShowYesNoQuestionBox(string question
             , bool isDialog = true);
 
         string OpenFileChooserDialogWindow(string title = "Choose a log file"

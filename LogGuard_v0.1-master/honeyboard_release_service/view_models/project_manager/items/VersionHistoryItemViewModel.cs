@@ -25,7 +25,7 @@ namespace honeyboard_release_service.view_models.project_manager.items
         private string _hour = "10:20:30";
         private string _dayOfWeek = "MON";
         private string _dayOfMonth = "23";
-        private VersionVO _versionVO;
+        private CommitVO _versionVO;
         private bool _isVersionTitleLoaded = false;
         private bool _isLoadingVersionTitle;
         private BaseAsyncTask? _loadingTaskCache;
@@ -145,7 +145,7 @@ namespace honeyboard_release_service.view_models.project_manager.items
             }
         }
 
-        public VersionHistoryItemViewModel(VersionVO vo)
+        public VersionHistoryItemViewModel(CommitVO vo)
         {
             _dayOfMonth = vo.ReleaseDateTime.ToString("dd");
             _dayOfWeek = vo.ReleaseDateTime.ToString("ddd").ToUpper();
@@ -181,9 +181,11 @@ namespace honeyboard_release_service.view_models.project_manager.items
         public BaseAsyncTask? GetUpdateVersionTitleTask()
         {
             if (_versionVO != null
-                && _versionVO?.Properties?.Version == ""
+                && _versionVO.Properties == null
                 && !_isVersionTitleLoaded)
             {
+                _versionVO.Properties = new VersionPropertiesVO();
+
                 BaseAsyncTask getVersionPropFromCommit = new GetReleasedCommitVersionPropertiesTask(
                 new string[] { ViewModelManager.Current.PMViewModel.ProjectPath
                     ,ViewModelManager.Current.PMViewModel.VersionPropertiesPath

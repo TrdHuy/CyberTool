@@ -16,11 +16,11 @@ namespace honeyboard_release_service.view_models.project_manager.items
 
         public bool IsRemoteBranch { get; set; }
 
-        public BranchItemViewModel(string path, string title, bool isNode = false, bool isRemote = false)
-            : base(new BranchVO(path, title, isNode, isRemote))
+        public BranchItemViewModel(BranchVO bVO)
+            : base(bVO)
         {
             _newVO = (BranchVO)_vo;
-            IsSelectable = isNode;
+            IsSelectable = _newVO.IsNode;
         }
 
         public override string ToString()

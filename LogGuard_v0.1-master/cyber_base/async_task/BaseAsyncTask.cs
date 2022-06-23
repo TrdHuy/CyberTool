@@ -206,7 +206,7 @@ namespace cyber_base.async_task
                 // when the task was canceled due to function exception
                 // callback will not be triggered
                 _result.Messsage = ex.ToString();
-                _result.MesResult = MessageAsyncTaskResult.Aborted;
+                _result.MesResult = MessageAsyncTaskResult.Faulted;
                 IsCompleted = false;
                 IsFaulted = true;
                 IsCanceled = false;

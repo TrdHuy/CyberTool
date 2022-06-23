@@ -16,7 +16,7 @@ namespace cyber_base.implement.command
         public event NotifyIsCompletedChangedHandler? CompletedChanged;
         public event NotifyIsCanceledChangedHandler? CanceledChanged;
 
-        private Func<object?, ICommandExecuter> _action;
+        private Func<object?, ICommandExecuter?> _action;
         private ICommandExecuter? _commandExecuterCache;
 
         protected ActionExecuteHelper ActionExecuteHelper { get; set; }
@@ -49,7 +49,7 @@ namespace cyber_base.implement.command
             }
         }
 
-        public CommandExecuterModel(Func<object?, ICommandExecuter> hpssAction)
+        public CommandExecuterModel(Func<object?, ICommandExecuter?> hpssAction)
         {
             _action = hpssAction;
             ActionExecuteHelper = ActionExecuteHelper.Current;

@@ -85,14 +85,20 @@ namespace cyber_tool
         }
 
         public CyberContactMessage OpenMultiTaskBox(string title
-            , MultiAsyncTask tasks)
+            , MultiAsyncTask tasks
+            , bool isCancelable = true)
         {
-            return _WindowDirector.OpenMultiTaskBox(title, tasks);
+            return _WindowDirector.OpenMultiTaskBox(title, tasks, isCancelable);
         }
 
         public CyberContactMessage ShowWaringBox(string warning, bool isDialog = true)
         {
             return _WindowDirector.ShowWarningBox(warning, isDialog);
+        }
+
+        public CyberContactMessage ShowYesNoQuestionBox(string question, bool isDialog = true)
+        {
+            return _WindowDirector.ShowYesNoQuestionBox(question, isDialog);
         }
 
         public void ShowPopupCControl(ContentControl cc

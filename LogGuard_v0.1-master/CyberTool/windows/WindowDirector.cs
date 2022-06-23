@@ -68,6 +68,30 @@ namespace cyber_tool.windows
             return mesBox.ShowDialog();
         }
 
+        public CyberContactMessage ShowYesNoQuestionBox(string question, bool isDialog)
+        {
+            CyberIMesWindow mesBox = new CyberIMesWindow(
+                title: "Question",
+                pathIcon: Application.Current.Resources["QuestionPathGeomerty"] as string ?? "",
+                content: question,
+                yesBtnContent: "Yes",
+                noBtnContent: "No",
+                continueBtnContent: "",
+                cancelBtnContent: "",
+                owner: IFaceWindow
+                );
+            CyberIMesBoxResult res = CyberIMesBoxResult.Continue;
+            if (isDialog)
+            {
+                res = mesBox.ShowDialog();
+            }
+            else
+            {
+                mesBox.Show();
+            }
+            return ConvertToContactMessage(res);
+        }
+
         public CyberContactMessage ShowWarningBox(string warning, bool isDialog)
         {
             CyberIMesWindow mesBox = new CyberIMesWindow(
@@ -118,11 +142,13 @@ namespace cyber_tool.windows
         }
 
         public CyberContactMessage OpenMultiTaskBox(string title
-            , MultiAsyncTask tasks)
+            , MultiAsyncTask tasks
+            , bool isCancelable = true)
         {
             var newWaitingBox = new CyberIStandWindow(title
                 , tasks
-                , IFaceWindow);
+                , IFaceWindow
+                , isCancelable);
 
             var message = newWaitingBox.Show();
 

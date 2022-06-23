@@ -21,21 +21,43 @@ namespace cyber_tool.app_resources.controls.cyber_window
                typeof(CyberWindow),
                new PropertyMetadata(Brushes.Transparent));
 
-        public static Brush GetChromeBackground(UIElement obj)
+        public Brush ChromeBackground
         {
-            return (Brush)obj.GetValue(ChromeBackgroundProperty);
+            get { return (Brush)GetValue(ChromeBackgroundProperty); }
+            set { SetValue(ChromeBackgroundProperty, value); }
+        }
+        #endregion
+
+        #region IsWindowButtonEnabled
+        public static readonly DependencyProperty IsWindowButtonEnabledProperty = DependencyProperty.RegisterAttached(
+               "IsWindowButtonEnabled",
+               typeof(bool),
+               typeof(CyberWindow),
+               new PropertyMetadata(true, new PropertyChangedCallback(OnWindowButtonEnabledChangedCallback)));
+
+        private static void OnWindowButtonEnabledChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var ctrl = d as CyberWindow;
+            var enabled = (bool)e.NewValue;
+            if (ctrl != null && ctrl._windowControlPanel != null)
+            {
+                ctrl._windowControlPanel.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
 
-        public static void SetChromeBackground(UIElement obj, Brush value)
+        public bool IsWindowButtonEnabled
         {
-            obj.SetValue(ChromeBackgroundProperty, value);
+            get { return (bool)GetValue(IsWindowButtonEnabledProperty); }
+            set { SetValue(IsWindowButtonEnabledProperty, value); }
         }
+
         #endregion
 
         private const string MinimizeButtonName = "MinimizeButton";
         private const string SmallmizeButtonName = "SmallmizeButton";
         private const string CloseButtonName = "CloseButton";
         private const string MaximizeButtonName = "MaximizeButton";
+        private const string WindowControlPanelName = "WindowControlPanel";
 
         public CyberWindow()
         {
@@ -49,10 +71,11 @@ namespace cyber_tool.app_resources.controls.cyber_window
 
 
 
-        private Button _minimizeBtn;
-        private Button _maximizeBtn;
-        private Button _closeBtn;
-        private Button _smallmizeBtn;
+        private Button? _minimizeBtn;
+        private Button? _maximizeBtn;
+        private Button? _closeBtn;
+        private Button? _smallmizeBtn;
+        private StackPanel? _windowControlPanel;
 
         public override void OnApplyTemplate()
         {
@@ -61,7 +84,7 @@ namespace cyber_tool.app_resources.controls.cyber_window
             _maximizeBtn = GetTemplateChild(MaximizeButtonName) as Button;
             _closeBtn = GetTemplateChild(CloseButtonName) as Button;
             _smallmizeBtn = GetTemplateChild(SmallmizeButtonName) as Button;
-
+            _windowControlPanel = GetTemplateChild(WindowControlPanelName) as StackPanel;
 
             _maximizeBtn.Click += (s, e) =>
             {
@@ -82,6 +105,8 @@ namespace cyber_tool.app_resources.controls.cyber_window
             {
                 this.WindowState = WindowState.Minimized;
             };
+
+            _windowControlPanel.Visibility = IsWindowButtonEnabled ? Visibility.Visible : Visibility.Collapsed;
 
         }
 

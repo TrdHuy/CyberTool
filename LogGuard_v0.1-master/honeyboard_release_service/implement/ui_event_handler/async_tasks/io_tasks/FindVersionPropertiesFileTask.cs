@@ -28,7 +28,6 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.io_t
             , AsyncTaskResult result
             , CancellationTokenSource token)
         {
-            var id = GetCurrentThreadInformation();
             var folderPath = param.ToString();
             if (Directory.Exists(folderPath))
             {

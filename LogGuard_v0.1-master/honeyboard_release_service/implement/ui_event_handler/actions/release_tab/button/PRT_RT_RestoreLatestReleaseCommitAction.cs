@@ -16,7 +16,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
 {
     internal class PRT_RT_RestoreLatestReleaseCommitAction : RT_ViewModelCommandExecuter
     {
-        public PRT_RT_RestoreLatestReleaseCommitAction(string actionID, string builderID, BaseViewModel viewModel, ILogger logger)
+        public PRT_RT_RestoreLatestReleaseCommitAction(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger)
             : base(actionID, builderID, viewModel, logger)
         {
         }

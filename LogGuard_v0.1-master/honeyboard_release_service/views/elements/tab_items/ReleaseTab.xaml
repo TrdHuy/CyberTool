@@ -209,6 +209,7 @@
 			<Button x:Name="CommitButton"
 					Grid.Column="1"
 					ToolTip="Commit change list"
+					Command="{Binding ButtonCommandVM.CreateReleaseCLButtonCommand}"
 					Background="{StaticResource ButtonBackground_Level1}"
 					HorizontalAlignment="Left"
 					Template="{DynamicResource CircleBtnTmpl}">

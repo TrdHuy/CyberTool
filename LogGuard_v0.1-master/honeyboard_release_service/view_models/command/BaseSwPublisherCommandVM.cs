@@ -26,16 +26,16 @@ namespace honeyboard_release_service.view_models.command
             _logger = new Logger(commandVMTag);
         }
 
-        protected override ICommandExecuter OnKey(string keyTag
-            , object paramaters
+        protected override ICommandExecuter? OnKey(string keyTag
+            , object? paramaters
             , bool isViewModelOnKey = true
             , string builderTag = PublisherDefinition.PUBLISHER_PLUGIN_TAG)
         {
             return base.OnKey(keyTag, paramaters, isViewModelOnKey, builderTag);
         }
 
-        protected override ICommandExecuter OnKey(string keyTag
-            , object paramaters
+        protected override ICommandExecuter? OnKey(string keyTag
+            , object? paramaters
             , BuilderLocker locker
             , bool isViewModelOnKey = true
             , string builderTag = PublisherDefinition.PUBLISHER_PLUGIN_TAG)

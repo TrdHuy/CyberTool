@@ -21,16 +21,15 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
     {
 
         private bool _isOnBranchSet = false;
+        private bool _isLatestVersionSet = false;
         private BaseAsyncTask? _getVersionHistoryTaskCache;
         public PRT_PM_ProjectPathFileSelectedAction(string actionID, string builderID, BaseViewModel viewModel, ILogger logger)
             : base(actionID, builderID, viewModel, logger)
         {
         }
 
-        protected override void ExecuteCommand()
+        protected async override void ExecuteCommand()
         {
-            base.ExecuteCommand();
-
             var branchCache = new CyberTreeViewObservableCollection<ICyberTreeViewItem>();
 
             BaseAsyncTask findVersionPathTask = new FindVersionPropertiesFileTask(PMViewModel.ProjectPath
@@ -39,7 +38,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
                     if (result.MesResult == MessageAsyncTaskResult.Done
                     || result.MesResult == MessageAsyncTaskResult.Finished)
                     {
-                        PMViewModel.VersionPropertiesPath = result.Result?.ToString();
+                        PMViewModel.VersionPropertiesPath = result.Result?.ToString() ?? "";
                     }
                 });
             BaseAsyncTask listAllBranch = new GetAllProjectBranchsTask(PMViewModel.ProjectPath
@@ -56,9 +55,8 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
             tasks.Add(findVersionPathTask);
             tasks.Add(listAllBranch);
 
-            MultiAsyncTask multiTask = new MultiAsyncTask(tasks
-                , new CancellationTokenSource()
-                , Callback
+            MultiAsyncTask multiTask = new MultiAsyncTask(mainFunc: tasks
+                , cancellationTokenSource: new CancellationTokenSource()
                 , name: "Importing project"
                 , delayTime: 0
                 , reportDelay: 100);
@@ -80,49 +78,35 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
                     , versionPropertiesFoundCallback: (prop, task) =>
                     {
                         dynamic data = prop;
-                        VersionPropertiesVO vpVO = new VersionPropertiesVO();
-
-                        try
+                        CommitVO vVO = new CommitVO()
                         {
-                            vpVO.Version = data.Version;
-                            vpVO.Major = data.Major;
-                            vpVO.Minor = data.Minor;
-                            vpVO.Patch = data.Patch;
-                            vpVO.Revision = data.Revision;
-                        }
-                        catch { }
-
-                        VersionVO vVO = new VersionVO()
-                        {
-                            Name = vpVO.Version,
+                            Name = data.Title,
                             ReleaseDateTime = DateTime.ParseExact(data.DateTime, "HH:mm:ss yyyy-MM-dd",
                                        System.Globalization.CultureInfo.InvariantCulture),
                             AuthorEmail = data.Email,
                             CommitId = data.HashId,
-                            Properties = vpVO,
                         };
-                        if (vVO.Name == "")
+                        if (!_isLatestVersionSet)
                         {
-                            vVO.Name = data.Title;
+                            PMViewModel.LatestCommitVO = vVO;
+                            _isLatestVersionSet = true;
                         }
+                        PMViewModel.CurrentProjectVO?.AddCurrentBranchVersionVO(vVO);
                         PMViewModel.VersionHistoryItemContexts.Add(new VersionHistoryItemViewModel(vVO));
                     }
-                    , callback: (s) =>
+                    , taskFinishedCallback: (s) =>
                     {
-                        PMViewModel.IsLoadingProjectVersionHistory = false; 
+                        PMViewModel.IsLoadingProjectVersionHistory = false;
                     });
                 _getVersionHistoryTaskCache = getVersionHistory;
                 PMViewModel.VersionHistoryItemContexts.Clear();
                 PMViewModel.VersionHistoryListTipVisibility = Visibility.Collapsed;
                 PMViewModel.IsLoadingProjectVersionHistory = true;
-                getVersionHistory.Execute();
+                await getVersionHistory.Execute();
             }
-
-        }
-
-        private async Task<AsyncTaskResult> Callback(List<AsyncTaskResult> results, AsyncTaskResult result)
-        {
-            return result;
+            else if (message == CyberContactMessage.Cancel)
+            {
+            }
         }
 
         private void AddPath(CyberTreeViewObservableCollection<ICyberTreeViewItem> source,
@@ -139,19 +123,19 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
 
             if (string.IsNullOrEmpty(path)) return;
 
-            var splits = path.Split("/", System.StringSplitOptions.TrimEntries);
-            var rootFolder = "";
+            var splits = path.Split("/", StringSplitOptions.TrimEntries);
+            string rootFolder = "";
             int startFolderIndex = 1;
             int lenght = splits.Length;
             var isRemote = false;
             BranchItemViewModel? parents;
 
-            if (splits[0].Equals("remotes", System.StringComparison.CurrentCultureIgnoreCase))
+            if (splits[0].Equals("remotes", StringComparison.CurrentCultureIgnoreCase))
             {
                 rootFolder = "Remote";
                 isRemote = true;
             }
-            else if (splits[0].Equals("origin", System.StringComparison.CurrentCultureIgnoreCase))
+            else if (splits[0].Equals("origin", StringComparison.CurrentCultureIgnoreCase))
             {
                 rootFolder = "Remote";
                 isRemote = true;
@@ -166,7 +150,8 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
 
             if (parents == null)
             {
-                parents = new BranchItemViewModel("", rootFolder);
+                var bVO = new BranchVO("", rootFolder);
+                parents = new BranchItemViewModel(bVO);
                 source.Add(parents);
             }
 
@@ -180,28 +165,27 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
                 else
                     branchPath += splits[i] + "/";
 
-
-                if (current == null && i < lenght - 1)
+                if (current == null)
                 {
-                    current = new BranchItemViewModel("", splits[i]);
-                    parents?.AddItem(current);
-                }
-                else if (current == null && i == lenght - 1)
-                {
-                    current = new BranchItemViewModel(branchPath
-                        , splits[i]
-                        , isNode: true
+                    var bVO = new BranchVO(path: i == lenght - 1 ? branchPath : ""
+                        , title: splits[i]
+                        , isNode: i == lenght - 1
                         , isRemote: isRemote);
+                    current = new BranchItemViewModel(bVO);
                     parents?.AddItem(current);
+                    PMViewModel.CurrentProjectVO?.AddProjectBranch(bVO);
                 }
                 parents = current as BranchItemViewModel;
             }
 
-            if (isShouldSelectItem && parents != null)
+            if (isShouldSelectItem)
             {
-                PMViewModel.SelectedItem = parents;
-                parents.IsSelected = true;
-                _isOnBranchSet = true;
+                if (parents != null)
+                {
+                    PMViewModel.ForceSetSelectedBranch(parents);
+                    parents.IsSelected = true;
+                    _isOnBranchSet = true;
+                }
             }
         }
 

@@ -23,7 +23,10 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
             public string LatestSubject = "";
         }
 
-        private static readonly Regex _releaseCLSubjectRegex = new Regex(@"huy.td1_hashid:(?<hashid>[a-z0-9]{10}) huy.td1_subject:\[(?<taskid>\S+)\](?<subject>.*) huy.td1_description:(?<description>.*)");
+        private static readonly Regex _releaseCLSubjectRegex
+            = new Regex(@"huy.td1_hashid:(?<hashid>[a-z0-9]{5,20}) " +
+                @"huy.td1_subject:\[(?<taskid>\S+)\](?<subject>.*) " +
+                @"huy.td1_description:(?<description>.*)");
 
         private string _folderPath;
         private string _versionFileName;
@@ -95,7 +98,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
                         process.OutputDataReceived -= OnDataReceived;
                         process.ErrorDataReceived -= OnDataReceived;
                         process.OutputDataReceived += OnDataReceived;
-                        //process.ErrorDataReceived += OnDataReceived;
+                        process.ErrorDataReceived += OnDataReceived;
                         process.BeginOutputReadLine();
                         process.BeginErrorReadLine();
                         process.WaitForExit();
