@@ -63,13 +63,13 @@ namespace cyber_tool.plugins
                     foreach (var t in types)
                     {
                         var instance = Activator.CreateInstance(t) as ICyberExtension;
-                        
-                        if(instance != null)
+
+                        if (instance != null)
                         {
                             Plugins.Add(instance);
+                            break;
                         }
 
-                        break;
                     }
                 }
 
