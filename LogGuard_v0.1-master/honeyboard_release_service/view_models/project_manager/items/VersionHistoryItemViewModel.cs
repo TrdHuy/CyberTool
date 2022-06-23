@@ -181,7 +181,7 @@ namespace honeyboard_release_service.view_models.project_manager.items
         public BaseAsyncTask? GetUpdateVersionTitleTask()
         {
             if (_versionVO != null
-                && _versionVO.Properties == null
+                && (_versionVO.Properties?.IsEmpty() ?? true)
                 && !_isVersionTitleLoaded)
             {
                 _versionVO.Properties = new VersionPropertiesVO();

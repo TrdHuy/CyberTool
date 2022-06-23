@@ -48,7 +48,7 @@ namespace honeyboard_release_service.models.VOs
             }
         }
 
-        public void AddCurrentBranchVersionVO(CommitVO vVO)
+        public void AddCommitVOToCurrentBranch(CommitVO vVO)
         {
             if (string.IsNullOrEmpty(OnBranch?.BranchPath)) return;
 

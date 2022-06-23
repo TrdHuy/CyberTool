@@ -106,9 +106,26 @@
 				<Path Data="{Binding Source={StaticResource RT_HistoryIconPathGeomerty}}"
 					  Fill="{StaticResource Foreground_Level1}"
 					  Height="15"
+					  Margin="0,0,5,0"
 					  Stretch="Uniform" />
 			</StackPanel>
 
+			<StackPanel Orientation="Horizontal"
+						Grid.Row="5"
+						Margin="5"
+						HorizontalAlignment="Right"
+						Grid.ColumnSpan="2">
+				<Button ToolTip="Fetch"
+						Height="15"
+						Width="15"
+						Command="{Binding ButtonCommandVM.FetchPrjectButtonCommand}"
+						Content="{StaticResource RT_FetchIconPathGeomerty}"
+						Foreground="{DynamicResource Foreground_Level3}"
+						Background="{DynamicResource ButtonBackground_Level1}"
+						HorizontalAlignment="Left"
+						Template="{DynamicResource IconBtnTmpl}" />
+			</StackPanel>
+			
 			<Grid Grid.Row="6"
 				  Grid.Column="1"
 				  Grid.ColumnSpan="2">

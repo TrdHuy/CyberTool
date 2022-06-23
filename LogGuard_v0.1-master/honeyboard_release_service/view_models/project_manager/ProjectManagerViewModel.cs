@@ -4,6 +4,7 @@ using cyber_base.implement.utils;
 using cyber_base.implement.view_models.cyber_treeview;
 using cyber_base.implement.views.cyber_treeview;
 using cyber_base.view_model;
+using honeyboard_release_service.implement.project_manager;
 using honeyboard_release_service.models.VOs;
 using honeyboard_release_service.utils;
 using honeyboard_release_service.view_models.command.project_manager;
@@ -23,15 +24,11 @@ namespace honeyboard_release_service.view_models.project_manager
     internal class ProjectManagerViewModel : BaseViewModel
     {
         private FirstLastObservableCollection<VersionHistoryItemViewModel> _versionHistoryItemContexts;
-        private object? _selectedItem;
+        private BranchItemViewModel? _selectedItem;
         private bool _isLoadingProjectVersionHistory = false;
         private Visibility _versionHistoryListTipVisibility = Visibility.Visible;
-        private ProjectVO? _currentProjectVO;
-        private CommitVO? _latestCommitVO;
         private CyberTreeViewObservableCollection<ICyberTreeViewItem> _branchsSource;
-
-        public ProjectVO? CurrentProjectVO { get => _currentProjectVO; }
-        public CommitVO? LatestCommitVO { get => _latestCommitVO; set => _latestCommitVO = value; }
+        private ReleasingProjectManager _RPM_Instance = ReleasingProjectManager.Current;
 
         [Bindable(true)]
         public Visibility VersionHistoryListTipVisibility
@@ -76,16 +73,17 @@ namespace honeyboard_release_service.view_models.project_manager
         {
             get
             {
-                return _currentProjectVO?.OnBranch?.BranchPath ?? "";
+                return _RPM_Instance.CurrentProjectVO?.OnBranch?.BranchPath ?? "";
             }
             set
             {
-                var isShouldExecuteBranchChanged = !string.IsNullOrEmpty(_currentProjectVO?.OnBranch?.BranchPath);
-                if (_currentProjectVO?.OnBranch?.BranchPath != value)
+                var isShouldExecuteBranchChanged = !string.IsNullOrEmpty(
+                    _RPM_Instance.CurrentProjectVO?.OnBranch?.BranchPath);
+                if (_RPM_Instance.CurrentProjectVO?.OnBranch?.BranchPath != value)
                 {
-                    if (_currentProjectVO != null)
+                    if (_RPM_Instance.CurrentProjectVO != null)
                     {
-                        _currentProjectVO.SetOnBranch(value);
+                        _RPM_Instance.CurrentProjectVO.SetOnBranch(value);
                         InvalidateOwn();
 
                         if (isShouldExecuteBranchChanged)
@@ -96,7 +94,7 @@ namespace honeyboard_release_service.view_models.project_manager
         }
 
         [Bindable(true)]
-        public object? SelectedItem
+        public BranchItemViewModel? SelectedItem
         {
             get
             {
@@ -122,16 +120,17 @@ namespace honeyboard_release_service.view_models.project_manager
         {
             get
             {
-                return _currentProjectVO?.VersionFilePath ?? "";
+                return _RPM_Instance.CurrentProjectVO?.VersionFilePath ?? "";
             }
             set
             {
-                if (_currentProjectVO != null)
+                if (_RPM_Instance.CurrentProjectVO != null)
                 {
-                    _currentProjectVO.VersionFilePath = value;
+                    _RPM_Instance.CurrentProjectVO.VersionFilePath = value;
                     if (value.IndexOf(ProjectPath) != -1)
                     {
-                        _currentProjectVO.VersionFilePath = value.Substring(ProjectPath.Length + 1);
+                        _RPM_Instance.CurrentProjectVO.VersionFilePath = 
+                            value.Substring(ProjectPath.Length + 1);
                     }
 
                     InvalidateOwn();
@@ -144,13 +143,13 @@ namespace honeyboard_release_service.view_models.project_manager
         {
             get
             {
-                return _currentProjectVO?.Path ?? "";
+                return _RPM_Instance.CurrentProjectVO?.Path ?? "";
             }
             set
             {
                 if (!string.IsNullOrEmpty(value))
                 {
-                    _currentProjectVO = new ProjectVO(value);
+                    _RPM_Instance.CreateNewProjectVO(value);
                     InvalidateOwn();
                 }
             }
@@ -158,6 +157,8 @@ namespace honeyboard_release_service.view_models.project_manager
 
         [Bindable(true)]
         public PM_GestureCommandVM GestureCommandVM { get; set; }
+        [Bindable(true)]
+        public PM_ButtonCommandVM ButtonCommandVM { get; set; }
 
         [Bindable(true)]
         public FirstLastObservableCollection<VersionHistoryItemViewModel> VersionHistoryItemContexts
@@ -196,6 +197,7 @@ namespace honeyboard_release_service.view_models.project_manager
             _versionHistoryItemContexts = new FirstLastObservableCollection<VersionHistoryItemViewModel>();
             _branchsSource = new CyberTreeViewObservableCollection<ICyberTreeViewItem>();
             GestureCommandVM = new PM_GestureCommandVM(this);
+            ButtonCommandVM = new PM_ButtonCommandVM(this);
             _versionHistoryItemContexts.CollectionChanged += (s, e) =>
             {
                 Invalidate("IsVirtualizingVersionHistoryList");

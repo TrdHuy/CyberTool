@@ -4,6 +4,7 @@ using cyber_base.ui_event_handler.action.executer;
 using cyber_base.utils;
 using cyber_base.view_model;
 using honeyboard_release_service.definitions;
+using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.button;
 using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.gesture;
 using honeyboard_release_service.implement.ui_event_handler.actions.release_tab.button;
 using System;
@@ -52,6 +53,9 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions
                     break;
                 case PublisherKeyFeatureTag.KEY_TAG_PRT_CREATE_CL_AND_COMMIT_FEATURE:
                     viewModelCommandExecuter = new PRT_RT_CreateReleaseCommitAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_PM_FETCH_PROJECT_FEATURE:
+                    viewModelCommandExecuter = new PRT_PM_FetchProjectButtonAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
                     break;
                 default:
                     break;

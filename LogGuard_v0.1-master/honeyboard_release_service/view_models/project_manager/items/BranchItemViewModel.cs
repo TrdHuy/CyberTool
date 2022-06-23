@@ -12,20 +12,20 @@ namespace honeyboard_release_service.view_models.project_manager.items
 {
     internal class BranchItemViewModel : BaseCyberTreeItemViewModel
     {
-        private BranchVO _newVO;
+        public BranchVO Branch { get; private set; }
 
         public bool IsRemoteBranch { get; set; }
 
         public BranchItemViewModel(BranchVO bVO)
             : base(bVO)
         {
-            _newVO = (BranchVO)_vo;
-            IsSelectable = _newVO.IsNode;
+            Branch = (BranchVO)_vo;
+            IsSelectable = Branch.IsNode;
         }
 
         public override string ToString()
         {
-            return _newVO.BranchPath;
+            return Branch.BranchPath;
         }
     }
 }

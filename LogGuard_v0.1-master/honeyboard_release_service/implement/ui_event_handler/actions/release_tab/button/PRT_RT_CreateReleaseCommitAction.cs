@@ -2,6 +2,7 @@
 using cyber_base.implement.async_task;
 using cyber_base.utils;
 using cyber_base.view_model;
+using honeyboard_release_service.implement.project_manager;
 using honeyboard_release_service.implement.ui_event_handler.async_tasks.git_tasks;
 using honeyboard_release_service.implement.ui_event_handler.async_tasks.io_tasks;
 using honeyboard_release_service.implement.view_model;
@@ -29,7 +30,9 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
 
         protected override bool CanExecute(object? dataTransfer)
         {
-            if (PMViewModel.CurrentProjectVO == null)
+            if (ReleasingProjectManager
+                    .Current
+                    .CurrentProjectVO == null)
             {
                 HoneyboardReleaseService.Current
                     .ServiceManager?
@@ -65,7 +68,9 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
                 return false;
             }
 
-            if (PMViewModel.CurrentProjectVO.OnBranch == null)
+            if (ReleasingProjectManager
+                    .Current
+                    .CurrentProjectVO.OnBranch == null)
             {
                 HoneyboardReleaseService.Current
                    .ServiceManager?
@@ -74,8 +79,19 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
                 return false;
             }
 
-            if (!PMViewModel.CurrentProjectVO.OnBranch.IsRemote
-                && !PMViewModel.CurrentProjectVO.Branchs.ContainsKey("origin/" + PMViewModel.CurrentProjectVO.OnBranch.BranchPath))
+            if (!ReleasingProjectManager
+                    .Current
+                    .CurrentProjectVO.OnBranch.IsRemote
+                && !ReleasingProjectManager
+                    .Current
+                    .CurrentProjectVO
+                    .Branchs
+                    .ContainsKey("origin/"
+                        + ReleasingProjectManager
+                            .Current
+                            .CurrentProjectVO
+                            .OnBranch
+                            .BranchPath))
             {
                 HoneyboardReleaseService.Current
                    .ServiceManager?
@@ -84,9 +100,14 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
                 return false;
             }
 
-            if (PMViewModel.LatestCommitVO?.Properties == null
-                || (PMViewModel.LatestCommitVO?.Properties != null
-                    && (PMViewModel.LatestCommitVO?.Properties.IsEmpty() ?? false)))
+            if (ReleasingProjectManager
+                    .Current
+                    .LatestCommitVO?.Properties == null
+                || (ReleasingProjectManager.Current.LatestCommitVO?.Properties != null
+                    && (ReleasingProjectManager
+                        .Current
+                        .LatestCommitVO?
+                        .Properties.IsEmpty() ?? false)))
             {
                 HoneyboardReleaseService.Current
                    .ServiceManager?
@@ -95,20 +116,31 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
                 return false;
             }
 
-            if (PMViewModel.LatestCommitVO?.Properties != null
-                && RTViewModel.ModifiedVersionPropVO <= PMViewModel.LatestCommitVO.Properties)
+            if (ReleasingProjectManager
+                    .Current
+                    .LatestCommitVO?.Properties != null
+                && RTViewModel.ModifiedVersionPropVO
+                    <= ReleasingProjectManager
+                        .Current.LatestCommitVO.Properties)
             {
                 HoneyboardReleaseService.Current
                    .ServiceManager?
                    .App
                    .ShowWaringBox("New version must be greater than "
-                   + PMViewModel.LatestCommitVO.Properties.ToString());
+                   + ReleasingProjectManager
+                        .Current.LatestCommitVO.Properties.ToString());
                 return false;
             }
 
-            _branchPath = PMViewModel.CurrentProjectVO.OnBranch.IsRemote
-                ? PMViewModel.CurrentProjectVO.OnBranch.BranchPath
-                : "origin/" + PMViewModel.CurrentProjectVO.OnBranch.BranchPath;
+            _branchPath = ReleasingProjectManager
+                            .Current
+                            .CurrentProjectVO
+                            .OnBranch
+                            .IsRemote
+                ? ReleasingProjectManager
+                            .Current.CurrentProjectVO.OnBranch.BranchPath
+                : "origin/" + ReleasingProjectManager
+                            .Current.CurrentProjectVO.OnBranch.BranchPath;
             _branchPathForPushing = "HEAD:refs/for/" + _branchPath.Substring(7);
             return base.CanExecute(dataTransfer);
         }
@@ -124,7 +156,8 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
                 {
                     // Append log for user here
                 }
-                , name: "Fetching");
+                , name: "Fetching"
+                , estimatedTime: 4000);
 
             BaseAsyncTask checkoutTask = new CommonGitTask(folderPath: PMViewModel.ProjectPath
                 , gitCmd: "git checkout " + _branchPath

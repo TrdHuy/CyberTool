@@ -50,7 +50,7 @@ namespace honeyboard_release_service.implement.view_model
             }
         }
 
-        public ViewModelManager()
+        private ViewModelManager()
         {
             DataContextCache = new ObservableDictionary<Type, object>();
             DataContextCache.CollectionChanged -= OnContextCollectionsChanged;

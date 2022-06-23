@@ -1,5 +1,6 @@
 ﻿using honeyboard_release_service.@base.module;
 using honeyboard_release_service.implement.async_task_execute_helper;
+using honeyboard_release_service.implement.project_manager;
 using honeyboard_release_service.implement.ui_event_handler;
 using honeyboard_release_service.implement.view_helper;
 using honeyboard_release_service.implement.view_manager.notebook_header;
@@ -26,6 +27,7 @@ namespace honeyboard_release_service.implement.module
         private static IPublisherModule? _SPCEF_Instance;
         private static IPublisherModule? _PKAL_Instance;
         private static IPublisherModule? _ATM_Instance;
+        private static IPublisherModule? _RPM_Instance;
         
         static PublisherModuleManager()
         {
@@ -42,6 +44,8 @@ namespace honeyboard_release_service.implement.module
             _Modules.Add(CNHVM_Instance);
             _Modules.Add(SPCEF_Instance);
             _Modules.Add(PKAL_Instance);
+            _Modules.Add(ATM_Instance);
+            _Modules.Add(RPM_Instance);
 
             foreach (var module in _Modules)
             {
@@ -66,9 +70,24 @@ namespace honeyboard_release_service.implement.module
             _CNIVM_Instance = null;
             _SPCEF_Instance = null;
             _PKAL_Instance = null;
+            _ATM_Instance = null;
+            _RPM_Instance = null;
         }
 
-        public static AsyncTaskManager? ATM_Instance
+        public static ReleasingProjectManager RPM_Instance
+        {
+            get
+            {
+                if (_RPM_Instance == null)
+                {
+                    _RPM_Instance = Activator.CreateInstance(typeof(ReleasingProjectManager), true) as ReleasingProjectManager; ;
+                }
+                ArgumentNullException.ThrowIfNull(_RPM_Instance);
+                return (ReleasingProjectManager)_RPM_Instance;
+            }
+        }
+
+        public static AsyncTaskManager ATM_Instance
         {
             get
             {
@@ -76,7 +95,8 @@ namespace honeyboard_release_service.implement.module
                 {
                     _ATM_Instance = Activator.CreateInstance(typeof(AsyncTaskManager), true) as AsyncTaskManager; ;
                 }
-                return _ATM_Instance as AsyncTaskManager;
+                ArgumentNullException.ThrowIfNull(_ATM_Instance);
+                return (AsyncTaskManager)_ATM_Instance;
             }
         }
 
@@ -86,8 +106,9 @@ namespace honeyboard_release_service.implement.module
             {
                 if (_VMM_Instance == null)
                 {
-                    _VMM_Instance = new ViewModelManager();
+                    _VMM_Instance = Activator.CreateInstance(typeof(ViewModelManager), true) as ViewModelManager; ;
                 }
+                ArgumentNullException.ThrowIfNull(_VMM_Instance);
                 return (ViewModelManager)_VMM_Instance;
             }
         }

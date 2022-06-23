@@ -2,6 +2,7 @@
 using cyber_base.implement.async_task;
 using cyber_base.utils;
 using cyber_base.view_model;
+using honeyboard_release_service.implement.project_manager;
 using honeyboard_release_service.implement.ui_event_handler.async_tasks.git_tasks;
 using honeyboard_release_service.models.VOs;
 using honeyboard_release_service.view_models.project_manager.items;
@@ -27,20 +28,24 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
 
         protected override bool CanExecute(object? dataTransfer)
         {
-            if (PMViewModel.CurrentProjectVO == null)
+            if (ReleasingProjectManager
+                .Current
+                .CurrentProjectVO == null)
             {
                 return false;
             }
             return base.CanExecute(dataTransfer);
         }
 
-
-        protected override async void ExecuteCommand()
+        protected override void ExecuteCommand()
         {
             BaseAsyncTask checkoutTask = new CommonGitTask(folderPath: PMViewModel.ProjectPath
-               , gitCmd: "git checkout " + PMViewModel.SelectedBranch + " --force"
+               , gitCmd: "git checkout " 
+                    + ReleasingProjectManager.Current.SelectedBranchPath 
+                    + " --force"
                , null
-               , name: "Checking out branch: " + PMViewModel.SelectedBranch
+               , name: "Checking out branch: " 
+                    + ReleasingProjectManager.Current.SelectedBranchPath
                , estimatedTime: 2000);
 
             List<BaseAsyncTask> tasks = new List<BaseAsyncTask>();
@@ -55,44 +60,9 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
 
             HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox("Checking out", multiTask, isCancelable: false);
 
-            if (_getVersionHistoryTaskCache != null
-                && !_getVersionHistoryTaskCache.IsCompleted
-                && !_getVersionHistoryTaskCache.IsCanceled
-                && !_getVersionHistoryTaskCache.IsFaulted)
-            {
-                _getVersionHistoryTaskCache.Cancel();
-            }
-            BaseAsyncTask getVersionHistory = new GetVersionHistoryTask(
-                new string[] { PMViewModel.ProjectPath
-                    , PMViewModel.VersionPropertiesPath }
-                , versionPropertiesFoundCallback: (prop, task) =>
-                {
-                    dynamic data = prop;
-                    CommitVO vVO = new CommitVO()
-                    {
-                        Name = data.Title,
-                        ReleaseDateTime = DateTime.ParseExact(data.DateTime, "HH:mm:ss yyyy-MM-dd",
-                                   System.Globalization.CultureInfo.InvariantCulture),
-                        AuthorEmail = data.Email,
-                        CommitId = data.HashId,
-                    };
-                    if (!_isLatestVersionSet)
-                    {
-                        PMViewModel.LatestCommitVO = vVO;
-                        _isLatestVersionSet = true;
-                    }
-                    PMViewModel.CurrentProjectVO?.AddCurrentBranchVersionVO(vVO);
-                    PMViewModel.VersionHistoryItemContexts.Add(new VersionHistoryItemViewModel(vVO));
-                }
-                , taskFinishedCallback: (s) =>
-                {
-                    PMViewModel.IsLoadingProjectVersionHistory = false;
-                });
-            _getVersionHistoryTaskCache = getVersionHistory;
-            PMViewModel.VersionHistoryItemContexts.Clear();
-            PMViewModel.VersionHistoryListTipVisibility = Visibility.Collapsed;
-            PMViewModel.IsLoadingProjectVersionHistory = true;
-            await getVersionHistory.Execute();
+            ReleasingProjectManager
+                    .Current
+                    .UpdateVersionHistoryTimeline();
         }
 
     }

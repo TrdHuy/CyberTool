@@ -5,6 +5,7 @@ using cyber_base.implement.utils;
 using cyber_base.implement.views.cyber_treeview;
 using cyber_base.utils;
 using cyber_base.view_model;
+using honeyboard_release_service.implement.project_manager;
 using honeyboard_release_service.implement.ui_event_handler.async_tasks.git_tasks;
 using honeyboard_release_service.implement.ui_event_handler.async_tasks.io_tasks;
 using honeyboard_release_service.models.VOs;
@@ -28,7 +29,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
         {
         }
 
-        protected async override void ExecuteCommand()
+        protected override void ExecuteCommand()
         {
             var branchCache = new CyberTreeViewObservableCollection<ICyberTreeViewItem>();
 
@@ -65,44 +66,9 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
             if (message != CyberContactMessage.Cancel
                 && PMViewModel.VersionPropertiesPath != "")
             {
-                if (_getVersionHistoryTaskCache != null
-                    && !_getVersionHistoryTaskCache.IsCompleted
-                    && !_getVersionHistoryTaskCache.IsCanceled
-                    && !_getVersionHistoryTaskCache.IsFaulted)
-                {
-                    _getVersionHistoryTaskCache.Cancel();
-                }
-                BaseAsyncTask getVersionHistory = new GetVersionHistoryTask(
-                    new string[] { PMViewModel.ProjectPath
-                    , PMViewModel.VersionPropertiesPath }
-                    , versionPropertiesFoundCallback: (prop, task) =>
-                    {
-                        dynamic data = prop;
-                        CommitVO vVO = new CommitVO()
-                        {
-                            Name = data.Title,
-                            ReleaseDateTime = DateTime.ParseExact(data.DateTime, "HH:mm:ss yyyy-MM-dd",
-                                       System.Globalization.CultureInfo.InvariantCulture),
-                            AuthorEmail = data.Email,
-                            CommitId = data.HashId,
-                        };
-                        if (!_isLatestVersionSet)
-                        {
-                            PMViewModel.LatestCommitVO = vVO;
-                            _isLatestVersionSet = true;
-                        }
-                        PMViewModel.CurrentProjectVO?.AddCurrentBranchVersionVO(vVO);
-                        PMViewModel.VersionHistoryItemContexts.Add(new VersionHistoryItemViewModel(vVO));
-                    }
-                    , taskFinishedCallback: (s) =>
-                    {
-                        PMViewModel.IsLoadingProjectVersionHistory = false;
-                    });
-                _getVersionHistoryTaskCache = getVersionHistory;
-                PMViewModel.VersionHistoryItemContexts.Clear();
-                PMViewModel.VersionHistoryListTipVisibility = Visibility.Collapsed;
-                PMViewModel.IsLoadingProjectVersionHistory = true;
-                await getVersionHistory.Execute();
+                ReleasingProjectManager
+                    .Current
+                    .UpdateVersionHistoryTimeline();
             }
             else if (message == CyberContactMessage.Cancel)
             {
@@ -173,7 +139,10 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
                         , isRemote: isRemote);
                     current = new BranchItemViewModel(bVO);
                     parents?.AddItem(current);
-                    PMViewModel.CurrentProjectVO?.AddProjectBranch(bVO);
+                    ReleasingProjectManager
+                        .Current
+                        .CurrentProjectVO?
+                        .AddProjectBranch(bVO);
                 }
                 parents = current as BranchItemViewModel;
             }
