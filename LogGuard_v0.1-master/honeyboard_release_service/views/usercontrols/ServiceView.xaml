@@ -40,7 +40,7 @@
 		<TabControl Grid.Column="3"
 					Style="{StaticResource RT_TabControlStyle}"
 					BorderThickness="0"
-					Background="{StaticResource Background_Level2}"
+					Background="{DynamicResource Background_Level2}"
 					Grid.Row="0">
 			<TabControl.Resources>
 				<Style TargetType="{x:Type TabItem}"
@@ -69,6 +69,56 @@
 
 		<uc_pm:ProjectManager Grid.RowSpan="3" />
 
+		<Border Background="{DynamicResource Background_Level2}"
+				CornerRadius="10"
+				Grid.Row="2"
+				Grid.Column="2">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="8" />
+					<RowDefinition />
+					<RowDefinition Height="8" />
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="10" />
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition Width="7.68*"/>
+					<ColumnDefinition Width="40" />
+				</Grid.ColumnDefinitions>
+
+				<Button Grid.Column="1"
+						Grid.Row="1"
+						ToolTip="Release with one click"
+						Background="{StaticResource ButtonBackground_Level1}"
+						HorizontalAlignment="Left"
+						Template="{DynamicResource CircleBtnTmpl}">
+					<Path Fill="#FFF0F0F0"
+						  Margin="5"
+						  Data="{Binding Source={StaticResource CalendarPathGeomerty}}"
+						  Stretch="Uniform" />
+				</Button>
+
+				<Button Grid.Column="2"
+						Grid.Row="1"
+						ToolTip="Release with one click"
+						Background="{StaticResource ButtonBackground_Level1}"
+						HorizontalAlignment="Left"
+						Template="{DynamicResource CircleBtnTmpl}">
+					<Path Fill="#FFF0F0F0"
+						  Margin="5"
+						  Data="{Binding Source={StaticResource RT_ConsoleIconPathGeomerty}}"
+						  Stretch="Uniform" />
+				</Button>
+			</Grid>
+
+
+		</Border>
+
 		<Border x:Name="CalendarNoteBookBorder"
 				Grid.Row="4"
 				pvh:PublisherViewHelper.ViewKey="CalendarNoteBookBorder"
@@ -76,6 +126,7 @@
 				CornerRadius="10"
 				Background="{StaticResource Background_Level2}">
 		</Border>
+		
 		<Grid Grid.Row="4"
 			  Background="{StaticResource Background_Level2}"
 			  Grid.ColumnSpan="3">
@@ -223,7 +274,7 @@
 									<Border x:Name="Bd"
 											BorderThickness="0">
 										<!--<ContentPresenter />-->
-										<ContentPresenter Content="{Binding NoteBookContent}"/>
+										<ContentPresenter Content="{Binding NoteBookContent}" />
 									</Border>
 								</ControlTemplate>
 							</Setter.Value>
@@ -303,6 +354,7 @@
 				</ListView.ItemTemplate>
 			</ListView>
 		</Grid>
+
 	</Grid>
 	<!--<Grid Visibility="Hidden"
 		Background="{StaticResource Background_Level1}">
