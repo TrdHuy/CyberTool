@@ -1,4 +1,5 @@
 ﻿using cyber_base.async_task;
+using honeyboard_release_service.implement.log_manager;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -55,6 +56,8 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.io_t
 
         protected override void DoMainTask(object param, AsyncTaskResult result, CancellationTokenSource token)
         {
+            LogManager.Current.AppendLogLine("Parse version properties from file", true);
+
             if (File.Exists(_folderPath + "\\" + _versionFileName))
             {
                 foreach (string line in File.ReadLines(_folderPath + "\\" + _versionFileName))

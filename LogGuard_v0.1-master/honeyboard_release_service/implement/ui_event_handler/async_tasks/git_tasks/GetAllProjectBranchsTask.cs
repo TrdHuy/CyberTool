@@ -1,4 +1,5 @@
 ﻿using cyber_base.async_task;
+using honeyboard_release_service.implement.log_manager;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -49,6 +50,8 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
                 pSI.CreateNoWindow = true;
                 pSI.UseShellExecute = false;
                 pSI.StandardOutputEncoding = Encoding.UTF8;
+
+                LogManager.Current.AppendLogLine(cmd, true);
                 using (Process? process = Process.Start(pSI))
                 {
                     if (process != null)
@@ -99,6 +102,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
 
                 if (e.Data != null)
                 {
+                    LogManager.Current.AppendLogLine(e.Data);
                     var raw = e.Data;
                     res.Data += raw + "\n";
                     if (res.OnBranch == ""

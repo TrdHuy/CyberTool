@@ -24,8 +24,7 @@
 	</UserControl.DataContext>
 
 	<Border Background="{StaticResource Background_Level2}"
-			CornerRadius="10"
-			Grid.RowSpan="3">
+			CornerRadius="10">
 		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="30" />

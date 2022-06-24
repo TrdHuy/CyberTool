@@ -1,5 +1,6 @@
 ﻿using cyber_base.async_task;
 using cyber_base.implement.async_task;
+using honeyboard_release_service.implement.log_manager;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,6 +30,8 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.io_t
             , CancellationTokenSource token)
         {
             var folderPath = param.ToString();
+            LogManager.Current.AppendLogLine("Searching version properties file!", true);
+
             if (Directory.Exists(folderPath))
             {
                 var files = Directory.GetFiles(folderPath);

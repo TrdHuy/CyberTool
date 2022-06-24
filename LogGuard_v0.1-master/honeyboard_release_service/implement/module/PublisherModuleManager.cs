@@ -1,5 +1,6 @@
 ﻿using honeyboard_release_service.@base.module;
 using honeyboard_release_service.implement.async_task_execute_helper;
+using honeyboard_release_service.implement.log_manager;
 using honeyboard_release_service.implement.project_manager;
 using honeyboard_release_service.implement.ui_event_handler;
 using honeyboard_release_service.implement.view_helper;
@@ -28,6 +29,7 @@ namespace honeyboard_release_service.implement.module
         private static IPublisherModule? _PKAL_Instance;
         private static IPublisherModule? _ATM_Instance;
         private static IPublisherModule? _RPM_Instance;
+        private static IPublisherModule? _LM_Instance;
         
         static PublisherModuleManager()
         {
@@ -46,6 +48,7 @@ namespace honeyboard_release_service.implement.module
             _Modules.Add(PKAL_Instance);
             _Modules.Add(ATM_Instance);
             _Modules.Add(RPM_Instance);
+            _Modules.Add(LM_Instance);
 
             foreach (var module in _Modules)
             {
@@ -72,6 +75,20 @@ namespace honeyboard_release_service.implement.module
             _PKAL_Instance = null;
             _ATM_Instance = null;
             _RPM_Instance = null;
+            _LM_Instance = null;
+        }
+
+        public static LogManager LM_Instance
+        {
+            get
+            {
+                if (_LM_Instance == null)
+                {
+                    _LM_Instance = Activator.CreateInstance(typeof(LogManager), true) as LogManager; ;
+                }
+                ArgumentNullException.ThrowIfNull(_LM_Instance);
+                return (LogManager)_LM_Instance;
+            }
         }
 
         public static ReleasingProjectManager RPM_Instance

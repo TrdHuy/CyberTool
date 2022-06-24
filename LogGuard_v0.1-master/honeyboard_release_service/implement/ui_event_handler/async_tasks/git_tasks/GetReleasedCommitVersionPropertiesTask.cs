@@ -1,4 +1,5 @@
 ﻿using cyber_base.async_task;
+using honeyboard_release_service.implement.log_manager;
 using honeyboard_release_service.models.VOs;
 using System;
 using System.Collections.Generic;
@@ -63,6 +64,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
             pSI.UseShellExecute = false;
             pSI.StandardOutputEncoding = Encoding.UTF8;
 
+            LogManager.Current.AppendLogLine(gitShowCommitCmd, true);
             using (var process = Process.Start(pSI))
             {
                 if (process != null)

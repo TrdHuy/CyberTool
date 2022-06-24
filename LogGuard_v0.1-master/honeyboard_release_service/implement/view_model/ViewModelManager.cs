@@ -2,6 +2,7 @@
 using honeyboard_release_service.@base.module;
 using honeyboard_release_service.implement.module;
 using honeyboard_release_service.view_models;
+using honeyboard_release_service.view_models.log_monitor;
 using honeyboard_release_service.view_models.project_manager;
 using honeyboard_release_service.view_models.tab_items;
 using System;
@@ -31,6 +32,14 @@ namespace honeyboard_release_service.implement.view_model
             get
             {
                 return (ProjectManagerViewModel)DataContextCache[typeof(ProjectManagerViewModel)];
+            }
+        }
+
+        public LogMonitorViewModel LMViewModel
+        {
+            get
+            {
+                return (LogMonitorViewModel)DataContextCache[typeof(LogMonitorViewModel)];
             }
         }
 

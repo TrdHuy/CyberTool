@@ -12,6 +12,7 @@
 			 mc:Ignorable="d"
 			 xmlns:vmm="clr-namespace:honeyboard_release_service.implement.markup"
 			 xmlns:def="clr-namespace:honeyboard_release_service.definitions"
+			 xmlns:lm="clr-namespace:honeyboard_release_service.views.elements.log_monitor"
 			 xmlns:pvh="clr-namespace:honeyboard_release_service.implement.view_helper"
 			 d:DesignHeight="820"
 			 d:DesignWidth="883.714"
@@ -93,6 +94,7 @@
 
 				<Button Grid.Column="1"
 						Grid.Row="1"
+						Command="{Binding CalendarButtonCommand}"
 						ToolTip="Release with one click"
 						Background="{StaticResource ButtonBackground_Level1}"
 						HorizontalAlignment="Left"
@@ -105,6 +107,7 @@
 
 				<Button Grid.Column="2"
 						Grid.Row="1"
+						Command="{Binding LogMonitorButtonCommand}"
 						ToolTip="Release with one click"
 						Background="{StaticResource ButtonBackground_Level1}"
 						HorizontalAlignment="Left"
@@ -128,6 +131,7 @@
 		</Border>
 		
 		<Grid Grid.Row="4"
+			  Visibility="{Binding CalendarNoteBookVisibility}"
 			  Background="{StaticResource Background_Level2}"
 			  Grid.ColumnSpan="3">
 			<Grid.OpacityMask>
@@ -239,7 +243,7 @@
 				</Border>
 			</Grid>
 			<ListView Grid.Row="1"
-					  Background="{StaticResource Background_Level2}"
+					  Background="{DynamicResource Background_Level2}"
 					  pvh:PublisherViewHelper.ViewKey="CalendarNoteBookListView"
 					  ItemsSource="{Binding CalendarNoteBookContext.NotebookItemContexts}"
 					  BorderThickness="0">
@@ -355,70 +359,21 @@
 			</ListView>
 		</Grid>
 
-	</Grid>
-	<!--<Grid Visibility="Hidden"
-		Background="{StaticResource Background_Level1}">
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="3*" />
-			<ColumnDefinition Width="*" />
-			<ColumnDefinition Width="*" />
-		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="3*" />
-			<RowDefinition Height="*" />
-			<RowDefinition Height="*" />
-		</Grid.RowDefinitions>
-
-		<ScrollViewer>
-			<TextBlock x:Name="DBox"
-					   Text="{Binding DisplayData}"
-					   Foreground="White" />
-		</ScrollViewer>
 		
-
-		<Grid Grid.Column="1"
-			  Grid.ColumnSpan="2">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition />
-				<ColumnDefinition />
-				<ColumnDefinition />
-				<ColumnDefinition />
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*" />
-				<RowDefinition Height="*" />
-				<RowDefinition Height="*" />
-				<RowDefinition Height="*" />
-				<RowDefinition Height="*" />
-				<RowDefinition Height="*" />
-				<RowDefinition Height="*" />
-			</Grid.RowDefinitions>
-			<TextBox x:Name="PathBox"
-					 Grid.ColumnSpan="5"
-					 Text="{Binding ProjectPath}"
-					 Height="30"
-					 Grid.Row="0" />
-			<TextBox x:Name="CmdBox"
-					 Grid.ColumnSpan="5"
-					 Text="{Binding Cmd}"
-					 Height="30"
-					 Grid.Row="1"/>
-			<Button Height="30"
-					Width="60"
-					Content="Exct"
-					Command="{Binding ExecuteCmd}"
-					Grid.Row="2"/>
-			<Button Height="30"
-					Width="60"
-					Content="Stop"
-					Command="{Binding StopCmd}"
-					Grid.Row="3" />
-			<Button Height="30"
-					Width="60"
-					Content="Clr"
-					Command="{Binding ClearCmd}"
-					Grid.Row="2"
-					Grid.Column="1"/>
+		<Grid Grid.Row="4"
+			  Visibility="{Binding LogMonitorVisibility}"
+			  Background="{StaticResource Background_Level2}"
+			  Grid.ColumnSpan="3">
+			<Grid.OpacityMask>
+				<VisualBrush Visual="{Binding ElementName=CalendarNoteBookBorder}" />
+			</Grid.OpacityMask>
+			<lm:LogMonitor Margin="5">
+				<lm:LogMonitor.OpacityMask>
+					<VisualBrush Visual="{Binding ElementName=CalendarNoteBookBorder}" />
+				</lm:LogMonitor.OpacityMask>
+			</lm:LogMonitor>
 		</Grid>
-	</Grid>-->
+
+	</Grid>
+	
 </UserControl>

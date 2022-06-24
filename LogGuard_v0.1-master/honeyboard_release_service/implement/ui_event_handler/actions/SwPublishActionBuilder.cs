@@ -4,6 +4,7 @@ using cyber_base.ui_event_handler.action.executer;
 using cyber_base.utils;
 using cyber_base.view_model;
 using honeyboard_release_service.definitions;
+using honeyboard_release_service.implement.ui_event_handler.actions.log_monitor.button;
 using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.button;
 using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.gesture;
 using honeyboard_release_service.implement.ui_event_handler.actions.release_tab.button;
@@ -56,6 +57,18 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions
                     break;
                 case PublisherKeyFeatureTag.KEY_TAG_PRT_PM_FETCH_PROJECT_FEATURE:
                     viewModelCommandExecuter = new PRT_PM_FetchProjectButtonAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_LM_CLEAR_LOG_CONTENT_FEATURE:
+                    viewModelCommandExecuter = new PRT_LM_ClearLogContentButtonAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_LM_CLIPBOARD_LOG_CONTENT_FEATURE:
+                    viewModelCommandExecuter = new PRT_LM_CopyLogToClipboardButtonAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_SWITCH_CALENDAR_FEATURE:
+                    viewModelCommandExecuter = new PRT_CalendarSwitchButtonAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_SWITCH_LOG_MONITOR_FEATURE:
+                    viewModelCommandExecuter = new PRT_LogMonitorSwitchButtonAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
                     break;
                 default:
                     break;
