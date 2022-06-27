@@ -18,9 +18,6 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
 {
     internal class PRT_PM_SelectedBranchChangedAction : PM_ViewModelCommandExecuter
     {
-        private BaseAsyncTask? _getVersionHistoryTaskCache;
-        private bool _isLatestVersionSet = false;
-
         public PRT_PM_SelectedBranchChangedAction(string actionID, string builderID, BaseViewModel viewModel, ILogger logger)
             : base(actionID, builderID, viewModel, logger)
         {

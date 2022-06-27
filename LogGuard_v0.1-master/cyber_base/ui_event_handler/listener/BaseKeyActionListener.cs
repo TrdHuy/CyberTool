@@ -21,55 +21,51 @@ namespace cyber_base.ui_event_handler.listener
         }
 
         #region Onkey and execute action field
-        public IAction OnKey(string builderTag, string keyFeature, object dataTransfer)
+        public IAction? OnKey(string builderTag, string keyFeature, object dataTransfer)
         {
-            IAction action = GetKeyActionType(builderTag, keyFeature);
+            IAction? action = GetKeyActionType(builderTag, keyFeature);
             return action;
         }
 
-        public IAction OnKey(string builderTag, string keyFeature, object dataTransfer, BuilderLocker locker)
+        public IAction? OnKey(string builderTag, string keyFeature, object dataTransfer, BuilderLocker locker)
         {
-            IAction action = GetKeyActionAndLockFactory(builderTag, keyFeature, locker.IsLock, locker.Status);
+            IAction? action = GetKeyActionAndLockFactory(builderTag, keyFeature, locker.IsLock, locker.Status);
             return action;
         }
 
-        public IAction OnKey(BaseViewModel viewModel, ILogger logger, string builderTag, string keyFeature, object dataTransfer)
+        public IAction? OnKey(BaseViewModel viewModel, ILogger logger, string builderTag, string keyFeature, object dataTransfer)
         {
-            IAction action = GetKeyActionType(builderTag, keyFeature, viewModel, logger);
+            IAction? action = GetKeyActionType(builderTag, keyFeature, viewModel, logger);
             return action;
         }
 
-        public IAction OnKey(BaseViewModel viewModel, ILogger logger, string builderTag, string keyFeature, object dataTransfer, BuilderLocker locker)
+        public IAction? OnKey(BaseViewModel viewModel, ILogger logger, string builderTag, string keyFeature, object dataTransfer, BuilderLocker locker)
         {
-            IAction action = GetKeyActionAndLockFactory(builderTag, keyFeature, locker.IsLock, locker.Status, viewModel, logger);
+            IAction? action = GetKeyActionAndLockFactory(builderTag, keyFeature, locker.IsLock, locker.Status, viewModel, logger);
             return action;
         }
 
         #endregion
 
 
-        private IAction GetKeyActionType(string builderTag
+        private IAction? GetKeyActionType(string builderTag
             , string keytag
-            , BaseViewModel viewModel = null
-            , ILogger logger = null)
+            , BaseViewModel? viewModel = null
+            , ILogger? logger = null)
         {
             return GetAction(keytag, builderTag, viewModel, logger);
         }
 
-        protected abstract IAction GetKeyActionAndLockFactory(string builderTag
+        protected abstract IAction? GetKeyActionAndLockFactory(string builderTag
             , string keytag
             , bool isLock = false
             , BuilderStatus status = BuilderStatus.Default
-            , BaseViewModel viewModel = null
-            , ILogger logger = null);
+            , BaseViewModel? viewModel = null
+            , ILogger? logger = null);
 
-        protected abstract IAction GetAction(string keyTag
+        protected abstract IAction? GetAction(string keyTag
             , string builderID
-            , BaseViewModel viewModel = null
-            , ILogger logger = null);
-        
-
-       
-
+            , BaseViewModel? viewModel = null
+            , ILogger? logger = null);
     }
 }

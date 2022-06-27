@@ -20,10 +20,6 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
 {
     internal class PRT_PM_ProjectPathFileSelectedAction : PM_ViewModelCommandExecuter
     {
-
-        private bool _isOnBranchSet = false;
-        private bool _isLatestVersionSet = false;
-        private BaseAsyncTask? _getVersionHistoryTaskCache;
         public PRT_PM_ProjectPathFileSelectedAction(string actionID, string builderID, BaseViewModel viewModel, ILogger logger)
             : base(actionID, builderID, viewModel, logger)
         {
@@ -31,7 +27,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
 
         protected override void ExecuteCommand()
         {
-            var branchCache = new CyberTreeViewObservableCollection<ICyberTreeViewItem>();
+            var branchCache = new CyberTreeViewObservableCollection<ICyberTreeViewItemContext>();
 
             BaseAsyncTask findVersionPathTask = new FindVersionPropertiesFileTask(PMViewModel.ProjectPath
                 , (result) =>
@@ -43,13 +39,36 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
                     }
                 });
             BaseAsyncTask listAllBranch = new GetAllProjectBranchsTask(PMViewModel.ProjectPath
+                , prepareGetAllProjectBranchs: () =>
+                {
+                    ReleasingProjectManager
+                            .Current
+                            .CurrentProjectVO?
+                            .Branchs.Clear();
+                }
                 , callback: (result) =>
                 {
-                    PMViewModel.BranchsSource = branchCache;
+                    dynamic? newRes = result.Result;
+                    if (newRes != null)
+                    {
+                        PMViewModel.BranchsSource = newRes.ContextSource;
+                        var branchs = newRes.Branchs;
+                    }
                 }
-                , readBranchCallback: (sender, task, branch) =>
+                , readBranchCallback: (sender, task, branch, isOnBranch) =>
                 {
-                    AddPath(branchCache, branch, task.Result);
+                    if (branch != null)
+                    {
+                        ReleasingProjectManager
+                            .Current
+                            .CurrentProjectVO?
+                            .AddProjectBranch(branch.Branch);
+                    }
+
+                    if (isOnBranch && branch != null)
+                    {
+                        PMViewModel.ForceSetSelectedBranch(branch);
+                    }
                 });
 
             List<BaseAsyncTask> tasks = new List<BaseAsyncTask>();
@@ -72,89 +91,6 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
             }
             else if (message == CyberContactMessage.Cancel)
             {
-            }
-        }
-
-        private void AddPath(CyberTreeViewObservableCollection<ICyberTreeViewItem> source,
-            string? path,
-            AsyncTaskResult result)
-        {
-            if (result.Result == null)
-            {
-                return;
-            }
-
-            dynamic res = result.Result;
-            var isShouldSelectItem = res.OnBranch != "" && !_isOnBranchSet;
-
-            if (string.IsNullOrEmpty(path)) return;
-
-            var splits = path.Split("/", StringSplitOptions.TrimEntries);
-            string rootFolder = "";
-            int startFolderIndex = 1;
-            int lenght = splits.Length;
-            var isRemote = false;
-            BranchItemViewModel? parents;
-
-            if (splits[0].Equals("remotes", StringComparison.CurrentCultureIgnoreCase))
-            {
-                rootFolder = "Remote";
-                isRemote = true;
-            }
-            else if (splits[0].Equals("origin", StringComparison.CurrentCultureIgnoreCase))
-            {
-                rootFolder = "Remote";
-                isRemote = true;
-                startFolderIndex = 0;
-            }
-            else
-            {
-                rootFolder = "Local";
-                startFolderIndex = 0;
-            }
-            parents = source[rootFolder] as BranchItemViewModel;
-
-            if (parents == null)
-            {
-                var bVO = new BranchVO("", rootFolder);
-                parents = new BranchItemViewModel(bVO);
-                source.Add(parents);
-            }
-
-            string branchPath = "";
-            for (int i = startFolderIndex; i < lenght; i++)
-            {
-                var current = parents?.Items[splits[i]];
-
-                if (i == lenght - 1)
-                    branchPath += splits[i];
-                else
-                    branchPath += splits[i] + "/";
-
-                if (current == null)
-                {
-                    var bVO = new BranchVO(path: i == lenght - 1 ? branchPath : ""
-                        , title: splits[i]
-                        , isNode: i == lenght - 1
-                        , isRemote: isRemote);
-                    current = new BranchItemViewModel(bVO);
-                    parents?.AddItem(current);
-                    ReleasingProjectManager
-                        .Current
-                        .CurrentProjectVO?
-                        .AddProjectBranch(bVO);
-                }
-                parents = current as BranchItemViewModel;
-            }
-
-            if (isShouldSelectItem)
-            {
-                if (parents != null)
-                {
-                    PMViewModel.ForceSetSelectedBranch(parents);
-                    parents.IsSelected = true;
-                    _isOnBranchSet = true;
-                }
             }
         }
 

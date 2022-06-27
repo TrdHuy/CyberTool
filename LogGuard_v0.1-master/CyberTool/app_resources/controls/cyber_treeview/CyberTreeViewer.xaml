@@ -308,7 +308,7 @@
 
 		<Setter Property="ItemTemplate">
 			<Setter.Value>
-				<HierarchicalDataTemplate DataType="{x:Type ctrl:ICyberTreeViewItem}"
+				<HierarchicalDataTemplate DataType="{x:Type ctrl:ICyberTreeViewItemContext}"
 										  ItemsSource="{Binding Items}">
 					<TextBlock Text="{Binding Title}"
 							   x:Name="mainContent"

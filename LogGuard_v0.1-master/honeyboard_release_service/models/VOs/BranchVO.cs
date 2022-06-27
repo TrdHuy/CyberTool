@@ -9,15 +9,23 @@ namespace honeyboard_release_service.models.VOs
 {
     internal class BranchVO : BaseCyberTreeItemVO
     {
-        public string BranchPath { get; }
-        public bool IsRemote { get; } = false;
-        public bool IsNode { get; } = false;
+        public string BranchPath { get; set; }
+        public bool IsRemote { get; set; } = false;
+        public bool IsNode { get; set; } = false;
 
-        public BranchVO(string path, string title, bool isNode = false, bool isRemote = false) : base(title)
+        public SortedDictionary<DateTime, List<CommitVO>>? CommitMap { get; set; }
+
+        public BranchVO(string path, string title, bool isNode = false, bool isRemote = false)
+            : base(title)
         {
             BranchPath = path;
             IsRemote = isRemote;
             IsNode = isNode;
+
+            if (IsNode)
+            {
+                CommitMap = new SortedDictionary<DateTime, List<CommitVO>>();
+            }
         }
     }
 }

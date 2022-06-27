@@ -9,6 +9,10 @@ namespace honeyboard_release_service.implement.module
 {
     internal abstract class BasePublisherModule : IPublisherModule
     {
+        public virtual void OnDestroy()
+        {
+        }
+
         public virtual void OnModuleStart()
         {
         }

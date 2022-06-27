@@ -27,7 +27,7 @@ namespace honeyboard_release_service.view_models.project_manager
         private BranchItemViewModel? _selectedItem;
         private bool _isLoadingProjectVersionHistory = false;
         private Visibility _versionHistoryListTipVisibility = Visibility.Visible;
-        private CyberTreeViewObservableCollection<ICyberTreeViewItem> _branchsSource;
+        private CyberTreeViewObservableCollection<ICyberTreeViewItemContext> _branchsSource;
         private ReleasingProjectManager _RPM_Instance = ReleasingProjectManager.Current;
 
         [Bindable(true)]
@@ -102,7 +102,7 @@ namespace honeyboard_release_service.view_models.project_manager
             }
             set
             {
-                var branchPath = value?.ToString();
+                var branchPath = value?.Branch.BranchPath;
                 if (value != null 
                     && !string.IsNullOrEmpty(branchPath)
                     && value != _selectedItem)
@@ -149,7 +149,7 @@ namespace honeyboard_release_service.view_models.project_manager
             {
                 if (!string.IsNullOrEmpty(value))
                 {
-                    _RPM_Instance.CreateNewProjectVO(value);
+                    _RPM_Instance.CreateNewProjectForCurrentProjectVO(value);
                     InvalidateOwn();
                 }
             }
@@ -175,7 +175,7 @@ namespace honeyboard_release_service.view_models.project_manager
         }
 
         [Bindable(true)]
-        public CyberTreeViewObservableCollection<ICyberTreeViewItem> BranchsSource
+        public CyberTreeViewObservableCollection<ICyberTreeViewItemContext> BranchsSource
         {
             get
             {
@@ -195,13 +195,21 @@ namespace honeyboard_release_service.view_models.project_manager
         public ProjectManagerViewModel(BaseViewModel parents) : base(parents)
         {
             _versionHistoryItemContexts = new FirstLastObservableCollection<VersionHistoryItemViewModel>();
-            _branchsSource = new CyberTreeViewObservableCollection<ICyberTreeViewItem>();
+            _branchsSource = new CyberTreeViewObservableCollection<ICyberTreeViewItemContext>();
             GestureCommandVM = new PM_GestureCommandVM(this);
             ButtonCommandVM = new PM_ButtonCommandVM(this);
             _versionHistoryItemContexts.CollectionChanged += (s, e) =>
             {
                 Invalidate("IsVirtualizingVersionHistoryList");
             };
+
+            _RPM_Instance.UserDataImported -= HandleUserDataImported;
+            _RPM_Instance.UserDataImported += HandleUserDataImported;
+        }
+
+        private void HandleUserDataImported(object sender)
+        {
+            RefreshViewModel();
         }
 
         private bool HandlePreSelectedItemChange(string newBranchPath)
@@ -216,7 +224,7 @@ namespace honeyboard_release_service.view_models.project_manager
         public void ForceSetSelectedBranch(BranchItemViewModel parents)
         {
             _selectedItem = parents;
-            var branchPath = parents.ToString();
+            var branchPath = parents.Branch.BranchPath;
             if (!string.IsNullOrEmpty(branchPath))
             {
                 SelectedBranch = branchPath;

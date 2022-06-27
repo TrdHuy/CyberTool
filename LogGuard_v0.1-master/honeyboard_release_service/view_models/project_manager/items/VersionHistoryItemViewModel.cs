@@ -150,10 +150,9 @@ namespace honeyboard_release_service.view_models.project_manager.items
             _dayOfMonth = vo.ReleaseDateTime.ToString("dd");
             _dayOfWeek = vo.ReleaseDateTime.ToString("ddd").ToUpper();
             _hour = vo.ReleaseDateTime.ToString("hh:mm tt");
-            _version = vo.Name;
+            _version = vo.CommitTitle;
             _email = vo.AuthorEmail;
             _versionVO = vo;
-
 
             SyncVersionCommand = new BaseDotNetCommandImpl((arg) =>
             {
@@ -210,6 +209,7 @@ namespace honeyboard_release_service.view_models.project_manager.items
                                 _version += "." + _versionVO.Properties.Revision;
                             }
 
+                            _versionVO.Version = _version;
                             Invalidate("Version");
                         }
                         _isVersionTitleLoaded = true;
@@ -255,11 +255,20 @@ namespace honeyboard_release_service.view_models.project_manager.items
 
         public void OnVirtualizingViewModelLoaded()
         {
-            _loadingTaskCache = GetUpdateVersionTitleTask();
-            if (_loadingTaskCache != null)
+            if (string.IsNullOrEmpty(_versionVO.Version))
             {
-                AsyncTaskManager.Current?.AddVersionPropertiesLoadingTask(_loadingTaskCache);
+                _loadingTaskCache = GetUpdateVersionTitleTask();
+                if (_loadingTaskCache != null)
+                {
+                    AsyncTaskManager.Current?.AddVersionPropertiesLoadingTask(_loadingTaskCache);
+                }
             }
+            else
+            {
+                IsLoadingVersionTitle = false;
+                Version = _versionVO.Version;
+            }
+            
         }
     }
 }

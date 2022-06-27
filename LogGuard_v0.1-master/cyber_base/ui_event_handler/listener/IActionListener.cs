@@ -18,7 +18,7 @@ namespace cyber_base.ui_event_handler.listener
         /// <typeparam name="windowTag">là chuỗi key để xác định window nào đang gọi</typeparam>
         /// <typeparam name="keyFeature">là chuỗi key để xác định đó là feature gì</typeparam>
         /// <typeparam name="obj">data transfer giữa các class</typeparam>
-        IAction OnKey(string builderTag, string keyFeature, object obj);
+        IAction? OnKey(string builderTag, string keyFeature, object obj);
 
         /// <summary>
         /// Thực hiện hành động click vao 1 button
@@ -27,7 +27,7 @@ namespace cyber_base.ui_event_handler.listener
         /// <typeparam name="keyFeature">là chuỗi key để xác định đó là feature gì</typeparam>
         /// <typeparam name="obj">data transfer giữa các class</typeparam>
         /// <typeparam name="locker">khóa factory sau khi tạo action</typeparam>
-        IAction OnKey(string builderTag, string keyFeature, object obj, BuilderLocker locker);
+        IAction? OnKey(string builderTag, string keyFeature, object obj, BuilderLocker locker);
 
         /// <summary>
         /// Thực hiện hành động click vao 1 button
@@ -37,7 +37,7 @@ namespace cyber_base.ui_event_handler.listener
         /// <typeparam name="logger">ghi log</typeparam>
         /// <typeparam name="keyFeature">là chuỗi key để xác định đó là feature gì</typeparam>
         /// <typeparam name="obj">data transfer giữa các class</typeparam>
-        IAction OnKey(BaseViewModel? viewModel, ILogger logger, string builderTag, string keyFeature, object obj);
+        IAction? OnKey(BaseViewModel viewModel, ILogger logger, string builderTag, string keyFeature, object obj);
 
         /// <summary>
         /// Thực hiện hành động click vao 1 button
@@ -46,6 +46,6 @@ namespace cyber_base.ui_event_handler.listener
         /// <typeparam name="logger">ghi log</typeparam>
         /// <typeparam name="obj">data transfer giữa các class</typeparam>
         /// <typeparam name="locker">khóa factory sau khi tạo action</typeparam>
-        IAction OnKey(BaseViewModel? viewModel, ILogger logger, string builderTag, string keyFeature, object obj, BuilderLocker locker);
+        IAction? OnKey(BaseViewModel viewModel, ILogger logger, string builderTag, string keyFeature, object obj, BuilderLocker locker);
     }
 }

@@ -99,7 +99,7 @@
 						<Setter.Value>
 							<ControlTemplate TargetType="ListViewItem">
 								<Grid>
-									<TextBlock Text="{Binding Name}"
+									<TextBlock Text="{Binding CommitTitle}"
 											   Margin="7,0,0,0"
 											   VerticalAlignment="Center" />
 									<Rectangle x:Name="FeedBackRec"

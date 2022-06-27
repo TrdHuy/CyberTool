@@ -38,14 +38,18 @@ namespace honeyboard_release_service.implement.ui_event_handler
         {
         }
 
-        public override IAction CreateAction(string builderID, string keyID, BaseViewModel? viewModel = null, ILogger? logger = null)
+        public override IAction? CreateAction(string builderID, string keyID, BaseViewModel? viewModel = null, ILogger? logger = null)
         {
-            IAction action = base.CreateAction(builderID, keyID, viewModel, logger);
+            IAction? action = base.CreateAction(builderID, keyID, viewModel, logger);
 
             return action;
         }
 
         public void OnViewInstantiated()
+        {
+        }
+
+        public void OnDestroy()
         {
         }
     }

@@ -48,15 +48,16 @@ namespace honeyboard_release_service.implement.view_manager.notebook_item
         public void UpdateNotebookItemContent(ProjectVO project)
         {
             if (_itemGridContainer != null
+                && project.OnBranch != null
                 && !string.IsNullOrEmpty(project.OnBranch?.BranchPath)
-                && (project.VersionMap?.ContainsKey(project.OnBranch.BranchPath) ?? false))
+                && project.OnBranch.CommitMap != null)
             {
-                var branchVersionMap = project.VersionMap[project.OnBranch.BranchPath];
+                var branchVersionMap = project.OnBranch.CommitMap;
                 for (int i = 0; i < ColumnNumber; i++)
                 {
                     var currentDate = _startDateTime.Date.AddDays(i);
 
-                    if (project.VersionMap != null && branchVersionMap.ContainsKey(currentDate))
+                    if (branchVersionMap.ContainsKey(currentDate))
                     {
                         var source = branchVersionMap[currentDate];
 

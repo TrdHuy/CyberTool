@@ -7,8 +7,15 @@ using System.Runtime.CompilerServices;
 
 namespace cyber_base.implement.view_models.cyber_treeview
 {
-    public class BaseCyberTreeItemViewModel : INotifyPropertyChanged, ICyberTreeViewItem
+    public class BaseCyberTreeItemViewModel : INotifyPropertyChanged, ICyberTreeViewItemContext
     {
+        private ICyberTreeViewItemContext? _last;
+        private ICyberTreeViewItemContext? _first;
+        private ICyberTreeViewItemContext? _parents;
+        private bool _isFirst;
+        private bool _isLast;
+        private bool _isSelected;
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected BaseCyberTreeItemVO _vo;
 
@@ -28,7 +35,7 @@ namespace cyber_base.implement.view_models.cyber_treeview
         {
             get
             {
-                var current = this as ICyberTreeViewItem;
+                var current = this as ICyberTreeViewItemContext;
                 string absTitle = "";
                 while (current != null)
                 {
@@ -40,73 +47,70 @@ namespace cyber_base.implement.view_models.cyber_treeview
                     {
                         absTitle = absTitle.Insert(0, "/" + current.Title);
                     }
-                    current = current.Parent as ICyberTreeViewItem;
+                    current = current.Parent as ICyberTreeViewItemContext;
                 }
 
                 return absTitle;
             }
             set => throw new System.NotImplementedException();
         }
-        public CyberTreeViewObservableCollection<ICyberTreeViewItem> Items { get; set; }
-        public BaseCommandImpl? AddBtnCommand { get => _vo.AddCmd; }
-        public BaseCommandImpl? RemoveBtnCommand { get => _vo.RmCmd; }
+        public CyberTreeViewObservableCollection<ICyberTreeViewItemContext> Items { get; set; }
         public bool IsFirst
         {
-            get { return _vo.IsFirst; }
+            get { return _isFirst; }
             set
             {
-                _vo.IsFirst = value;
+                _isFirst = value;
                 OnChanged();
             }
         }
         public bool IsLast
         {
-            get { return _vo.IsLast; }
+            get { return _isLast; }
             set
             {
-                _vo.IsLast = value;
+                _isLast = value;
                 OnChanged();
             }
         }
         public int ItemsCount => Items.Count;
-        public object? Parent => _vo.Parent;
+        public ICyberTreeViewItemContext? Parent => _parents;
         public bool IsOrphaned => Parent == null;
-        public ICyberTreeViewItem? Last { get => _vo.Last; set => _vo.Last = value; }
-        public ICyberTreeViewItem? First { get => _vo.First; set => _vo.First = value; }
+        public ICyberTreeViewItemContext? Last { get => _last; set => _last = value; }
+        public ICyberTreeViewItemContext? First { get => _first; set => _first = value; }
         public bool IsFolder => Items.Count > 0;
         public bool IsSelected
         {
             get
             {
-                return _vo.IsSelected;
+                return _isSelected;
             }
             set
             {
-                _vo.IsSelected = value;
+                _isSelected = value;
                 OnChanged();
             }
         }
-
         public bool IsSelectable { get; set; }
 
         public BaseCyberTreeItemViewModel(BaseCyberTreeItemVO vo)
         {
             _vo = vo;
-            Items = new CyberTreeViewObservableCollection<ICyberTreeViewItem>();
+            Items = new CyberTreeViewObservableCollection<ICyberTreeViewItemContext>();
         }
 
-        public BaseCyberTreeItemViewModel AddItem(ICyberTreeViewItem item)
+        public BaseCyberTreeItemViewModel AddItem(ICyberTreeViewItemContext item)
         {
             Items.Add(item);
             var cast = item as BaseCyberTreeItemViewModel;
             if (cast != null)
             {
-                cast._vo.Parent = this;
+                cast._parents = this;
             }
             return this;
         }
 
-        public BaseCyberTreeItemViewModel RemoveItem(ICyberTreeViewItem item)
+        public BaseCyberTreeItemViewModel RemoveItem(ICyberTreeViewItemContext item)
         {
             Items.Remove(item);
             return this;
@@ -116,6 +120,5 @@ namespace cyber_base.implement.view_models.cyber_treeview
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
-
     }
 }

@@ -8,19 +8,20 @@ namespace honeyboard_release_service.models.VOs
 {
     internal class CommitVO
     {
-        public string Name { get; set; } = "";
+        public string CommitTitle { get; set; } = "";
         public string CommitId { get; set; } = "";
         public DateTime ReleaseDateTime { get; set; }
         public Uri? RetriverLink { get; set; }
         public Uri? QuickBuildLink { get; set; }
         public string AuthorEmail { get; set; } = "";
         public VersionPropertiesVO? Properties { get; set; }
+        public string Version { get; set; } = "";
 
         public static CommitVO GetTestData(string version, DateTime releaseDate)
         {
             var vo = new CommitVO()
             {
-                Name = version,
+                CommitTitle = version,
                 CommitId = "a45b2c1",
                 ReleaseDateTime = releaseDate,
                 RetriverLink = new Uri("https://retriever.sw.sec.samsung.net"),

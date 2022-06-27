@@ -15,7 +15,7 @@ namespace cyber_base.implement.views.cyber_treeview
     public class CyberTreeViewItem : TreeViewItem, ICyberTreeViewElement
     {
         private const string ExpandBtnName = "Expander";
-        private ICyberTreeViewItem? _castContext;
+        private ICyberTreeViewItemContext? _castContext;
         private ICyberTreeViewElement _parents;
 
         public CyberTreeViewItem(ICyberTreeViewElement parents)
@@ -40,7 +40,7 @@ namespace cyber_base.implement.views.cyber_treeview
 
         private void CyberTreeViewItem_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            _castContext = e.NewValue as ICyberTreeViewItem;
+            _castContext = e.NewValue as ICyberTreeViewItemContext;
         }
 
         private void HandleFirstLastElement(object? sender, NotifyCollectionChangedEventArgs e)
@@ -49,8 +49,8 @@ namespace cyber_base.implement.views.cyber_treeview
 
             if (Items.Count > 0)
             {
-                var fi = Items.GetItemAt(0) as ICyberTreeViewItem;
-                var li = Items.GetItemAt(Items.Count - 1) as ICyberTreeViewItem;
+                var fi = Items.GetItemAt(0) as ICyberTreeViewItemContext;
+                var li = Items.GetItemAt(Items.Count - 1) as ICyberTreeViewItemContext;
 
                 if (fi != null)
                 {
@@ -86,7 +86,7 @@ namespace cyber_base.implement.views.cyber_treeview
                 throw new InvalidOperationException("Some view elements not found!");
             }
 
-            var source = DataContext as ICyberTreeViewItem;
+            var source = DataContext as ICyberTreeViewItemContext;
 
             _expandButton.Checked += (s, e) =>
             {
@@ -169,7 +169,7 @@ namespace cyber_base.implement.views.cyber_treeview
         protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
         {
             if (newValue != null
-               && !(newValue is ICyberTreeViewObservableCollection<ICyberTreeViewItem>))
+               && !(newValue is ICyberTreeViewObservableCollection<ICyberTreeViewItemContext>))
             {
                 throw new InvalidOperationException("ItemsSource must be inherited from ICyberTreeViewObservableCollection");
             }
@@ -210,37 +210,73 @@ namespace cyber_base.implement.views.cyber_treeview
 
     public interface IFirstLastElement
     {
+        /// <summary>
+        /// Kiểm tra phần tử hiện tại có là phần tử đầu tiên trong tập hợp hay không
+        /// </summary>
         bool IsFirst { get; set; }
+
+        /// <summary>
+        /// Kiểm tra phần tử hiện tại có là phần tử cuối cùng trong tập hợp hay không
+        /// </summary>
         bool IsLast { get; set; }
     }
 
-    public interface ICyberTreeViewItem : IFirstLastElement
+    public interface ICyberTreeViewItemContext : IFirstLastElement
     {
+        /// <summary>
+        /// Tiêu đề hiển thị của item trên treeview
+        /// </summary>
         string Title { get; set; }
 
-        string AbsoluteTitle { get; set; }
+        /// <summary>
+        /// Đường dẫn tuyệt đối đến item 
+        /// </summary>
+        string AbsoluteTitle { get; }
 
-        BaseCommandImpl? AddBtnCommand { get; }
-
-        BaseCommandImpl? RemoveBtnCommand { get; }
-
+        /// <summary>
+        /// Số lượng phần tử có trong 1 item
+        /// </summary>
         int ItemsCount { get; }
 
+        /// <summary>
+        /// Kiểm tra item hiện tại có thuộc bất kỳ item nào khác không
+        /// </summary>
         bool IsOrphaned { get; }
 
+        /// <summary>
+        /// Kiểm tra item hiện tại có đang được chọn hay không
+        /// </summary>
         bool IsSelected { get; set; }
 
+        /// <summary>
+        /// Kiểm tra item hiện tại có thể chọn được hay không
+        /// </summary>
         bool IsSelectable { get; set; }
 
-        object? Parent { get; }
+        /// <summary>
+        /// Biến lưu đối tượng cha của item
+        /// </summary>
+        ICyberTreeViewItemContext? Parent { get; }
 
-        ICyberTreeViewItem? Last { get; set; }
+        /// <summary>
+        /// Biến lưu đối tượng cuối trong tập phần tử con của item hiện tại
+        /// </summary>
+        ICyberTreeViewItemContext? Last { get; set; }
 
-        ICyberTreeViewItem? First { get; set; }
+        /// <summary>
+        /// Biến lưu đối tượng đầu trong tập phần tử con của item hiện tại
+        /// </summary>
+        ICyberTreeViewItemContext? First { get; set; }
 
+        /// <summary>
+        /// Kiểm tra item hiện tại có phải là 1 folder không
+        /// </summary>
         bool IsFolder { get; }
 
-        CyberTreeViewObservableCollection<ICyberTreeViewItem> Items { get; set; }
+        /// <summary>
+        /// Tập hợp các phần tử con của item hiện tại
+        /// </summary>
+        CyberTreeViewObservableCollection<ICyberTreeViewItemContext> Items { get; set; }
 
     }
 

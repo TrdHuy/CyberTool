@@ -1,9 +1,13 @@
 ﻿using cyber_base.async_task;
 using cyber_base.implement.async_task;
+using cyber_base.implement.utils;
+using cyber_base.implement.views.cyber_treeview;
 using cyber_base.utils;
 using cyber_base.view_model;
 using honeyboard_release_service.implement.project_manager;
 using honeyboard_release_service.implement.ui_event_handler.async_tasks.git_tasks;
+using honeyboard_release_service.models.VOs;
+using honeyboard_release_service.view_models.project_manager.items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,9 +51,43 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
                 }
                 , name: "Fetching"
                 , estimatedTime: 4000);
+            BaseAsyncTask listAllBranch = new GetAllProjectBranchsTask(PMViewModel.ProjectPath
+                , prepareGetAllProjectBranchs: () =>
+                {
+                    ReleasingProjectManager
+                            .Current
+                            .CurrentProjectVO?
+                            .Branchs.Clear();
+                }
+                , callback: (result) =>
+                {
+                    dynamic? newRes = result.Result;
+                    if (newRes != null)
+                    {
+                        PMViewModel.BranchsSource = newRes.ContextSource;
+                        var branchs = newRes.Branchs;
+                    }
+                }
+                , readBranchCallback: (sender, task, branch, isOnBranch) =>
+                {
+                    if (branch != null)
+                    {
+                        ReleasingProjectManager
+                            .Current
+                            .CurrentProjectVO?
+                            .AddProjectBranch(branch.Branch);
+                    }
+
+                    if (isOnBranch && branch != null)
+                    {
+                        PMViewModel.ForceSetSelectedBranch(branch);
+                    }
+                });
+
 
             List<BaseAsyncTask> tasks = new List<BaseAsyncTask>();
             tasks.Add(fetchTask);
+            tasks.Add(listAllBranch);
 
             MultiAsyncTask multiTask = new MultiAsyncTask(tasks
                , new CancellationTokenSource()

@@ -38,7 +38,7 @@ namespace cyber_base.implement.views.cyber_treeview
         protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
         {
             if (newValue != null
-               && !(newValue is ICyberTreeViewObservableCollection<ICyberTreeViewItem>))
+               && !(newValue is ICyberTreeViewObservableCollection<ICyberTreeViewItemContext>))
             {
                 throw new InvalidOperationException("ItemsSource must be inherited from ICyberTreeViewObservableCollection");
             }
@@ -54,7 +54,7 @@ namespace cyber_base.implement.views.cyber_treeview
         protected override void OnSelectedItemChanged(RoutedPropertyChangedEventArgs<object> e)
         {
             base.OnSelectedItemChanged(e);
-            var cyberTreeItem = e.NewValue as ICyberTreeViewItem;
+            var cyberTreeItem = e.NewValue as ICyberTreeViewItemContext;
             if (cyberTreeItem != null)
             {
                 if (cyberTreeItem.IsSelectable)

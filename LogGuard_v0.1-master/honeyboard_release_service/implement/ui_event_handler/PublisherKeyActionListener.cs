@@ -24,6 +24,10 @@ namespace honeyboard_release_service.implement.ui_event_handler
             }
         }
 
+        public void OnDestroy()
+        {
+        }
+
         public void OnModuleStart()
         {
         }
@@ -32,9 +36,12 @@ namespace honeyboard_release_service.implement.ui_event_handler
         {
         }
 
-        protected override IAction GetAction(string keyTag, string builderID, BaseViewModel viewModel = null, ILogger logger = null)
+        protected override IAction? GetAction(string keyTag
+            , string builderID
+            , BaseViewModel? viewModel = null
+            , ILogger? logger = null)
         {
-            IAction action;
+            IAction? action;
             try
             {
                 action = _actionExecuteHelper.GetActionInCache(builderID, keyTag);
@@ -54,7 +61,12 @@ namespace honeyboard_release_service.implement.ui_event_handler
             return action;
         }
 
-        protected override IAction GetKeyActionAndLockFactory(string windowTag, string keytag, bool isLock = false, BuilderStatus status = BuilderStatus.Default, BaseViewModel viewModel = null, ILogger logger = null)
+        protected override IAction? GetKeyActionAndLockFactory(string windowTag
+            , string keytag
+            , bool isLock = false
+            , BuilderStatus status = BuilderStatus.Default
+            , BaseViewModel? viewModel = null
+            , ILogger? logger = null)
         {
             var action = GetAction(keytag, windowTag, viewModel, logger);
             SwPublisherCommandExecuterFactory

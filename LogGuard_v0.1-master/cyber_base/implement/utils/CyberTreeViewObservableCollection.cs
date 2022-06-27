@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace cyber_base.implement.utils
 {
     public class CyberTreeViewObservableCollection<T> : ObservableCollection<T>, ICyberTreeViewObservableCollection<T>
-        where T : ICyberTreeViewItem
+        where T : ICyberTreeViewItemContext
     {
         private Dictionary<string, T> _parts = new Dictionary<string, T>();
 
@@ -59,7 +59,7 @@ namespace cyber_base.implement.utils
     }
 
     public interface ICyberTreeViewObservableCollection<T>
-        where T: ICyberTreeViewItem
+        where T: ICyberTreeViewItemContext
     {
         T? this[string key] { get; set; }
     }

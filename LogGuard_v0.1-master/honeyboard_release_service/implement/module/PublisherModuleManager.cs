@@ -3,6 +3,7 @@ using honeyboard_release_service.implement.async_task_execute_helper;
 using honeyboard_release_service.implement.log_manager;
 using honeyboard_release_service.implement.project_manager;
 using honeyboard_release_service.implement.ui_event_handler;
+using honeyboard_release_service.implement.user_data_manager;
 using honeyboard_release_service.implement.view_helper;
 using honeyboard_release_service.implement.view_manager.notebook_header;
 using honeyboard_release_service.implement.view_manager.notebook_item;
@@ -30,6 +31,7 @@ namespace honeyboard_release_service.implement.module
         private static IPublisherModule? _ATM_Instance;
         private static IPublisherModule? _RPM_Instance;
         private static IPublisherModule? _LM_Instance;
+        private static IPublisherModule? _UDM_Instance;
         
         static PublisherModuleManager()
         {
@@ -49,6 +51,7 @@ namespace honeyboard_release_service.implement.module
             _Modules.Add(ATM_Instance);
             _Modules.Add(RPM_Instance);
             _Modules.Add(LM_Instance);
+            _Modules.Add(UDM_Instance);
 
             foreach (var module in _Modules)
             {
@@ -66,6 +69,10 @@ namespace honeyboard_release_service.implement.module
 
         public static void Destroy()
         {
+            foreach (var module in _Modules)
+            {
+                module.OnDestroy();
+            }
             _Modules.Clear();
             _VMM_Instance = null;
             _PVH_Instance = null;
@@ -76,6 +83,19 @@ namespace honeyboard_release_service.implement.module
             _ATM_Instance = null;
             _RPM_Instance = null;
             _LM_Instance = null;
+            _UDM_Instance = null;
+        }
+        public static UserDataManager UDM_Instance
+        {
+            get
+            {
+                if (_UDM_Instance == null)
+                {
+                    _UDM_Instance = Activator.CreateInstance(typeof(UserDataManager), true) as UserDataManager;
+                }
+                ArgumentNullException.ThrowIfNull(_UDM_Instance);
+                return (UserDataManager)_UDM_Instance;
+            }
         }
 
         public static LogManager LM_Instance
@@ -84,7 +104,7 @@ namespace honeyboard_release_service.implement.module
             {
                 if (_LM_Instance == null)
                 {
-                    _LM_Instance = Activator.CreateInstance(typeof(LogManager), true) as LogManager; ;
+                    _LM_Instance = Activator.CreateInstance(typeof(LogManager), true) as LogManager;
                 }
                 ArgumentNullException.ThrowIfNull(_LM_Instance);
                 return (LogManager)_LM_Instance;
@@ -97,7 +117,7 @@ namespace honeyboard_release_service.implement.module
             {
                 if (_RPM_Instance == null)
                 {
-                    _RPM_Instance = Activator.CreateInstance(typeof(ReleasingProjectManager), true) as ReleasingProjectManager; ;
+                    _RPM_Instance = Activator.CreateInstance(typeof(ReleasingProjectManager), true) as ReleasingProjectManager;
                 }
                 ArgumentNullException.ThrowIfNull(_RPM_Instance);
                 return (ReleasingProjectManager)_RPM_Instance;
@@ -110,7 +130,7 @@ namespace honeyboard_release_service.implement.module
             {
                 if (_ATM_Instance == null)
                 {
-                    _ATM_Instance = Activator.CreateInstance(typeof(AsyncTaskManager), true) as AsyncTaskManager; ;
+                    _ATM_Instance = Activator.CreateInstance(typeof(AsyncTaskManager), true) as AsyncTaskManager;
                 }
                 ArgumentNullException.ThrowIfNull(_ATM_Instance);
                 return (AsyncTaskManager)_ATM_Instance;
@@ -123,7 +143,7 @@ namespace honeyboard_release_service.implement.module
             {
                 if (_VMM_Instance == null)
                 {
-                    _VMM_Instance = Activator.CreateInstance(typeof(ViewModelManager), true) as ViewModelManager; ;
+                    _VMM_Instance = Activator.CreateInstance(typeof(ViewModelManager), true) as ViewModelManager;
                 }
                 ArgumentNullException.ThrowIfNull(_VMM_Instance);
                 return (ViewModelManager)_VMM_Instance;

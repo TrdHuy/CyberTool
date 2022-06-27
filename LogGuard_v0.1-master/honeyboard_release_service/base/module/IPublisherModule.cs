@@ -17,5 +17,10 @@ namespace honeyboard_release_service.@base.module
         /// Sự kiện xảy ra sau khi service view được khởi tạo nhưng chưa load
         /// </summary>
         void OnViewInstantiated();
+
+        /// <summary>
+        /// Sự kiện xảy ra khi service bị hủy
+        /// </summary>
+        void OnDestroy();
     }
 }
