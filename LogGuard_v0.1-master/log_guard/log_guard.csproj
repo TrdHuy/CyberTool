@@ -9,9 +9,13 @@
 
   <ItemGroup>
     <Compile Remove="base\android_log\**" />
+    <Compile Remove="views\others\animations\**" />
     <EmbeddedResource Remove="base\android_log\**" />
+    <EmbeddedResource Remove="views\others\animations\**" />
     <None Remove="base\android_log\**" />
+    <None Remove="views\others\animations\**" />
     <Page Remove="base\android_log\**" />
+    <Page Remove="views\others\animations\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -79,10 +83,6 @@
     <Page Update="views\usercontrols\elements\log_manager\LogManager.xaml">
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="views\others\animations\" />
   </ItemGroup>
 
 </Project>
