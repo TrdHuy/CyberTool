@@ -81,7 +81,6 @@ namespace cyber_base.implement.utils
             {
                 await foreach (T item in list)
                 {
-                    var id = BaseAsyncTask.GetCurrentThreadInformation();
                     Items.Add(item);
                     asyncCollectionChangedCallback?.Invoke();
                     SendNotifications();
