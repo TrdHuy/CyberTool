@@ -1,4 +1,5 @@
 ﻿using cyber_base.async_task;
+using cyber_base.implement.utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace cyber_base.implement.async_task
 {
     public class CancelableAsyncTask : BaseAsyncTask
     {
+        private static Logger CATLogger = new Logger("CancelableAsyncTask");
+
         private Func<CancellationTokenSource, AsyncTaskResult, Task<AsyncTaskResult>> _mainFunc;
         private Func<AsyncTaskResult, Task<AsyncTaskResult>>? _callback;
         private Func<bool>? _canExecute;
@@ -71,8 +74,18 @@ namespace cyber_base.implement.async_task
 
         public override void Cancel()
         {
-            _cancellationTokenSource.Cancel();
-            _cancellationTokenSource.Dispose();
+            try
+            {
+                lock (_cancellationTokenSource)
+                {
+                    _cancellationTokenSource.Cancel();
+                    _cancellationTokenSource.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                CATLogger.E(ex.ToString());
+            }
         }
 
         protected async override Task DoDelayForReportTask()

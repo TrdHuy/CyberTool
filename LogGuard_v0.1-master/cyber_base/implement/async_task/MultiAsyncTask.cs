@@ -79,8 +79,18 @@ namespace cyber_base.implement.async_task
             {
                 CurrentExecuteTask.Cancel();
             }
-            _cancellationTokenSource.Cancel();
-            _cancellationTokenSource.Dispose();
+            try
+            {
+                lock (_cancellationTokenSource)
+                {
+                    _cancellationTokenSource.Cancel();
+                    _cancellationTokenSource.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                MATLogger.E(ex.ToString());
+            }
         }
 
         protected async override Task DoCallback()
