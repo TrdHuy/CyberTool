@@ -103,7 +103,7 @@ namespace honeyboard_release_service.view_models.project_manager
             set
             {
                 var branchPath = value?.Branch.BranchPath;
-                if (value != null 
+                if (value != null
                     && !string.IsNullOrEmpty(branchPath)
                     && value != _selectedItem)
                 {
@@ -129,7 +129,7 @@ namespace honeyboard_release_service.view_models.project_manager
                     _RPM_Instance.CurrentProjectVO.VersionFilePath = value;
                     if (value.IndexOf(ProjectPath) != -1)
                     {
-                        _RPM_Instance.CurrentProjectVO.VersionFilePath = 
+                        _RPM_Instance.CurrentProjectVO.VersionFilePath =
                             value.Substring(ProjectPath.Length + 1);
                     }
 
@@ -223,13 +223,22 @@ namespace honeyboard_release_service.view_models.project_manager
 
         public void ForceSetSelectedBranch(BranchItemViewModel parents)
         {
-            _selectedItem = parents;
-            var branchPath = parents.Branch.BranchPath;
-            if (!string.IsNullOrEmpty(branchPath))
-            {
-                SelectedBranch = branchPath;
-            }
-            Invalidate("SelectedItem");
+            HoneyboardReleaseService
+                .Current
+                .ServiceManager?
+                .App
+                .CyberApp
+                .Dispatcher
+                .Invoke(() =>
+                {
+                    _selectedItem = parents;
+                    var branchPath = parents.Branch.BranchPath;
+                    if (!string.IsNullOrEmpty(branchPath))
+                    {
+                        SelectedBranch = branchPath;
+                    }
+                    Invalidate("SelectedItem");
+                });
         }
     }
 }
