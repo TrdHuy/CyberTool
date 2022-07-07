@@ -30,7 +30,7 @@ namespace log_guard.implement.flow.source_manager
 {
     internal class SourceManager : BaseLogGuardModule, ISourceManager
     {
-        private static Logger Logger { get; } = new Logger("SourceManager");
+        private static Logger Logger { get; } = new Logger("SourceManager", "log_guard");
         private object stateLockObject = new Object();
 
         private RangeObservableCollection<ILogWatcherElements> _rawSource;

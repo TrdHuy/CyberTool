@@ -18,7 +18,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions
 {
     internal class SwPublishActionBuilder : AbstractExecutableCommandBuilder
     {
-        private static Logger logger = new Logger("SwPublishActionBuilder");
+        private static Logger logger = new Logger("SwPublishActionBuilder", "HRT");
 
         public override ICommandExecuter? BuildAlternativeCommandExecuterWhenBuilderIsLock(string keyTag, ILogger? logger = null)
         {

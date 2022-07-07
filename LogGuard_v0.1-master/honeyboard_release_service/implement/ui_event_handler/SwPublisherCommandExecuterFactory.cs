@@ -17,7 +17,7 @@ namespace honeyboard_release_service.implement.ui_event_handler
 {
     public class SwPublisherCommandExecuterFactory : BaseCommandExecuterFactory, IPublisherModule
     {
-        private static Logger logger = new Logger("LogGuardCommandExecuterFactory");
+        private static Logger logger = new Logger("LogGuardCommandExecuterFactory", "HRT");
 
         public static SwPublisherCommandExecuterFactory Current
         {

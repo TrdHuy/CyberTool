@@ -17,7 +17,7 @@ namespace log_guard.implement.ui_event_handler
 {
     public class LogGuardCommandExecuterFactory : BaseCommandExecuterFactory, ILogGuardModule
     {
-        private static Logger logger = new Logger("LogGuardCommandExecuterFactory");
+        private static Logger logger = new Logger("LogGuardCommandExecuterFactory", "log_guard");
 
         public static LogGuardCommandExecuterFactory Current
         {

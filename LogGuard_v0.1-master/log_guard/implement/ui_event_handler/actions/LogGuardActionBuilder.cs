@@ -17,7 +17,7 @@ namespace log_guard.implement.ui_event_handler.actions
 {
     internal class LogGuardActionBuilder : AbstractExecutableCommandBuilder
     {
-        private static Logger logger = new Logger("LogGuardActionBuilder");
+        private static Logger logger = new Logger("LogGuardActionBuilder", "log_guard");
 
         public override ICommandExecuter BuildAlternativeCommandExecuterWhenBuilderIsLock(string keyTag, ILogger logger = null)
         {

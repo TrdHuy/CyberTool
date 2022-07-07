@@ -23,7 +23,7 @@ namespace honeyboard_release_service.view_models.command
 
         public BaseSwPublisherCommandVM(BaseViewModel parentsModel, string commandVMTag = "BaseSwPublisherCommandVM") : base(parentsModel)
         {
-            _logger = new Logger(commandVMTag);
+            _logger = new Logger(commandVMTag, "HRT");
         }
 
         public ICommandExecuter? GetCommandExecuter(string keyTag

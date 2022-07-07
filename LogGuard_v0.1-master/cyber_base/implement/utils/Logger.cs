@@ -37,7 +37,7 @@ namespace cyber_base.implement.utils
             ERROR = 5
         }
 
-        private const string TAG = "LogGuard_v0.1";
+        private const string TAG = "CyberTool";
         private const int OLD_LOG_FILES_CAPACITY = 10;
         private static readonly SemaphoreSlim Mutex = new SemaphoreSlim(1);
 
@@ -50,6 +50,7 @@ namespace cyber_base.implement.utils
         private static string folderName { get; set; } = "";
 
         private string className { get; set; }
+        private string moduleName { get; set; }
         private int PId { get; set; }
         private int TId { get; set; }
 
@@ -191,10 +192,10 @@ namespace cyber_base.implement.utils
         /// ctor
         /// </summary>
         /// <param name="className"></param>
-        public Logger(string className)
+        public Logger(string className, string moduleName = "cyber_base")
         {
             this.className = className;
-
+            this.moduleName = moduleName;
             PId = Process.GetCurrentProcess().Id;
             TId = Thread.CurrentThread.ManagedThreadId;
         }
@@ -352,7 +353,8 @@ namespace cyber_base.implement.utils
                     PId + " " +
                     TId + " " +
                     tag + " " +
-                    className + ":" + methodName + ":" + message;
+                    moduleName + " " +
+                    className + " " + methodName + ":" + message;
 
                 if (_logBuilder != null)
                 {

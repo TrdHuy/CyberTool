@@ -308,7 +308,7 @@ namespace log_guard.implement.device
                     }
 
                 }
-                
+
             }
 
             FinishScanDevice?.Invoke(this, EventArgs.Empty);
@@ -323,7 +323,7 @@ namespace log_guard.implement.device
         #region SerialPortService
         private static class SerialPortService
         {
-            private static Logger SPSLogger = new Logger("SerialPortService");
+            private static Logger SPSLogger = new Logger("SerialPortService", "log_guard");
 
             private static string[] _serialPorts;
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using cyber_base.implement.utils;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace cyber_base.async_task
 {
     public abstract class BaseAsyncTask : IAsyncTask
     {
+        private static Logger _logger = new Logger("BaseAsyncTask");
+
         private bool _isDisposed = false;
         private bool _isCompleted;
         private bool _isFaulted;
@@ -163,6 +166,8 @@ namespace cyber_base.async_task
 
                 // set completed flag
                 IsCompleted = true;
+                _logger.I("Task " + "\"" + Name + "\"" + " was completed in: "
+                    + asynTaskExecuteWatcher.ElapsedMilliseconds + "ms");
 
                 // default set message result if it was not handled
                 if (_result.MesResult == MessageAsyncTaskResult.Non)
@@ -296,10 +301,16 @@ namespace cyber_base.async_task
         {
             if (task.IsFaulted)
             {
+                _logger.I("Task " + "\"" + Name + "\"" + " was faulted");
+                if (task.Exception != null)
+                {
+                    _logger.F(task.Exception.ToString());
+                }
                 throw task.Exception ?? new AggregateException();
             }
             else if (task.IsCanceled)
             {
+                _logger.I("Task " + "\"" + Name + "\"" + " was canceled from user");
                 throw new OperationCanceledException("Task was aborted from user!");
             }
         }

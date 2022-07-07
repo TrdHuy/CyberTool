@@ -16,7 +16,7 @@ namespace log_guard.implement.flow.run_thread_config
 {
     internal class RunThreadConfigManager : BaseLogGuardModule, IRunThreadConfigManager
     {
-        private static Logger logger = new Logger("RunThreadConfigManager");
+        private static Logger logger = new Logger("RunThreadConfigManager", "log_guard");
         private const string _configPath = @"\config.json";
         private RunThreadConfigImpl _config;
 

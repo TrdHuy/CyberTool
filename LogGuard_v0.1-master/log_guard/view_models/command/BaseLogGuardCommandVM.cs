@@ -23,7 +23,7 @@ namespace log_guard.view_models.command
 
         public BaseLogGuardCommandVM(BaseViewModel parentsModel, string commandVMTag = "BaseLogGuardCommandVM") : base(parentsModel)
         {
-            _logger = new Logger(commandVMTag);
+            _logger = new Logger(commandVMTag, "log_guard");
         }
 
         protected override ICommandExecuter OnKey(string keyTag
