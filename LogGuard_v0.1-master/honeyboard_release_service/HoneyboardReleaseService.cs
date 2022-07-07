@@ -32,7 +32,7 @@ namespace honeyboard_release_service
         public HoneyboardReleaseService()
         {
             Header = "HBD Release";
-            HeaderGeometryData = PublisherDefinition.SERVICE_PAGE_HEADER_GEOMETRY_DATA;
+            HeaderGeometryData = PublisherDefinition.PUBLISHER_PLUGIN_GEOMETRY_DATA;
             ServiceID = PublisherDefinition.SERVICE_PAGE_URI_ORIGINAL_STRING;
             ServicePageLoadingDelayTime = PublisherDefinition.SERVICE_PAGE_LOADING_DELAY_TIME;
             ServiceResourceUri = new Uri("pack://application:,,,/honeyboard_release_service;component/themes/Themes.xaml",
