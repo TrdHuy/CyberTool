@@ -99,7 +99,7 @@
 						<Setter.Value>
 							<ControlTemplate TargetType="ListViewItem">
 								<Grid>
-									<TextBlock Text="{Binding CommitTitle}"
+									<TextBlock Text="{Binding CommitTitle, Mode=OneWay}"
 											   Margin="7,0,0,0"
 											   VerticalAlignment="Center" />
 									<Rectangle x:Name="FeedBackRec"
@@ -376,7 +376,7 @@
 						<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
 						<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
 					</ControlTemplate.Resources>
-					
+
 					<Grid>
 						<Rectangle x:Name="BackgroundRec"
 								   Fill="{TemplateBinding Background}"
@@ -391,7 +391,7 @@
 											HorizontalScrollBarVisibility="Disabled"
 											ScrollHeaderHeight="0"
 											ThumbBackground="{DynamicResource ButtonBackground_Level1}"
-											ScrollBarBackground="Transparent"/>
+											ScrollBarBackground="Transparent" />
 					</Grid>
 
 				</ControlTemplate>

@@ -60,9 +60,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
                     if (branch != null)
                     {
                         ReleasingProjectManager
-                            .Current
-                            .CurrentProjectVO?
-                            .AddProjectBranch(branch.Branch);
+                            .Current.AddProjectBranch(branch.Branch);
                     }
 
                     if (isOnBranch && branch != null)
@@ -87,7 +85,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
             {
                 ReleasingProjectManager
                     .Current
-                    .UpdateVersionHistoryTimeline();
+                    .UpdateVersionHistoryTimelineInBackground();
             }
             else if (message == CyberContactMessage.Cancel)
             {

@@ -5,8 +5,6 @@ using honeyboard_release_service.implement.project_manager;
 using honeyboard_release_service.implement.ui_event_handler;
 using honeyboard_release_service.implement.user_data_manager;
 using honeyboard_release_service.implement.view_helper;
-using honeyboard_release_service.implement.view_manager.notebook_header;
-using honeyboard_release_service.implement.view_manager.notebook_item;
 using honeyboard_release_service.implement.view_model;
 using System;
 using System.Collections.Generic;
@@ -23,8 +21,6 @@ namespace honeyboard_release_service.implement.module
         private static Collection<IPublisherModule> _Modules;
 
         private static IPublisherModule? _VMM_Instance;
-        private static IPublisherModule? _CNHVM_Instance;
-        private static IPublisherModule? _CNIVM_Instance;
         private static IPublisherModule? _PVH_Instance;
         private static IPublisherModule? _SPCEF_Instance;
         private static IPublisherModule? _PKAL_Instance;
@@ -44,8 +40,6 @@ namespace honeyboard_release_service.implement.module
 
             _Modules.Add(VMM_Instance);
             _Modules.Add(PVH_Instance);
-            _Modules.Add(CNIVM_Instance);
-            _Modules.Add(CNHVM_Instance);
             _Modules.Add(SPCEF_Instance);
             _Modules.Add(PKAL_Instance);
             _Modules.Add(ATM_Instance);
@@ -76,8 +70,6 @@ namespace honeyboard_release_service.implement.module
             _Modules.Clear();
             _VMM_Instance = null;
             _PVH_Instance = null;
-            _CNHVM_Instance = null;
-            _CNIVM_Instance = null;
             _SPCEF_Instance = null;
             _PKAL_Instance = null;
             _ATM_Instance = null;
@@ -147,32 +139,6 @@ namespace honeyboard_release_service.implement.module
                 }
                 ArgumentNullException.ThrowIfNull(_VMM_Instance);
                 return (ViewModelManager)_VMM_Instance;
-            }
-        }
-
-        public static CalendarNotebookHeaderViewManager CNHVM_Instance
-        {
-            get
-            {
-                if (_CNHVM_Instance == null)
-                {
-                    _CNHVM_Instance = Activator.CreateInstance(typeof(CalendarNotebookHeaderViewManager), true) as CalendarNotebookHeaderViewManager;
-                }
-                ArgumentNullException.ThrowIfNull(_CNHVM_Instance);
-                return (CalendarNotebookHeaderViewManager)_CNHVM_Instance;
-            }
-        }
-
-        public static CalendarNotebookItemViewManager CNIVM_Instance
-        {
-            get
-            {
-                if (_CNIVM_Instance == null)
-                {
-                    _CNIVM_Instance = Activator.CreateInstance(typeof(CalendarNotebookItemViewManager), true) as CalendarNotebookItemViewManager;
-                }
-                ArgumentNullException.ThrowIfNull(_CNIVM_Instance);
-                return (CalendarNotebookItemViewManager)_CNIVM_Instance;
             }
         }
 

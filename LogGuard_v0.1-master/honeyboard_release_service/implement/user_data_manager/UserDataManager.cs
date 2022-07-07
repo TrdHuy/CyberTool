@@ -18,7 +18,7 @@ namespace honeyboard_release_service.implement.user_data_manager
 {
     internal class UserDataManager : BasePublisherModule
     {
-        private const string TAG = "LogGuard_v0.1";
+        private const string TAG = "h2sw_solution";
         private const string DATA_FOLDER_NAME = "data";
         private const string DATA_FILE_NAME = "user_data.json";
         private string directory = "";
@@ -140,7 +140,7 @@ namespace honeyboard_release_service.implement.user_data_manager
         {
             var path = dataFolderName + @"\" + DATA_FILE_NAME;
             dynamic obj = new ExpandoObject();
-            obj.CurrentImportedProject = _currentImportedProject;
+            obj.CurrentImportedProject = _currentImportedProject?.Path ?? "";
             obj.ImportedProjects = _importedProjects;
             var json = JsonHelper.SerializeObject(obj);
             await File.WriteAllTextAsync(path, json);
@@ -161,14 +161,17 @@ namespace honeyboard_release_service.implement.user_data_manager
 
             if (obj != null)
             {
+
                 try
                 {
-                    _currentImportedProject = obj.CurrentImportedProject.ToObject<ProjectVO>();
+                    _importedProjects = obj.ImportedProjects.ToObject<Dictionary<string, ProjectVO>>();
                 }
                 catch { }
                 try
                 {
-                    _importedProjects = obj.ImportedProjects.ToObject<Dictionary<string, ProjectVO>>();
+
+                    var currentImportedPorjectPath = obj.CurrentImportedProject.ToObject<string>();
+                    _currentImportedProject = _importedProjects[currentImportedPorjectPath];
                 }
                 catch { }
             }

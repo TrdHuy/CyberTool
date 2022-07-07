@@ -13,7 +13,7 @@ namespace honeyboard_release_service.models.VOs
         public bool IsRemote { get; set; } = false;
         public bool IsNode { get; set; } = false;
 
-        public SortedDictionary<DateTime, List<CommitVO>>? CommitMap { get; set; }
+        public Dictionary<string, CommitVO>? CommitMap { get; set; }
 
         public BranchVO(string path, string title, bool isNode = false, bool isRemote = false)
             : base(title)
@@ -24,7 +24,7 @@ namespace honeyboard_release_service.models.VOs
 
             if (IsNode)
             {
-                CommitMap = new SortedDictionary<DateTime, List<CommitVO>>();
+                CommitMap = new Dictionary<string, CommitVO>();
             }
         }
     }

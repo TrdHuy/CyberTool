@@ -74,7 +74,6 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
                     {
                         ReleasingProjectManager
                             .Current
-                            .CurrentProjectVO?
                             .AddProjectBranch(branch.Branch);
                     }
 
@@ -102,7 +101,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
 
             ReleasingProjectManager
                     .Current
-                    .UpdateVersionHistoryTimeline();
+                    .UpdateVersionHistoryTimelineInBackground();
         }
 
     }

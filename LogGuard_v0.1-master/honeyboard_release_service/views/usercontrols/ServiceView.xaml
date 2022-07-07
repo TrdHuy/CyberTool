@@ -10,6 +10,7 @@
 			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 			 xmlns:nic="clr-namespace:honeyboard_release_service.view_models.calendar_notebook.items"
 			 mc:Ignorable="d"
+			 xmlns:cnu="clr-namespace:honeyboard_release_service.views.elements.calendar_notebook"
 			 xmlns:vmm="clr-namespace:honeyboard_release_service.implement.markup"
 			 xmlns:def="clr-namespace:honeyboard_release_service.definitions"
 			 xmlns:lm="clr-namespace:honeyboard_release_service.views.elements.log_monitor"
@@ -132,160 +133,8 @@
 		
 		<Grid Grid.Row="4"
 			  Visibility="{Binding CalendarNoteBookVisibility}"
-			  Background="{StaticResource Background_Level2}"
 			  Grid.ColumnSpan="3">
-			<Grid.OpacityMask>
-				<VisualBrush Visual="{Binding ElementName=CalendarNoteBookBorder}" />
-			</Grid.OpacityMask>
-
-			<Grid.RowDefinitions>
-				<RowDefinition Height="45" />
-				<RowDefinition Height="*" />
-			</Grid.RowDefinitions>
-
-
-			<Grid Grid.Row="0"
-				  pvh:PublisherViewHelper.ViewKey="CalendarNoteBookGridContainer">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="50" />
-					<ColumnDefinition />
-					<ColumnDefinition />
-					<ColumnDefinition />
-					<ColumnDefinition />
-					<ColumnDefinition />
-					<ColumnDefinition />
-					<ColumnDefinition />
-					<ColumnDefinition Width="25" />
-				</Grid.ColumnDefinitions>
-
-				<Border Grid.Column="1"
-						CornerRadius="5"
-						Margin="5,10,5,5"
-						Background="{StaticResource Background_Level3}">
-					<TextBlock Text="Monday 16"
-							   FontSize="10"
-							   FontWeight="Bold"
-							   VerticalAlignment="Center"
-							   Margin="7,0,0,0"
-							   Foreground="{StaticResource Foreground_Level3}" />
-				</Border>
-
-				<Border Grid.Column="2"
-						CornerRadius="5"
-						Margin="5,10,5,5"
-						Background="{StaticResource Background_Level3}">
-					<TextBlock Text="Tuesday 17"
-							   FontSize="10"
-							   FontWeight="Bold"
-							   VerticalAlignment="Center"
-							   Margin="7,0,0,0"
-							   Foreground="{StaticResource Foreground_Level3}" />
-				</Border>
-
-				<Border Grid.Column="3"
-						CornerRadius="5"
-						Margin="5,10,5,5"
-						Background="{StaticResource Background_Level3}">
-					<TextBlock Text="Wednesday 18"
-							   FontSize="10"
-							   FontWeight="Bold"
-							   VerticalAlignment="Center"
-							   Margin="7,0,0,0"
-							   Foreground="{StaticResource Foreground_Level3}" />
-				</Border>
-
-				<Border Grid.Column="4"
-						CornerRadius="5"
-						Margin="5,10,5,5"
-						Background="{StaticResource Background_Level3}">
-					<TextBlock Text="Thursday 19"
-							   FontSize="10"
-							   FontWeight="Bold"
-							   VerticalAlignment="Center"
-							   Margin="7,0,0,0"
-							   Foreground="{StaticResource Foreground_Level3}" />
-				</Border>
-
-				<Border Grid.Column="5"
-						CornerRadius="5"
-						Margin="5,10,5,5"
-						Background="{StaticResource Background_Level3}">
-					<TextBlock Text="Friday 20"
-							   FontSize="10"
-							   FontWeight="Bold"
-							   VerticalAlignment="Center"
-							   Margin="7,0,0,0"
-							   Foreground="{StaticResource Foreground_Level3}" />
-				</Border>
-
-				<Border Grid.Column="6"
-						CornerRadius="5"
-						Margin="5,10,5,5"
-						Background="{StaticResource Background_Level3}">
-					<TextBlock Text="Saturday 21"
-							   FontSize="10"
-							   FontWeight="Bold"
-							   VerticalAlignment="Center"
-							   Margin="7,0,0,0"
-							   Foreground="{StaticResource Foreground_Level3}" />
-				</Border>
-
-				<Border Grid.Column="7"
-						CornerRadius="5"
-						Margin="5,10,5,5"
-						Background="{StaticResource Background_Level3}">
-					<TextBlock Text="Sunday 22"
-							   FontSize="10"
-							   FontWeight="Bold"
-							   VerticalAlignment="Center"
-							   Margin="7,0,0,0"
-							   Foreground="{StaticResource Foreground_Level3}" />
-				</Border>
-			</Grid>
-			<ListView Grid.Row="1"
-					  Background="{DynamicResource Background_Level2}"
-					  pvh:PublisherViewHelper.ViewKey="CalendarNoteBookListView"
-					  ItemsSource="{Binding CalendarNoteBookContext.NotebookItemContexts}"
-					  BorderThickness="0">
-				<ListView.Template>
-					<ControlTemplate TargetType="ListView">
-						<Grid>
-							<Border x:Name="RecMask"
-									CornerRadius="0,0,10,10"
-									Background="{TemplateBinding Background}" />
-							<Border Name="Border"
-									Background="{TemplateBinding Background}">
-								<Border.OpacityMask>
-									<VisualBrush Visual="{Binding ElementName=RecMask}" />
-								</Border.OpacityMask>
-								<ContentControl BorderBrush="{StaticResource ButtonBackground_Level1}"
-												VerticalAlignment="Top"
-												VerticalContentAlignment="Center"
-												Style="{StaticResource CyberCollapsibleScrollStyle}">
-									<ItemsPresenter />
-								</ContentControl>
-							</Border>
-						</Grid>
-					</ControlTemplate>
-				</ListView.Template>
-				<ListView.ItemContainerStyle>
-					<Style TargetType="ListViewItem">
-						<Setter Property="Height"
-								Value="100" />
-						<Setter Property="Template">
-							<Setter.Value>
-								<ControlTemplate TargetType="ListViewItem">
-									<Border x:Name="Bd"
-											BorderThickness="0">
-										<!--<ContentPresenter />-->
-										<ContentPresenter Content="{Binding NoteBookContent}" />
-									</Border>
-								</ControlTemplate>
-							</Setter.Value>
-						</Setter>
-					</Style>
-				</ListView.ItemContainerStyle>
-			</ListView>
+			<cnu:ReleaseNotebook/>
 		</Grid>
 
 		

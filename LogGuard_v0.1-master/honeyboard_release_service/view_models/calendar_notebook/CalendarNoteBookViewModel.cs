@@ -1,11 +1,11 @@
 ﻿using cyber_base.view_model;
 using honeyboard_release_service.definitions;
 using honeyboard_release_service.extensions;
+using honeyboard_release_service.implement.project_manager;
 using honeyboard_release_service.implement.view_helper;
-using honeyboard_release_service.implement.view_manager.notebook_header;
-using honeyboard_release_service.implement.view_manager.notebook_item;
 using honeyboard_release_service.models.VOs;
 using honeyboard_release_service.view_models.calendar_notebook.items;
+using honeyboard_release_service.views.elements.calendar_notebook.@base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,16 +18,16 @@ using System.Windows.Controls;
 
 namespace honeyboard_release_service.view_models.calendar_notebook
 {
-    internal class CalendarNoteBookViewModel : BaseViewModel
+    internal class CalendarNotebookViewModel : BaseViewModel
     {
+        private ObservableCollection<ICalendarNotebookProjectItemContext> _notebookItemContexts;
+        private Dictionary<string, ICalendarNotebookProjectItemContext> _notebookItemContextsMap;
 
-        private DateTime _startDateTime;
-        private DateTime _endDateTime;
-        private PublisherCalendarNotebookViewType _calendarViewType;
-        private ObservableCollection<NotebookItemViewModel> _notebookItemContexts;
+        private CalendarNotebookProjectItemViewModel? _currentSelectedProjectItemContext;
+        public CalendarNotebookProjectItemViewModel? CurrentSelectedProjectItemContext => _currentSelectedProjectItemContext;
 
         [Bindable(true)]
-        public ObservableCollection<NotebookItemViewModel> NotebookItemContexts
+        public ObservableCollection<ICalendarNotebookProjectItemContext> ProjectItemContexts
         {
             get
             {
@@ -40,64 +40,66 @@ namespace honeyboard_release_service.view_models.calendar_notebook
             }
         }
 
-        [Bindable(true)]
-        public PublisherCalendarNotebookViewType CalendarViewType
+
+
+        public CalendarNotebookViewModel(BaseViewModel parent) : base(parent)
         {
-            get
+            _notebookItemContexts = new ObservableCollection<ICalendarNotebookProjectItemContext>();
+            _notebookItemContextsMap = new Dictionary<string, ICalendarNotebookProjectItemContext>();
+
+            ReleasingProjectManager.Current.UserDataImported -= HandleUserDataImported;
+            ReleasingProjectManager.Current.UserDataImported += HandleUserDataImported;
+            ReleasingProjectManager.Current.ImportedProjectsCollectionChanged -= HandleImportedProjectCollectionChanged;
+            ReleasingProjectManager.Current.ImportedProjectsCollectionChanged += HandleImportedProjectCollectionChanged;
+            ReleasingProjectManager.Current.CurrentProjectChanged -= HandleCurrentProjectChanged;
+            ReleasingProjectManager.Current.CurrentProjectChanged += HandleCurrentProjectChanged;
+        }
+
+        private void HandleCurrentProjectChanged(object sender, ProjectVO? oldProject, ProjectVO? newProject)
+        {
+            if (newProject != null)
+                _currentSelectedProjectItemContext = _notebookItemContextsMap[newProject.Path] as CalendarNotebookProjectItemViewModel;
+        }
+
+        private void HandleImportedProjectCollectionChanged(object sender, ProjectsCollectionChangedEventArg arg)
+        {
+            if (arg.ChangedType == ProjectsCollectionChangedType.Add
+                && arg.NewValue != null)
             {
-                return _calendarViewType;
+                var context = new CalendarNotebookProjectItemViewModel(arg.NewValue);
+                _notebookItemContexts.Add(context);
+                _notebookItemContextsMap.Add(arg.NewValue.Path, context);
             }
-            set
+            else if (arg.ChangedType == ProjectsCollectionChangedType.Modified
+                && arg.NewValue != null
+                && arg.OldValue != null)
             {
-                _calendarViewType = value;
-                InvalidateOwn();
+                var context = _notebookItemContextsMap[arg.OldValue.Path];
+                _notebookItemContexts.Remove(context);
+                var newContext = new CalendarNotebookProjectItemViewModel(arg.NewValue);
+                _notebookItemContexts.Add(newContext);
+                _notebookItemContextsMap[arg.OldValue.Path] = newContext;
             }
         }
 
-        [Bindable(true)]
-        public DateTime StartDateTime
+        private void HandleUserDataImported(object sender)
         {
-            get
-            {
-                return _startDateTime;
-            }
-            set
-            {
-                _startDateTime = value;
-                InvalidateOwn();
-            }
-        }
+            var importedProjectMap = ReleasingProjectManager.Current.ImportedProjects;
 
-        [Bindable(true)]
-        public DateTime EndDateTime
-        {
-            get
+            if (importedProjectMap != null)
             {
-                return _endDateTime;
+                foreach (var project in importedProjectMap.Values)
+                {
+                    var context = new CalendarNotebookProjectItemViewModel(project);
+                    _notebookItemContexts.Add(context);
+                    _notebookItemContextsMap.Add(project.Path, context);
+                }
             }
-            set
-            {
-                _endDateTime = value;
-                InvalidateOwn();
-            }
-        }
-
-        public CalendarNoteBookViewModel(BaseViewModel parent) : base(parent)
-        {
-            _startDateTime = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
-            _endDateTime = DateTime.Now.EndOfWeek(DayOfWeek.Sunday);
-            _calendarViewType = PublisherCalendarNotebookViewType.DayOfWeek;
-            _notebookItemContexts = new ObservableCollection<NotebookItemViewModel>();
-            _notebookItemContexts.Add(new NotebookItemViewModel(this, ProjectVO.GetTestData("HoneyBoard")));
-            _notebookItemContexts.Add(new NotebookItemViewModel(this, ProjectVO.GetTestData("SmartEye")));
-            _notebookItemContexts.Add(new NotebookItemViewModel(this, ProjectVO.GetTestData("Clipboard")));
-            _notebookItemContexts.Add(new NotebookItemViewModel(this, ProjectVO.GetTestData("HoneyBoardW")));
         }
 
         public override void OnViewInstantiated()
         {
             base.OnViewInstantiated();
-            CalendarNotebookHeaderViewManager.Current.UpdateColumnNumber(StartDateTime, EndDateTime);
         }
 
     }

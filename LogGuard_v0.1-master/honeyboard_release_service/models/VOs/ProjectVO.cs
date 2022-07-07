@@ -28,6 +28,11 @@ namespace honeyboard_release_service.models.VOs
         {
             Path = projectPath;
             Branchs = new Dictionary<string, BranchVO>();
+            var projectPathSplit = projectPath?.Split('\\');
+            if (projectPathSplit?.Length > 1)
+            {
+                Name = projectPathSplit[projectPathSplit.Length - 1];
+            }
         }
 
         public void AddProjectBranch(BranchVO bVO)
@@ -53,25 +58,17 @@ namespace honeyboard_release_service.models.VOs
                || string.IsNullOrEmpty(OnBranch?.BranchPath)
                || OnBranch.CommitMap == null) return null;
 
-            var versionDateMap = OnBranch.CommitMap;
+            var commitMap = OnBranch.CommitMap;
 
-            var listVersion = versionDateMap.ContainsKey(vVO.ReleaseDateTime.Date) ?
-                versionDateMap[vVO.ReleaseDateTime.Date]
-                : new List<CommitVO>();
-
-            var existedVO = listVersion.Where(cm => cm.CommitId == vVO.CommitId).FirstOrDefault();
-            if (existedVO == null)
+            if (!commitMap.ContainsKey(vVO.CommitId))
             {
-                existedVO = vVO;
-                listVersion.Add(vVO);
+                commitMap.Add(vVO.CommitId, vVO);
+                return vVO;
             }
-
-            if (!versionDateMap.ContainsKey(vVO.ReleaseDateTime.Date))
+            else
             {
-                versionDateMap.Add(vVO.ReleaseDateTime.Date, listVersion);
+                return commitMap[vVO.CommitId];
             }
-
-            return existedVO;
         }
 
         public void SetOnBranch(string branchPath)
@@ -80,24 +77,6 @@ namespace honeyboard_release_service.models.VOs
             {
                 OnBranch = Branchs[branchPath];
             }
-        }
-
-        public static ProjectVO GetTestData(string name, string package = "com.samsung.android")
-        {
-            var vo = new ProjectVO(@"C:/user/data/project/HoneyBoard")
-            {
-                OnBranch = new BranchVO(@"origin\master", "master", true, true),
-                Name = name,
-                PackageName = package,
-                VersionFilePath = @"C:/user/data/project/HoneyBoard/version.properties",
-            };
-            vo.AddCommitVOToCurrentBranch(CommitVO.GetTestData("5.5.00.13", DateTime.Now.AddDays(-2)));
-            vo.AddCommitVOToCurrentBranch(CommitVO.GetTestData("5.5.00.14", DateTime.Now));
-            vo.AddCommitVOToCurrentBranch(CommitVO.GetTestData("5.5.00.15", DateTime.Now));
-            vo.AddCommitVOToCurrentBranch(CommitVO.GetTestData("5.5.00.16", DateTime.Now));
-            vo.AddCommitVOToCurrentBranch(CommitVO.GetTestData("5.5.00.17", DateTime.Now.AddDays(1)));
-
-            return vo;
         }
     }
 }

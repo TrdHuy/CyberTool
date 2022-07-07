@@ -9,11 +9,13 @@
 			<Path x:Name="ContentPresenterPath"
 				  Data="{TemplateBinding Content, Converter={StaticResource GeoPathConverter}}"
 				  Stretch="Uniform"
+				  Margin="{TemplateBinding Padding}"
 				  Fill="{TemplateBinding Foreground}" />
 			<Path x:Name="FeedbackPath"
 				  Visibility="Hidden"
 				  Data="{TemplateBinding Content, Converter={StaticResource GeoPathConverter}}"
 				  Stretch="Uniform"
+				  Margin="{TemplateBinding Padding}"
 				  Fill="{TemplateBinding Background}" />
 		</Grid>
 		<ControlTemplate.Triggers>
@@ -24,6 +26,15 @@
 						Value="Visible" />
 				<Setter Property="Cursor"
 						Value="Hand" />
+			</Trigger>
+			<Trigger Property="IsPressed"
+					 Value="True">
+				<Setter Property="Visibility"
+						TargetName="FeedbackPath"
+						Value="Visible" />
+				<Setter Property="Fill"
+						TargetName="FeedbackPath"
+						Value="#2c000000" />
 			</Trigger>
 
 		</ControlTemplate.Triggers>

@@ -83,7 +83,7 @@ namespace honeyboard_release_service.view_models.project_manager
                 {
                     if (_RPM_Instance.CurrentProjectVO != null)
                     {
-                        _RPM_Instance.CurrentProjectVO.SetOnBranch(value);
+                        _RPM_Instance.SetCurrentProjectOnBranch(value);
                         InvalidateOwn();
 
                         if (isShouldExecuteBranchChanged)

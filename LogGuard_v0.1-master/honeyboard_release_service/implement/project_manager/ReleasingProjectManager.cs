@@ -8,9 +8,11 @@ using honeyboard_release_service.implement.ui_event_handler.async_tasks.others;
 using honeyboard_release_service.implement.user_data_manager;
 using honeyboard_release_service.implement.view_model;
 using honeyboard_release_service.models.VOs;
+using honeyboard_release_service.view_models.calendar_notebook.items;
 using honeyboard_release_service.view_models.project_manager.items;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -22,12 +24,50 @@ namespace honeyboard_release_service.implement.project_manager
     internal class ReleasingProjectManager : BasePublisherModule
     {
         private ProjectVO? _currentProjectVO;
-        private Dictionary<string, ProjectVO>? _importedProjects;
+        private Dictionary<string, ProjectVO> _importedProjects = new Dictionary<string, ProjectVO>();
         private CommitVO? _latestCommitVO;
         private BaseAsyncTask? _getVersionHistoryTaskCache;
         private bool _isLatestVersionSet = false;
 
-        public event UserDataImportedHandler? UserDataImported;
+        private event UserDataImportedHandler? _userDataImported;
+        private event ImportedProjectsCollectionChangedHandler? _importedProjectsCollectionChanged;
+        private event CurrentProjectChangedHandler? _currentProjectChanged;
+
+        public event CurrentProjectChangedHandler CurrentProjectChanged
+        {
+            add
+            {
+                _currentProjectChanged += value;
+            }
+            remove
+            {
+                _currentProjectChanged -= value;
+            }
+        }
+
+        public event UserDataImportedHandler UserDataImported
+        {
+            add
+            {
+                _userDataImported += value;
+            }
+            remove
+            {
+                _userDataImported -= value;
+            }
+        }
+
+        public event ImportedProjectsCollectionChangedHandler ImportedProjectsCollectionChanged
+        {
+            add
+            {
+                _importedProjectsCollectionChanged += value;
+            }
+            remove
+            {
+                _importedProjectsCollectionChanged -= value;
+            }
+        }
 
         public static ReleasingProjectManager Current
         {
@@ -38,6 +78,14 @@ namespace honeyboard_release_service.implement.project_manager
         }
 
         public ProjectVO? CurrentProjectVO { get => _currentProjectVO; }
+        public Dictionary<string, ProjectVO> ImportedProjects
+        {
+            get => _importedProjects;
+            private set
+            {
+                _importedProjects = value;
+            }
+        }
 
         public CommitVO? LatestCommitVO
         {
@@ -47,6 +95,7 @@ namespace honeyboard_release_service.implement.project_manager
             }
 
         }
+
         public string SelectedBranchPath
         {
             get
@@ -73,9 +122,29 @@ namespace honeyboard_release_service.implement.project_manager
 
         public void CreateNewProjectForCurrentProjectVO(string proPath)
         {
+            var oldProject = _currentProjectVO;
             _currentProjectVO = new ProjectVO(proPath);
+            if (!ImportedProjects.ContainsKey(proPath))
+            {
+                ImportedProjects[proPath] = _currentProjectVO;
+                _importedProjectsCollectionChanged?.Invoke(this
+                    , new ProjectsCollectionChangedEventArg(_currentProjectVO
+                        , null
+                        , ProjectsCollectionChangedType.Add));
+            }
+            else
+            {
+                var oldProjectVO = ImportedProjects[proPath];
+                ImportedProjects[proPath] = _currentProjectVO;
+                _importedProjectsCollectionChanged?.Invoke(this
+                    , new ProjectsCollectionChangedEventArg(_currentProjectVO
+                        , oldProjectVO
+                        , ProjectsCollectionChangedType.Modified));
+            }
             UserDataManager.Current.AddImportedProject(proPath, _currentProjectVO);
             UserDataManager.Current.SetCurrentImportedProject(_currentProjectVO);
+            _currentProjectChanged?.Invoke(this, oldProject, _currentProjectVO);
+
         }
 
         public void SetLatestCommitVO(CommitVO commitVO)
@@ -83,10 +152,32 @@ namespace honeyboard_release_service.implement.project_manager
             _latestCommitVO = commitVO;
         }
 
-        public async void UpdateVersionHistoryTimeline()
+        public void SetCurrentProjectOnBranch(string branch)
+        {
+            if (CurrentProjectVO?.OnBranch?.BranchPath != branch)
+            {
+                if (CurrentProjectVO != null)
+                {
+                    CurrentProjectVO.SetOnBranch(branch);
+                }
+            }
+        }
+
+        public CommitVO? AddCommitToCurrentBranch(CommitVO vVO)
+        {
+            return CurrentProjectVO?.AddCommitVOToCurrentBranch(vVO);
+        }
+
+        public void AddProjectBranch(BranchVO bVO)
+        {
+            CurrentProjectVO?.AddProjectBranch(bVO);
+        }
+
+        public async void UpdateVersionHistoryTimelineInBackground(bool isNeedToUpdateCurrentPorjectOnCalendarNotebook = true)
         {
             _isLatestVersionSet = false;
             var pMViewmodel = ViewModelManager.Current.PMViewModel;
+            var cnViewmodel = ViewModelManager.Current.CNViewModel;
 
             if (_getVersionHistoryTaskCache != null
                 && !_getVersionHistoryTaskCache.IsCompleted
@@ -114,23 +205,48 @@ namespace honeyboard_release_service.implement.project_manager
                         SetLatestCommitVO(vVO);
                         _isLatestVersionSet = true;
                     }
-                    var vOInCurrentBranch = CurrentProjectVO?
-                        .AddCommitVOToCurrentBranch(vVO);
 
+                    // Xử lý trên model
+                    var vOInCurrentBranch = AddCommitToCurrentBranch(vVO);
+
+                    // Xử lý trên viewmodel
                     if (vOInCurrentBranch != null)
                     {
                         pMViewmodel.VersionHistoryItemContexts.Add(
                             new VersionHistoryItemViewModel(vOInCurrentBranch));
+
+                        if (isNeedToUpdateCurrentPorjectOnCalendarNotebook)
+                        {
+                            cnViewmodel.CurrentSelectedProjectItemContext?
+                                .CommitSource.Add(new CalendarNotebookCommitItemViewModel(
+                                    vOInCurrentBranch
+                                    , cnViewmodel.CurrentSelectedProjectItemContext));
+                        }
                     }
                 }
                 , taskFinishedCallback: (s) =>
                 {
                     pMViewmodel.IsLoadingProjectVersionHistory = false;
+                    if (isNeedToUpdateCurrentPorjectOnCalendarNotebook
+                        && cnViewmodel.CurrentSelectedProjectItemContext != null)
+                    {
+                        cnViewmodel.CurrentSelectedProjectItemContext.IsLoadingData = false;
+                    }
                 });
             _getVersionHistoryTaskCache = getVersionHistory;
+
+            // Xử lý project manager viewmodel trước khi thực hiện task
             pMViewmodel.VersionHistoryItemContexts.Clear();
             pMViewmodel.VersionHistoryListTipVisibility = Visibility.Collapsed;
             pMViewmodel.IsLoadingProjectVersionHistory = true;
+
+            // Xử lý calendar notebook viewmodel trước khi thực hiện task
+            if (isNeedToUpdateCurrentPorjectOnCalendarNotebook
+                && cnViewmodel.CurrentSelectedProjectItemContext != null)
+            {
+                cnViewmodel.CurrentSelectedProjectItemContext.IsLoadingData = true;
+                cnViewmodel.CurrentSelectedProjectItemContext.CommitSource.Clear();
+            }
             await getVersionHistory.Execute();
         }
 
@@ -150,8 +266,9 @@ namespace honeyboard_release_service.implement.project_manager
                 _getVersionHistoryTaskCache.Cancel();
             }
             var pMViewmodel = ViewModelManager.Current.PMViewModel;
+            var oldProject = _currentProjectVO;
             _currentProjectVO = currentProject;
-            _importedProjects = importedProjects;
+            ImportedProjects = importedProjects;
 
             if (currentProject != null && currentProject.OnBranch != null)
             {
@@ -179,12 +296,37 @@ namespace honeyboard_release_service.implement.project_manager
                     title: "Importing branchs from user data"
                    , task: multiTask
                    , isCancelable: false);
-                UserDataImported?.Invoke(this);
-                UpdateVersionHistoryTimeline();
+                _userDataImported?.Invoke(this);
+                UpdateVersionHistoryTimelineInBackground(isNeedToUpdateCurrentPorjectOnCalendarNotebook: false);
             }
+
+            // Nên gọi sự kiện này sau khi toàn bộ user data đã được imported thành công
+            _currentProjectChanged?.Invoke(this, oldProject, _currentProjectVO);
         }
     }
 
     internal delegate void UserDataImportedHandler(object sender);
-
+    internal delegate void ImportedProjectsCollectionChangedHandler(object sender, ProjectsCollectionChangedEventArg arg);
+    internal delegate void CurrentProjectChangedHandler(object sender, ProjectVO? oldProject, ProjectVO? newProject);
+    internal class ProjectsCollectionChangedEventArg
+    {
+        public ProjectVO? OldValue { get; private set; }
+        public ProjectVO? NewValue { get; private set; }
+        public ProjectsCollectionChangedType ChangedType { get; private set; }
+        public ProjectsCollectionChangedEventArg(
+            ProjectVO? newValue
+            , ProjectVO? oldValue
+            , ProjectsCollectionChangedType changedType)
+        {
+            OldValue = oldValue;
+            NewValue = newValue;
+            ChangedType = changedType;
+        }
+    }
+    internal enum ProjectsCollectionChangedType
+    {
+        Add = 1,
+        Remove = 2,
+        Modified = 3
+    }
 }

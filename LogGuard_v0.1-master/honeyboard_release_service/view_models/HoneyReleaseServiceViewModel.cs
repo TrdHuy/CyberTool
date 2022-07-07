@@ -16,7 +16,6 @@ namespace honeyboard_release_service.view_models
 {
     internal class HoneyReleaseServiceViewModel : BaseViewModel
     {
-        private CalendarNoteBookViewModel _calendarNoteBookContext;
         private Visibility _calendarNoteBookVisibility;
         private Visibility _logMonitorVisibility;
         private BaseSwPublisherCommandVM _commandVM;
@@ -26,20 +25,6 @@ namespace honeyboard_release_service.view_models
 
         [Bindable(true)]
         public CommandExecuterModel LogMonitorButtonCommand { get; set; }
-
-        [Bindable(true)]
-        public CalendarNoteBookViewModel CalendarNoteBookContext
-        {
-            get
-            {
-                return _calendarNoteBookContext;
-            }
-            set
-            {
-                _calendarNoteBookContext = value;
-                InvalidateOwn();
-            }
-        }
 
         [Bindable(true)]
         public Visibility LogMonitorVisibility
@@ -73,7 +58,6 @@ namespace honeyboard_release_service.view_models
         {
             _calendarNoteBookVisibility = Visibility.Visible;
             _logMonitorVisibility= Visibility.Hidden;
-            _calendarNoteBookContext = new CalendarNoteBookViewModel(this);
             _commandVM = new BaseSwPublisherCommandVM(this);
             CalendarButtonCommand = new CommandExecuterModel((paramaters) =>
             {

@@ -15,28 +15,6 @@ namespace honeyboard_release_service.definitions
 
     }
 
-    internal struct CalendarNotebookSizeDefinition
-    {
-        public static float ProjectColumnWidth { get; } = 50;
-        public static float RightGapColumnWidth { get; } = 25;
-        public static float HeaderCornerRadius { get; } = 5;
-        public static float HeaderMarginLeft { get; } = 5;
-        public static float HeaderMarginTop { get; } = 10;
-        public static float HeaderMarginRight { get; } = 5;
-        public static float HeaderMarginBottom { get; } = 5;
-        public static float HeaderContentMarginLeft { get; } = 8;
-        public static float HeaderContentFontSize { get; } = 10;
-        public static float NotebookItemHeight { get; } = 100;
-        public static float HeaderItemHeight { get; } = 90;
-        public static float HeaderItemWidth { get; } = 30;
-        public static float HeaderItemCornerRad { get; } = 5; 
-        public static float HeaderItemFontSize { get; } = 10;
-        public static float ItemCornerRad { get; } = 5;
-        public static float ItemMargin { get; } = 5;
-        public static float ItemFontSize { get; } = 10;
-
-    }
-
     internal class PublisherKeyFeatureTag
     {
         public const string KEY_TAG_PRT_QUICK_RELEASE_FEATURE = "KEY_TAG_PRT_QUICK_RELEASE_FEATURE";
@@ -62,12 +40,5 @@ namespace honeyboard_release_service.definitions
         CalendarNoteBookBorder = 1,
         CalendarNoteBookGridContainer = 2,
         CalendarNoteBookListView = 3,
-    }
-
-    internal enum PublisherCalendarNotebookViewType
-    {
-        DayOfWeek = 1,
-        MonthOfYear = 2,
-        HourOfDay = 3
     }
 }

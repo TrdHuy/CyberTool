@@ -162,7 +162,7 @@ namespace honeyboard_release_service.view_models.project_manager.items
                     {
                         _loadingTaskCache.Dispose();
                     }
-                    _loadingTaskCache = GetUpdateVersionTitleTask();
+                    _loadingTaskCache = GetUpdateVersionTitleTask(true);
                     if (_loadingTaskCache != null)
                     {
                         IsLoadingVersionTitle = true;
@@ -177,11 +177,12 @@ namespace honeyboard_release_service.view_models.project_manager.items
             return Version;
         }
 
-        public BaseAsyncTask? GetUpdateVersionTitleTask()
+        public BaseAsyncTask? GetUpdateVersionTitleTask(bool force = false)
         {
-            if (_versionVO != null
-                && (_versionVO.Properties?.IsEmpty() ?? true)
-                && !_isVersionTitleLoaded)
+            if (_versionVO != null 
+                && (_versionVO.Properties?.IsEmpty() ?? true) 
+                && !_isVersionTitleLoaded
+                || force && _versionVO != null)
             {
                 _versionVO.Properties = new VersionPropertiesVO();
 
@@ -268,7 +269,7 @@ namespace honeyboard_release_service.view_models.project_manager.items
                 IsLoadingVersionTitle = false;
                 Version = _versionVO.Version;
             }
-            
+
         }
     }
 }
