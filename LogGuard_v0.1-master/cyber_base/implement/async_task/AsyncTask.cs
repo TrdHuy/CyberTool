@@ -33,15 +33,12 @@ namespace cyber_base.implement.async_task
 
         protected async override Task DoMainFunc()
         {
-            var canExecute = CanExecute?.Invoke() ?? true;
-            if (canExecute)
-            {
-                await MainFunc.Invoke(_result)
-                    .ContinueWith((task) =>
-                    {
-                        HandleMainTaskException(task);
-                    });
-            }
+
+            await MainFunc.Invoke(_result)
+                .ContinueWith((task) =>
+                {
+                    HandleMainTaskException(task);
+                });
         }
 
         protected async override Task DoCallback()
@@ -54,6 +51,7 @@ namespace cyber_base.implement.async_task
 
         protected async override Task DoWaitRestDelay(long rest)
         {
+            await Task.Delay(0);
         }
 
         public override void Cancel()
@@ -63,6 +61,11 @@ namespace cyber_base.implement.async_task
         protected async override Task DoDelayForReportTask()
         {
             await Task.Delay(_reportDelay);
+        }
+
+        protected override bool CanMainFuncExecute()
+        {
+            return CanExecute?.Invoke() ?? true;
         }
     }
 }

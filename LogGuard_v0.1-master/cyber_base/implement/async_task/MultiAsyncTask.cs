@@ -155,6 +155,11 @@ namespace cyber_base.implement.async_task
             await Task.Delay(Convert.ToInt32(rest)
                 , _cancellationTokenSource.Token);
         }
+
+        protected override bool CanMainFuncExecute()
+        {
+            return true;
+        }
     }
 
     public delegate void CurrentTaskChangedHandler(object sender, BaseAsyncTask? oldTask, BaseAsyncTask? newTask);

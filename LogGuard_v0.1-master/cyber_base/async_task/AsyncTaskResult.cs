@@ -34,6 +34,11 @@ namespace cyber_base.async_task
         /// The task was faulted
         /// </summary>
         Faulted = 5,
+
+        /// <summary>
+        /// The task is not executeable
+        /// </summary>
+        DoneWithoutExecuted = 6,
     }
 
     public class AsyncTaskResult

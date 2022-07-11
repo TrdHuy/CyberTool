@@ -42,19 +42,15 @@ namespace cyber_base.implement.async_task
 
         protected async override Task DoMainFunc()
         {
-            var canExecute = CanExecute?.Invoke() ?? true;
-            if (canExecute)
-            {
-                await MainFunc.Invoke(_cancellationTokenSource, _result)
-                    .ContinueWith((task) =>
-                    {
-                        HandleMainTaskException(task);
-                    });
-
-                if (_cancellationTokenSource.IsCancellationRequested)
+            await MainFunc.Invoke(_cancellationTokenSource, _result)
+                .ContinueWith((task) =>
                 {
-                    throw new OperationCanceledException("Task was aborted from user!");
-                }
+                    HandleMainTaskException(task);
+                });
+
+            if (_cancellationTokenSource.IsCancellationRequested)
+            {
+                throw new OperationCanceledException("Task was aborted from user!");
             }
         }
 
@@ -92,6 +88,11 @@ namespace cyber_base.implement.async_task
         {
             await Task.Delay(_reportDelay
               , _cancellationTokenSource.Token);
+        }
+
+        protected override bool CanMainFuncExecute()
+        {
+            return CanExecute?.Invoke() ?? true;
         }
     }
 }

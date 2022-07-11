@@ -34,6 +34,7 @@ namespace cyber_base.async_task
             get => _isCompletedCallback;
             protected set => _isCompletedCallback = value;
         }
+
         public bool IsExecuting
         {
             get => _isExecuting;
@@ -107,6 +108,7 @@ namespace cyber_base.async_task
             }
         }
 
+        public bool IsExcuteable { get; private set; }
 
         public BaseAsyncTask(
              string name = ""
@@ -121,7 +123,6 @@ namespace cyber_base.async_task
             _reportDelay = reportDelay;
         }
 
-
         public event IsCompletedChangedHandler? OnCompletedChanged;
         public event IsCanceldChangedHandler? OnCanceledChanged;
         public event IsFaultedChangedHandler? OnFaultedChanged;
@@ -135,47 +136,106 @@ namespace cyber_base.async_task
             var asynTaskExecuteWatcher = Stopwatch.StartNew();
             if (IsCanceled || IsCompleted || IsFaulted) return this;
 
-            // Cập nhật cờ executing
-            IsExecuting = true;
+            // Cập nhật cờ executeable
+            IsExcuteable = CanMainFuncExecute();
 
-            // Thực hiện report tiến độ nếu cần thiết
-            if (_isEnableReport)
+            if (IsExcuteable)
             {
-                DoReportTask();
-            }
-            try
-            {
-                // do main task
-                await Task.Run(DoMainFunc)
-                .ContinueWith((t) =>
-                {
-                    // stop clock
-                    asynTaskExecuteWatcher.Stop();
+                // Cập nhật cờ executing
+                IsExecuting = true;
 
-                    // handle task exception
-                    // only handle operation cancel exception
-                    // exception will be thrown here
-                    HandleMainTaskException(t);
-                });
-                long restLoadingTime = (long)DelayTime - asynTaskExecuteWatcher.ElapsedMilliseconds;
-                if (restLoadingTime > 0)
+                // Thực hiện report tiến độ nếu cần thiết
+                if (_isEnableReport)
                 {
-                    // delay the task if its execution duration smaller than inited delay time
-                    await DoWaitRestDelay(restLoadingTime);
+                    DoReportTask();
                 }
+                try
+                {
+                    // do main task
+                    await Task.Run(DoMainFunc)
+                    .ContinueWith((t) =>
+                    {
+                        // stop clock
+                        asynTaskExecuteWatcher.Stop();
 
+                        // handle task exception
+                        // only handle operation cancel exception
+                        // exception will be thrown here
+                        HandleMainTaskException(t);
+                    });
+                    long restLoadingTime = (long)DelayTime - asynTaskExecuteWatcher.ElapsedMilliseconds;
+                    if (restLoadingTime > 0)
+                    {
+                        // delay the task if its execution duration smaller than inited delay time
+                        await DoWaitRestDelay(restLoadingTime);
+                    }
+
+                    // set completed flag
+                    IsCompleted = true;
+                    _logger.I("Task " + "\"" + Name + "\"" + " was completed in: "
+                        + asynTaskExecuteWatcher.ElapsedMilliseconds + "ms");
+
+                    // default set message result if it was not handled
+                    if (_result.MesResult == MessageAsyncTaskResult.Non)
+                    {
+                        _result.MesResult = MessageAsyncTaskResult.Finished;
+                    }
+                    // update progress when it completed
+                    CurrentProgress = 100;
+
+                    if (isAsyncCallback)
+                    {
+                        await Task.Run(DoCallback);
+                    }
+                    else
+                    {
+                        await DoCallback();
+                    }
+                    IsCompletedCallback = true;
+                }
+                catch (OperationCanceledException oce)
+                {
+                    // when the task was canceled by user
+                    // the callback will be triggered
+                    _result.Messsage = oce.ToString();
+                    _result.MesResult = MessageAsyncTaskResult.Aborted;
+                    IsCompleted = false;
+                    IsFaulted = false;
+                    IsCanceled = true;
+                    if (isAsyncCallback)
+                    {
+                        await Task.Run(DoCallback);
+                    }
+                    else
+                    {
+                        await DoCallback();
+                    }
+                    IsCompletedCallback = true;
+                }
+                catch (Exception ex)
+                {
+                    // when the task was canceled due to function exception
+                    // callback will not be triggered
+                    _result.Messsage = ex.ToString();
+                    _result.MesResult = MessageAsyncTaskResult.Faulted;
+                    IsCompleted = false;
+                    IsFaulted = true;
+                    IsCanceled = false;
+                    IsCompletedCallback = false;
+                }
+                finally
+                {
+                    // Cập nhật cờ executing khi thực hiện toàn bộ
+                    // công việc chính và callback
+                    IsExecuting = false;
+                }
+            }
+            else
+            {
+                _result.MesResult = MessageAsyncTaskResult.DoneWithoutExecuted;
                 // set completed flag
                 IsCompleted = true;
-                _logger.I("Task " + "\"" + Name + "\"" + " was completed in: "
-                    + asynTaskExecuteWatcher.ElapsedMilliseconds + "ms");
-
-                // default set message result if it was not handled
-                if (_result.MesResult == MessageAsyncTaskResult.Non)
-                {
-                    _result.MesResult = MessageAsyncTaskResult.Finished;
-                }
-                // update progress when it completed
-                CurrentProgress = 100;
+                _logger.I("Task " + "\"" + Name + "\"" + " can not be executed!");
 
                 if (isAsyncCallback)
                 {
@@ -186,42 +246,6 @@ namespace cyber_base.async_task
                     await DoCallback();
                 }
                 IsCompletedCallback = true;
-            }
-            catch (OperationCanceledException oce)
-            {
-                // when the task was canceled by user
-                // the callback will be triggered
-                _result.Messsage = oce.ToString();
-                _result.MesResult = MessageAsyncTaskResult.Aborted;
-                IsCompleted = false;
-                IsFaulted = false;
-                IsCanceled = true;
-                if (isAsyncCallback)
-                {
-                    await Task.Run(DoCallback);
-                }
-                else
-                {
-                    await DoCallback();
-                }
-                IsCompletedCallback = true;
-            }
-            catch (Exception ex)
-            {
-                // when the task was canceled due to function exception
-                // callback will not be triggered
-                _result.Messsage = ex.ToString();
-                _result.MesResult = MessageAsyncTaskResult.Faulted;
-                IsCompleted = false;
-                IsFaulted = true;
-                IsCanceled = false;
-                IsCompletedCallback = false;
-            }
-            finally
-            {
-                // Cập nhật cờ executing khi thực hiện toàn bộ
-                // công việc chính và callback
-                IsExecuting = false;
             }
             return this;
         }
@@ -257,6 +281,7 @@ namespace cyber_base.async_task
             _isDisposed = true;
         }
 
+        protected abstract bool CanMainFuncExecute();
         protected abstract Task DoMainFunc();
         protected abstract Task DoCallback();
         protected abstract Task DoWaitRestDelay(long rest);
