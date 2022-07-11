@@ -46,7 +46,6 @@ namespace cyber_base.implement.async_task
         public new List<AsyncTaskResult> Result => _results;
         public event CurrentTaskChangedHandler? CurrentTaskChanged;
 
-
         public MultiAsyncTask(
             List<BaseAsyncTask> mainFunc
             , CancellationTokenSource cancellationTokenSource
@@ -112,6 +111,9 @@ namespace cyber_base.implement.async_task
             int countTaskFinished = 0;
             foreach (var ele in _mainFuncs)
             {
+                // Cập nhật cờ executeable trước khi thay đổi current execute task
+                ele.CanThisTaskExecuteable();
+
                 CurrentExecuteTask = ele;
                 await ele.Execute()
                     .ContinueWith((task) =>

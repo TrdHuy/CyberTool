@@ -39,7 +39,7 @@ namespace cyber_base.async_task
         /// <summary>
         /// Task chính có thực hiện được không
         /// </summary>
-        bool IsExcuteable { get; }
+        bool IsExecuteable { get; }
 
         /// <summary>
         /// Task chính đã được thực hiện xong chưa

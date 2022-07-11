@@ -13,6 +13,7 @@ namespace cyber_base.async_task
     {
         private static Logger _logger = new Logger("BaseAsyncTask");
 
+        private bool _isExecuteableFlagUpdated = false;
         private bool _isDisposed = false;
         private bool _isCompleted;
         private bool _isFaulted;
@@ -108,7 +109,7 @@ namespace cyber_base.async_task
             }
         }
 
-        public bool IsExcuteable { get; private set; }
+        public bool IsExecuteable { get; private set; }
 
         public BaseAsyncTask(
              string name = ""
@@ -129,6 +130,14 @@ namespace cyber_base.async_task
         public event IsExecutingChangedHandler? OnExecutingChanged;
         public event ProgressChangedHandler? ProgressChanged;
 
+        public bool CanThisTaskExecuteable()
+        {
+            if(!_isExecuteableFlagUpdated)
+                IsExecuteable = CanMainFuncExecute();
+            _isExecuteableFlagUpdated = true;
+            return IsExecuteable;
+        }
+
         public async Task<BaseAsyncTask> Execute(bool isAsyncCallback = false)
         {
             if (_isDisposed) throw new InvalidOperationException("Can not exectue a disposed task");
@@ -137,9 +146,9 @@ namespace cyber_base.async_task
             if (IsCanceled || IsCompleted || IsFaulted) return this;
 
             // Cập nhật cờ executeable
-            IsExcuteable = CanMainFuncExecute();
+            CanThisTaskExecuteable();
 
-            if (IsExcuteable)
+            if (IsExecuteable)
             {
                 // Cập nhật cờ executing
                 IsExecuting = true;

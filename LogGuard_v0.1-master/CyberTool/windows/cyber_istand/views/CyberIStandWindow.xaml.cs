@@ -234,9 +234,12 @@ namespace cyber_tool.windows.cyber_istand.views
             }
             if (newTask != null)
             {
-                newTask.ProgressChanged -= OnCurrentTaskProgressChanged;
-                newTask.ProgressChanged += OnCurrentTaskProgressChanged;
-                _context.Content = newTask.Name ?? "An anonymous task is being executed";
+                if (newTask.IsExecuteable)
+                {
+                    newTask.ProgressChanged -= OnCurrentTaskProgressChanged;
+                    newTask.ProgressChanged += OnCurrentTaskProgressChanged;
+                    _context.Content = newTask.Name ?? "An anonymous task is being executed";
+                }
             }
         }
 
