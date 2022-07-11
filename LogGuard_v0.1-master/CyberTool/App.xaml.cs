@@ -88,17 +88,32 @@ namespace cyber_tool
             , MultiAsyncTask tasks
             , bool isCancelable = true)
         {
-            return _WindowDirector.OpenMultiTaskBox(title, tasks, isCancelable);
+            var message = CyberContactMessage.None;
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                message = _WindowDirector.OpenMultiTaskBox(title, tasks, isCancelable);
+            });
+            return message;
         }
 
         public CyberContactMessage ShowWaringBox(string warning, bool isDialog = true)
         {
-            return _WindowDirector.ShowWarningBox(warning, isDialog);
+            var message = CyberContactMessage.None;
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                message = _WindowDirector.ShowWarningBox(warning, isDialog);
+            });
+            return message;
         }
 
         public CyberContactMessage ShowYesNoQuestionBox(string question, bool isDialog = true)
         {
-            return _WindowDirector.ShowYesNoQuestionBox(question, isDialog);
+            var message = CyberContactMessage.None;
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                message = _WindowDirector.ShowYesNoQuestionBox(question, isDialog);
+            });
+            return message;
         }
 
         public void ShowPopupCControl(ContentControl cc
@@ -110,29 +125,32 @@ namespace cyber_tool
            , Action<object>? windowShowedCallback = null
            , string title = "Floating window")
         {
-            switch (ownerType)
+            App.Current.Dispatcher.Invoke(() =>
             {
-                case CyberOwner.Default:
-                    _WindowDirector.ShowPopupCustomControlWindow(cc
-                        , opener
-                        , CyberOwnerWindow.Default
-                        , width
-                        , height
-                        , dataContext
-                        , windowShowedCallback
-                        , title);
-                    break;
-                case CyberOwner.ServiceManager:
-                    _WindowDirector.ShowPopupCustomControlWindow(cc
-                        , opener
-                        , CyberOwnerWindow.CyberIFace
-                        , width
-                        , height
-                        , dataContext
-                        , windowShowedCallback
-                        , title);
-                    break;
-            }
+                switch (ownerType)
+                {
+                    case CyberOwner.Default:
+                        _WindowDirector.ShowPopupCustomControlWindow(cc
+                            , opener
+                            , CyberOwnerWindow.Default
+                            , width
+                            , height
+                            , dataContext
+                            , windowShowedCallback
+                            , title);
+                        break;
+                    case CyberOwner.ServiceManager:
+                        _WindowDirector.ShowPopupCustomControlWindow(cc
+                            , opener
+                            , CyberOwnerWindow.CyberIFace
+                            , width
+                            , height
+                            , dataContext
+                            , windowShowedCallback
+                            , title);
+                        break;
+                }
+            });
         }
 
         public string OpenSaveFileDialogWindow()
