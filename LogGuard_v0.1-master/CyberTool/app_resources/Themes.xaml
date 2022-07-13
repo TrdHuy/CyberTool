@@ -375,45 +375,13 @@
 							<VisualState x:Name="MouseOver" />
 							<VisualState x:Name="Pressed" />
 							<VisualState x:Name="Disabled" />
-
-						</VisualStateGroup>
-						<VisualStateGroup x:Name="CheckStates">
-							<VisualState x:Name="Checked">
-								<Storyboard>
-									<ThicknessAnimation Storyboard.TargetProperty="BorderThickness"
-														Storyboard.TargetName="Border"
-														From="0"
-														To="1"
-														Duration="0:0:0.1" />
-									<DoubleAnimation Storyboard.TargetProperty="(RotateTransform.Angle)"
-													 Storyboard.TargetName="AnimRotateTransfrom"
-													 From="0"
-													 To="-90"
-													 Duration="0:0:0.1" />
-								</Storyboard>
-							</VisualState>
-							<VisualState x:Name="Unchecked">
-								<Storyboard>
-									<ThicknessAnimation Storyboard.TargetProperty="BorderThickness"
-														Storyboard.TargetName="Border"
-														From="1"
-														To="0"
-														Duration="0:0:0.1" />
-									<DoubleAnimation Storyboard.TargetProperty="(RotateTransform.Angle)"
-													 Storyboard.TargetName="AnimRotateTransfrom"
-													 From="-90"
-													 To="0"
-													 Duration="0:0:0.1" />
-								</Storyboard>
-							</VisualState>
-							<VisualState x:Name="Indeterminate" />
 						</VisualStateGroup>
 					</VisualStateManager.VisualStateGroups>
 					<Border x:Name="Border"
 							Grid.ColumnSpan="2"
 							BorderBrush="{StaticResource BorderbrushEffect_Level1}"
 							CornerRadius="5"
-							BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource AncestorType=ComboBox, Mode=FindAncestor}}"
+							BorderThickness="0"
 							Background="{Binding Background, RelativeSource={RelativeSource AncestorType=ComboBox, Mode=FindAncestor}}" />
 
 					<Path x:Name="Arrow"
@@ -432,6 +400,43 @@
 						</Path.RenderTransform>
 					</Path>
 				</Grid>
+				<ControlTemplate.Triggers>
+					<Trigger Property="IsChecked"
+							 Value="True">
+						<Trigger.EnterActions>
+							<BeginStoryboard>
+								<Storyboard>
+									<ThicknessAnimation Storyboard.TargetProperty="BorderThickness"
+														Storyboard.TargetName="Border"
+														From="0"
+														To="1"
+														Duration="0:0:0.1" />
+									<DoubleAnimation Storyboard.TargetProperty="(RotateTransform.Angle)"
+													 Storyboard.TargetName="AnimRotateTransfrom"
+													 From="0"
+													 To="-90"
+													 Duration="0:0:0.1" />
+								</Storyboard>
+							</BeginStoryboard>
+						</Trigger.EnterActions>
+						<Trigger.ExitActions>
+							<BeginStoryboard>
+								<Storyboard>
+									<ThicknessAnimation Storyboard.TargetProperty="BorderThickness"
+														Storyboard.TargetName="Border"
+														From="1"
+														To="0"
+														Duration="0:0:0.1" />
+									<DoubleAnimation Storyboard.TargetProperty="(RotateTransform.Angle)"
+													 Storyboard.TargetName="AnimRotateTransfrom"
+													 From="-90"
+													 To="0"
+													 Duration="0:0:0.1" />
+								</Storyboard>
+							</BeginStoryboard>
+						</Trigger.ExitActions>
+					</Trigger>
+				</ControlTemplate.Triggers>
 			</ControlTemplate>
 
 			<ControlTemplate x:Key="ComboBoxTextBox"
