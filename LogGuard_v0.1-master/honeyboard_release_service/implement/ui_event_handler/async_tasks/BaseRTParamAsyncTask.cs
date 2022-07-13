@@ -13,7 +13,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks
     internal abstract class BaseRTParamAsyncTask : ParamAsyncTask
     {
         private Action<AsyncTaskResult>? _completedCallback;
-
+        private Func<object, bool>? _baseRTTaskCanExecute;
         public BaseRTParamAsyncTask(object param
             , string name
             , [Optional] Action<AsyncTaskResult>? completedCallback
@@ -28,6 +28,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks
         {
             _mainFunc = _DoMainTask;
             _canExecute = _IsTaskPossile;
+            _baseRTTaskCanExecute = canExecute;
             _callback = _DoCallback;
             _cancellationTokenSource = new CancellationTokenSource();
             _completedCallback = completedCallback;
@@ -50,7 +51,8 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks
 
         private bool _IsTaskPossile(object param)
         {
-            return IsTaskPossible(param);
+            return IsTaskPossible(param) 
+                && (_baseRTTaskCanExecute?.Invoke(param) ?? true);
         }
 
         protected virtual void DoCallback(object param, AsyncTaskResult result) { }

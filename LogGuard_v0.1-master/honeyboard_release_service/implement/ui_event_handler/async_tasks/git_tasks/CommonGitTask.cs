@@ -20,8 +20,9 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
         public CommonGitTask(string folderPath
            , string gitCmd
            , Action<AsyncTaskResult>? callback = null
+           , Func<object, bool>? canExecute = null
            , string name = "Common git task"
-           , ulong estimatedTime = 8000) : base(folderPath, name, callback)
+           , ulong estimatedTime = 8000) : base(folderPath, name, callback, canExecute: canExecute)
         {
             _folderPath = folderPath;
             _cmd = gitCmd;

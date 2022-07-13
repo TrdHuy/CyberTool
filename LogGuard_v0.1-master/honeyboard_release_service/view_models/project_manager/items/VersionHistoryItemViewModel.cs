@@ -25,7 +25,7 @@ namespace honeyboard_release_service.view_models.project_manager.items
         private string _hour = "10:20:30";
         private string _dayOfWeek = "MON";
         private string _dayOfMonth = "23";
-        private CommitVO _versionVO;
+        private VersionUpCommitVO _versionVO;
         private bool _isVersionTitleLoaded = false;
         private bool _isLoadingVersionTitle;
         private BaseAsyncTask? _loadingTaskCache;
@@ -145,7 +145,7 @@ namespace honeyboard_release_service.view_models.project_manager.items
             }
         }
 
-        public VersionHistoryItemViewModel(CommitVO vo)
+        public VersionHistoryItemViewModel(VersionUpCommitVO vo)
         {
             _dayOfMonth = vo.ReleaseDateTime.ToString("dd");
             _dayOfWeek = vo.ReleaseDateTime.ToString("ddd").ToUpper();

@@ -14,7 +14,7 @@ namespace honeyboard_release_service.view_models.calendar_notebook.items
     internal class CalendarNotebookCommitItemViewModel : BaseViewModel, ICalendarNotebookCommitItemContext
     {
         private ICalendarNotebookProjectItemContext _project;
-        private CommitVO _commitVO;
+        private VersionUpCommitVO _commitVO;
         private string _mainContent = "";
 
         [Bindable(true)]
@@ -45,7 +45,7 @@ namespace honeyboard_release_service.view_models.calendar_notebook.items
 
         public ICalendarNotebookProjectItemContext Project => _project;
 
-        public CalendarNotebookCommitItemViewModel(CommitVO vo
+        public CalendarNotebookCommitItemViewModel(VersionUpCommitVO vo
             , ICalendarNotebookProjectItemContext project)
         {
             _commitVO = vo;

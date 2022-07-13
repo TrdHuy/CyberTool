@@ -32,7 +32,7 @@ namespace honeyboard_release_service.view_models.command.tab_items.release_tab
 
             CreateReleaseCLButtonCommand = new CommandExecuterModel((paramaters) =>
             {
-                return OnKey(PublisherKeyFeatureTag.KEY_TAG_PRT_CREATE_CL_AND_COMMIT_FEATURE
+                return OnKey(PublisherKeyFeatureTag.KEY_TAG_PRT_CREATE_RELEASE_CL_AND_COMMIT_FEATURE
                     , paramaters);
             });
         }

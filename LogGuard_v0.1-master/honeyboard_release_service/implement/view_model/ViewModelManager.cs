@@ -60,6 +60,14 @@ namespace honeyboard_release_service.implement.view_model
             }
         }
 
+        public MergeTabViewModel MTViewModel
+        {
+            get
+            {
+                return (MergeTabViewModel)DataContextCache[typeof(MergeTabViewModel)];
+            }
+        }
+
         public static ViewModelManager Current
         {
             get

@@ -14,47 +14,30 @@ using System.Threading.Tasks;
 
 namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_tasks
 {
-    internal class GetLatestReleaseCommitTask : BaseRTParamAsyncTask
+    internal class GetLatestMergeCommitTask : BaseRTParamAsyncTask
     {
-        class SubjectDO
-        {
-            public int Count;
-            public string TaskId = "";
-            public string LatestHashId = "";
-            public string LatestSubject = "";
-        }
-
-        private static readonly Regex _releaseCLSubjectRegex
+        private static readonly Regex _mergeCLSubjectRegex
             = new Regex(@"huy.td1_hashid:(?<hashid>[a-z0-9]{5,20}) " +
-                @"huy.td1_subject:\[(?<taskid>\S+)\](?<subject>.*) " +
+                @"huy.td1_subject:(?<subject>.+) " +
                 @"huy.td1_description:(?<description>.*)");
+        private static readonly Regex _subjectLogRegex = new Regex(@"(?<subjectid>\[\S+\])(?<title>.+)");
+        private string _folderPath = "";
+        private object? _resultCache;
 
-        private string _folderPath;
-        private string _versionFileName;
-        private int _logCount = 10;
-        private Dictionary<string, SubjectDO> _taskIdsMap;
-
-        public GetLatestReleaseCommitTask(object param
-            , Action<AsyncTaskResult>? completedCallback = null
-            , string name = "Get latest release commit!")
-            : base(param, name, completedCallback)
+        public GetLatestMergeCommitTask(object param
+           , Action<AsyncTaskResult>? completedCallback = null
+           , string name = "Get latest merge commit!")
+           : base(param, name, completedCallback)
         {
             _folderPath = "";
-            _versionFileName = "";
             switch (param)
             {
-                case string[] data:
-                    if (data.Length == 2)
-                    {
-                        _folderPath = data[0];
-                        _versionFileName = data[1];
-                    }
+                case string data:
+                    _folderPath = data;
                     break;
                 default:
-                    throw new InvalidDataException("Param must be an array of string has 2 elements");
+                    throw new InvalidDataException("Param must be a string of project path");
             }
-
-            _taskIdsMap = new Dictionary<string, SubjectDO>();
             _estimatedTime = 3000;
             _reportDelay = 100;
             _delayTime = 3000;
@@ -62,31 +45,16 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
 
         protected override void DoCallback(object param, AsyncTaskResult result)
         {
-            var max = 0;
-            SubjectDO mostUseCL = new SubjectDO();
-            foreach (var taskId in _taskIdsMap)
-            {
-                if (max < taskId.Value.Count)
-                {
-                    max = taskId.Value.Count;
-                    mostUseCL = taskId.Value;
-                }
-            }
-            dynamic res = new ExpandoObject();
-            res.TaskId = mostUseCL.TaskId;
-            res.HashId = mostUseCL.LatestHashId;
-            res.Subject = mostUseCL.LatestSubject;
-            result.Result = res;
+            result.Result = _resultCache;
         }
 
         protected override void DoMainTask(object param, AsyncTaskResult result, CancellationTokenSource token)
         {
             try
             {
-                string cmd = "git log -n " 
-                    + _logCount 
-                    + " --pretty=\"format:huy.td1_hashid:%h huy.td1_subject:%s huy.td1_description:%b\" --no-decorate -s " 
-                    + _versionFileName;
+                string cmd = "git log -n 1"
+                    + " --pretty=\"format:huy.td1_hashid:%h huy.td1_subject:%s huy.td1_description:%b\"" 
+                    + " --merges --no-decorate -s ";
                 var pSI = new ProcessStartInfo("cmd", "/c" + cmd);
                 pSI.WorkingDirectory = _folderPath;
                 pSI.RedirectStandardInput = true;
@@ -129,27 +97,28 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
             {
                 LogManager.Current.AppendLogLine(e.Data);
                 var raw = e.Data;
-                var match = _releaseCLSubjectRegex.Match(raw);
+                var match = _mergeCLSubjectRegex.Match(raw);
                 if (match.Length > 0)
                 {
-                    var taskID = match.Groups["taskid"].ToString();
+                    var taskID = "";
                     var hashID = match.Groups["hashid"].ToString();
                     var subject = match.Groups["subject"].ToString();
+                    var des = match.Groups["description"].ToString();
 
-                    if (_taskIdsMap.ContainsKey(taskID))
+                    var matchSubject = _subjectLogRegex.Match(subject);
+                    if (matchSubject.Success)
                     {
-                        _taskIdsMap[taskID].Count++;
+                        taskID = match.Groups["subjectid"].Value ?? "";
+                        subject = match.Groups["title"].Value ?? "";
                     }
-                    else
-                    {
-                        _taskIdsMap.Add(taskID, new SubjectDO()
-                        {
-                            Count = 1,
-                            TaskId = taskID,
-                            LatestHashId = hashID,
-                            LatestSubject = subject
-                        });
-                    }
+
+                    dynamic result = new ExpandoObject();
+                    result.Subject = subject;
+                    result.Description = des;
+                    result.HashID = hashID;
+                    result.TaskId = taskID;
+
+                    _resultCache = result;
                 }
             }
         }
@@ -158,16 +127,9 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
         {
             switch (param)
             {
-                case string[] data:
-                    if (data.Length == 2)
-                    {
-                        return !string.IsNullOrEmpty(data[0])
-                       && Directory.Exists(data[0])
-                       && !string.IsNullOrEmpty(data[1])
-                       && File.Exists(data[0] + "\\" + data[1]);
-                    }
-                    return false;
-
+                case string data:
+                    return !string.IsNullOrEmpty(data)
+                        && Directory.Exists(data);
                 default:
                     return false;
             }

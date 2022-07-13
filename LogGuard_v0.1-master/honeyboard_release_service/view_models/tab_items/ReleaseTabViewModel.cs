@@ -1,4 +1,5 @@
 ﻿using cyber_base.view_model;
+using honeyboard_release_service.definitions;
 using honeyboard_release_service.models.VOs;
 using honeyboard_release_service.view_models.command.tab_items.release_tab;
 using System;
@@ -13,7 +14,7 @@ namespace honeyboard_release_service.view_models.tab_items
 {
     internal class ReleaseTabViewModel : BaseViewModel
     {
-        private static readonly Regex PLMCaseCodeRegex = new Regex(@"P([0-9]{6})-([0-9]{5})");
+        private static readonly Regex PLMCaseCodeRegex = new Regex(PublisherDefinition.PLM_CASE_CODE_REGEX);
         private string _taskID = "";
         private string _commitTitle = "";
         private string _commitDescription = "";
@@ -146,7 +147,7 @@ namespace honeyboard_release_service.view_models.tab_items
             }
         }
 
-        public ReleaseTabViewModel(BaseViewModel parents)
+        public ReleaseTabViewModel(BaseViewModel parents) : base(parents)
         {
             ButtonCommandVM = new RT_ButtonCommandVM(this);
             _modifiedVersionPropVO = new VersionPropertiesVO();

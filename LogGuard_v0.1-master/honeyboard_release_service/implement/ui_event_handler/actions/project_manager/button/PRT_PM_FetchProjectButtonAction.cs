@@ -64,7 +64,9 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
                     dynamic? newRes = result.Result;
                     if (newRes != null)
                     {
-                        PMViewModel.BranchsSource = newRes.ContextSource;
+                        ReleasingProjectManager
+                            .Current
+                            .SetCurrentProjectBranchContextSource(newRes.ContextSource);
                         var branchs = newRes.Branchs;
                     }
                 }

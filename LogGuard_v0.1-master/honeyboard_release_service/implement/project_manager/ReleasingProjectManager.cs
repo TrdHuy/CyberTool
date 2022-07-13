@@ -25,13 +25,35 @@ namespace honeyboard_release_service.implement.project_manager
     {
         private ProjectVO? _currentProjectVO;
         private Dictionary<string, ProjectVO> _importedProjects = new Dictionary<string, ProjectVO>();
-        private CommitVO? _latestCommitVO;
+        private VersionUpCommitVO? _latestCommitVO;
         private BaseAsyncTask? _getVersionHistoryTaskCache;
         private bool _isLatestVersionSet = false;
+        private CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? _currentProjectBranchContextSource;
 
         private event UserDataImportedHandler? _userDataImported;
         private event ImportedProjectsCollectionChangedHandler? _importedProjectsCollectionChanged;
         private event CurrentProjectChangedHandler? _currentProjectChanged;
+        private event CurrentProjectBranchContextSourceChangedHandler? _currentProjectBranchContextSourceChanged;
+
+        public static ReleasingProjectManager Current
+        {
+            get
+            {
+                return PublisherModuleManager.RPM_Instance;
+            }
+        }
+
+        public event CurrentProjectBranchContextSourceChangedHandler CurrentProjectBranchContextSourceChanged
+        {
+            add
+            {
+                _currentProjectBranchContextSourceChanged += value;
+            }
+            remove
+            {
+                _currentProjectBranchContextSourceChanged -= value;
+            }
+        }
 
         public event CurrentProjectChangedHandler CurrentProjectChanged
         {
@@ -69,15 +91,25 @@ namespace honeyboard_release_service.implement.project_manager
             }
         }
 
-        public static ReleasingProjectManager Current
+        public CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? CurrentProjectBranchContextSource
         {
             get
             {
-                return PublisherModuleManager.RPM_Instance;
+                return _currentProjectBranchContextSource;
+            }
+            private set
+            {
+                var oldValue = _currentProjectBranchContextSource;
+                _currentProjectBranchContextSource = value;
+                if (oldValue != value)
+                {
+                    _currentProjectBranchContextSourceChanged?.Invoke(this, oldValue, value);
+                }
             }
         }
 
         public ProjectVO? CurrentProjectVO { get => _currentProjectVO; }
+
         public Dictionary<string, ProjectVO> ImportedProjects
         {
             get => _importedProjects;
@@ -87,7 +119,7 @@ namespace honeyboard_release_service.implement.project_manager
             }
         }
 
-        public CommitVO? LatestCommitVO
+        public VersionUpCommitVO? LatestCommitVO
         {
             get
             {
@@ -120,6 +152,11 @@ namespace honeyboard_release_service.implement.project_manager
             }
         }
 
+        public BranchVO? GetBranchOfCurrentProjectFromPath(string path)
+        {
+            return CurrentProjectVO?.Branchs[path];
+        }
+
         public void CreateNewProjectForCurrentProjectVO(string proPath)
         {
             var oldProject = _currentProjectVO;
@@ -147,9 +184,15 @@ namespace honeyboard_release_service.implement.project_manager
 
         }
 
-        public void SetLatestCommitVO(CommitVO commitVO)
+        public void SetLatestCommitVO(VersionUpCommitVO commitVO)
         {
             _latestCommitVO = commitVO;
+        }
+
+        public void SetCurrentProjectBranchContextSource(
+            CyberTreeViewObservableCollection<ICyberTreeViewItemContext> source)
+        {
+            CurrentProjectBranchContextSource = source;
         }
 
         public void SetCurrentProjectOnBranch(string branch)
@@ -163,7 +206,7 @@ namespace honeyboard_release_service.implement.project_manager
             }
         }
 
-        public CommitVO? AddCommitToCurrentBranch(CommitVO vVO)
+        public VersionUpCommitVO? AddCommitToCurrentBranch(VersionUpCommitVO vVO)
         {
             return CurrentProjectVO?.AddCommitVOToCurrentBranch(vVO);
         }
@@ -192,7 +235,7 @@ namespace honeyboard_release_service.implement.project_manager
                 , versionPropertiesFoundCallback: (prop, task) =>
                 {
                     dynamic data = prop;
-                    CommitVO vVO = new CommitVO()
+                    VersionUpCommitVO vVO = new VersionUpCommitVO()
                     {
                         CommitTitle = data.Title,
                         ReleaseDateTime = DateTime.ParseExact(data.DateTime, "HH:mm:ss yyyy-MM-dd",
@@ -278,10 +321,7 @@ namespace honeyboard_release_service.implement.project_manager
                    {
                        var source = result.Result
                         as CyberTreeViewObservableCollection<ICyberTreeViewItemContext>;
-                       if (source != null)
-                       {
-                           pMViewmodel.BranchsSource = source;
-                       }
+                       CurrentProjectBranchContextSource = source;
                    });
                 List<BaseAsyncTask> tasks = new List<BaseAsyncTask>();
                 tasks.Add(importProjectBranchTask);
@@ -308,6 +348,10 @@ namespace honeyboard_release_service.implement.project_manager
     internal delegate void UserDataImportedHandler(object sender);
     internal delegate void ImportedProjectsCollectionChangedHandler(object sender, ProjectsCollectionChangedEventArg arg);
     internal delegate void CurrentProjectChangedHandler(object sender, ProjectVO? oldProject, ProjectVO? newProject);
+    internal delegate void CurrentProjectBranchContextSourceChangedHandler(object sender
+        , CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? oldSource
+        , CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? newSource);
+
     internal class ProjectsCollectionChangedEventArg
     {
         public ProjectVO? OldValue { get; private set; }

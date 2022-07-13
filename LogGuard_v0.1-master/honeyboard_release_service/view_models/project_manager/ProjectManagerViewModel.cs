@@ -27,7 +27,7 @@ namespace honeyboard_release_service.view_models.project_manager
         private BranchItemViewModel? _selectedItem;
         private bool _isLoadingProjectVersionHistory = false;
         private Visibility _versionHistoryListTipVisibility = Visibility.Visible;
-        private CyberTreeViewObservableCollection<ICyberTreeViewItemContext> _branchsSource;
+        private CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? _branchsSource;
         private ReleasingProjectManager _RPM_Instance = ReleasingProjectManager.Current;
 
         [Bindable(true)]
@@ -105,12 +105,13 @@ namespace honeyboard_release_service.view_models.project_manager
                 var branchPath = value?.Branch.BranchPath;
                 if (value != null
                     && !string.IsNullOrEmpty(branchPath)
-                    && value != _selectedItem)
+                    && value != _selectedItem
+                    && SelectedBranch != branchPath)
                 {
                     HandlePreSelectedItemChange(branchPath);
-                    _selectedItem = value;
                     SelectedBranch = branchPath;
                 }
+                _selectedItem = value;
                 InvalidateOwn();
             }
         }
@@ -175,7 +176,7 @@ namespace honeyboard_release_service.view_models.project_manager
         }
 
         [Bindable(true)]
-        public CyberTreeViewObservableCollection<ICyberTreeViewItemContext> BranchsSource
+        public CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? BranchsSource
         {
             get
             {
@@ -205,6 +206,15 @@ namespace honeyboard_release_service.view_models.project_manager
 
             _RPM_Instance.UserDataImported -= HandleUserDataImported;
             _RPM_Instance.UserDataImported += HandleUserDataImported;
+            _RPM_Instance.CurrentProjectBranchContextSourceChanged -= HandleProjectBranchContextSourceChanged;
+            _RPM_Instance.CurrentProjectBranchContextSourceChanged += HandleProjectBranchContextSourceChanged;
+        }
+
+        private void HandleProjectBranchContextSourceChanged(object sender
+            , CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? oldSource
+            , CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? newSource)
+        {
+            BranchsSource = newSource;
         }
 
         private void HandleUserDataImported(object sender)

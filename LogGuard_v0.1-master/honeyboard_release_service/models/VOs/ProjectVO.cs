@@ -52,7 +52,7 @@ namespace honeyboard_release_service.models.VOs
         /// </summary>
         /// <param name="vVO"></param>
         /// <returns></returns>
-        public CommitVO? AddCommitVOToCurrentBranch(CommitVO vVO)
+        public VersionUpCommitVO? AddCommitVOToCurrentBranch(VersionUpCommitVO vVO)
         {
             if (OnBranch == null
                || string.IsNullOrEmpty(OnBranch?.BranchPath)

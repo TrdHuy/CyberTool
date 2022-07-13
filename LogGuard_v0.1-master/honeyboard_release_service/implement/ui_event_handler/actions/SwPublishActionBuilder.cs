@@ -5,6 +5,7 @@ using cyber_base.utils;
 using cyber_base.view_model;
 using honeyboard_release_service.definitions;
 using honeyboard_release_service.implement.ui_event_handler.actions.log_monitor.button;
+using honeyboard_release_service.implement.ui_event_handler.actions.merge_tab.button;
 using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.button;
 using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.gesture;
 using honeyboard_release_service.implement.ui_event_handler.actions.release_tab.button;
@@ -52,7 +53,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions
                 case PublisherKeyFeatureTag.KEY_TAG_PRT_RESTORE_LATEST_RELEASE_FEATURE:
                     viewModelCommandExecuter = new PRT_RT_RestoreLatestReleaseCommitAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
                     break;
-                case PublisherKeyFeatureTag.KEY_TAG_PRT_CREATE_CL_AND_COMMIT_FEATURE:
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_CREATE_RELEASE_CL_AND_COMMIT_FEATURE:
                     viewModelCommandExecuter = new PRT_RT_CreateReleaseCommitAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
                     break;
                 case PublisherKeyFeatureTag.KEY_TAG_PRT_PM_FETCH_PROJECT_FEATURE:
@@ -69,6 +70,18 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions
                     break;
                 case PublisherKeyFeatureTag.KEY_TAG_PRT_SWITCH_LOG_MONITOR_FEATURE:
                     viewModelCommandExecuter = new PRT_LogMonitorSwitchButtonAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_RESTORE_LATEST_MERGE_FEATURE:
+                    viewModelCommandExecuter = new PRT_MT_RestoreLatestMergeCommitButtonAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_CREATE_MERGE_CL_AND_COMMIT_FEATURE:
+                    viewModelCommandExecuter = new PRT_MT_CreateMergeCommitButtonAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_CHECK_MERGE_CONFLICT_FEATURE:
+                    viewModelCommandExecuter = new PRT_MT_CheckMergeConflictButtonAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_PUSH_MERGE_COMMIT_FEATURE:
+                    viewModelCommandExecuter = new PRT_MT_PushMergeCommitButtonAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
                     break;
                 default:
                     break;

@@ -59,7 +59,7 @@
 				<uc_ti:ReleaseTab />
 			</TabItem>
 			<TabItem Header="Merge">
-
+				<uc_ti:MergeTab />
 			</TabItem>
 			<TabItem Header="Merge &amp; Release">
 

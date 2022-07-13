@@ -22,9 +22,11 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
         private string _projectPath;
         private static readonly Regex _gitLogRegex =
             new Regex(@"huy.td1_hashid:(?<hashid>[a-z0-9]{5,20}) " +
-                @"huy.td1_subject:((?<subjectid>\[\S+\])(?<title>.+)) " +
+                @"huy.td1_subject:(?<subject>.+) " +
                 @"huy.td1_datetime:(?<datetime>\d{2}:\d{2}:\d{2} \d{4}-\d{2}-\d{2}) " +
                 @"huy.td1_email:(?<email>\S+\@samsung.com)");
+        private static readonly Regex _subjectLogRegex = new Regex(@"(?<subjectid>\[\S+\])(?<title>.+)");
+
         private static readonly Regex _majorRegex = new Regex(@"\s*(?<property>" + VersionPropertiesVO.VERSION_MAJOR_PROPERTY_NAME + @")=(?<value>\d+)");
         private static readonly Regex _minorRegex = new Regex(@"\s*(?<property>" + VersionPropertiesVO.VERSION_MINOR_PROPERTY_NAME + @")=(?<value>\d+)");
         private static readonly Regex _patchRegex = new Regex(@"\s*(?<property>" + VersionPropertiesVO.VERSION_PATCH_PROPERTY_NAME + @")=(?<value>\d+)");
@@ -96,8 +98,16 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
                             var hashID = match.Groups["hashid"].Value ?? "";
                             var dateTime = match.Groups["datetime"].Value ?? "";
                             var email = match.Groups["email"].Value ?? "";
-                            var subjectId = match.Groups["subjectid"].Value ?? "";
-                            var title = match.Groups["title"].Value ?? "";
+                            var subject = match.Groups["subject"].Value ?? "";
+                            var subjectId = "";
+                            var title = subject;
+
+                            var matchSubject = _subjectLogRegex.Match(subject);
+                            if (matchSubject.Success)
+                            {
+                                subjectId = match.Groups["subjectid"].Value ?? "";
+                                title = match.Groups["title"].Value ?? "";
+                            }
 
                             dynamic ele = new ExpandoObject();
                             ele.HashId = hashID;
