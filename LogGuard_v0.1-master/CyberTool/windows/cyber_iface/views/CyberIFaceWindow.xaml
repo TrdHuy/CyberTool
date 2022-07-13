@@ -8,8 +8,8 @@
 				 xmlns:local="clr-namespace:cyber_tool.windows.cyber_iface.views"
 				 mc:Ignorable="d"
 				 Title="CyberTool"
-				 Height="820"
-				 Width="1066"
+				 Height="810"
+				 Width="1080"
 				 Background="{StaticResource Background_Level1}"
 				 Style="{StaticResource DefaultCyberStyle}"
 				 FontFamily="Calibri">
