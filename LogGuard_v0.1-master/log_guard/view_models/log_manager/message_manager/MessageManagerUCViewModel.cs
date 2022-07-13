@@ -30,8 +30,13 @@ namespace log_guard.view_models.log_manager.message_manager
 
         public MessageManagerUCViewModel(BaseViewModel baseViewModel) : base(baseViewModel)
         {
-            var vos = RunThreadConfigManager.Current.MessageEmployees;
             _messages = new RangeObservableCollection<TrippleToggleItemViewModel>();
+        }
+
+        public override void OnBegin()
+        {
+            base.OnBegin();
+            var vos = RunThreadConfigManager.Current.MessageEmployees;
 
             if (vos != null)
             {
@@ -42,7 +47,6 @@ namespace log_guard.view_models.log_manager.message_manager
                 }
                 _messages.SendNotifications();
             }
-
         }
 
         public override void OnDestroy()
