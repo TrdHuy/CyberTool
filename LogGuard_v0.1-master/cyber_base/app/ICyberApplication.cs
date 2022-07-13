@@ -27,7 +27,10 @@ namespace cyber_base.app
 
         CyberContactMessage OpenMultiTaskBox(string title
             , MultiAsyncTask task
-            , bool isCancelable = true);
+            , bool isCancelable = true
+            , Action<object>? multiTaskDoneCallback = null
+            , bool isUseMultiTaskReport = true);
+
 
         CyberContactMessage ShowWaringBox(string warning
             , bool isDialog = true);

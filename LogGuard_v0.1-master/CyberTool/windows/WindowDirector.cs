@@ -143,12 +143,16 @@ namespace cyber_tool.windows
 
         public CyberContactMessage OpenMultiTaskBox(string title
             , MultiAsyncTask tasks
-            , bool isCancelable = true)
+            , bool isCancelable = true
+            , Action<object>? multiTaskDoneCallback = null
+            , bool isUseMultiTaskReport = true)
         {
             var newWaitingBox = new CyberIStandWindow(title
                 , tasks
                 , IFaceWindow
-                , isCancelable);
+                , isCancelable
+                , multiTaskDoneCallback
+                , isUseMultiTaskReport);
 
             var message = newWaitingBox.Show();
 

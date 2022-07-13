@@ -30,6 +30,7 @@ namespace cyber_tool.windows.cyber_istand.views
         private BaseAsyncTask MainTask { get; set; }
         private CyberIStandWindowViewModel _context;
 
+        private Action<object>? _multiTaskDoneCallback;
         #region SingleTaskWindow
         public CyberIStandWindow(string content
             , string title
@@ -124,13 +125,16 @@ namespace cyber_tool.windows.cyber_istand.views
         public CyberIStandWindow(string title
             , MultiAsyncTask tasks
             , Window? owner = null
-            , bool isCancelable = true)
+            , bool isCancelable = true
+            , Action<object>? multilTaskDoneCallback = null
+            , bool isUseMultiTaskReport = true)
         {
             InitializeComponent();
             MainTask = tasks;
             SingleTaskDisplayPanel.Visibility = Visibility.Collapsed;
             MultiTaskDisplayPanel.Visibility = Visibility.Visible;
 
+            _multiTaskDoneCallback = multilTaskDoneCallback;
             _context = (CyberIStandWindowViewModel)DataContext;
             _context.Title = string.IsNullOrEmpty(title) ? tasks.Name : title;
             _context.Content = "Waiting to be assigned!";
@@ -145,7 +149,7 @@ namespace cyber_tool.windows.cyber_istand.views
                 WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
 
-            if (tasks.TaskCount <= 1)
+            if (tasks.TaskCount <= 1 || !isUseMultiTaskReport)
             {
                 MainTaskProgress.Visibility = Visibility.Collapsed;
                 MainTaskLabel.Visibility = Visibility.Collapsed;
@@ -214,6 +218,7 @@ namespace cyber_tool.windows.cyber_istand.views
                 ContinueBtn.Visibility = Visibility.Visible;
                 CancelBtn.Visibility = Visibility.Collapsed;
 
+                _multiTaskDoneCallback?.Invoke(this);
                 if (!IsWindowButtonEnabled)
                 {
                     Close();

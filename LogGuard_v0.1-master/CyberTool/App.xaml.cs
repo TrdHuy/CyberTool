@@ -7,6 +7,7 @@ using cyber_tool.definitions;
 using cyber_tool.plugins;
 using cyber_tool.utils;
 using cyber_tool.windows;
+using cyber_tool.windows.cyber_istand.views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -86,12 +87,14 @@ namespace cyber_tool
 
         public CyberContactMessage OpenMultiTaskBox(string title
             , MultiAsyncTask tasks
-            , bool isCancelable = true)
+            , bool isCancelable = true
+            , Action<object>? multiTaskDoneCallback = null
+            , bool isUseMultiTaskReport = true)
         {
             var message = CyberContactMessage.None;
             App.Current.Dispatcher.Invoke(() =>
             {
-                message = _WindowDirector.OpenMultiTaskBox(title, tasks, isCancelable);
+                message = _WindowDirector.OpenMultiTaskBox(title, tasks, isCancelable, multiTaskDoneCallback, isUseMultiTaskReport);
             });
             return message;
         }
