@@ -133,6 +133,9 @@
 			   Margin="0,20,0,0"
 			   NavigationUIVisibility="Hidden"
 			   x:Name="mainFrame"
+			   Navigated="mainFrame_Navigated"
+			   Navigating="mainFrame_Navigating"
+			   NavigationProgress="mainFrame_NavigationProgress"
 			   Source="{Binding CurrentPageSource}" />
 	</Grid>
 </lgWindow:LogGuardWindow>

@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <Company>h2sw_solution</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="view_models\**" />
+    <EmbeddedResource Remove="view_models\**" />
+    <None Remove="view_models\**" />
+    <Page Remove="view_models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\cyber_base\cyber_base.csproj" />
+    <ProjectReference Include="..\cyber_extension\cyber_extension.csproj" />
+  </ItemGroup>
+
+</Project>

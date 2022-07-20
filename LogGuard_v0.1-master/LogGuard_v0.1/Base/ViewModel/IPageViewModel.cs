@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogGuard_v0._1.Base.ViewModel
 {
-    internal interface IPageViewModel
+    public interface IPageViewModel
     {
         /// <summary>
         /// Occur when the page was unloaded

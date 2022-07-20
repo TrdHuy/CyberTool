@@ -1,0 +1,130 @@
+﻿<UserControl x:Class="log_guard.views.usercontrols.elements.filter.LevelFilter"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:anim="clr-namespace:cyber_base.implement.views.cyber_anim;assembly=cyber_base"
+			 xmlns:vm="clr-namespace:log_guard.view_models.level_filter"
+			 xmlns:vmm="clr-namespace:log_guard.implement.markup"
+			 xmlns:vmp="clr-namespace:log_guard.view_models"
+			 mc:Ignorable="d"
+			 d:DesignHeight="168"
+			 d:DesignWidth="110"
+			 FontFamily="Calibri"
+			 FontSize="12">
+	<UserControl.DataContext>
+		<vmm:ViewModelManagerME DataContextType="{x:Type vm:LogLevelFilterUCViewModel}"
+								ParentDataContextType="{x:Type vmp:LogGuardViewModel }"
+								GeneratorType="{x:Static vmm:DataContextGeneratorType.CreateNew}" />
+	</UserControl.DataContext>
+	<Border x:Name="MainBorder"
+			CornerRadius="{StaticResource DefaultPanelCornerRadius}"
+			Background="{StaticResource Background_Level2}">
+		<Grid Margin="18,0,0,0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="0.3*" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="2.5*" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+
+			<TextBlock Text="Level filter"
+					   VerticalAlignment="Center"
+					   FontSize="9"
+					   FontWeight="Bold"
+					   Margin="-9,5,10,0"
+					   Foreground="{StaticResource Foreground_Level1}" />
+			
+			<anim:LoadingAnimation Grid.Row="0"
+										  Grid.Column="1"
+										  Height="5"
+										  Margin="-9,5,0,0"
+										  HorizontalAlignment="Left"
+										  IsBusy="{Binding IsFilterBusy}" />
+			<TextBlock Text="Error"
+					   VerticalAlignment="Center"
+					   Grid.Row="1"
+					   Foreground="{StaticResource Foreground_Level3}" />
+			<TextBlock Text="Warning"
+					   VerticalAlignment="Center"
+					   Grid.Row="2"
+					   Foreground="{StaticResource Foreground_Level3}" />
+			<TextBlock Text="Verbose"
+					   VerticalAlignment="Center"
+					   Grid.Row="3"
+					   Foreground="{StaticResource Foreground_Level3}" />
+			<TextBlock Text="Info"
+					   VerticalAlignment="Center"
+					   Grid.Row="4"
+					   Foreground="{StaticResource Foreground_Level3}" />
+			<TextBlock Text="Debug"
+					   VerticalAlignment="Center"
+					   Grid.Row="5"
+					   Foreground="{StaticResource Foreground_Level3}" />
+			<TextBlock Text="Fatal"
+					   VerticalAlignment="Center"
+					   Grid.Row="6"
+					   Foreground="{StaticResource Foreground_Level3}" />
+
+			<CheckBox IsChecked="{Binding IsErrorEnable}"
+					  Grid.Row="1"
+					  Grid.Column="1"
+					  BorderThickness="0"
+					  HorizontalAlignment="Left"
+					  Background="{StaticResource ButtonBackground_Level1}"
+					  VerticalAlignment="Center"
+					  Template="{StaticResource RoundCheckBoxTmpl}" />
+			<CheckBox IsChecked="{Binding IsWarningEnable}"
+					  Grid.Row="2"
+					  Grid.Column="1"
+					  BorderThickness="0"
+					  HorizontalAlignment="Left"
+					  Background="{StaticResource ButtonBackground_Level1}"
+					  VerticalAlignment="Center"
+					  Template="{StaticResource RoundCheckBoxTmpl}" />
+			<CheckBox IsChecked="{Binding IsVerboseEnable}"
+					  Grid.Row="3"
+					  Grid.Column="1"
+					  BorderThickness="0"
+					  HorizontalAlignment="Left"
+					  Background="{StaticResource ButtonBackground_Level1}"
+					  VerticalAlignment="Center"
+					  Template="{StaticResource RoundCheckBoxTmpl}" />
+			<CheckBox IsChecked="{Binding IsInfoEnable}"
+					  Grid.Row="4"
+					  Grid.Column="1"
+					  BorderThickness="0"
+					  HorizontalAlignment="Left"
+					  Background="{StaticResource ButtonBackground_Level1}"
+					  VerticalAlignment="Center"
+					  Template="{StaticResource RoundCheckBoxTmpl}" />
+			<CheckBox IsChecked="{Binding IsDebugEnable}"
+					  Grid.Row="5"
+					  Grid.Column="1"
+					  BorderThickness="0"
+					  HorizontalAlignment="Left"
+					  Background="{StaticResource ButtonBackground_Level1}"
+					  VerticalAlignment="Center"
+					  Template="{StaticResource RoundCheckBoxTmpl}" />
+			<CheckBox IsChecked="{Binding IsFatalEnable}"
+					  Grid.Row="6"
+					  Grid.Column="1"
+					  BorderThickness="0"
+					  HorizontalAlignment="Left"
+					  Background="{StaticResource ButtonBackground_Level1}"
+					  VerticalAlignment="Center"
+					  Template="{StaticResource RoundCheckBoxTmpl}" />
+
+
+
+		</Grid>
+	</Border>
+</UserControl>

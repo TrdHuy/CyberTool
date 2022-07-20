@@ -1,0 +1,232 @@
+﻿<UserControl x:Class="log_guard.views.usercontrols.LogGuard"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="clr-namespace:log_guard.views.usercontrols"
+			 mc:Ignorable="d"
+			 xmlns:def="clr-namespace:log_guard.definitions"
+			 xmlns:tvh="clr-namespace:log_guard.implement.flow.view_helper"
+			 xmlns:vm="clr-namespace:log_guard.view_models"
+			 xmlns:wr="clr-namespace:log_guard.views.others.log_watcher"
+			 xmlns:mb="clr-namespace:log_guard.views.others.log_watcher._log_mapping_border"
+			 xmlns:gw="clr-namespace:log_guard.views.others.log_watcher._grid_view"
+			 xmlns:ap="clr-namespace:log_guard.prop.attached_properties"
+			 xmlns:uc_ld="clr-namespace:log_guard.views.usercontrols.elements.device"
+			 xmlns:uc_ft="clr-namespace:log_guard.views.usercontrols.elements.filter"
+			 xmlns:uc_lm="clr-namespace:log_guard.views.usercontrols.elements.log_manager"
+			 xmlns:uc_cp="clr-namespace:log_guard.views.usercontrols.elements.control_panel"
+			 xmlns:vmm="clr-namespace:log_guard.implement.markup"
+			 d:DesignHeight="820"
+			 d:DesignWidth="883.714">
+	<UserControl.DataContext>
+		<vmm:ViewModelManagerME DataContextType="{x:Type vm:LogGuardViewModel}"
+								ParentDataContextType="{x:Null}"
+								GeneratorType="{x:Static vmm:DataContextGeneratorType.CreateNew}" />
+	</UserControl.DataContext>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="1.57*" />
+			<ColumnDefinition Width="1.65*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.35*" />
+			<ColumnDefinition Width="0.24*" />
+			<ColumnDefinition Width="2.82*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="0.01*" />
+			<RowDefinition Height="1.41*" />
+			<RowDefinition Height="1.8*" />
+			<RowDefinition Height="0.37*" />
+			<RowDefinition Height="3.72*" />
+		</Grid.RowDefinitions>
+
+		<uc_ld:ListOfDevice Grid.Column="0"
+							Grid.Row="1"
+							Margin="0,0,15,15" />
+
+		<uc_ft:LevelFilter Grid.Column="0"
+						   Grid.Row="2"
+						   Margin="0,0,15,15" />
+
+		<uc_ft:AdvanceFilter Grid.Column="1"
+							 Grid.Row="1"
+							 Margin="0,0,15,15"
+							 Grid.RowSpan="2"
+							 Grid.ColumnSpan="11" />
+
+		<uc_lm:LogManager Grid.Column="13"
+						  Grid.Row="1"
+						  Margin="0,0,0,15"
+						  Grid.RowSpan="3" />
+
+		<ComboBox Grid.Row="3"
+				  Grid.ColumnSpan="2"
+				  Margin="0,0,15,15"
+				  Style="{StaticResource UneditableVirtualComboboxStyle}"
+				  MaxDropDownHeight="140"
+				  Background="{StaticResource Background_Level3}"
+				  Grid.Column="0"
+				  FontSize="12"
+				  FontFamily="Calibri"
+				  ToolTip="{Binding ParserBoxTip}"
+				  SelectedIndex="{Binding SelectedCmdIndex}"
+				  ItemsSource="{Binding DeviceCmdItemsSource}">
+			<ComboBox.ItemTemplate>
+				<ItemContainerTemplate>
+					<TextBlock Text="{Binding Path=DisplayName}"
+							   Margin="5,0,0,0"
+							   ToolTip="{Binding Path=ParserTip}"
+							   Foreground="{StaticResource Foreground_Level3}" />
+				</ItemContainerTemplate>
+			</ComboBox.ItemTemplate>
+		</ComboBox>
+
+		<uc_cp:CaptureControlPanel Grid.Row="3"
+								   Grid.Column="2"
+								   Grid.ColumnSpan="9" />
+
+		<ContentControl x:Name="LogWatcherCC"
+						Grid.Row="4"
+						tvh:LogGuardViewHelper.ViewKey="{x:Static def:LogGuardViewKeyDefinition.LogWatcherContentControl}"
+						Grid.Column="0"
+						Grid.ColumnSpan="13">
+			<ContentControl.LayoutTransform>
+				<ScaleTransform x:Name="CC_ScaleTransform"
+								ScaleX="1"
+								ScaleY="1" />
+			</ContentControl.LayoutTransform>
+			<wr:LogWatcher UseAutoScroll="{Binding UseAutoScroll}"
+						   LogWatcherItemsSource="{Binding ItemsSource}"
+						   ScrollViewer.HorizontalScrollBarVisibility="Visible"
+						   ScrollViewer.VerticalScrollBarVisibility="Visible"
+						   tvh:LogGuardViewHelper.ViewKey="{x:Static def:LogGuardViewKeyDefinition.LogWatcher}"
+						   VirtualizingPanel.CacheLength="1"
+						   VirtualizingPanel.CacheLengthUnit="Pixel"
+						   VirtualizingPanel.IsContainerVirtualizable="True"
+						   VirtualizingPanel.IsVirtualizing="True"
+						   VirtualizingPanel.VirtualizationMode="Recycling"
+						   VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+						   mb:LogMappingBorder.MagnifierRadius="50"
+						   AlternationCount="2"
+						   x:Name="LogView"
+						   FontFamily="Calibri">
+				<wr:LogWatcher.View>
+					<gw:GridViewWatcher>
+						<GridViewColumn DisplayMemberBinding="{Binding Line}">
+							<GridViewColumnHeader Content="Line" />
+						</GridViewColumn>
+						<GridViewColumn DisplayMemberBinding="{Binding Level}">
+							<GridViewColumnHeader Content="Level" />
+						</GridViewColumn>
+						<GridViewColumn DisplayMemberBinding="{Binding LogDateTimeString}">
+							<GridViewColumnHeader Content="Time" />
+						</GridViewColumn>
+						<GridViewColumn>
+							<GridViewColumnHeader Content="PID" />
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock ap:TextBlockAttProperties.HighlightSource="{Binding HighlightPidSource, UpdateSourceTrigger=PropertyChanged}"
+											   ap:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
+											   ap:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
+											   ap:TextBlockAttProperties.RawText="{Binding Pid}"
+											   Text="{Binding Pid}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>
+						<GridViewColumn>
+							<GridViewColumnHeader Content="TID" />
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock ap:TextBlockAttProperties.HighlightSource="{Binding HighlightTidSource, UpdateSourceTrigger=PropertyChanged}"
+											   ap:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
+											   ap:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
+											   ap:TextBlockAttProperties.RawText="{Binding Tid}"
+											   Text="{Binding Tid}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>
+						<GridViewColumn>
+							<GridViewColumnHeader Content="Tag" />
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock x:Name="mainContent"
+											   ap:TextBlockAttProperties.HighlightSource="{Binding HighlightTagSource, UpdateSourceTrigger=PropertyChanged}"
+											   ap:TextBlockAttProperties.ExtraHighlightSource="{Binding ExtraHighlightTagSource, UpdateSourceTrigger=PropertyChanged}"
+											   ap:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
+											   ap:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
+											   ap:TextBlockAttProperties.RawText="{Binding Tag}"
+											   Text="{Binding Tag}">
+										<TextBlock.InputBindings>
+											<MouseBinding Command="{Binding TagLeftDoubleClickCommand}"
+														  CommandParameter="{Binding .}"
+														  MouseAction="LeftDoubleClick" />
+										</TextBlock.InputBindings>
+
+									</TextBlock>
+									<DataTemplate.Triggers>
+										<Trigger Property="IsMouseOver"
+												 Value="True">
+											<Setter Property="TextDecorations"
+													TargetName="mainContent"
+													Value="Underline" />
+										</Trigger>
+									</DataTemplate.Triggers>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>
+						<GridViewColumn>
+							<GridViewColumnHeader Content="Message" />
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock x:Name="mainContent"
+											   ap:TextBlockAttProperties.HighlightSource="{Binding HighlightMessageSource, UpdateSourceTrigger=PropertyChanged}"
+											   ap:TextBlockAttProperties.ExtraHighlightSource="{Binding ExtraHighlightMessageSource, UpdateSourceTrigger=PropertyChanged}"
+											   ap:TextBlockAttProperties.BackgroundColor="#FFD8F2B6"
+											   ap:TextBlockAttProperties.ForegroundColor="#FFFF5BA8"
+											   ap:TextBlockAttProperties.RawText="{Binding Message}"
+											   Text="{Binding Message}">
+										<TextBlock.InputBindings>
+											<MouseBinding Command="{Binding MessageLeftDoubleClickCommand}"
+														  CommandParameter="{Binding .}"
+														  MouseAction="LeftDoubleClick" />
+										</TextBlock.InputBindings>
+
+									</TextBlock>
+									<DataTemplate.Triggers>
+										<Trigger Property="IsMouseOver"
+												 Value="True">
+											<Setter Property="TextDecorations"
+													TargetName="mainContent"
+													Value="Underline" />
+										</Trigger>
+									</DataTemplate.Triggers>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>
+					</gw:GridViewWatcher>
+				</wr:LogWatcher.View>
+
+				<wr:LogWatcher.InputBindings>
+					<KeyBinding Gesture="Back"
+								Command="{Binding CommandViewModel.LWDeleteGestureCommand}"
+								CommandParameter="{Binding ElementName=LogView}" />
+					<KeyBinding Gesture="Delete"
+								Command="{Binding CommandViewModel.LWDeleteGestureCommand}"
+								CommandParameter="{Binding ElementName=LogView}" />
+					<KeyBinding Gesture="Ctrl+A"
+								Command="{Binding CommandViewModel.LWCtrlAGestureCommand}" />
+				</wr:LogWatcher.InputBindings>
+			</wr:LogWatcher>
+
+		</ContentControl>
+
+	</Grid>
+</UserControl>

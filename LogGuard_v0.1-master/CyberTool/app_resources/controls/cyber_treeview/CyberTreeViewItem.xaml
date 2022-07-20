@@ -1,0 +1,289 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:ctrl="clr-namespace:cyber_base.implement.views.cyber_treeview;assembly=cyber_base">
+
+	<Style x:Key="CyberTreeExpandToggleStyle"
+		   TargetType="ToggleButton">
+		<Setter Property="Focusable"
+				Value="False" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ToggleButton">
+					<Grid Background="Transparent">
+						<Path x:Name="PART_expandPath"
+							  Fill="{DynamicResource Foreground_Level2}"
+							  Stretch="Uniform"
+							  Data="m 172.03613,17.118796 c -3.68396,0 -6.64972,2.965767 -6.64972,6.649722 v 20.001881 c 0,3.683955 2.96576,6.650241 6.64972,6.650241 h 20.00239 c 3.68396,0 6.64973,-2.966286 6.64973,-6.650241 V 23.768518 c 0,-3.683955 -2.96577,-6.649722 -6.64973,-6.649722 z m 8.64288,4.627626 h 2.71663 c 0.84089,0 1.51722,0.676851 1.51722,1.517734 v 7.629509 h 7.62899 c 0.84089,0 1.51825,0.676849 1.51825,1.517738 v 2.716112 c 1e-5,0.840885 -0.67736,1.517737 -1.51825,1.517737 h -7.62899 v 7.628993 c 0,0.840885 -0.67633,1.518253 -1.51722,1.518253 h -2.71663 c -0.84089,0 -1.51774,-0.677368 -1.51774,-1.518253 v -7.628993 h -7.6295 c -0.8409,0 -1.51722,-0.676852 -1.51722,-1.517737 v -2.716112 c 0,-0.840889 0.67632,-1.517738 1.51722,-1.517738 h 7.6295 v -7.629509 c 0,-0.840883 0.67685,-1.517734 1.51774,-1.517734 z">
+						</Path>
+					</Grid>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver"
+								 Value="True">
+							<Setter TargetName="PART_expandPath"
+									Property="Fill"
+									Value="{DynamicResource Foreground_Level3}" />
+						</Trigger>
+						<Trigger Property="IsChecked"
+								 Value="True">
+							<Setter TargetName="PART_expandPath"
+									Property="Data"
+									Value="m 236.29309,23.534361 c 0,-3.68395 -2.96577,-6.64972 -6.64973,-6.64972 h -20.00239 c -3.68396,0 -6.64973,2.96577 -6.64973,6.64972 v 20.0024 c 0,3.68396 2.96577,6.64973 6.64973,6.64973 h 20.00239 c 3.68396,0 6.64973,-2.96577 6.64973,-6.64973 z m -13.77487,-0.50384 v 21.01009 c 0,0.84088 -0.67737,1.51773 -1.51825,1.51773 h -2.71612 c -0.84089,0 -1.51774,-0.67685 -1.51774,-1.51773 v -21.01009 c 0,-0.84088 0.67685,-1.51774 1.51774,-1.51774 h 2.71612 c 0.84088,0 1.51825,0.67686 1.51825,1.51774 z" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="CyberTreeItemFocusVisual">
+		<Setter Property="Control.Template">
+			<Setter.Value>
+				<ControlTemplate>
+					<Border>
+						<Rectangle Margin="0,0,0,0"
+								   StrokeThickness="5"
+								   Stroke="Black"
+								   StrokeDashArray="1 2"
+								   Opacity="0" />
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="{x:Type ctrl:CyberTreeViewItem}"
+		   TargetType="TreeViewItem">
+		<Setter Property="Background"
+				Value="#26292e" />
+		<Setter Property="HorizontalContentAlignment"
+				Value="{Binding Path=HorizontalContentAlignment,
+    RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+		<Setter Property="VerticalContentAlignment"
+				Value="{Binding Path=VerticalContentAlignment,
+    RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+		<Setter Property="Padding"
+				Value="5,0,5,0" />
+		<Setter Property="IsSelected"
+				Value="{Binding IsSelected}" />
+		<Setter Property="Foreground"
+				Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+		<Setter Property="FocusVisualStyle"
+				Value="{DynamicResource CyberTreeItemFocusVisual}" />
+
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type ctrl:CyberTreeViewItem}">
+					<Grid Background="{TemplateBinding Background}"
+						  x:Name="MainGrid">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="*"
+											  MinWidth="130" />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="10" />
+							<RowDefinition Height="3" />
+							<RowDefinition Height="6" />
+							<RowDefinition Height="3" />
+							<RowDefinition Height="10" />
+							<RowDefinition />
+						</Grid.RowDefinitions>
+
+						<Grid x:Name="ExpanderPanel"
+							  Grid.Row="0"
+							  Grid.Column="1"
+							  Width="12"
+							  Grid.RowSpan="5">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="10" />
+								<RowDefinition Height="12" />
+								<RowDefinition Height="10" />
+							</Grid.RowDefinitions>
+							<ToggleButton x:Name="Expander"
+										  Grid.Row="1"
+										  RenderTransformOrigin="0.5,0.5"
+										  Style="{StaticResource CyberTreeExpandToggleStyle}"
+										  ClickMode="Press"
+										  IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}">
+								<ToggleButton.RenderTransform>
+									<RotateTransform x:Name="PART_ToggleButtonRotateTransform" />
+								</ToggleButton.RenderTransform>
+							</ToggleButton>
+							<Rectangle x:Name="VerLineBot2"
+									   Grid.Row="2"
+									   Fill="Gray"
+									   Width="1" />
+						</Grid>
+
+						<Grid x:Name="IndicatorHeaderPanel"
+							  Grid.Column="0"
+							  Grid.Row="0"
+							  Width="12"
+							  Grid.RowSpan="5">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="13" />
+								<RowDefinition Height="6" />
+								<RowDefinition Height="13" />
+							</Grid.RowDefinitions>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="6" />
+								<ColumnDefinition Width="6" />
+							</Grid.ColumnDefinitions>
+							<Rectangle x:Name="VerLineUp1"
+									   Grid.Row="0"
+									   Fill="Gray"
+									   Width="1" />
+							<Path Grid.Row="1"
+								  Fill="Gray"
+								  Stretch="Uniform"
+								  Data="M 820.41992 -1.7675781 A 16.793785 16.793785 0 0 0 803.62695 15.025391 A 16.793785 16.793785 0 0 0 820.41992 31.820312 A 16.793785 16.793785 0 0 0 837.21484 15.025391 A 16.793785 16.793785 0 0 0 820.41992 -1.7675781 z " />
+							<Rectangle x:Name="VerLineBot1"
+									   Grid.Row="2"
+									   Fill="Gray"
+									   Width="1" />
+
+							<Rectangle x:Name="HorLine1"
+									   Grid.Row="1"
+									   Grid.Column="1"
+									   Fill="Gray"
+									   Height="1" />
+						</Grid>
+
+						<Border x:Name="Bd"
+								Grid.RowSpan="5"
+								Grid.Column="2"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								BorderThickness="{TemplateBinding BorderThickness}"
+								Padding="{TemplateBinding Padding}">
+							<ContentPresenter x:Name="PART_Header"
+											  ContentSource="Header"
+											  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+						</Border>
+
+						<Rectangle x:Name="FeedbackRec" 
+								   Grid.Column="0"
+								   Grid.ColumnSpan="3"
+								   Grid.Row="0"
+								   Grid.RowSpan="5"
+								   IsHitTestVisible="False"
+								   Fill="Transparent"
+								   StrokeThickness="0"/>
+						<Rectangle x:Name="ItemPresenterVerLine"
+								   Grid.Column="0"
+								   Margin="-6,0,0,0"
+								   Grid.Row="6"
+								   Fill="Gray"
+								   Width="1" />
+
+						<ItemsPresenter x:Name="ItemsHost"
+										Grid.Row="6"
+										Margin="3,0,0,0"
+										Grid.Column="1"
+										Grid.ColumnSpan="5"
+										Visibility="Collapsed">
+							<ItemsPresenter.LayoutTransform>
+								<ScaleTransform x:Name="PART_ItemHostScaleTransform"
+												ScaleY="1" />
+							</ItemsPresenter.LayoutTransform>
+						</ItemsPresenter>
+					</Grid>
+					<ControlTemplate.Triggers>
+
+						<!--Kiểm tra có phải phần tử cuối cùng ko-->
+						<DataTrigger Binding="{Binding Path=IsLast}"
+									 Value="true">
+							<Setter TargetName="ItemPresenterVerLine"
+									Property="Visibility"
+									Value="Collapsed" />
+						</DataTrigger>
+
+						<!--Có mồ côi không-->
+						<MultiDataTrigger>
+							<MultiDataTrigger.Conditions>
+								<Condition Binding="{Binding Path=IsOrphaned}"
+										   Value="true" />
+							</MultiDataTrigger.Conditions>
+							<Setter TargetName="IndicatorHeaderPanel"
+									Property="Visibility"
+									Value="Collapsed" />
+						</MultiDataTrigger>
+
+						<!--Có được mở rộng ko-->
+						<MultiDataTrigger>
+							<MultiDataTrigger.Conditions>
+								<Condition Binding="{Binding IsChecked, ElementName=Expander}"
+										   Value="False" />
+							</MultiDataTrigger.Conditions>
+							<Setter TargetName="VerLineBot2"
+									Property="Visibility"
+									Value="Collapsed" />
+						</MultiDataTrigger>
+
+
+						<MultiDataTrigger>
+							<MultiDataTrigger.Conditions>
+								<Condition Binding="{Binding Path=IsOrphaned}"
+										   Value="true" />
+								<Condition Binding="{Binding ItemsCount}"
+										   Value="0" />
+							</MultiDataTrigger.Conditions>
+							<Setter TargetName="IndicatorHeaderPanel"
+									Property="Visibility"
+									Value="Visible" />
+							<Setter TargetName="ExpanderPanel"
+									Property="Visibility"
+									Value="Collapsed" />
+							<Setter TargetName="VerLineBot1"
+									Property="Visibility"
+									Value="Collapsed" />
+							<Setter TargetName="VerLineUp1"
+									Property="Visibility"
+									Value="Collapsed" />
+						</MultiDataTrigger>
+
+						<!--Có cha và ko có phần tử-->
+						<MultiDataTrigger>
+							<MultiDataTrigger.Conditions>
+								<Condition Binding="{Binding Path=IsOrphaned}"
+										   Value="false" />
+								<Condition Binding="{Binding ItemsCount}"
+										   Value="0" />
+							</MultiDataTrigger.Conditions>
+							<Setter TargetName="ExpanderPanel"
+									Property="Visibility"
+									Value="Collapsed" />
+						</MultiDataTrigger>
+
+
+						<MultiDataTrigger>
+							<MultiDataTrigger.Conditions>
+								<Condition Binding="{Binding Path=IsOrphaned}"
+										   Value="false" />
+								<Condition Binding="{Binding Path=IsLast}"
+										   Value="true" />
+							</MultiDataTrigger.Conditions>
+							<Setter TargetName="VerLineBot1"
+									Property="Visibility"
+									Value="Collapsed" />
+						</MultiDataTrigger>
+
+						<MultiDataTrigger>
+							<MultiDataTrigger.Conditions>
+								<Condition Binding="{Binding Path=IsMouseOver, ElementName=MainGrid}"
+										   Value="True" />
+								<Condition Binding="{Binding Path=IsSelectable}"
+										   Value="True" />
+							</MultiDataTrigger.Conditions>
+							<Setter TargetName="FeedbackRec"
+									Property="Fill"
+									Value="{DynamicResource MouseOverFillEffect_Level1}" />
+						</MultiDataTrigger>
+						
+					</ControlTemplate.Triggers>
+
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+</ResourceDictionary>

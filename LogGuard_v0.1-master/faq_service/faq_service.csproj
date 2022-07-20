@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <Company>h2sw_solution</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\cyber_base\cyber_base.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="themes\Themes.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>

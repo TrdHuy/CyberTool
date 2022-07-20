@@ -1,0 +1,171 @@
+﻿<UserControl x:Class="log_guard.views.usercontrols.elements.device.ListOfDevice"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:log_guard.views.usercontrols.elements.device"
+             mc:Ignorable="d" 
+			 xmlns:vm="clr-namespace:log_guard.view_models.device"
+			 xmlns:vmm="clr-namespace:log_guard.implement.markup"
+			 xmlns:vmp="clr-namespace:log_guard.view_models"
+             xmlns:ll="clr-namespace:log_guard.views.others.loading_list"
+			 d:DesignHeight="125"
+			 d:DesignWidth="110"
+			 FontFamily="Calibri">
+	
+	<UserControl.DataContext>
+		<vmm:ViewModelManagerME DataContextType="{x:Type vm:ListOfDeviceUCViewModel}"
+								ParentDataContextType="{x:Type vmp:LogGuardViewModel}"
+								GeneratorType="{x:Static vmm:DataContextGeneratorType.CreateNew}" />
+	</UserControl.DataContext>
+	
+	<UserControl.Resources>
+	</UserControl.Resources>
+	<Border Background="{StaticResource Background_Level2}"
+			CornerRadius="{StaticResource DefaultPanelCornerRadius}"
+			x:Name="MainBorder">
+		<Grid>
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height=" 0.32*" />
+				<RowDefinition Height=" 0.63*" />
+				<RowDefinition Height=" 0.3*" />
+			</Grid.RowDefinitions>
+
+			<TextBlock Text="List of devices"
+					   VerticalAlignment="Center"
+					   FontSize="9"
+					   FontWeight="Bold"
+					   Margin="7,5,10,0"
+					   Foreground="{StaticResource Foreground_Level1}" />
+			<Button Grid.Row="2"
+					Content="Refresh"
+					Command="{Binding CommandViewModel.RefreshDeviceButtonCommand}"
+					HorizontalAlignment="Center"
+					Foreground="{StaticResource Foreground_Level3}"
+					Background="{StaticResource ButtonBackground_Level1}"
+					Padding="10,0,10,0"
+					Margin="0,0,0,8"
+					Template="{StaticResource RecBtnTmpl}">
+
+			</Button>
+
+			<ll:LoadingListView Grid.Row="1"
+								  Background="Transparent"
+								  SelectedItem="{Binding ParentsModel.SelectedDevice}"
+								  BorderThickness="0"
+								  IsLoading="{Binding IsLoadingDevice}"
+								  Foreground="{StaticResource Foreground_Level3}"
+								  Margin="0,0,0,5">
+				<ListView.ItemContainerStyle>
+					<Style TargetType="ListViewItem">
+						<Setter Property="Height"
+								Value="25" />
+						<Setter Property="FontSize"
+								Value="11" />
+						<Setter Property="BorderThickness"
+								Value="0" />
+						<Setter Property="Margin"
+								Value="0" />
+						<Setter Property="Padding"
+								Value="0" />
+
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="ListBoxItem">
+									<Border x:Name="Border"
+											SnapsToDevicePixels="true"
+											BorderThickness="0"
+											Background="{TemplateBinding Background}">
+										<Grid>
+
+											<Grid x:Name="FeedbackGrid"
+												  Visibility="Visible">
+												<Border Background="{StaticResource SelectedRowIndicatorPanelBackground}"
+														Width="10"
+														HorizontalAlignment="Left">
+													<Path x:Name="IndicateSelectedArrow"
+														  Data="m 430.70734,408.44156 -345.981495,199.75251 0,-399.50502 z"
+														  Fill="#FFF0F0F0"
+														  Margin="1,0,2,0"
+														  Stretch="Uniform"
+														  Visibility="Hidden" />
+												</Border>
+												<Border x:Name="FeedbackBorder"
+														BorderThickness="1"
+														Margin="10,0,0,0"
+														Background="#19B8E7F9"
+														BorderBrush="#FFB8EAF9"
+														Visibility="Hidden"
+														HorizontalAlignment="Stretch" />
+											</Grid>
+											<ContentPresenter Margin="15,0,0,0"
+															  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+															  VerticalAlignment="Center" />
+
+
+										</Grid>
+									</Border>
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsMouseOver"
+												 Value="True">
+											<Setter Property="Visibility"
+													TargetName="FeedbackBorder"
+													Value="Visible" />
+										</Trigger>
+
+										<Trigger Property="IsSelected"
+												 Value="True">
+											<Setter Property="Visibility"
+													TargetName="FeedbackBorder"
+													Value="Visible" />
+											<Setter Property="Visibility"
+													TargetName="IndicateSelectedArrow"
+													Value="Visible" />
+											<Setter Property="Background"
+													TargetName="FeedbackBorder"
+													Value="{StaticResource SelectedItemBackground}" />
+											<Setter Property="BorderThickness"
+													TargetName="FeedbackBorder"
+													Value="0" />
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Style.Triggers>
+							<Trigger Property="ListView.AlternationIndex"
+									 Value="0">
+							</Trigger>
+							<Trigger Property="ListView.AlternationIndex"
+									 Value="1">
+							</Trigger>
+
+						</Style.Triggers>
+					</Style>
+
+				</ListView.ItemContainerStyle>
+				<ListView.ItemsSource>
+					<Binding Path="DevicesSource"
+							 x:Name="DevicesItemSource" />
+				</ListView.ItemsSource>
+			</ll:LoadingListView>
+
+			<!--<Grid.Triggers>
+				<EventTrigger RoutedEvent="Grid.Loaded">
+					<BeginStoryboard x:Name="WatingStoryBoard">
+						<Storyboard RepeatBehavior="Forever">
+							<DoubleAnimation Storyboard.TargetName="WaitingIconTransform"
+											 Storyboard.TargetProperty="(RotateTransform.Angle)"
+											 From="0.0"
+											 To="360"
+											 Duration="0:0:2" />
+						</Storyboard>
+					</BeginStoryboard>
+				</EventTrigger>
+
+
+			</Grid.Triggers>-->
+		</Grid>
+	</Border>
+</UserControl>
