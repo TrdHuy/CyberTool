@@ -72,7 +72,6 @@ namespace log_guard
             base.OnServiceUnloaded(cyberServiceManager);
             CurrentServiceView = null;
             LogGuardModuleManager.Destroy();
-            GC.Collect();
         }
 
         protected override object? GenerateServiceView()
