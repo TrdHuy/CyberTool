@@ -105,8 +105,8 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
                             var matchSubject = _subjectLogRegex.Match(subject);
                             if (matchSubject.Success)
                             {
-                                subjectId = match.Groups["subjectid"].Value ?? "";
-                                title = match.Groups["title"].Value ?? "";
+                                subjectId = matchSubject.Groups["subjectid"].Value ?? "";
+                                title = matchSubject.Groups["title"].Value ?? "";
                             }
 
                             dynamic ele = new ExpandoObject();

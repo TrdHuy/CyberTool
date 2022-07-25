@@ -304,5 +304,6 @@
 	<cvt:MultiBindingConverter x:Key="MultiBinding" />
 	<cvt:StringToGeoPathConverter x:Key="GeoPathConverter" />
 	<cvt:BooleanToVisibilityConverter x:Key="VisibilityConverter" />
+	<cvt:SizeRatioConverter x:Key="SizeRatioConverter" />
 
 </ResourceDictionary>
