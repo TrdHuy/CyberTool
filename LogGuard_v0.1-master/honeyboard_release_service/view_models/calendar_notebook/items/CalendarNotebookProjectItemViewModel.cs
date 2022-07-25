@@ -84,6 +84,8 @@ namespace honeyboard_release_service.view_models.calendar_notebook.items
             });
             _deleteProjectCommand = new CommandExecuterModel((paramaters) =>
             {
+                var cnViewmodel = ViewModelManager.Current.CNViewModel;
+                cnViewmodel.DeleteProjectItem(_projectVO);
                 return null;
             });
         }
