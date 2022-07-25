@@ -40,6 +40,8 @@ namespace honeyboard_release_service.definitions
         public const string KEY_TAG_PRT_SWITCH_CALENDAR_FEATURE = "KEY_TAG_PRT_SWITCH_CALENDAR_FEATURE";
         public const string KEY_TAG_PRT_SWITCH_LOG_MONITOR_FEATURE = "KEY_TAG_PRT_SWITCH_LOG_MONITOR_FEATURE";
 
+        public const string KEY_TAG_PRT_NB_DELETE_PROJECT_ITEM_FEATURE = "KEY_TAG_PRT_NB_DELETE_PROJECT_ITEM_FEATURE";
+
     }
 
     internal enum PublisherViewKeyDefinition

@@ -25,6 +25,9 @@ namespace honeyboard_release_service.view_models.calendar_notebook
 
         private CalendarNotebookProjectItemViewModel? _currentSelectedProjectItemContext;
         public CalendarNotebookProjectItemViewModel? CurrentSelectedProjectItemContext => _currentSelectedProjectItemContext;
+        public Dictionary<string, ICalendarNotebookProjectItemContext> NotebookItemContextsMap => _notebookItemContextsMap;
+        public ObservableCollection<ICalendarNotebookProjectItemContext> NotebookItemContexts => _notebookItemContexts;
+
 
         [Bindable(true)]
         public ObservableCollection<ICalendarNotebookProjectItemContext> ProjectItemContexts
