@@ -1,10 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:local="clr-namespace:cyber_tool.app_resources.controls.cyber_window">
 	<Style TargetType="{x:Type local:CyberWindow}"
 		   x:Key="DefaultCyberStyle">
 		<Setter Property="ChromeBackground"
-				Value="#FF333438"/>
+				Value="#FF333438" />
 		<Setter Property="AllowsTransparency"
 				Value="True" />
 		<Setter Property="Background"
@@ -13,7 +13,7 @@
 				Value="None" />
 		<Setter Property="ResizeMode"
 				Value="CanResizeWithGrip" />
-		
+
 		<Setter Property="WindowChrome.WindowChrome">
 			<Setter.Value>
 				<WindowChrome CaptionHeight="30" />
@@ -80,7 +80,6 @@
 
 
 						</Style>
-
 
 						<!--Window Maximize button-->
 						<Style x:Key="WindowMaximizeButton"
@@ -247,87 +246,204 @@
 					</ControlTemplate.Resources>
 
 					<Border x:Name="MainBorderContainer"
-							CornerRadius="30"
 							Width="{TemplateBinding Width}"
 							Height="{TemplateBinding Height}"
-							DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:CyberWindow, Mode=FindAncestor}}">
+							DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:CyberWindow, Mode=FindAncestor}}"
+							Background="Transparent">
 
 						<Border.LayoutTransform>
 							<ScaleTransform x:Name="MainBorderCtn_ScaleTransform"
 											ScaleX="1"
 											ScaleY="1" />
 						</Border.LayoutTransform>
-						<Border.OpacityMask>
-							<VisualBrush Visual="{Binding ElementName=RecMask}" />
-						</Border.OpacityMask>
-						<!--Content and title bar field-->
-						<Grid x:Name="ContentAndTitleGrid"
-							  Grid.Column="1">
+
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition x:Name="LeftShadowColumnDef"
+												  Width="5" />
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition x:Name="RightShadowColumnDef"
+												  Width="5" />
+							</Grid.ColumnDefinitions>
 							<Grid.RowDefinitions>
-								<RowDefinition Height="Auto" />
 								<RowDefinition Height="*" />
+								<RowDefinition x:Name="BotShadowColumnDef"
+											   Height="5" />
 							</Grid.RowDefinitions>
-							<Rectangle x:Name="RecMask"
-									   Fill="{TemplateBinding Background}"
-									   RadiusX="0"
-									   RadiusY="0"
-									   Grid.RowSpan="2" />
 
-							<!--Title bar-->
-							<Grid x:Name="TitleBartGrid"
-								  Grid.Row="0"
-								  Height="30"
-								  VerticalAlignment="Stretch"
-								  Background="{Binding ChromeBackground}"
-								  WindowChrome.IsHitTestVisibleInChrome="False">
+							<!--Content and title bar field-->
+							<Grid x:Name="ContentAndTitleGrid"
+								  Background="{TemplateBinding Background}"
+								  Grid.Column="1">
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto" />
+									<RowDefinition Height="*" />
+								</Grid.RowDefinitions>
 
-								<Grid.ColumnDefinitions>
+								<!--Title bar-->
+								<Grid x:Name="TitleBartGrid"
+									  Grid.Row="0"
+									  Height="30"
+									  VerticalAlignment="Stretch"
+									  Background="{Binding ChromeBackground}"
+									  WindowChrome.IsHitTestVisibleInChrome="False">
+
+									<Grid.ColumnDefinitions>
+										<!--Title-->
+										<ColumnDefinition Width="*" />
+										<!--Windows Button-->
+										<ColumnDefinition Width="Auto" />
+
+									</Grid.ColumnDefinitions>
+
 									<!--Title-->
-									<ColumnDefinition Width="*" />
-									<!--Windows Button-->
-									<ColumnDefinition Width="Auto" />
+									<Viewbox x:Name="TitleViewBox"
+											 Grid.Column="0"
+											 HorizontalAlignment="Left"
+											 Grid.ColumnSpan="3"
+											 Margin="20,8,8,8">
+										<TextBlock x:Name="SubContentTitleText"
+												   FontWeight="Bold"
+												   FontFamily="Calibri"
+												   Foreground="{StaticResource Foreground_Level2}"
+												   Text="{TemplateBinding Title}"
+												   TextAlignment="Center" />
+									</Viewbox>
 
-								</Grid.ColumnDefinitions>
+									<!--Window Buttons-->
+									<StackPanel x:Name="WindowControlPanel"
+												Grid.Column="1"
+												Orientation="Horizontal">
 
-								<!--Title-->
-								<Viewbox x:Name="TitleViewBox"
-										 Grid.Column="0"
-										 HorizontalAlignment="Left"
-										 Grid.ColumnSpan="3"
-										 Margin="20,8,8,8">
-									<TextBlock x:Name="SubContentTitleText"
-											   FontWeight="Bold"
-											   FontFamily="Calibri"
-											   Foreground="{StaticResource Foreground_Level2}"
-											   Text="{TemplateBinding Title}"
-											   TextAlignment="Center" />
-								</Viewbox>
+										<Button x:Name="MinimizeButton"
+												Style="{StaticResource WindowMinimizeButton}" />
+										<Button x:Name="SmallmizeButton"
+												Style="{StaticResource WindowSmallmizeButton}" />
+										<Button x:Name="MaximizeButton"
+												Style="{StaticResource WindowMaximizeButton}" />
+										<Button x:Name="CloseButton"
+												Style="{StaticResource WindowControlButton}" />
+									</StackPanel>
 
-								<!--Window Buttons-->
-								<StackPanel x:Name="WindowControlPanel"
-											Grid.Column="1"
-											Orientation="Horizontal">
+								</Grid>
 
-									<Button x:Name="MinimizeButton"
-											Style="{StaticResource WindowMinimizeButton}" />
-									<Button x:Name="SmallmizeButton"
-											Style="{StaticResource WindowSmallmizeButton}" />
-									<Button x:Name="MaximizeButton"
-											Style="{StaticResource WindowMaximizeButton}" />
-									<Button x:Name="CloseButton"
-											Style="{StaticResource WindowControlButton}" />
-								</StackPanel>
-
+								<!--Content field-->
+								<ContentPresenter x:Name="DWContentPresenter"
+												  Grid.Row="1"
+												  Margin="{TemplateBinding Padding}"
+												  Content="{TemplateBinding Content}"
+												  Visibility="Visible">
+								</ContentPresenter>
 							</Grid>
 
-							<!--Content field-->
-							<ContentPresenter x:Name="DWContentPresenter"
-											  Grid.Row="1"
-											  Margin="{TemplateBinding Padding}"
-											  Content="{TemplateBinding Content}"
-											  Visibility="Visible">
-							</ContentPresenter>
+							<!--Shadow effect-->
+							<!--Must use radient due to performance issue-->
+							<!--link: https://www.telerik.com/forums/extremely-slow-when-having-dropshadow-->
+							<Rectangle Grid.Column="0"
+									   Grid.RowSpan="1">
+								<Rectangle.Fill>
+									<LinearGradientBrush EndPoint="0.5,1"
+														 StartPoint="0.5,0">
+										<LinearGradientBrush.RelativeTransform>
+											<TransformGroup>
+												<ScaleTransform CenterY="0.5"
+																CenterX="0.5" />
+												<SkewTransform CenterX="0.5"
+															   CenterY="0.5" />
+												<RotateTransform Angle="90"
+																 CenterX="0.5"
+																 CenterY="0.5" />
+												<TranslateTransform />
+											</TransformGroup>
+										</LinearGradientBrush.RelativeTransform>
+										<GradientStop Color="#25000000" />
+										<GradientStop Color="#00000000"
+													  Offset="1" />
+									</LinearGradientBrush>
+								</Rectangle.Fill>
+							</Rectangle>
+							<Rectangle Grid.Column="1"
+									   Grid.Row="1"
+									   Grid.ColumnSpan="1">
+								<Rectangle.Fill>
+									<LinearGradientBrush EndPoint="0.5,1"
+														 StartPoint="0.5,0">
+										<GradientStop Color="#25000000" />
+										<GradientStop Color="#00000000"
+													  Offset="1" />
+									</LinearGradientBrush>
+								</Rectangle.Fill>
+							</Rectangle>
+							<Rectangle Grid.Column="2"
+									   Grid.RowSpan="1">
+								<Rectangle.Fill>
+									<LinearGradientBrush EndPoint="0.5,1"
+														 StartPoint="0.5,0">
+										<LinearGradientBrush.RelativeTransform>
+											<TransformGroup>
+												<ScaleTransform CenterY="0.5"
+																CenterX="0.5" />
+												<SkewTransform CenterX="0.5"
+															   CenterY="0.5" />
+												<RotateTransform Angle="-90"
+																 CenterX="0.5"
+																 CenterY="0.5" />
+												<TranslateTransform />
+											</TransformGroup>
+										</LinearGradientBrush.RelativeTransform>
+										<GradientStop Color="#25000000" />
+										<GradientStop Color="#00000000"
+													  Offset="1" />
+									</LinearGradientBrush>
+								</Rectangle.Fill>
+							</Rectangle>
+							<Rectangle Grid.Row="1">
+								<Rectangle.Fill>
+									<LinearGradientBrush EndPoint="0.5,1"
+														 StartPoint="0.5,0">
+										<LinearGradientBrush.RelativeTransform>
+											<TransformGroup>
+												<ScaleTransform CenterY="0.5"
+																CenterX="0.5" />
+												<SkewTransform CenterX="0.5"
+															   CenterY="0.5" />
+												<RotateTransform Angle="45"
+																 CenterX="0.5"
+																 CenterY="0.5" />
+												<TranslateTransform />
+											</TransformGroup>
+										</LinearGradientBrush.RelativeTransform>
+										<GradientStop Color="#19000000" />
+										<GradientStop Color="#00000000"
+													  Offset="1" />
+									</LinearGradientBrush>
+								</Rectangle.Fill>
+							</Rectangle>
+							<Rectangle Grid.Row="1"
+									   Grid.Column="2">
+								<Rectangle.Fill>
+									<LinearGradientBrush EndPoint="0.5,1"
+														 StartPoint="0.5,0">
+										<LinearGradientBrush.RelativeTransform>
+											<TransformGroup>
+												<ScaleTransform CenterY="0.5"
+																CenterX="0.5" />
+												<SkewTransform CenterX="0.5"
+															   CenterY="0.5" />
+												<RotateTransform Angle="-45"
+																 CenterX="0.5"
+																 CenterY="0.5" />
+												<TranslateTransform />
+											</TransformGroup>
+										</LinearGradientBrush.RelativeTransform>
+										<GradientStop Color="#19000000" />
+										<GradientStop Color="#00000000"
+													  Offset="1" />
+									</LinearGradientBrush>
+								</Rectangle.Fill>
+							</Rectangle>
 						</Grid>
+
 					</Border>
 					<ControlTemplate.Triggers>
 						<Trigger Property="WindowState"
@@ -335,6 +451,15 @@
 							<Setter TargetName="MaximizeButton"
 									Property="Visibility"
 									Value="Collapsed" />
+							<Setter TargetName="BotShadowColumnDef"
+									Property="Height"
+									Value="0" />
+							<Setter TargetName="LeftShadowColumnDef"
+									Property="Width"
+									Value="0" />
+							<Setter TargetName="RightShadowColumnDef"
+									Property="Width"
+									Value="0" />
 						</Trigger>
 
 						<Trigger Property="WindowState"
