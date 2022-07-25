@@ -145,6 +145,14 @@ namespace honeyboard_release_service.view_models.project_manager.items
             }
         }
 
+        public VersionUpCommitVO VersionCommitVO
+        {
+            get
+            {
+                return _versionVO;
+            }
+        }
+
         public VersionHistoryItemViewModel(VersionUpCommitVO vo)
         {
             _dayOfMonth = vo.ReleaseDateTime.ToString("dd");
@@ -179,8 +187,8 @@ namespace honeyboard_release_service.view_models.project_manager.items
 
         public BaseAsyncTask? GetUpdateVersionTitleTask(bool force = false)
         {
-            if (_versionVO != null 
-                && (_versionVO.Properties?.IsEmpty() ?? true) 
+            if (_versionVO != null
+                && (_versionVO.Properties?.IsEmpty() ?? true)
                 && !_isVersionTitleLoaded
                 || force && _versionVO != null)
             {

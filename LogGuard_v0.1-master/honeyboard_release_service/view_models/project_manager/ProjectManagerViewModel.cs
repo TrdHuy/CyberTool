@@ -23,7 +23,6 @@ namespace honeyboard_release_service.view_models.project_manager
 {
     internal class ProjectManagerViewModel : BaseViewModel
     {
-        private FirstLastObservableCollection<VersionHistoryItemViewModel> _versionHistoryItemContexts;
         private BranchItemViewModel? _selectedItem;
         private bool _isLoadingProjectVersionHistory = false;
         private Visibility _versionHistoryListTipVisibility = Visibility.Visible;
@@ -64,7 +63,7 @@ namespace honeyboard_release_service.view_models.project_manager
         {
             get
             {
-                return _versionHistoryItemContexts.Count > 20;
+                return VersionHistoryItemContexts.Count > 20;
             }
         }
 
@@ -166,12 +165,7 @@ namespace honeyboard_release_service.view_models.project_manager
         {
             get
             {
-                return _versionHistoryItemContexts;
-            }
-            set
-            {
-                _versionHistoryItemContexts = value;
-                InvalidateOwn();
+                return ReleasingProjectManager.Current.VersionHistoryItemContexts;
             }
         }
 
@@ -195,11 +189,10 @@ namespace honeyboard_release_service.view_models.project_manager
 
         public ProjectManagerViewModel(BaseViewModel parents) : base(parents)
         {
-            _versionHistoryItemContexts = new FirstLastObservableCollection<VersionHistoryItemViewModel>();
             _branchsSource = new CyberTreeViewObservableCollection<ICyberTreeViewItemContext>();
             GestureCommandVM = new PM_GestureCommandVM(this);
             ButtonCommandVM = new PM_ButtonCommandVM(this);
-            _versionHistoryItemContexts.CollectionChanged += (s, e) =>
+            VersionHistoryItemContexts.CollectionChanged += (s, e) =>
             {
                 Invalidate("IsVirtualizingVersionHistoryList");
             };

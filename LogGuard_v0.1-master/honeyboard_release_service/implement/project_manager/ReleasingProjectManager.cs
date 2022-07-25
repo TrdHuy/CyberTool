@@ -8,6 +8,7 @@ using honeyboard_release_service.implement.ui_event_handler.async_tasks.others;
 using honeyboard_release_service.implement.user_data_manager;
 using honeyboard_release_service.implement.view_model;
 using honeyboard_release_service.models.VOs;
+using honeyboard_release_service.utils;
 using honeyboard_release_service.view_models.calendar_notebook.items;
 using honeyboard_release_service.view_models.project_manager.items;
 using System;
@@ -29,17 +30,31 @@ namespace honeyboard_release_service.implement.project_manager
         private BaseAsyncTask? _getVersionHistoryTaskCache;
         private bool _isLatestVersionSet = false;
         private CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? _currentProjectBranchContextSource;
+        private FirstLastObservableCollection<VersionHistoryItemViewModel> _versionHistoryItemContexts;
 
         private event UserDataImportedHandler? _userDataImported;
         private event ImportedProjectsCollectionChangedHandler? _importedProjectsCollectionChanged;
         private event CurrentProjectChangedHandler? _currentProjectChanged;
         private event CurrentProjectBranchContextSourceChangedHandler? _currentProjectBranchContextSourceChanged;
-
+        private event LatestVersionUpCommitChangedHandler? _latestVersionUpCommitChanged;
+        
         public static ReleasingProjectManager Current
         {
             get
             {
                 return PublisherModuleManager.RPM_Instance;
+            }
+        }
+
+        public event LatestVersionUpCommitChangedHandler LatestVersionUpCommitChanged
+        {
+            add
+            {
+                _latestVersionUpCommitChanged += value;
+            }
+            remove
+            {
+                _latestVersionUpCommitChanged -= value;
             }
         }
 
@@ -119,6 +134,15 @@ namespace honeyboard_release_service.implement.project_manager
             }
         }
 
+        public VersionHistoryItemViewModel? LatestCommitVM
+        {
+            get
+            {
+                return _versionHistoryItemContexts.First;
+            }
+
+        }
+
         public VersionUpCommitVO? LatestCommitVO
         {
             get
@@ -150,6 +174,35 @@ namespace honeyboard_release_service.implement.project_manager
             {
                 return _currentProjectVO?.VersionFilePath ?? "";
             }
+        }
+
+        public FirstLastObservableCollection<VersionHistoryItemViewModel> VersionHistoryItemContexts
+        {
+            get
+            {
+                return _versionHistoryItemContexts;
+            }
+        }
+
+        private ReleasingProjectManager()
+        {
+            _versionHistoryItemContexts = new FirstLastObservableCollection<VersionHistoryItemViewModel>();
+            _versionHistoryItemContexts.FirstChanged -= OnVersionHistoryItemContextsFirstChanged;
+            _versionHistoryItemContexts.FirstChanged += OnVersionHistoryItemContextsFirstChanged;
+        }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            // Memory leak issue
+            // Ref: https://michaelscodingspot.com/5-techniques-to-avoid-memory-leaks-by-events-in-c-net-you-should-know/
+            _versionHistoryItemContexts.FirstChanged -= OnVersionHistoryItemContextsFirstChanged;
+        }
+
+        private void OnVersionHistoryItemContextsFirstChanged(object sender, VersionHistoryItemViewModel? oldFirst, VersionHistoryItemViewModel? newFirst)
+        {
+            _latestVersionUpCommitChanged?.Invoke(this);
         }
 
         public BranchVO? GetBranchOfCurrentProjectFromPath(string path)
@@ -255,7 +308,7 @@ namespace honeyboard_release_service.implement.project_manager
                     // Xử lý trên viewmodel
                     if (vOInCurrentBranch != null)
                     {
-                        pMViewmodel.VersionHistoryItemContexts.Add(
+                        _versionHistoryItemContexts.Add(
                             new VersionHistoryItemViewModel(vOInCurrentBranch));
 
                         if (isNeedToUpdateCurrentPorjectOnCalendarNotebook)
@@ -277,9 +330,9 @@ namespace honeyboard_release_service.implement.project_manager
                     }
                 });
             _getVersionHistoryTaskCache = getVersionHistory;
+            _versionHistoryItemContexts.Clear();
 
             // Xử lý project manager viewmodel trước khi thực hiện task
-            pMViewmodel.VersionHistoryItemContexts.Clear();
             pMViewmodel.VersionHistoryListTipVisibility = Visibility.Collapsed;
             pMViewmodel.IsLoadingProjectVersionHistory = true;
 
@@ -346,6 +399,7 @@ namespace honeyboard_release_service.implement.project_manager
     }
 
     internal delegate void UserDataImportedHandler(object sender);
+    internal delegate void LatestVersionUpCommitChangedHandler(object sender);
     internal delegate void ImportedProjectsCollectionChangedHandler(object sender, ProjectsCollectionChangedEventArg arg);
     internal delegate void CurrentProjectChangedHandler(object sender, ProjectVO? oldProject, ProjectVO? newProject);
     internal delegate void CurrentProjectBranchContextSourceChangedHandler(object sender

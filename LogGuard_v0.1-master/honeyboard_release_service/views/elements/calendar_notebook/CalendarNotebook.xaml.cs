@@ -1172,12 +1172,19 @@ namespace honeyboard_release_service.views.elements.calendar_notebook
                 {
                 };
 
-                chartItem.SetValue(Grid.RowProperty, 1);
-                chartItem.SetValue(Grid.ColumnProperty, 1);
                 chartItem.SetBinding(CalendarNotebookChartItem.DataProperty, itemSourceBinding);
                 chartItem.SetBinding(CalendarNotebookChartItem.MaxPointScoreProperty, maxPointScoreBinding);
                 chartItem.SetBinding(CalendarNotebookChartItem.UpdatingNotificationProperty, updatingNotificationBinding);
-                contentPanel.Children.Add(chartItem);
+
+                var grid = new Grid()
+                {
+                    Margin = new Thickness(0, 5, 0, 5),
+                };
+                grid.SetValue(Grid.RowProperty, 1);
+                grid.SetValue(Grid.ColumnProperty, 1);
+                grid.Children.Add(chartItem);
+
+                contentPanel.Children.Add(grid);
             }
         }
         #endregion
