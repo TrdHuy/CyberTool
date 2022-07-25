@@ -1091,6 +1091,7 @@ namespace honeyboard_release_service.views.elements.calendar_notebook
                     CornerRadius = new CornerRadius(headerItemCornerRad)
                 };
                 headerBorder.SetResourceReference(Border.BackgroundProperty, "ButtonBackground_Level1");
+                headerBorder.SetResourceReference(Border.ContextMenuProperty, "HeaderContextMenu");
                 headerBorder.SetValue(Grid.RowProperty, 1);
                 TextBlock headerContent = new TextBlock()
                 {
@@ -1100,6 +1101,7 @@ namespace honeyboard_release_service.views.elements.calendar_notebook
                     VerticalAlignment = VerticalAlignment.Center,
                     RenderTransformOrigin = new Point(0.5, 0.5),
                     LayoutTransform = new RotateTransform(270),
+                    IsHitTestVisible = false,
                 };
                 headerContent.SetResourceReference(TextBlock.ForegroundProperty, "Foreground_Level3");
                 Binding textBinding = new Binding("ProjectName") { FallbackValue = "HoneyBoard" };

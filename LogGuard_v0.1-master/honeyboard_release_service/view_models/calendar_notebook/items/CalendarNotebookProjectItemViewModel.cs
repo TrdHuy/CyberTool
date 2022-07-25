@@ -1,4 +1,5 @@
-﻿using cyber_base.view_model;
+﻿using cyber_base.implement.command;
+using cyber_base.view_model;
 using honeyboard_release_service.implement.view_model;
 using honeyboard_release_service.models.VOs;
 using honeyboard_release_service.views.elements.calendar_notebook.@base;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace honeyboard_release_service.view_models.calendar_notebook.items
 {
@@ -22,6 +24,8 @@ namespace honeyboard_release_service.view_models.calendar_notebook.items
         private object? _itemView;
         private bool _isLoadingData;
         private CalendarNotebookItemCollection<ICalendarNotebookCommitItemContext> _commitSource;
+        private ICommand _renameProjectCommand;
+        private ICommand _deleteProjectCommand;
 
         public CalendarNotebookItemCollection<ICalendarNotebookCommitItemContext> CommitSource => _commitSource;
 
@@ -67,10 +71,21 @@ namespace honeyboard_release_service.view_models.calendar_notebook.items
             }
         }
 
+        public ICommand RenameProjectCommand { get => _renameProjectCommand; }
+        public ICommand DeleteProjectCommand { get => _deleteProjectCommand; }
+
         public CalendarNotebookProjectItemViewModel(ProjectVO vo)
         {
             _commitSource = new CalendarNotebookItemCollection<ICalendarNotebookCommitItemContext>();
             _projectVO = vo;
+            _renameProjectCommand = new CommandExecuterModel((paramaters) =>
+            {
+                return null;
+            });
+            _deleteProjectCommand = new CommandExecuterModel((paramaters) =>
+            {
+                return null;
+            });
         }
 
         public async override void OnBegin()
