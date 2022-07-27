@@ -171,5 +171,10 @@ namespace cyber_tool
             return _WindowDirector.OpenFolderChooserDialogWindow();
         }
 
+        public string OpenEditTextDialogWindow(string oldText)
+        {
+            //TODO: Triển khai Edit text window ở đây
+            return "";
+        }
     }
 }
