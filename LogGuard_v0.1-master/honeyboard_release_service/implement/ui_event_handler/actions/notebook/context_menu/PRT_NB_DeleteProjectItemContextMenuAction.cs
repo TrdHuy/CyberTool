@@ -44,6 +44,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.notebook
                 if (selectedProjectItem == releasingProjectManager.CurrentProjectVO)
                 {
                     viewModelManager.PMViewModel.ProjectPath = "";
+                    releasingProjectManager.UpdateVersionHistoryTimelineInBackground();
                     viewModelManager.PMViewModel.RefreshViewModel();
                 }
                 if (selectedProjectItem != null)
