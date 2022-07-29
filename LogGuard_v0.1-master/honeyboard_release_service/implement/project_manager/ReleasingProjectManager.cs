@@ -210,10 +210,16 @@ namespace honeyboard_release_service.implement.project_manager
             return CurrentProjectVO?.Branchs[path];
         }
 
+
+
         public void CreateNewProjectForCurrentProjectVO(string proPath)
         {
             var oldProject = _currentProjectVO;
             _currentProjectVO = new ProjectVO(proPath);
+            if (string.IsNullOrEmpty(proPath))
+            {
+                _currentProjectVO = null;
+            }
             if (!ImportedProjects.ContainsKey(proPath))
             {
                 ImportedProjects[proPath] = _currentProjectVO;
