@@ -105,15 +105,5 @@ namespace honeyboard_release_service.view_models.calendar_notebook
             base.OnViewInstantiated();
         }
 
-        public void DeleteProjectItem(ProjectVO selectedProject)
-        {
-            var importedProjectMap = ReleasingProjectManager.Current.ImportedProjects;
-            importedProjectMap.Remove(selectedProject.Path);
-
-            var context = _notebookItemContextsMap[selectedProject.Path];
-            _notebookItemContexts.Remove(context);
-            _notebookItemContextsMap.Remove(selectedProject.Path);
-        }
-
     }
 }

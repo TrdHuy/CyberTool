@@ -3,7 +3,6 @@ using honeyboard_release_service.@base.module;
 using honeyboard_release_service.implement.module;
 using honeyboard_release_service.view_models;
 using honeyboard_release_service.view_models.calendar_notebook;
-using honeyboard_release_service.view_models.calendar_notebook.items;
 using honeyboard_release_service.view_models.log_monitor;
 using honeyboard_release_service.view_models.project_manager;
 using honeyboard_release_service.view_models.tab_items;
