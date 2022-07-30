@@ -210,29 +210,38 @@ namespace honeyboard_release_service.implement.project_manager
             return CurrentProjectVO?.Branchs[path];
         }
 
+
+
         public void CreateNewProjectForCurrentProjectVO(string proPath)
         {
             var oldProject = _currentProjectVO;
             _currentProjectVO = new ProjectVO(proPath);
-            if (!ImportedProjects.ContainsKey(proPath))
+            if (string.IsNullOrEmpty(proPath))
             {
-                ImportedProjects[proPath] = _currentProjectVO;
-                _importedProjectsCollectionChanged?.Invoke(this
-                    , new ProjectsCollectionChangedEventArg(_currentProjectVO
-                        , null
-                        , ProjectsCollectionChangedType.Add));
+                _currentProjectVO = null;
             }
             else
             {
-                var oldProjectVO = ImportedProjects[proPath];
-                ImportedProjects[proPath] = _currentProjectVO;
-                _importedProjectsCollectionChanged?.Invoke(this
-                    , new ProjectsCollectionChangedEventArg(_currentProjectVO
-                        , oldProjectVO
-                        , ProjectsCollectionChangedType.Modified));
+                if (!ImportedProjects.ContainsKey(proPath))
+                {
+                    ImportedProjects[proPath] = _currentProjectVO;
+                    _importedProjectsCollectionChanged?.Invoke(this
+                        , new ProjectsCollectionChangedEventArg(_currentProjectVO
+                            , null
+                            , ProjectsCollectionChangedType.Add));
+                }
+                else
+                {
+                    var oldProjectVO = ImportedProjects[proPath];
+                    ImportedProjects[proPath] = _currentProjectVO;
+                    _importedProjectsCollectionChanged?.Invoke(this
+                        , new ProjectsCollectionChangedEventArg(_currentProjectVO
+                            , oldProjectVO
+                            , ProjectsCollectionChangedType.Modified));
+                }
+                UserDataManager.Current.AddImportedProject(proPath, _currentProjectVO);
+                UserDataManager.Current.SetCurrentImportedProject(_currentProjectVO);
             }
-            UserDataManager.Current.AddImportedProject(proPath, _currentProjectVO);
-            UserDataManager.Current.SetCurrentImportedProject(_currentProjectVO);
             _currentProjectChanged?.Invoke(this, oldProject, _currentProjectVO);
 
         }
@@ -389,10 +398,9 @@ namespace honeyboard_release_service.implement.project_manager
                     title: "Importing branchs from user data"
                    , task: multiTask
                    , isCancelable: false);
-                _userDataImported?.Invoke(this);
-                UpdateVersionHistoryTimelineInBackground(isNeedToUpdateCurrentPorjectOnCalendarNotebook: false);
             }
-
+            _userDataImported?.Invoke(this);
+            UpdateVersionHistoryTimelineInBackground(isNeedToUpdateCurrentPorjectOnCalendarNotebook: false);
             // Nên gọi sự kiện này sau khi toàn bộ user data đã được imported thành công
             _currentProjectChanged?.Invoke(this, oldProject, _currentProjectVO);
         }

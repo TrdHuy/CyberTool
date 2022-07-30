@@ -147,7 +147,7 @@ namespace honeyboard_release_service.view_models.project_manager
             }
             set
             {
-                if (!string.IsNullOrEmpty(value))
+                if (value != null)
                 {
                     _RPM_Instance.CreateNewProjectForCurrentProjectVO(value);
                     InvalidateOwn();

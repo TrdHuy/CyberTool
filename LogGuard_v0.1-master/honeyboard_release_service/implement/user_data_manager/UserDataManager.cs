@@ -126,7 +126,7 @@ namespace honeyboard_release_service.implement.user_data_manager
 
         public void AddImportedProject(string projectPath, ProjectVO projectVO)
         {
-            _importedProjects[projectPath] = projectVO;
+           _importedProjects[projectPath] = projectVO;
         }
 
         public void SetCurrentImportedProject(ProjectVO projectVO)
