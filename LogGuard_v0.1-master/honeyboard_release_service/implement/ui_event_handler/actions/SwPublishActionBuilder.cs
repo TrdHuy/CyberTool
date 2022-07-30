@@ -6,6 +6,7 @@ using cyber_base.view_model;
 using honeyboard_release_service.definitions;
 using honeyboard_release_service.implement.ui_event_handler.actions.log_monitor.button;
 using honeyboard_release_service.implement.ui_event_handler.actions.merge_tab.button;
+using honeyboard_release_service.implement.ui_event_handler.actions.notebook.context_menu;
 using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.button;
 using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.gesture;
 using honeyboard_release_service.implement.ui_event_handler.actions.release_tab.button;
@@ -33,7 +34,16 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions
 
         public override ICommandExecuter? BuildCommandExecuter(string keyTag, ILogger? logger = null)
         {
-            return null;
+            ICommandExecuter? commandExecuter = null;
+            switch (keyTag)
+            {
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_NB_DELETE_PROJECT_ITEM_FEATURE:
+                    commandExecuter = new PRT_NB_DeleteProjectItemContextMenuAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, null, logger);
+                    break;
+                default:
+                    break;
+            }
+            return commandExecuter;
         }
 
         public override IViewModelCommandExecuter? BuildViewModelCommandExecuter(string keyTag, BaseViewModel viewModel, ILogger? logger = null)
