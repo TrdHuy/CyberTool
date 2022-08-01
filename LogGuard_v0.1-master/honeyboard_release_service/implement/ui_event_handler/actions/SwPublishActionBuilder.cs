@@ -40,6 +40,9 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions
                 case PublisherKeyFeatureTag.KEY_TAG_PRT_NB_DELETE_PROJECT_ITEM_FEATURE:
                     commandExecuter = new PRT_NB_DeleteProjectItemContextMenuAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, null, logger);
                     break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_NB_RENAME_PROJECT_ITEM_FEATURE:
+                    commandExecuter = new PRT_NB_RenameProjectItemContextMenuAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, null, logger);
+                    break;
                 default:
                     break;
             }

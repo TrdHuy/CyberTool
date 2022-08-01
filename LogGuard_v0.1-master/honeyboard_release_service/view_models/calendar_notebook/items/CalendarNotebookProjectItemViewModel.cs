@@ -82,10 +82,18 @@ namespace honeyboard_release_service.view_models.calendar_notebook.items
         {
             _commitSource = new CalendarNotebookItemCollection<ICalendarNotebookCommitItemContext>();
             _projectVO = vo;
+
             _renameProjectCommand = new CommandExecuterModel((paramaters) =>
             {
+                if (paramaters != null)
+                {
+                    return PublisherKeyActionListener.Current
+                        .OnKey(PublisherDefinition.PUBLISHER_PLUGIN_TAG,
+                        PublisherKeyFeatureTag.KEY_TAG_PRT_NB_RENAME_PROJECT_ITEM_FEATURE, paramaters) as ICommandExecuter;
+                }
                 return null;
             });
+
             _deleteProjectCommand = new CommandExecuterModel((paramaters) =>
             {
                 if (paramaters != null)
