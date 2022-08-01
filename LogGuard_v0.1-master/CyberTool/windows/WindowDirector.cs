@@ -181,12 +181,12 @@ namespace cyber_tool.windows
             switch (ownerWindow)
             {
                 case CyberOwnerWindow.Default:
-                    _IPopWindow = new CyberIPopWindow(opener, null, width, height);
+                    _IPopWindow = new CyberIPopWindow(opener, null);
                     _IPopWindow.DataContext = dataContext;
                     _IPopWindow.Title = title;
                     break;
                 case CyberOwnerWindow.CyberIFace:
-                    _IPopWindow = new CyberIPopWindow(opener, IFaceWindow, 0, 0);
+                    _IPopWindow = new CyberIPopWindow(opener, IFaceWindow);
                     _IPopWindow.DataContext = dataContext;
                     _IPopWindow.Title = title;
                     break;
@@ -202,6 +202,53 @@ namespace cyber_tool.windows
                 StartDispandCCAnim(cc, _IPopWindow, 200, windowShowedCallback);
             }
 
+        }
+
+        public void ShowPopupUserControlWindow(UserControl uc
+           , CyberOwnerWindow ownerWindow = CyberOwnerWindow.Default
+           , double width = 500
+           , double height = 400
+           , Action<object>? windowShowedCallback = null
+           , string title = "Floating window")
+        {
+            if (_IPopWindowMap.ContainsKey(uc))
+            {
+                _IPopWindow = _IPopWindowMap[uc];
+                if (_IPopWindow != null && _IPopWindow.WindowState == WindowState.Minimized)
+                {
+                    _IPopWindow.WindowState = WindowState.Normal;
+                }
+                return;
+            }
+
+            var owner = IFaceWindow;
+            switch (ownerWindow)
+            {
+                case CyberOwnerWindow.Default:
+                    owner = null;
+                    break;
+                case CyberOwnerWindow.CyberIFace:
+                    break;
+            }
+            var userControlWindow = new CyberIPopWindow(null, owner);
+            userControlWindow.Title = title;
+            userControlWindow.Content = uc;
+
+            if (userControlWindow != null)
+            {
+                _IPopWindow = userControlWindow;
+                userControlWindow.Height = height;
+                userControlWindow.Width = width;
+
+                _IPopWindowMap.Add(uc, userControlWindow);
+                userControlWindow.Closed += (s1, e1) =>
+                {
+                    _IPopWindowMap.Remove(uc);
+                };
+                _IPopWindow.Show();
+                windowShowedCallback?.Invoke(_IPopWindow);
+
+            }
         }
 
         public string OpenSaveLogFileDialogWindow()

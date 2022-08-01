@@ -105,6 +105,25 @@ namespace cyber_base.app
            , string title = "Floating window");
 
         /// <summary>
+        /// Mở cửa sổ mới có chứa 1 đối tượng usercontrol
+        /// </summary>
+        /// <param name="uc"></param>
+        /// <param name="opener"></param>
+        /// <param name="ownerWindow"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="dataContext"></param>
+        /// <param name="windowShowedCallback"></param>
+        /// <param name="title"></param>
+        void ShowUserControlWindow(UserControl uc
+            , CyberOwner ownerWindow = CyberOwner.Default
+            , double width = 500
+            , double height = 400
+            , Action<object>? windowShowedCallback = null
+            , string title = "Floating window"
+            );
+
+        /// <summary>
         /// Mở cửa sổ chọn folder và trả về đường dẫn tới folder
         /// đó
         /// </summary>
