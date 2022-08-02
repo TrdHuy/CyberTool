@@ -42,7 +42,7 @@ namespace honeyboard_release_service.definitions
 
         public const string KEY_TAG_PRT_NB_DELETE_PROJECT_ITEM_FEATURE = "KEY_TAG_PRT_NB_DELETE_PROJECT_ITEM_FEATURE";
         public const string KEY_TAG_PRT_NB_RENAME_PROJECT_ITEM_FEATURE = "KEY_TAG_PRT_NB_RENAME_PROJECT_ITEM_FEATURE";
-
+        public const string KEY_TAG_PRT_NB_IMPORT_PROJECT_ITEM_FEATURE = "KEY_TAG_PRT_NB_IMPORT_PROJECT_ITEM_FEATURE";
     }
 
     internal enum PublisherViewKeyDefinition

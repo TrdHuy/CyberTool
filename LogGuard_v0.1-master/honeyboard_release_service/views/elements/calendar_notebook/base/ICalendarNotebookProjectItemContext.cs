@@ -28,5 +28,8 @@ namespace honeyboard_release_service.views.elements.calendar_notebook.@base
 
         [Bindable(true)]
         ICommand DeleteProjectCommand { get; }
+
+        [Bindable(true)]
+        ICommand ImportProjectCommand { get; }
     }
 }
