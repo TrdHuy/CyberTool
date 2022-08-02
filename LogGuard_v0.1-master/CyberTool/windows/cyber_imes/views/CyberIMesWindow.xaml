@@ -16,7 +16,7 @@
 				 ChromeBackground="Transparent">
 	<Grid Background="{DynamicResource Background_Level3}"
 		  Width="auto"
-		  Margin="5,0,5,5"
+		  Margin="1,0,1,1"
 		  x:Name="MainGrid"
 		  Height="auto">
 		<Grid.RowDefinitions>
