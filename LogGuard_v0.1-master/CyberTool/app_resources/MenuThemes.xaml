@@ -315,6 +315,15 @@
 									  SharedSizeGroup="Shortcut" />
 					<ColumnDefinition Width="13" />
 				</Grid.ColumnDefinitions>
+
+				<Path Name="IconPath"
+					  Fill="Transparent"
+					  Width="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Icon.Width}"
+					  Height="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Icon.Height}"
+					  Margin="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Icon.Margin}"
+					  Stretch="Uniform"
+					  Data="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Icon.Data}" />
+
 				<ContentPresenter Name="Icon"
 								  Margin="6,0,6,0"
 								  VerticalAlignment="Center"
@@ -323,9 +332,7 @@
 						 Width="10"
 						 Height="10"
 						 Visibility="Hidden"
-						 Fill="{DynamicResource ButtonBackground_Level1}" />
-
-
+						 Fill="Transparent" />
 
 				<ContentPresenter Name="HeaderHost"
 								  Grid.Column="1"
@@ -350,17 +357,58 @@
 					 Value="true">
 				<Setter TargetName="CheckMark"
 						Property="Fill"
-						Value="{DynamicResource ButtonBackground_Level2}" />
+						Value="{DynamicResource ButtonBackground_Level1}" />
+				<Setter TargetName="IconPath"
+						Property="Fill"
+						Value="{DynamicResource ButtonBackground_Level1}" />
 			</Trigger>
-			<Trigger Property="IsCheckable"
-					 Value="true">
+
+			<MultiTrigger>
+				<MultiTrigger.Conditions>
+					<Condition Property="IsCheckable"
+							   Value="true" />
+					<Condition Property="Icon"
+							   Value="{x:Null}" />
+				</MultiTrigger.Conditions>
 				<Setter TargetName="CheckMark"
 						Property="Visibility"
 						Value="Visible" />
 				<Setter TargetName="Icon"
 						Property="Visibility"
 						Value="Hidden" />
-			</Trigger>
+				<Setter TargetName="IconPath"
+						Property="Visibility"
+						Value="Hidden" />
+			</MultiTrigger>
+
+			<MultiDataTrigger>
+				<MultiDataTrigger.Conditions>
+					<Condition  Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Icon.Data, Converter={StaticResource NullCheckConverter}}"
+								Value="False" />
+				</MultiDataTrigger.Conditions>
+				<Setter TargetName="IconPath"
+						Property="Visibility"
+						Value="Visible" />
+				<Setter TargetName="Icon"
+						Property="Visibility"
+						Value="Hidden" />
+			</MultiDataTrigger>
+
+			<MultiDataTrigger>
+				<MultiDataTrigger.Conditions>
+					<Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsCheckable}"
+							   Value="False" />
+					<Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Icon, Converter={StaticResource NullCheckConverter}}"
+							   Value="False" />
+				</MultiDataTrigger.Conditions>
+				<Setter TargetName="IconPath"
+						Property="Visibility"
+						Value="Hidden" />
+				<Setter TargetName="Icon"
+						Property="Visibility"
+						Value="Visible" />
+			</MultiDataTrigger>
+
 			<Trigger Property="IsHighlighted"
 					 Value="true">
 				<Setter TargetName="Border"
@@ -389,7 +437,7 @@
 					<ColumnDefinition Width="13" />
 				</Grid.ColumnDefinitions>
 				<ContentPresenter Name="Icon"
-								  Margin="5,0,15,0"
+								  Margin="6,0,6,0"
 								  VerticalAlignment="Center"
 								  ContentSource="Icon" />
 				<TextBlock Name="HeaderHost"
@@ -459,6 +507,5 @@
 			</Trigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
-
 
 </ResourceDictionary>

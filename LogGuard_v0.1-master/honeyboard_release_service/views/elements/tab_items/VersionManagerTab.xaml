@@ -221,6 +221,12 @@
 												</ContextMenu>
 											</Grid.ContextMenu>
 
+											<Grid.InputBindings>
+												<MouseBinding Gesture="LeftDoubleClick"
+															  CommandParameter="{Binding .}"
+															  Command="{Binding ShowCommitDataGridCommand}" />
+											</Grid.InputBindings>
+											
 											<Grid.ColumnDefinitions>
 												<ColumnDefinition Width="0.4*" />
 												<ColumnDefinition Width="10" />

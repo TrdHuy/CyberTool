@@ -1,8 +1,11 @@
 ﻿using cyber_base.async_task;
 using cyber_base.implement.command;
+using cyber_base.ui_event_handler.action.executer;
 using cyber_base.view_model;
 using honeyboard_release_service.@base.view_model;
+using honeyboard_release_service.definitions;
 using honeyboard_release_service.implement.async_task_execute_helper;
+using honeyboard_release_service.implement.ui_event_handler;
 using honeyboard_release_service.implement.ui_event_handler.async_tasks.git_tasks;
 using honeyboard_release_service.implement.view_model;
 using honeyboard_release_service.models.VOs;
@@ -29,6 +32,9 @@ namespace honeyboard_release_service.view_models.project_manager.items
         private bool _isVersionTitleLoaded = false;
         private bool _isLoadingVersionTitle;
         private BaseAsyncTask? _loadingTaskCache;
+
+        [Bindable(true)]
+        public CommandExecuterModel ShowCommitDataGridCommand { get; set; }
 
         [Bindable(true)]
         public BaseDotNetCommandImpl SyncVersionCommand { get; set; }
@@ -177,6 +183,17 @@ namespace honeyboard_release_service.view_models.project_manager.items
                         AsyncTaskManager.Current?.ForceAddVersionPropertiesLoadingTask(_loadingTaskCache);
                     }
                 }
+            });
+
+            ShowCommitDataGridCommand = new CommandExecuterModel((paramaters) =>
+            {
+                if (paramaters != null)
+                {
+                    return PublisherKeyActionListener.Current
+                        .OnKey(PublisherDefinition.PUBLISHER_PLUGIN_TAG,
+                        PublisherKeyFeatureTag.KEY_TAG_PRT_VM_SHOW_COMMIT_DATA_GRID_FEATURE, paramaters) as ICommandExecuter;
+                }
+                return null;
             });
         }
 

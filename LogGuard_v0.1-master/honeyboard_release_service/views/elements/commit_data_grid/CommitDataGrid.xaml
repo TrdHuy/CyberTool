@@ -1,0 +1,804 @@
+﻿<UserControl x:Class="honeyboard_release_service.views.elements.commit_data_grid.CommitDataGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="clr-namespace:honeyboard_release_service.views.elements.commit_data_grid"
+			 xmlns:cvt="clr-namespace:honeyboard_release_service.views.elements.commit_data_grid.converter"
+			 xmlns:cs="clr-namespace:cyber_base.implement.views.cyber_scroll;assembly=cyber_base"
+			 xmlns:cb="clr-namespace:cyber_base.implement.views.clipping_border;assembly=cyber_base"
+			 xmlns:atp="clr-namespace:honeyboard_release_service.views.elements.commit_data_grid.prop"
+			 mc:Ignorable="d" 
+			 x:Name="cdguc"
+             d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+		<cvt:VisibilityToBooleanConverter x:Key="VisibilityConverter" />
+	</UserControl.Resources>
+
+	<cb:ClippingBorder CornerRadius="0,0,10,10"
+					   BorderThickness="0">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="46.176" />
+				<RowDefinition Height="0.07*" />
+				<RowDefinition Height="3.3*" />
+			</Grid.RowDefinitions>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="3.29*" />
+					<ColumnDefinition Width="0.32*" />
+					<ColumnDefinition Width="3.24*" />
+				</Grid.ColumnDefinitions>
+				<cb:ClippingBorder Background="#FF232529"
+								   CornerRadius="10">
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="14.976" />
+							<ColumnDefinition Width="5.59" />
+							<ColumnDefinition Width="14.976" />
+							<ColumnDefinition Width="12.48" />
+						</Grid.ColumnDefinitions>
+
+						<TextBox x:Name="PART_SearchTextBox"
+								 Text="{Binding ElementName=cdguc, Path=SearchText, UpdateSourceTrigger=LostFocus}"
+								 BorderThickness="0"
+								 Tag="Enter some things to search"
+								 Background="Transparent"
+								 CaretBrush="{DynamicResource BorderbrushEffect_Level1}"
+								 SelectionBrush="White"
+								 SelectionOpacity="0.3"
+								 Margin="11.52,0,0,0"
+								 FontSize="13.86"
+								 VerticalAlignment="Center"
+								 Foreground="{DynamicResource Foreground_Level3}">
+							<TextBox.Template>
+								<ControlTemplate TargetType="{x:Type TextBox}">
+									<Grid>
+										<ScrollViewer VerticalContentAlignment="Center"
+													  VerticalAlignment="Top"
+													  FontFamily="{TemplateBinding FontFamily}"
+													  VerticalScrollBarVisibility="Disabled"
+													  HorizontalScrollBarVisibility="Disabled"
+													  x:Name="PART_ContentHost" />
+
+										<TextBlock x:Name="TagTextBox"
+												   Margin="2,0,0,0"
+												   Text="{TemplateBinding Tag}"
+												   FontFamily="{TemplateBinding FontFamily}"
+												   Background="Transparent"
+												   VerticalAlignment="Top"
+												   IsHitTestVisible="False"
+												   Foreground="{StaticResource Foreground_Level1}"
+												   FontSize="{TemplateBinding FontSize}">
+											<TextBlock.Style>
+												<Style TargetType="{x:Type TextBlock}">
+													<Setter Property="Visibility"
+															Value="Collapsed" />
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
+																	 Value="">
+															<Setter Property="Visibility"
+																	Value="Visible" />
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</TextBlock.Style>
+										</TextBlock>
+									</Grid>
+
+
+								</ControlTemplate>
+							</TextBox.Template>
+						</TextBox>
+
+						<Button x:Name="PART_SearchButton"
+								Click="HandleButtonAndMenuItemClick"
+								Grid.Column="1"
+								Foreground="{StaticResource Foreground_Level1}"
+								Background="{StaticResource Foreground_Level3}"
+								Content="{StaticResource SearchPathGeomerty}"
+								Template="{StaticResource IconBtnTmpl}" />
+
+						<Button x:Name="PART_FilterButton"
+								Click="HandleButtonAndMenuItemClick"
+								Grid.Column="3"
+								Foreground="{StaticResource Foreground_Level1}"
+								Background="{StaticResource Foreground_Level3}"
+								Content="{StaticResource FilterEnableIcon}"
+								Template="{StaticResource IconBtnTmpl}" />
+
+
+					</Grid>
+				</cb:ClippingBorder>
+				<StackPanel Grid.Column="2"
+							VerticalAlignment="Center"
+							Orientation="Horizontal">
+					<RadioButton x:Name="PART_AllFilterRadioButton"
+								 Content="All"
+								 IsChecked="True"
+								 Checked="HandleFilterRadioButtonChecked"
+								 Style="{StaticResource CyberRadioButton}"
+								 FontSize="17.3"
+								 FontFamily="Calibri"
+								 FontWeight="Bold"
+								 Foreground="{DynamicResource Foreground_Level2}" />
+					<RadioButton x:Name="PART_PLMFilterRadioButton"
+								 Content="PLM"
+								 Checked="HandleFilterRadioButtonChecked"
+								 Style="{StaticResource CyberRadioButton}"
+								 Foreground="{DynamicResource Foreground_Level2}"
+								 FontSize="17.3"
+								 FontFamily="Calibri"
+								 FontWeight="Bold"
+								 Margin="24.96,0,0,0" />
+					<RadioButton x:Name="PART_JiraFilterRadioButton"
+								 Content="Jira"
+								 Checked="HandleFilterRadioButtonChecked"
+								 Style="{StaticResource CyberRadioButton}"
+								 Foreground="{DynamicResource Foreground_Level2}"
+								 FontSize="17.3"
+								 FontWeight="Bold"
+								 FontFamily="Calibri"
+								 Margin="24.96,0,0,0" />
+				</StackPanel>
+			</Grid>
+
+			<DataGrid x:Name="PART_CommitDataGrid"
+					  Grid.Row="2"
+					  BorderThickness="0"
+					  AutoGenerateColumns="False"
+					  HeadersVisibility="All"
+					  SelectionUnit="Cell"
+					  AlternationCount="2"
+					  SelectionMode="Extended"
+					  HorizontalGridLinesBrush="{DynamicResource InflectBackground_Level2}"
+					  VerticalGridLinesBrush="{DynamicResource InflectBackground_Level2}"
+					  GridLinesVisibility="None">
+				<DataGrid.ContextMenu>
+					<ContextMenu x:Name="PART_ControlPanelContextMenu">
+						<MenuItem x:Name="PART_ColumnVisibilityItem"
+								  Header="Column visibility">
+							<MenuItem.Icon>
+								<Path Width="12"
+									  Height="12"
+									  Fill="{StaticResource Background_Level2}"
+									  Data="M 23.710549,30.124047 C 17.524031,29.850886 11.372658,27.489768 6.0319774,23.338376 4.0421074,21.79162 1.8414034,19.650673 0.72093342,18.171545 c -0.47354,-0.625117 -0.615954,-0.904137 -0.694111,-1.359914 -0.140696,-0.820476 0.24639,-1.617573 1.77549698,-3.656142 2.629205,-3.5051943 6.236767,-6.9053693 9.5868006,-9.0356853 2.298206,-1.461448 5.038669,-2.657348 7.684445,-3.35338204 7.319882,-1.92566996 14.982456,-0.19795 21.754331,4.90506004 1.189665,0.896483 1.54506,1.219268 3.523094,3.199819 1.990892,1.9934263 2.674275,2.7501263 3.668284,4.0618433 1.446179,1.90841 1.966785,2.878787 1.966785,3.665963 0,0.750402 -0.674735,1.737823 -2.371258,3.470148 -2.928421,2.990221 -6.73085,5.704886 -10.22634,7.300883 -3.662693,1.67234 -7.328497,2.573718 -11.203617,2.754837 -1.161224,0.05427 -1.224616,0.05425 -2.474295,-9.28e-4 z m 2.55102,-4.744283 c 1.696028,-0.09715 3.116227,-0.303794 4.540817,-0.660716 4.147215,-1.039057 8.366124,-3.326428 11.709183,-6.348382 0.308674,-0.279025 0.926397,-0.85818 1.372718,-1.28701 L 44.69578,16.303964 44.001112,15.441057 C 43.006143,14.205123 42.191235,13.309895 40.974432,12.11606 39.328365,10.501062 37.92407,9.3383367 36.363245,8.2980977 35.57801,7.7747637 34.346053,7.0738947 34.299103,7.1237927 c -0.0092,0.0098 0.0864,0.18997 0.212445,0.400429 0.38657,0.645468 1.021126,1.986375 1.207217,2.5510213 0.196271,0.595537 0.398131,1.507898 0.496683,2.244899 0.0925,0.691751 0.08004,2.14254 -0.02466,2.871833 -0.621744,4.330606 -3.606115,7.859671 -7.823551,9.251471 -0.371221,0.122507 -0.874755,0.257583 -1.118964,0.300169 -1.143547,0.199418 -3.024957,0.220454 -4.194829,0.0469 -1.66695,-0.247295 -3.561297,-1.090636 -4.977167,-2.215775 -2.782862,-2.211439 -4.365726,-5.426392 -4.365726,-8.86722 0,-2.201733 0.502818,-4.0129073 1.674116,-6.0302383 0.171074,-0.294643 0.28801,-0.54374 0.259857,-0.553549 -0.05711,-0.0199 -0.996414,0.530982 -1.864617,1.093565 -1.195241,0.774499 -2.419579,1.722505 -3.666295,2.8388153 -0.8454076,0.756979 -2.4673176,2.397029 -3.1169216,3.151782 -0.638363,0.741694 -1.653486,2.016904 -1.653486,2.07713 0,0.0867 1.937513,1.957864 2.599219,2.510208 3.9379736,3.287133 8.6657236,5.571015 13.0385356,6.298657 1.723619,0.286813 3.543851,0.385353 5.280612,0.285872 z m -7.346467,-10.1517 c 0.716842,-0.365705 0.937826,-0.749592 1.071861,-1.862004 0.235264,-1.952559 1.304576,-3.5129853 2.915243,-4.2541583 0.546184,-0.251335 0.888699,-0.340745 1.67569,-0.437423 1.037177,-0.127412 1.263708,-0.21875 1.693274,-0.682733 0.309486,-0.334282 0.398562,-0.566854 0.398562,-1.040621 0,-0.629362 -0.273307,-1.201426 -0.690912,-1.446158 -0.407237,-0.238657 -0.650693,-0.286068 -1.452828,-0.282928 -0.677009,0.0027 -0.804115,0.01884 -1.478612,0.188359 -1.083159,0.272222 -1.722169,0.54306 -2.551117,1.081267 -0.902553,0.585995 -1.769299,1.417898 -2.411329,2.314393 -0.408106,0.569857 -0.998861,1.7360103 -1.185718,2.3406143 -0.404542,1.308958 -0.468748,2.700944 -0.154232,3.343791 0.18905,0.386404 0.62781,0.702473 1.174748,0.846252 0.263733,0.06933 0.750692,0.01618 0.99537,-0.108651 z"
+									  Stretch="Uniform" />
+							</MenuItem.Icon>
+						</MenuItem>
+
+						<MenuItem x:Name="PART_TurnOnOffGridLineMenuItem"
+								  Header="Grid line">
+							<MenuItem.Icon>
+								<Path Width="12"
+									  Height="12"
+									  Fill="{StaticResource Background_Level2}"
+									  Data="m -98.96524,51.593749 c -1.53282,0 -2.76705,1.234221 -2.76705,2.767025 v 8.102356 c 0,1.532804 1.23423,2.767025 2.76705,2.767025 h 8.10243 c 1.53282,0 2.76706,-1.234221 2.76706,-2.767025 v -8.102356 c 0,-1.532804 -1.23424,-2.767025 -2.76706,-2.767025 z m 18.18173,0 c -1.53281,0 -2.76705,1.234221 -2.76705,2.767025 v 8.102356 c 0,1.532804 1.23424,2.767025 2.76705,2.767025 h 8.102907 c 1.532817,0 2.76658,-1.234221 2.76658,-2.767025 v -8.102356 c 0,-1.532804 -1.233763,-2.767025 -2.76658,-2.767025 z m 18.181736,0 c -1.532818,0 -2.76658,1.234221 -2.76658,2.767025 v 8.102356 c 0,1.532804 1.233762,2.767025 2.76658,2.767025 h 8.102903 c 1.53282,0 2.766583,-1.234221 2.766583,-2.767025 v -8.102356 c 0,-1.532804 -1.233763,-2.767025 -2.766583,-2.767025 z M -98.96524,69.775311 c -1.53282,0 -2.76705,1.23422 -2.76705,2.767024 v 8.102358 c 0,1.532803 1.23423,2.767024 2.76705,2.767024 h 8.10243 c 1.53282,0 2.76706,-1.234221 2.76706,-2.767024 v -8.102358 c 0,-1.532804 -1.23424,-2.767024 -2.76706,-2.767024 z m 18.18173,0 c -1.53281,0 -2.76705,1.23422 -2.76705,2.767024 v 8.102358 c 0,1.532803 1.23424,2.767024 2.76705,2.767024 h 8.102907 c 1.532817,0 2.76658,-1.234221 2.76658,-2.767024 v -8.102358 c 0,-1.532804 -1.233763,-2.767024 -2.76658,-2.767024 z m 18.181736,0 c -1.532818,0 -2.76658,1.23422 -2.76658,2.767024 v 8.102358 c 0,1.532803 1.233762,2.767024 2.76658,2.767024 h 8.102903 c 1.53282,0 2.766583,-1.234221 2.766583,-2.767024 v -8.102358 c 0,-1.532804 -1.233763,-2.767024 -2.766583,-2.767024 z M -98.96524,87.957343 c -1.53282,0 -2.76705,1.234219 -2.76705,2.767026 v 8.102354 c 0,1.532807 1.23423,2.767027 2.76705,2.767027 h 8.10243 c 1.53282,0 2.76706,-1.23422 2.76706,-2.767027 v -8.102354 c 0,-1.532807 -1.23424,-2.767026 -2.76706,-2.767026 z m 18.18173,0 c -1.53281,0 -2.76705,1.234219 -2.76705,2.767026 v 8.102354 c 0,1.532807 1.23424,2.767027 2.76705,2.767027 h 8.102907 c 1.532817,0 2.76658,-1.23422 2.76658,-2.767027 v -8.102354 c 0,-1.532807 -1.233763,-2.767026 -2.76658,-2.767026 z m 18.181736,0 c -1.532818,0 -2.76658,1.234219 -2.76658,2.767026 v 8.102354 c 0,1.532807 1.233762,2.767027 2.76658,2.767027 h 8.102903 c 1.53282,0 2.766583,-1.23422 2.766583,-2.767027 v -8.102354 c 0,-1.532807 -1.233763,-2.767026 -2.766583,-2.767026 z"
+									  Stretch="Uniform">
+								</Path>
+							</MenuItem.Icon>
+						</MenuItem>
+
+						<MenuItem x:Name="PART_SearchModeMenuItem"
+								  Header="Search &amp; filter mode" />
+
+					</ContextMenu>
+				</DataGrid.ContextMenu>
+				<DataGrid.Template>
+					<ControlTemplate TargetType="{x:Type DataGrid}">
+						<ControlTemplate.Resources>
+							<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
+							<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
+						</ControlTemplate.Resources>
+						<Border x:Name="border"
+								SnapsToDevicePixels="True"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								BorderThickness="{TemplateBinding BorderThickness}"
+								Padding="{TemplateBinding Padding}"
+								Background="#FF232529">
+
+							<cs:CyberScrollView x:Name="DG_ScrollViewer"
+												Focusable="false"
+												Background="Black"
+												ScrollBarBackground="Transparent"
+												ThumbBackground="#FF009A76"
+												IsMouseOverExpandScrollbar="True">
+								<cs:CyberScrollView.Template>
+									<ControlTemplate TargetType="{x:Type ScrollViewer}">
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="33.696" />
+												<ColumnDefinition Width="*" />
+											</Grid.ColumnDefinitions>
+											<Grid.RowDefinitions>
+												<RowDefinition Height="Auto" />
+												<RowDefinition Height="*" />
+												<RowDefinition Height="Auto" />
+											</Grid.RowDefinitions>
+
+											<Button x:Name="PART_MenuButton"
+													Click="HandleButtonAndMenuItemClick"
+													Grid.Column="0"
+													Padding="10"
+													Foreground="{StaticResource Foreground_Level1}"
+													Background="{StaticResource Foreground_Level3}"
+													Content="m 20.231082,49.855051 c -1.37307,-0.369747 -2.398555,-1.313158 -2.918176,-2.684659 -0.131783,-0.347817 -0.176995,-0.922705 -0.222908,-2.834363 l -0.0576,-2.398045 -0.367157,-0.742758 C 16.044262,39.938963 14.898733,39.080007 13.532116,38.845918 12.452268,38.660947 11.957087,38.809004 9.46314,40.062503 L 7.2656035,41.167009 H 6.2400963 c -0.9449501,0 -1.075854,-0.02385 -1.6663832,-0.303679 C 3.5643743,40.385041 3.1075876,39.843699 1.7101948,37.469711 1.0276505,36.310159 0.37850688,35.156378 0.26764721,34.905759 c -0.6345128,-1.4344 -0.10564632,-3.365592 1.21408899,-4.433379 0.2987721,-0.241727 1.190161,-0.813085 1.9808887,-1.269679 1.7330643,-1.000764 2.2783409,-1.464909 2.6804323,-2.281671 0.6085875,-1.236219 0.6085875,-2.599884 0,-3.836103 C 5.7386476,22.263468 5.190178,21.799132 3.4479148,20.803264 1.7376794,19.825691 1.052292,19.214463 0.59731738,18.261095 0.07890008,17.174804 -0.0029165,16.057407 0.35078088,14.894353 0.55006471,14.239068 2.7622752,10.449348 3.2932938,9.8535349 3.9190793,9.151417 4.9390863,8.6732576 5.9339477,8.615672 6.9846338,8.554842 7.4851375,8.7195372 9.7598277,9.8746157 11.952872,10.988233 12.456546,11.130532 13.538484,10.942118 14.92863,10.700037 16.114808,9.7908799 16.728497,8.4971099 L 17.029629,7.862266 17.089012,5.5670728 C 17.151973,3.1341441 17.196229,2.8804168 17.711,2.0020297 18.005173,1.5000568 18.787843,0.76369944 19.310738,0.49694155 20.15604,0.06569926 20.687658,0 23.33197,0 c 2.644323,0 3.175942,0.06569926 4.021243,0.49694155 0.522896,0.26675789 1.305554,1.00311525 1.599739,1.50508815 0.52036,0.8879293 0.559817,1.1210476 0.620998,3.6678961 l 0.0576,2.3980466 0.363897,0.7361658 c 0.567336,1.1477514 1.554966,1.9629298 2.757571,2.2760918 1.2783,0.332867 2.039445,0.143319 4.008282,-0.998195 1.987616,-1.1523883 2.445993,-1.3730769 3.099176,-1.4921326 1.152347,-0.2100401 2.466451,0.2481714 3.393808,1.1833741 0.614789,0.6199735 2.829623,4.2949295 3.197971,5.3062035 0.409105,1.123202 0.199199,2.444039 -0.55604,3.498712 -0.468049,0.653624 -0.866198,0.951206 -2.777354,2.075904 -1.626091,0.956942 -2.153191,1.429694 -2.595268,2.327674 -0.614811,1.248867 -0.618598,2.590525 -0.01074,3.825127 0.442656,0.899174 1.06437,1.451112 2.698709,2.395804 1.615357,0.933715 2.128264,1.340681 2.583227,2.049685 0.709458,1.105598 0.921694,2.783429 0.513896,4.062649 -0.236847,0.742956 -2.369105,4.395955 -2.937981,5.033362 -0.28077,0.314605 -0.668177,0.594981 -1.153609,0.834891 -0.620289,0.306562 -0.853204,0.367636 -1.539536,0.403653 -1.124765,0.05904 -1.577236,-0.09883 -3.47669,-1.213044 -0.886339,-0.519913 -1.809296,-1.022182 -2.051026,-1.116135 -1.924031,-0.747841 -4.191264,0.190933 -5.15108,2.132867 l -0.367167,0.742829 -0.05801,2.300312 c -0.0615,2.439263 -0.105215,2.690713 -0.620592,3.570155 -0.294185,0.501973 -1.076843,1.238331 -1.599739,1.505089 -0.852414,0.434878 -1.370149,0.497329 -4.066181,0.490514 -1.867272,-0.0047 -2.679532,-0.04312 -3.05595,-0.14448 z M 25.869295,32.92404 c 2.620931,-0.889606 4.509794,-2.772477 5.374973,-5.357915 0.267751,-0.800136 0.326112,-1.139724 0.366569,-2.133196 0.02835,-0.695345 0.0011,-1.451156 -0.06594,-1.836669 -0.487606,-2.800029 -2.529203,-5.313098 -5.134767,-6.320575 -1.245702,-0.481662 -1.975972,-0.59891 -3.41999,-0.549092 -1.105632,0.03814 -1.392638,0.08506 -2.221309,0.363169 -1.793555,0.601929 -3.317085,1.762518 -4.359551,3.321025 -0.939299,1.40427 -1.379072,2.86867 -1.379072,4.592191 0,1.723306 0.440859,3.192307 1.375133,4.582114 0.972854,1.447211 2.335602,2.562316 3.841779,3.143639 1.263033,0.487485 1.806752,0.575831 3.329031,0.540918 1.236743,-0.02836 1.455771,-0.06137 2.293147,-0.345609 z"
+													Template="{StaticResource IconBtnTmpl}" />
+
+											<DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter"
+																			Grid.Column="1"
+																			Visibility="{Binding HeadersVisibility, 
+																		  ConverterParameter={x:Static DataGridHeadersVisibility.Column}, 
+																		  Converter={x:Static DataGrid.HeadersVisibilityConverter}, 
+																		  RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+											<ScrollContentPresenter x:Name="PART_ScrollContentPresenter"
+																	Grid.ColumnSpan="2"
+																	Grid.Row="1"
+																	CanContentScroll="{TemplateBinding CanContentScroll}" />
+
+											<ScrollBar Name="PART_VerticalScrollBar"
+													   Grid.Column="1"
+													   HorizontalAlignment="Right"
+													   Grid.Row="1"
+													   Grid.RowSpan="2"
+													   Maximum="{TemplateBinding ScrollableHeight}"
+													   ViewportSize="{TemplateBinding ViewportHeight}"
+													   Value="{TemplateBinding VerticalOffset}"
+													   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+													   Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type cs:CyberScrollView}, Mode=FindAncestor}, Path=ScrollBarBackground}">
+												<ScrollBar.Template>
+													<ControlTemplate TargetType="{x:Type ScrollBar}">
+														<Grid x:Name="Bg"
+															  SnapsToDevicePixels="True">
+															<Border x:Name="border"
+																	BorderBrush="{TemplateBinding BorderBrush}"
+																	BorderThickness="0"
+																	Background="{TemplateBinding Background}"
+																	Grid.Row="1" />
+															<Track x:Name="PART_Track"
+																   IsDirectionReversed="True"
+																   IsEnabled="True"
+																   Grid.Row="1">
+																<Track.DecreaseRepeatButton>
+																	<RepeatButton Command="ScrollBar.PageUpCommand">
+																		<RepeatButton.Style>
+																			<Style TargetType="{x:Type RepeatButton}">
+																				<Setter Property="OverridesDefaultStyle"
+																						Value="True" />
+																				<Setter Property="Background"
+																						Value="Transparent" />
+																				<Setter Property="Focusable"
+																						Value="False" />
+																				<Setter Property="IsTabStop"
+																						Value="False" />
+																				<Setter Property="Template">
+																					<Setter.Value>
+																						<ControlTemplate TargetType="{x:Type RepeatButton}">
+																							<Rectangle Fill="{TemplateBinding Background}"
+																									   Height="{TemplateBinding Height}"
+																									   Width="{TemplateBinding Width}" />
+																						</ControlTemplate>
+																					</Setter.Value>
+																				</Setter>
+																			</Style>
+																		</RepeatButton.Style>
+																	</RepeatButton>
+																</Track.DecreaseRepeatButton>
+																<Track.IncreaseRepeatButton>
+																	<RepeatButton Command="ScrollBar.PageDownCommand">
+																		<RepeatButton.Style>
+																			<Style TargetType="{x:Type RepeatButton}">
+																				<Setter Property="OverridesDefaultStyle"
+																						Value="True" />
+																				<Setter Property="Background"
+																						Value="Transparent" />
+																				<Setter Property="Focusable"
+																						Value="False" />
+																				<Setter Property="IsTabStop"
+																						Value="False" />
+																				<Setter Property="Template">
+																					<Setter.Value>
+																						<ControlTemplate TargetType="{x:Type RepeatButton}">
+																							<Rectangle Fill="{TemplateBinding Background}"
+																									   Height="{TemplateBinding Height}"
+																									   Width="{TemplateBinding Width}" />
+																						</ControlTemplate>
+																					</Setter.Value>
+																				</Setter>
+																			</Style>
+																		</RepeatButton.Style>
+																	</RepeatButton>
+																</Track.IncreaseRepeatButton>
+																<Track.Thumb>
+																	<Thumb>
+																		<Thumb.Style>
+																			<Style TargetType="{x:Type Thumb}">
+																				<Setter Property="OverridesDefaultStyle"
+																						Value="True" />
+																				<Setter Property="IsTabStop"
+																						Value="False" />
+																				<Setter Property="Template">
+																					<Setter.Value>
+																						<ControlTemplate TargetType="{x:Type Thumb}">
+																							<Rectangle x:Name="rectangle"
+																									   Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type cs:CyberScrollView},Mode=FindAncestor},Path=ThumbBackground}"
+																									   Height="{TemplateBinding Height}"
+																									   SnapsToDevicePixels="True"
+																									   Width="{TemplateBinding Width}" />
+																							<ControlTemplate.Triggers>
+																								<Trigger Property="IsEnabled"
+																										 Value="False">
+																									<Setter Property="Width"
+																											TargetName="rectangle"
+																											Value="2" />
+																									<Setter Property="HorizontalAlignment"
+																											TargetName="rectangle"
+																											Value="Right" />
+																								</Trigger>
+																							</ControlTemplate.Triggers>
+																						</ControlTemplate>
+																					</Setter.Value>
+																				</Setter>
+																			</Style>
+																		</Thumb.Style>
+																	</Thumb>
+																</Track.Thumb>
+															</Track>
+														</Grid>
+														<ControlTemplate.Triggers>
+															<MultiDataTrigger>
+																<MultiDataTrigger.Conditions>
+																	<Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=cs:CyberScrollView, Mode=FindAncestor}, Path=IsMouseOverExpandScrollbar}"
+																			   Value="True" />
+																	<Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}"
+																			   Value="False" />
+																</MultiDataTrigger.Conditions>
+																<Setter TargetName="border"
+																		Property="Background"
+																		Value="Transparent" />
+																<Setter TargetName="PART_Track"
+																		Property="IsEnabled"
+																		Value="False" />
+															</MultiDataTrigger>
+
+
+														</ControlTemplate.Triggers>
+													</ControlTemplate>
+												</ScrollBar.Template>
+											</ScrollBar>
+
+											<Grid Grid.Column="1"
+												  Grid.Row="2">
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, 
+													RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+													<ColumnDefinition Width="*" />
+												</Grid.ColumnDefinitions>
+
+												<ScrollBar Name="PART_HorizontalScrollBar"
+														   Orientation="Horizontal"
+														   Grid.Column="1"
+														   BorderThickness="0"
+														   Maximum="{TemplateBinding ScrollableWidth}"
+														   ViewportSize="{TemplateBinding ViewportWidth}"
+														   Value="{TemplateBinding HorizontalOffset}"
+														   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+														   Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type cs:CyberScrollView}, Mode=FindAncestor}, Path=ScrollBarBackground}">
+													<ScrollBar.Template>
+														<ControlTemplate TargetType="{x:Type ScrollBar}">
+															<Grid x:Name="Bg"
+																  SnapsToDevicePixels="True">
+																<Border BorderBrush="{TemplateBinding BorderBrush}"
+																		BorderThickness="{TemplateBinding BorderThickness}"
+																		Background="{TemplateBinding Background}"
+																		Grid.Column="1" />
+																<Track x:Name="PART_Track"
+																	   Grid.Column="1"
+																	   IsEnabled="{TemplateBinding IsMouseOver}">
+																	<Track.DecreaseRepeatButton>
+																		<RepeatButton Command="ScrollBar.PageLeftCommand">
+																			<RepeatButton.Style>
+																				<Style TargetType="{x:Type RepeatButton}">
+																					<Setter Property="OverridesDefaultStyle"
+																							Value="True" />
+																					<Setter Property="Background"
+																							Value="Transparent" />
+																					<Setter Property="Focusable"
+																							Value="False" />
+																					<Setter Property="IsTabStop"
+																							Value="False" />
+																					<Setter Property="Template">
+																						<Setter.Value>
+																							<ControlTemplate TargetType="{x:Type RepeatButton}">
+																								<Rectangle Fill="{TemplateBinding Background}"
+																										   Height="{TemplateBinding Height}"
+																										   Width="{TemplateBinding Width}" />
+																							</ControlTemplate>
+																						</Setter.Value>
+																					</Setter>
+																				</Style>
+																			</RepeatButton.Style>
+																		</RepeatButton>
+																	</Track.DecreaseRepeatButton>
+																	<Track.IncreaseRepeatButton>
+																		<RepeatButton Command="ScrollBar.PageRightCommand">
+																			<RepeatButton.Style>
+																				<Style TargetType="{x:Type RepeatButton}">
+																					<Setter Property="OverridesDefaultStyle"
+																							Value="True" />
+																					<Setter Property="Background"
+																							Value="Transparent" />
+																					<Setter Property="Focusable"
+																							Value="False" />
+																					<Setter Property="IsTabStop"
+																							Value="False" />
+																					<Setter Property="Template">
+																						<Setter.Value>
+																							<ControlTemplate TargetType="{x:Type RepeatButton}">
+																								<Rectangle Fill="{TemplateBinding Background}"
+																										   Height="{TemplateBinding Height}"
+																										   Width="{TemplateBinding Width}" />
+																							</ControlTemplate>
+																						</Setter.Value>
+																					</Setter>
+																				</Style>
+																			</RepeatButton.Style>
+																		</RepeatButton>
+																	</Track.IncreaseRepeatButton>
+																	<Track.Thumb>
+																		<Thumb>
+																			<Thumb.Style>
+																				<Style TargetType="{x:Type Thumb}">
+																					<Setter Property="OverridesDefaultStyle"
+																							Value="True" />
+																					<Setter Property="IsTabStop"
+																							Value="False" />
+																					<Setter Property="Template">
+																						<Setter.Value>
+																							<ControlTemplate TargetType="{x:Type Thumb}">
+																								<Rectangle x:Name="rectangle"
+																										   Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type cs:CyberScrollView},Mode=FindAncestor},Path=ThumbBackground}"
+																										   Height="{TemplateBinding Height}"
+																										   SnapsToDevicePixels="True"
+																										   Width="{TemplateBinding Width}" />
+																							</ControlTemplate>
+																						</Setter.Value>
+																					</Setter>
+																				</Style>
+																			</Thumb.Style>
+																		</Thumb>
+																	</Track.Thumb>
+																</Track>
+															</Grid>
+														</ControlTemplate>
+													</ScrollBar.Template>
+												</ScrollBar>
+											</Grid>
+										</Grid>
+									</ControlTemplate>
+								</cs:CyberScrollView.Template>
+								<ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+							</cs:CyberScrollView>
+						</Border>
+					</ControlTemplate>
+				</DataGrid.Template>
+				<DataGrid.ColumnHeaderStyle>
+					<Style TargetType="DataGridColumnHeader">
+						<Setter Property="Background"
+								Value="#FF232529" />
+						<Setter Property="Height"
+								Value="34.944" />
+						<Setter Property="FontFamily"
+								Value="Calibri" />
+						<Setter Property="FontWeight"
+								Value="Bold" />
+						<Setter Property="Foreground"
+								Value="White" />
+						<Setter Property="FontSize"
+								Value="13.78" />
+						<Setter Property="BorderThickness"
+								Value="1" />
+						<Setter Property="BorderBrush"
+								Value="Transparent" />
+						<Style.Triggers>
+							<Trigger Property="IsMouseOver"
+									 Value="true">
+								<Setter Property="BorderBrush"
+										Value="{DynamicResource BorderbrushEffect_Level1}" />
+							</Trigger>
+						</Style.Triggers>
+					</Style>
+				</DataGrid.ColumnHeaderStyle>
+				<DataGrid.CellStyle>
+					<Style TargetType="DataGridCell">
+						<Setter Property="Foreground"
+								Value="White" />
+						<Setter Property="FontSize"
+								Value="13.78" />
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="{x:Type DataGridCell}">
+									<Border x:Name="border"
+											BorderThickness="1"
+											BorderBrush="Transparent"
+											Background="Transparent"
+											SnapsToDevicePixels="True">
+										<VisualStateManager.VisualStateGroups>
+											<VisualStateGroup x:Name="FocusStates">
+												<VisualState x:Name="Unfocused" />
+												<VisualState x:Name="Focused" />
+											</VisualStateGroup>
+											<VisualStateGroup x:Name="CurrentStates">
+												<VisualState x:Name="Regular" />
+												<VisualState x:Name="Current" />
+											</VisualStateGroup>
+										</VisualStateManager.VisualStateGroups>
+										<ContentPresenter HorizontalAlignment="Left"
+														  VerticalAlignment="Center"
+														  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+									</Border>
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsSelected"
+												 Value="True">
+											<Setter Property="BorderBrush"
+													TargetName="border"
+													Value="#FF009A76" />
+											<Setter Property="BorderThickness"
+													TargetName="border"
+													Value="1" />
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</DataGrid.CellStyle>
+				<DataGrid.RowStyle>
+					<Style TargetType="{x:Type DataGridRow}">
+						<Setter Property="Height"
+								Value="34.944" />
+
+						<Setter Property="SnapsToDevicePixels"
+								Value="true" />
+						<Setter Property="Validation.ErrorTemplate"
+								Value="{x:Null}" />
+						<Setter Property="ValidationErrorTemplate">
+							<Setter.Value>
+								<ControlTemplate>
+									<TextBlock Foreground="Red"
+											   Margin="2,0,0,0"
+											   Text="!"
+											   VerticalAlignment="Center" />
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="{x:Type DataGridRow}">
+									<Border x:Name="DGR_Border"
+											BorderBrush="{TemplateBinding BorderBrush}"
+											BorderThickness="{TemplateBinding BorderThickness}"
+											SnapsToDevicePixels="True">
+										<VisualStateManager.VisualStateGroups>
+											<VisualStateGroup x:Name="CommonStates">
+												<VisualState x:Name="Normal" />
+												<!--Provide a different appearance for every other row.-->
+												<VisualState x:Name="Normal_AlternatingRow" />
+
+												<!--In this example, a row in Editing or selected mode has an
+              identical appearances. In other words, the states 
+              Normal_Selected, Unfocused_Selected, Normal_Editing, 
+              MouseOver_Editing, MouseOver_Unfocused_Editing,
+              and Unfocused_Editing are identical.-->
+												<VisualState x:Name="Normal_Selected" />
+												<VisualState x:Name="Unfocused_Selected" />
+
+												<VisualState x:Name="Normal_Editing" />
+
+
+												<VisualState x:Name="MouseOver_Editing" />
+												<VisualState x:Name="MouseOver_Unfocused_Editing" />
+												<VisualState x:Name="Unfocused_Editing" />
+												<VisualState x:Name="MouseOver" />
+
+												<!--In this example, the appearance of a selected row 
+              that has the mouse over it is the same regardless of
+              whether the row is selected.  In other words, the states 
+              MouseOver_Editing and MouseOver_Unfocused_Editing are identical.-->
+												<VisualState x:Name="MouseOver_Selected" />
+												<VisualState x:Name="MouseOver_Unfocused_Selected" />
+
+											</VisualStateGroup>
+										</VisualStateManager.VisualStateGroups>
+
+										<SelectiveScrollingGrid>
+											<SelectiveScrollingGrid.ColumnDefinitions>
+												<ColumnDefinition Width="Auto" />
+												<ColumnDefinition Width="*" />
+											</SelectiveScrollingGrid.ColumnDefinitions>
+											<SelectiveScrollingGrid.RowDefinitions>
+												<RowDefinition Height="*" />
+												<RowDefinition Height="Auto" />
+											</SelectiveScrollingGrid.RowDefinitions>
+											<DataGridCellsPresenter Grid.Column="1"
+																	Panel.ZIndex="1"
+																	ItemsPanel="{TemplateBinding ItemsPanel}"
+																	SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+											<Rectangle x:Name="IndicatorPanel"
+													   Fill="#FF2B2F35"
+													   Width="33.696" />
+											<Rectangle x:Name="ReactionPanel"
+													   Grid.Column="1"
+													   Visibility="Hidden">
+												<Rectangle.Fill>
+													<LinearGradientBrush StartPoint="0,1"
+																		 EndPoint="0,0">
+														<LinearGradientBrush.RelativeTransform>
+															<TransformGroup>
+																<ScaleTransform CenterY="0.5"
+																				CenterX="0.5" />
+																<SkewTransform CenterX="0.5"
+																			   CenterY="0.5" />
+																<RotateTransform Angle="90"
+																				 CenterX="0.5"
+																				 CenterY="0.5" />
+																<TranslateTransform />
+															</TransformGroup>
+														</LinearGradientBrush.RelativeTransform>
+														<GradientStop Color="#72009A76" />
+														<GradientStop Color="#00000000"
+																	  Offset="1" />
+													</LinearGradientBrush>
+												</Rectangle.Fill>
+											</Rectangle>
+											<Path x:Name="IndicatorArrow"
+												  Data="M 0,50 V 0 L 25.001333,25.00134 Z M 2.66652,6.43699 V 43.56301 L 21.2282,25.00134 Z"
+												  Fill="White"
+												  Height="10.56"
+												  Visibility="Hidden"
+												  Width="4.8"
+												  Stretch="Uniform" />
+										</SelectiveScrollingGrid>
+									</Border>
+									<ControlTemplate.Triggers>
+										<Trigger Property="AlternationIndex"
+												 Value="0">
+											<Setter Property="Background"
+													TargetName="DGR_Border"
+													Value="#FF2B2F35" />
+										</Trigger>
+										<Trigger Property="AlternationIndex"
+												 Value="1">
+											<Setter Property="Background"
+													TargetName="DGR_Border"
+													Value="#FF272A2F" />
+										</Trigger>
+										<Trigger Property="IsMouseOver"
+												 Value="True">
+											<Setter Property="Fill"
+													TargetName="IndicatorPanel"
+													Value="#FF232529" />
+											<Setter Property="Visibility"
+													TargetName="IndicatorArrow"
+													Value="Visible" />
+											<Setter Property="Visibility"
+													TargetName="ReactionPanel"
+													Value="Visible" />
+										</Trigger>
+										<Trigger Property="IsEditing"
+												 Value="True">
+											<Setter Property="Fill"
+													TargetName="IndicatorPanel"
+													Value="#FF232529" />
+											<Setter Property="Visibility"
+													TargetName="IndicatorArrow"
+													Value="Visible" />
+											<Setter Property="Visibility"
+													TargetName="ReactionPanel"
+													Value="Visible" />
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</DataGrid.RowStyle>
+				<DataGrid.Columns>
+					<DataGridTemplateColumn x:Name="PART_CommitIdColumn"
+											Header="Commit id"
+											Width="71.04"
+											CanUserSort="True"
+											SortMemberPath="Title"
+											ClipboardContentBinding="{Binding Title, Mode=OneWay}">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<Border>
+									<TextBlock atp:CommitDataGridTextBlockAttProperties.BackgroundColor="{DynamicResource BorderbrushEffect_Level1}"
+											   atp:CommitDataGridTextBlockAttProperties.ForegroundColor="{DynamicResource ButtonBackground_Level2}"
+											   atp:CommitDataGridTextBlockAttProperties.RawText="{Binding CommitId}"
+											   atp:CommitDataGridTextBlockAttProperties.HighlightSource="{Binding CommitIdHighlightSource}"
+											   Text="{Binding Path=CommitId, Mode=OneWay}" />
+								</Border>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTemplateColumn x:Name="PART_TaskIdColumn"
+											Header="Task id"
+											Width="109.44"
+											CanUserSort="True"
+											SortMemberPath="Title"
+											ClipboardContentBinding="{Binding TaskId, Mode=OneWay}">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<Border>
+									<TextBlock atp:CommitDataGridTextBlockAttProperties.BackgroundColor="{DynamicResource BorderbrushEffect_Level1}"
+											   atp:CommitDataGridTextBlockAttProperties.ForegroundColor="{DynamicResource ButtonBackground_Level2}"
+											   atp:CommitDataGridTextBlockAttProperties.RawText="{Binding TaskId}"
+											   atp:CommitDataGridTextBlockAttProperties.HighlightSource="{Binding TaskIdHighlightSource}"
+											   Text="{Binding Path=TaskId, Mode=OneWay}" />
+								</Border>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTemplateColumn  x:Name="PART_TitleColumn"
+											 Header="Title"
+											 Width="235.2"
+											 CanUserSort="True"
+											 SortMemberPath="Title"
+											 ClipboardContentBinding="{Binding Title, Mode=OneWay}">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<Border>
+									<TextBlock atp:CommitDataGridTextBlockAttProperties.BackgroundColor="{DynamicResource BorderbrushEffect_Level1}"
+											   atp:CommitDataGridTextBlockAttProperties.ForegroundColor="{DynamicResource ButtonBackground_Level2}"
+											   atp:CommitDataGridTextBlockAttProperties.RawText="{Binding Title}"
+											   atp:CommitDataGridTextBlockAttProperties.HighlightSource="{Binding TitleHighlightSource}"
+											   Text="{Binding Path=Title, Mode=OneWay}" />
+								</Border>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTemplateColumn x:Name="PART_DateTimeColumn"
+											Width="86.4"
+											Header="Date time"
+											CanUserSort="True"
+											SortMemberPath="Title"
+											ClipboardContentBinding="{Binding DateTime, Mode=OneWay}">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<Border>
+									<TextBlock atp:CommitDataGridTextBlockAttProperties.BackgroundColor="{DynamicResource BorderbrushEffect_Level1}"
+											   atp:CommitDataGridTextBlockAttProperties.ForegroundColor="{DynamicResource ButtonBackground_Level2}"
+											   atp:CommitDataGridTextBlockAttProperties.RawText="{Binding DateTime}"
+											   atp:CommitDataGridTextBlockAttProperties.HighlightSource="{Binding DateTimeHighlightSource}"
+											   Text="{Binding Path=DateTime, Mode=OneWay}" />
+								</Border>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTemplateColumn x:Name="PART_AuthorColumn"
+											Header="Author"
+											Width="63.36"
+											CanUserSort="True"
+											SortMemberPath="Title"
+											ClipboardContentBinding="{Binding Author, Mode=OneWay}">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<Border>
+									<TextBlock atp:CommitDataGridTextBlockAttProperties.BackgroundColor="{DynamicResource BorderbrushEffect_Level1}"
+											   atp:CommitDataGridTextBlockAttProperties.ForegroundColor="{DynamicResource ButtonBackground_Level2}"
+											   atp:CommitDataGridTextBlockAttProperties.RawText="{Binding Author}"
+											   atp:CommitDataGridTextBlockAttProperties.HighlightSource="{Binding AuthorHighlightSource}"
+											   Text="{Binding Path=Author, Mode=OneWay}" />
+								</Border>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+		</Grid>
+
+	</cb:ClippingBorder>
+</UserControl>

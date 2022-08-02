@@ -33,6 +33,16 @@ namespace cyber_base.implement.utils
             BindingOperations.EnableCollectionSynchronization(this, ThreadSafeLock);
         }
 
+        public void AddRange(System.Collections.IList list)
+        {
+            if (list == null)
+                return;
+
+            foreach (T item in list)
+                Items.Add(item);
+            SendNotifications();
+        }
+
         public void AddRange(IEnumerable<T> list)
         {
             if (list == null)
@@ -69,7 +79,8 @@ namespace cyber_base.implement.utils
         }
 
         public async Task AddNewRangeAsync(IAsyncEnumerable<T> list
-            , Action? asyncCollectionChangedCallback = null)
+            , Action? asyncCollectionChangedCallback = null
+            , bool isNotifyWhenAllFinished = false)
         {
             if (list == null)
                 return;
@@ -83,8 +94,11 @@ namespace cyber_base.implement.utils
                 {
                     Items.Add(item);
                     asyncCollectionChangedCallback?.Invoke();
-                    SendNotifications();
+                    if (!isNotifyWhenAllFinished)
+                        SendNotifications();
                 }
+                if (isNotifyWhenAllFinished)
+                    SendNotifications();
             }
             catch (OperationCanceledException e)
             {
@@ -98,6 +112,16 @@ namespace cyber_base.implement.utils
         }
 
         public void RemoveRange(IEnumerable<T> list)
+        {
+            if (list == null)
+                return;
+
+            foreach (T item in list)
+                Items.Remove(item);
+            SendNotifications();
+        }
+
+        public void RemoveRange(System.Collections.IList list)
         {
             if (list == null)
                 return;

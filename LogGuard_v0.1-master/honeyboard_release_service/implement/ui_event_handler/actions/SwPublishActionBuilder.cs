@@ -10,6 +10,7 @@ using honeyboard_release_service.implement.ui_event_handler.actions.notebook.con
 using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.button;
 using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.gesture;
 using honeyboard_release_service.implement.ui_event_handler.actions.release_tab.button;
+using honeyboard_release_service.implement.ui_event_handler.actions.version_manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +39,10 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions
             switch (keyTag)
             {
                 case PublisherKeyFeatureTag.KEY_TAG_PRT_NB_DELETE_PROJECT_ITEM_FEATURE:
-                    commandExecuter = new PRT_NB_DeleteProjectItemContextMenuAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, null, logger);
+                    commandExecuter = new PRT_NB_DeleteProjectItemContextMenuAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_VM_SHOW_COMMIT_DATA_GRID_FEATURE:
+                    commandExecuter = new PRT_VM_ShowCommitDataGridAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, logger);
                     break;
                 default:
                     break;

@@ -9,13 +9,13 @@ using System.Windows;
 
 namespace honeyboard_release_service.implement.ui_event_handler.actions.notebook.context_menu
 {
-    internal class PRT_NB_DeleteProjectItemContextMenuAction : BaseViewModelCommandExecuter
+    internal class PRT_NB_DeleteProjectItemContextMenuAction : BaseCommandExecuter
     {
         private ReleasingProjectManager releasingProjectManager;
         private ViewModelManager viewModelManager;
 
-        public PRT_NB_DeleteProjectItemContextMenuAction(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger)
-            : base(actionID, builderID, viewModel, logger)
+        public PRT_NB_DeleteProjectItemContextMenuAction(string actionID, string builderID, ILogger? logger)
+            : base(actionID, builderID, logger)
         {
             releasingProjectManager = ReleasingProjectManager.Current;
             viewModelManager = ViewModelManager.Current;
