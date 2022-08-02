@@ -60,16 +60,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.notebook
                 if (selectedProjectItem != null)
                 {
                     pMViewModel.ProjectPath = selectedProjectItem.Path;
-
-                    BaseAsyncTask findVersionPathTask = new FindVersionPropertiesFileTask(pMViewModel.ProjectPath
-                        ,(result) =>
-                        {
-                            if (result.MesResult == MessageAsyncTaskResult.Done
-                                || result.MesResult == MessageAsyncTaskResult.Finished)
-                            {
-                                pMViewModel.VersionPropertiesPath = result.Result?.ToString() ?? "";
-                            }
-                        });
+                    pMViewModel.VersionPropertiesPath = selectedProjectItem.VersionFilePath;
 
                     BaseAsyncTask listAllBranch = new GetAllProjectBranchsTask(pMViewModel.ProjectPath
                         ,prepareGetAllProjectBranchs: () =>
@@ -105,7 +96,6 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.notebook
                         });
 
                     List<BaseAsyncTask> tasks = new List<BaseAsyncTask>();
-                    tasks.Add(findVersionPathTask);
                     tasks.Add(listAllBranch);
 
                     MultiAsyncTask multiTask = new MultiAsyncTask(mainFunc: tasks
