@@ -233,9 +233,34 @@ namespace honeyboard_release_service.implement.project_manager
             _versionHistoryItemContexts.FirstChanged -= OnVersionHistoryItemContextsFirstChanged;
         }
 
-        public void SetCurrentImportedProject()
+        public void SetCurrentImportedProject(ProjectVO? projectVO)
         {
-            // TODO: Triển khai logic của set current imported project 
+            var oldProject = _currentImportedProjectVO;
+
+            if (projectVO == null)
+            {
+                _currentImportedProjectVO = null;
+            }
+            else
+            {
+                var proPath = projectVO.Path;
+                _currentImportedProjectVO = projectVO;
+
+                if (!ImportedProjects.ContainsKey(proPath))
+                {
+                    ImportedProjects[proPath] = _currentImportedProjectVO;
+
+                    _importedProjectsCollectionChanged?.Invoke(this
+                        , new ProjectsCollectionChangedEventArg(_currentImportedProjectVO
+                            , null
+                            , ProjectsCollectionChangedType.Add));
+                }
+
+                UserDataManager.Current.AddImportedProject(proPath, _currentImportedProjectVO);
+                UserDataManager.Current.SetCurrentImportedProject(_currentImportedProjectVO);
+            }
+
+            _currentProjectChanged?.Invoke(this, oldProject, _currentImportedProjectVO);
         }
 
         /// <summary>
