@@ -135,7 +135,8 @@ namespace cyber_base.app
         /// và trả về chuỗi mới
         /// </summary>
         /// <param name="oldText"></param>
+        /// <param name="isMultiLine">bật chế độ multi line cho edit text</param>
         /// <returns></returns>
-        string OpenEditTextDialogWindow(string oldText);
+        string OpenEditTextDialogWindow(string oldText, bool isMultiLine = false);
     }
 }

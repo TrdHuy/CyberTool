@@ -204,10 +204,9 @@ namespace cyber_tool
             return _WindowDirector.OpenFolderChooserDialogWindow();
         }
 
-        public string OpenEditTextDialogWindow(string oldText)
+        public string OpenEditTextDialogWindow(string oldText, bool isMultiLine)
         {
-            //TODO: Triển khai Edit text window ở đây
-            return "";
+            return _WindowDirector.OpenEditTextDialogWindow(oldText, isMultiLine);
         }
     }
 }

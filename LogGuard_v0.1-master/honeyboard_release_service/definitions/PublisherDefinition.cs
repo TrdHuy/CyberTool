@@ -41,6 +41,8 @@ namespace honeyboard_release_service.definitions
         public const string KEY_TAG_PRT_SWITCH_LOG_MONITOR_FEATURE = "KEY_TAG_PRT_SWITCH_LOG_MONITOR_FEATURE";
 
         public const string KEY_TAG_PRT_NB_DELETE_PROJECT_ITEM_FEATURE = "KEY_TAG_PRT_NB_DELETE_PROJECT_ITEM_FEATURE";
+        public const string KEY_TAG_PRT_NB_RENAME_PROJECT_ITEM_FEATURE = "KEY_TAG_PRT_NB_RENAME_PROJECT_ITEM_FEATURE";
+        public const string KEY_TAG_PRT_NB_IMPORT_PROJECT_ITEM_FEATURE = "KEY_TAG_PRT_NB_IMPORT_PROJECT_ITEM_FEATURE";
 
         public const string KEY_TAG_PRT_VM_SHOW_COMMIT_DATA_GRID_FEATURE = "KEY_TAG_PRT_VM_SHOW_COMMIT_DATA_GRID_FEATURE";
 
@@ -58,5 +60,12 @@ namespace honeyboard_release_service.definitions
         None = 0,
         HavingCommit = 1,
         HavingUnmergeFile = 2,
+    }
+
+    internal enum Level
+    {
+        Normal = 0,
+        Hard = 1,
+        Elite = 2,
     }
 }
