@@ -32,7 +32,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
         {
             if (ReleasingProjectManager
                     .Current
-                    .CurrentProjectVO == null)
+                    .CurrentImportedProjectVO == null)
             {
                 HoneyboardReleaseService.Current
                     .ServiceManager?
@@ -70,7 +70,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
 
             if (ReleasingProjectManager
                     .Current
-                    .CurrentProjectVO.OnBranch == null)
+                    .CurrentImportedProjectVO.OnBranch == null)
             {
                 HoneyboardReleaseService.Current
                    .ServiceManager?
@@ -81,15 +81,15 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
 
             if (!ReleasingProjectManager
                     .Current
-                    .CurrentProjectVO.OnBranch.IsRemote
+                    .CurrentImportedProjectVO.OnBranch.IsRemote
                 && !ReleasingProjectManager
                     .Current
-                    .CurrentProjectVO
+                    .CurrentImportedProjectVO
                     .Branchs
                     .ContainsKey("origin/"
                         + ReleasingProjectManager
                             .Current
-                            .CurrentProjectVO
+                            .CurrentImportedProjectVO
                             .OnBranch
                             .BranchPath))
             {
@@ -134,13 +134,13 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
 
             _branchPath = ReleasingProjectManager
                             .Current
-                            .CurrentProjectVO
+                            .CurrentImportedProjectVO
                             .OnBranch
                             .IsRemote
                 ? ReleasingProjectManager
-                            .Current.CurrentProjectVO.OnBranch.BranchPath
+                            .Current.CurrentImportedProjectVO.OnBranch.BranchPath
                 : "origin/" + ReleasingProjectManager
-                            .Current.CurrentProjectVO.OnBranch.BranchPath;
+                            .Current.CurrentImportedProjectVO.OnBranch.BranchPath;
             _branchPathForPushing = "HEAD:refs/for/" + _branchPath.Substring(7);
             return base.CanExecute(dataTransfer);
         }

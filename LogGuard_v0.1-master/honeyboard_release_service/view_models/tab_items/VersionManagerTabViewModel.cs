@@ -25,7 +25,7 @@ namespace honeyboard_release_service.view_models.tab_items
         {
             get
             {
-                return ReleasingProjectManager.Current.CurrentProjectVO?.OnBranch?.BranchPath ?? string.Empty;
+                return ReleasingProjectManager.Current.CurrentImportedProjectVO?.OnBranch?.BranchPath ?? string.Empty;
             }
         }
 

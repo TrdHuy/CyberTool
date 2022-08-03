@@ -44,7 +44,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.notebook
                 var selectedCNProjectItemVM = DataTransfer[0] as CalendarNotebookProjectItemViewModel;
                 var selectedProjectItem = selectedCNProjectItemVM?.SelectedProjectItem;
 
-                var currentImportProject = releasingProjectManager.CurrentProjectVO;
+                var currentImportProject = releasingProjectManager.CurrentImportedProjectVO;
                 var pMViewModel = viewModelManager.PMViewModel;
 
                 if (selectedProjectItem == currentImportProject)
@@ -67,7 +67,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.notebook
                         {
                             ReleasingProjectManager
                                     .Current
-                                    .CurrentProjectVO?
+                                    .CurrentImportedProjectVO?
                                     .Branchs.Clear();
                         }
                         , callback: (result) =>
@@ -86,7 +86,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.notebook
                             if (branch != null)
                             {
                                 ReleasingProjectManager
-                                    .Current.AddProjectBranch(branch.Branch);
+                                    .Current.AddBranchToCurrentProject(branch.Branch);
                             }
 
                             if (isOnBranch && branch != null)

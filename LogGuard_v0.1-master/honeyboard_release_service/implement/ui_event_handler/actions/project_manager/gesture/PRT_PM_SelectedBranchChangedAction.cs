@@ -27,7 +27,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
         {
             if (ReleasingProjectManager
                 .Current
-                .CurrentProjectVO == null)
+                .CurrentImportedProjectVO == null)
             {
                 return false;
             }

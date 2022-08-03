@@ -43,7 +43,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
                 {
                     ReleasingProjectManager
                             .Current
-                            .CurrentProjectVO?
+                            .CurrentImportedProjectVO?
                             .Branchs.Clear();
                 }
                 , callback: (result) =>
@@ -62,7 +62,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
                     if (branch != null)
                     {
                         ReleasingProjectManager
-                            .Current.AddProjectBranch(branch.Branch);
+                            .Current.AddBranchToCurrentProject(branch.Branch);
                     }
 
                     if (isOnBranch && branch != null)

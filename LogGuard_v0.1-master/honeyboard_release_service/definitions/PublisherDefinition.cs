@@ -58,4 +58,11 @@ namespace honeyboard_release_service.definitions
         HavingCommit = 1,
         HavingUnmergeFile = 2,
     }
+
+    internal enum Level
+    {
+        Normal = 0,
+        Hard = 1,
+        Elite = 2,
+    }
 }

@@ -72,15 +72,15 @@ namespace honeyboard_release_service.view_models.project_manager
         {
             get
             {
-                return _RPM_Instance.CurrentProjectVO?.OnBranch?.BranchPath ?? "";
+                return _RPM_Instance.CurrentImportedProjectVO?.OnBranch?.BranchPath ?? "";
             }
             set
             {
                 var isShouldExecuteBranchChanged = !string.IsNullOrEmpty(
-                    _RPM_Instance.CurrentProjectVO?.OnBranch?.BranchPath);
-                if (_RPM_Instance.CurrentProjectVO?.OnBranch?.BranchPath != value)
+                    _RPM_Instance.CurrentImportedProjectVO?.OnBranch?.BranchPath);
+                if (_RPM_Instance.CurrentImportedProjectVO?.OnBranch?.BranchPath != value)
                 {
-                    if (_RPM_Instance.CurrentProjectVO != null)
+                    if (_RPM_Instance.CurrentImportedProjectVO != null)
                     {
                         _RPM_Instance.SetCurrentProjectOnBranch(value);
                         InvalidateOwn();
@@ -120,16 +120,16 @@ namespace honeyboard_release_service.view_models.project_manager
         {
             get
             {
-                return _RPM_Instance.CurrentProjectVO?.VersionFilePath ?? "";
+                return _RPM_Instance.CurrentImportedProjectVO?.VersionFilePath ?? "";
             }
             set
             {
-                if (_RPM_Instance.CurrentProjectVO != null)
+                if (_RPM_Instance.CurrentImportedProjectVO != null)
                 {
-                    _RPM_Instance.CurrentProjectVO.VersionFilePath = value;
+                    _RPM_Instance.CurrentImportedProjectVO.VersionFilePath = value;
                     if (value.IndexOf(ProjectPath) != -1)
                     {
-                        _RPM_Instance.CurrentProjectVO.VersionFilePath =
+                        _RPM_Instance.CurrentImportedProjectVO.VersionFilePath =
                             value.Substring(ProjectPath.Length + 1);
                     }
 
@@ -143,8 +143,13 @@ namespace honeyboard_release_service.view_models.project_manager
         {
             get
             {
-                return _RPM_Instance.CurrentProjectVO?.Path ?? "";
+                return _RPM_Instance.CurrentImportedProjectVO?.Path ?? "";
             }
+
+            // Không được gọi hàm set này trong code behind để set project path
+            // mục đích của hàm set này chỉ phục vụ việc binding
+            // Khi người dùng chọn import project từ path textbox
+            // Nó sẽ tạo 1 project mới từ path mà người dùng đã select
             set
             {
                 if (value != null)
@@ -201,6 +206,21 @@ namespace honeyboard_release_service.view_models.project_manager
             _RPM_Instance.UserDataImported += HandleUserDataImported;
             _RPM_Instance.CurrentProjectBranchContextSourceChanged -= HandleProjectBranchContextSourceChanged;
             _RPM_Instance.CurrentProjectBranchContextSourceChanged += HandleProjectBranchContextSourceChanged;
+            _RPM_Instance.PreUpdateVersionTimelineBackground -= PreHandleUpdateVersionTimelineBackground;
+            _RPM_Instance.PreUpdateVersionTimelineBackground += PreHandleUpdateVersionTimelineBackground;
+            _RPM_Instance.VersionTimelineUpdated -= HandleVersionTimelineUpdated;
+            _RPM_Instance.VersionTimelineUpdated += HandleVersionTimelineUpdated;
+        }
+
+        private void HandleVersionTimelineUpdated(object sender, ReleasingProjectEventArg arg)
+        {
+            IsLoadingProjectVersionHistory = false;
+        }
+
+        private void PreHandleUpdateVersionTimelineBackground(object sender, ReleasingProjectEventArg arg)
+        {
+            VersionHistoryListTipVisibility = Visibility.Collapsed;
+            IsLoadingProjectVersionHistory = true;
         }
 
         private void HandleProjectBranchContextSourceChanged(object sender
@@ -242,6 +262,15 @@ namespace honeyboard_release_service.view_models.project_manager
                     }
                     Invalidate("SelectedItem");
                 });
+        }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            _RPM_Instance.UserDataImported -= HandleUserDataImported;
+            _RPM_Instance.CurrentProjectBranchContextSourceChanged -= HandleProjectBranchContextSourceChanged;
+            _RPM_Instance.VersionTimelineUpdated -= HandleVersionTimelineUpdated;
+            _RPM_Instance.PreUpdateVersionTimelineBackground -= PreHandleUpdateVersionTimelineBackground;
         }
     }
 }
