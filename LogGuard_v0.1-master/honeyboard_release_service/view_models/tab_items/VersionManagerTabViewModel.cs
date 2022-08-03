@@ -1,6 +1,5 @@
 ﻿using cyber_base.view_model;
 using honeyboard_release_service.implement.project_manager;
-using honeyboard_release_service.models.VOs;
 using honeyboard_release_service.utils;
 using honeyboard_release_service.view_models.project_manager.items;
 using System;
@@ -87,16 +86,6 @@ namespace honeyboard_release_service.view_models.tab_items
             }
         }
 
-        [Bindable(true)]
-        public string CurrentFocusCommitReleaseDate
-        {
-            get
-            {
-                return CurrentFocusVersionCommitVM?.VersionCommitVO.ReleaseDateTime.ToString("dd-MM-yyyy") ?? "NA";
-            }
-
-        }
-
         public VersionManagerTabViewModel(BaseViewModel parents) : base(parents)
         {
             VersionHistoryItemContexts.CollectionChanged += (s, e) =>
@@ -105,25 +94,18 @@ namespace honeyboard_release_service.view_models.tab_items
             };
 
             CurrentFocusVersionCommitVM = ReleasingProjectManager.Current.LatestCommitVM;
-            ReleasingProjectManager.Current.CurrentProjectChanged += CurrentFocusProjectChanged;
             ReleasingProjectManager.Current.LatestVersionUpCommitChanged += CurrentLatestVersionCommitChanged;
         }
 
         private void CurrentLatestVersionCommitChanged(object sender)
         {
             CurrentFocusVersionCommitVM = ReleasingProjectManager.Current.LatestCommitVM;
-            Invalidate("CurrentFocusCommitReleaseDate");
-        }
-
-        private void CurrentFocusProjectChanged(object sender, ProjectVO? oldProject, ProjectVO? newProject)
-        {
             Invalidate("CurrentFocusProjectBranch");
         }
 
         public override void OnDestroy()
         {
             base.OnDestroy();
-            ReleasingProjectManager.Current.CurrentProjectChanged -= CurrentFocusProjectChanged;
             ReleasingProjectManager.Current.LatestVersionUpCommitChanged -= CurrentLatestVersionCommitChanged;
         }
     }

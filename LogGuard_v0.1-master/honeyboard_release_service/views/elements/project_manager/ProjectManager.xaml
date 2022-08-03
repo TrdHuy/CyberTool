@@ -236,7 +236,13 @@
 												</ContextMenu>
 											</Grid.ContextMenu>
 
-											<Grid.ColumnDefinitions>
+                                            <Grid.InputBindings>
+                                                <MouseBinding Gesture="LeftClick"
+															  CommandParameter="{Binding .}"
+															  Command="{Binding ForcusVersionHistoryItemCommand}" />
+                                            </Grid.InputBindings>
+
+                                            <Grid.ColumnDefinitions>
 												<ColumnDefinition />
 												<ColumnDefinition Width="10" />
 												<ColumnDefinition Width="3*" />
