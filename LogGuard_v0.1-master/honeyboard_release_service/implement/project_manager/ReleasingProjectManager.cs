@@ -246,21 +246,95 @@ namespace honeyboard_release_service.implement.project_manager
                 var proPath = projectVO.Path;
                 _currentImportedProjectVO = projectVO;
 
-                if (!ImportedProjects.ContainsKey(proPath))
-                {
-                    ImportedProjects[proPath] = _currentImportedProjectVO;
+                //if (!ImportedProjects.ContainsKey(proPath))
+                //{
+                //    ImportedProjects[proPath] = _currentImportedProjectVO;
 
-                    _importedProjectsCollectionChanged?.Invoke(this
-                        , new ProjectsCollectionChangedEventArg(_currentImportedProjectVO
-                            , null
-                            , ProjectsCollectionChangedType.Add));
-                }
+                //    _importedProjectsCollectionChanged?.Invoke(this
+                //        , new ProjectsCollectionChangedEventArg(_currentImportedProjectVO
+                //            , null
+                //            , ProjectsCollectionChangedType.Add));
 
-                UserDataManager.Current.AddImportedProject(proPath, _currentImportedProjectVO);
+                //    UserDataManager.Current.AddImportedProject(proPath, _currentImportedProjectVO);
+                //}
+
                 UserDataManager.Current.SetCurrentImportedProject(_currentImportedProjectVO);
             }
 
             _currentProjectChanged?.Invoke(this, oldProject, _currentImportedProjectVO);
+        }
+
+        public CyberTreeViewObservableCollection<ICyberTreeViewItemContext> CreateBranchSourceForImportProject(ProjectVO? projectVO)
+        {
+            var source = new CyberTreeViewObservableCollection<ICyberTreeViewItemContext>();
+
+            if (projectVO == null)
+            {
+                return source;
+            }
+
+            foreach (var branch in projectVO.Branchs)
+            {
+                var path = branch.Key;
+
+                var splits = path.Split("/", StringSplitOptions.TrimEntries);
+                string rootFolder = "";
+                int startFolderIndex = 1;
+                int lenght = splits.Length;
+                var isRemote = false;
+                BranchItemViewModel? parents;
+
+                if (splits[0].Equals("remotes", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    rootFolder = "Remote";
+                    isRemote = true;
+                }
+                else if (splits[0].Equals("origin", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    rootFolder = "Remote";
+                    isRemote = true;
+                    startFolderIndex = 0;
+                }
+                else
+                {
+                    rootFolder = "Local";
+                    startFolderIndex = 0;
+                }
+
+                parents = source[rootFolder] as BranchItemViewModel;
+
+                if (parents == null)
+                {
+                    var bVO = new BranchVO("", rootFolder);
+                    parents = new BranchItemViewModel(bVO);
+                    source.Add(parents);
+                }
+
+                string branchPath = "";
+
+                for (int i = startFolderIndex; i < lenght; i++)
+                {
+                    var current = parents?.Items[splits[i]];
+
+                    if (i == lenght - 1)
+                        branchPath += splits[i];
+                    else
+                        branchPath += splits[i] + "/";
+
+                    if (current == null)
+                    {
+                        var bVO = new BranchVO(path: i == lenght - 1 ? branchPath : ""
+                            , title: splits[i]
+                            , isNode: i == lenght - 1
+                            , isRemote: isRemote);
+                        current = new BranchItemViewModel(bVO);
+                        parents?.AddItem(current);
+                    }
+                    parents = current as BranchItemViewModel;
+                }
+            }
+
+            return source;
         }
 
         /// <summary>
