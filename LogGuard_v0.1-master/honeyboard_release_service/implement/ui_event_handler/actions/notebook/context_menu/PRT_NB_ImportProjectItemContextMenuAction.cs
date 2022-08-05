@@ -1,9 +1,14 @@
-﻿using cyber_base.definition;
+﻿using cyber_base.async_task;
+using cyber_base.definition;
+using cyber_base.implement.async_task;
 using cyber_base.utils;
 using honeyboard_release_service.definitions;
 using honeyboard_release_service.implement.project_manager;
 using honeyboard_release_service.implement.view_model;
 using honeyboard_release_service.view_models.calendar_notebook.items;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace honeyboard_release_service.implement.ui_event_handler.actions.notebook.context_menu
 {
@@ -53,17 +58,36 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.notebook
 
                 if (selectedProjectItem != null)
                 {
-                    releasingProjectManager.SetCurrentImportedProject(selectedProjectItem);
+                    var importProject = new CancelableAsyncTask(
+                    mainFunc: async (ts, res) =>
+                        {
+                            await Task.Delay(100);
+                            releasingProjectManager.SetCurrentImportedProject(selectedProjectItem);
+                            pMViewModel.RefreshViewModel();
+                            releasingProjectManager.UpdateVersionHistoryTimelineInBackground(updateLevel: Level.Normal);
+                            return res;
+                        }
+                    , estimatedTime: 2000
+                    , delayTime: 2000
+                    , cancellationTokenSource: new CancellationTokenSource()
+                    , name: "Importing project");
 
-                    var source = releasingProjectManager.CreateBranchSourceForImportProject(selectedProjectItem);
+                    List<BaseAsyncTask> tasks = new List<BaseAsyncTask>();
+                    tasks.Add(importProject);
 
-                    releasingProjectManager.SetCurrentProjectBranchContextSource(source);
-
-                    pMViewModel.RefreshViewModel();
-
-                    releasingProjectManager.UpdateVersionHistoryTimelineInBackground(updateLevel: Level.Normal);
+                    MultiAsyncTask multiTask = new MultiAsyncTask(tasks
+                       , new CancellationTokenSource()
+                       , null
+                       , name: "Importing project"
+                       , delayTime: 0
+                       , reportDelay: 10);
+                    HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox(
+                        title: "Importing project"
+                        , task: multiTask
+                        , isCancelable: false);
                 }
             }
         }
     }
 }
+

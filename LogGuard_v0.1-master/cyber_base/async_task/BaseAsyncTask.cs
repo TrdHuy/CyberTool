@@ -132,7 +132,7 @@ namespace cyber_base.async_task
 
         public bool CanThisTaskExecuteable()
         {
-            if(!_isExecuteableFlagUpdated)
+            if (!_isExecuteableFlagUpdated)
                 IsExecuteable = CanMainFuncExecute();
             _isExecuteableFlagUpdated = true;
             return IsExecuteable;
@@ -295,38 +295,41 @@ namespace cyber_base.async_task
         protected abstract Task DoCallback();
         protected abstract Task DoWaitRestDelay(long rest);
 
-        protected virtual async void DoReportTask()
+        protected virtual void DoReportTask()
         {
-            var reportWatch = Stopwatch.StartNew();
-
-            if (EstimatedTime == 0)
+            Task.Run(async () =>
             {
-                CurrentProgress = 100;
-                return;
-            }
+                var reportWatch = Stopwatch.StartNew();
 
-            try
-            {
-                while (IsCompleted == false
-                && IsCanceled == false
-                && CurrentProgress < 100)
+                if (EstimatedTime == 0)
                 {
-                    var per = Math.Round
-                        ((double)(reportWatch.ElapsedMilliseconds
-                        / (double)EstimatedTime), 2);
-                    per = per > 1 ? 1 : per;
-                    CurrentProgress = per * 100;
-                    await DoDelayForReportTask();
+                    CurrentProgress = 100;
+                    return;
                 }
-            }
-            catch
-            {
 
-            }
-            finally
-            {
-                reportWatch.Stop();
-            }
+                try
+                {
+                    while (IsCompleted == false
+                    && IsCanceled == false
+                    && CurrentProgress < 100)
+                    {
+                        var per = Math.Round
+                            ((double)(reportWatch.ElapsedMilliseconds
+                            / (double)EstimatedTime), 2);
+                        per = per > 1 ? 1 : per;
+                        CurrentProgress = per * 100;
+                        await DoDelayForReportTask();
+                    }
+                }
+                catch
+                {
+
+                }
+                finally
+                {
+                    reportWatch.Stop();
+                }
+            });
         }
 
         protected abstract Task DoDelayForReportTask();
