@@ -2,15 +2,13 @@
 using cyber_base.definition;
 using cyber_base.implement.async_task;
 using cyber_base.utils;
-using cyber_base.view_model;
+using honeyboard_release_service.definitions;
 using honeyboard_release_service.implement.project_manager;
-using honeyboard_release_service.implement.ui_event_handler.async_tasks.git_tasks;
-using honeyboard_release_service.implement.ui_event_handler.async_tasks.io_tasks;
-using honeyboard_release_service.implement.user_data_manager;
 using honeyboard_release_service.implement.view_model;
 using honeyboard_release_service.view_models.calendar_notebook.items;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace honeyboard_release_service.implement.ui_event_handler.actions.notebook.context_menu
 {
@@ -18,18 +16,19 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.notebook
     {
         private ReleasingProjectManager releasingProjectManager;
         private ViewModelManager viewModelManager;
+        private HoneyboardReleaseService honeyboardReleaseService;
 
         public PRT_NB_ImportProjectItemContextMenuAction(string actionID, string builderID, ILogger? logger)
             : base(actionID, builderID, logger)
         {
             releasingProjectManager = ReleasingProjectManager.Current;
             viewModelManager = ViewModelManager.Current;
+            honeyboardReleaseService = HoneyboardReleaseService.Current;
         }
 
         protected override bool CanExecute(object? dataTransfer)
         {
-            var confirm = HoneyboardReleaseService
-                .Current
+            var confirm = honeyboardReleaseService
                 .ServiceManager?
                 .App
                 .ShowYesNoQuestionBox("Do you want to import this project?");
@@ -49,7 +48,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.notebook
 
                 if (selectedProjectItem == currentImportProject)
                 {
-                    HoneyboardReleaseService.Current
+                    honeyboardReleaseService
                         .ServiceManager?
                         .App
                         .ShowWaringBox("You've already imported this project!");
@@ -59,65 +58,36 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.notebook
 
                 if (selectedProjectItem != null)
                 {
-                    pMViewModel.ProjectPath = selectedProjectItem.Path;
-                    pMViewModel.VersionPropertiesPath = selectedProjectItem.VersionFilePath;
-
-                    BaseAsyncTask listAllBranch = new GetAllProjectBranchsTask(pMViewModel.ProjectPath
-                        ,prepareGetAllProjectBranchs: () =>
+                    var importProject = new CancelableAsyncTask(
+                    mainFunc: async (ts, res) =>
                         {
-                            ReleasingProjectManager
-                                    .Current
-                                    .CurrentImportedProjectVO?
-                                    .Branchs.Clear();
+                            await Task.Delay(100);
+                            releasingProjectManager.SetCurrentImportedProject(selectedProjectItem);
+                            pMViewModel.RefreshViewModel();
+                            releasingProjectManager.UpdateVersionHistoryTimelineInBackground(updateLevel: Level.Normal);
+                            return res;
                         }
-                        , callback: (result) =>
-                        {
-                            dynamic? newRes = result.Result;
-                            if (newRes != null)
-                            {
-                                ReleasingProjectManager
-                                    .Current
-                                    .SetCurrentProjectBranchContextSource(newRes.ContextSource);
-                                var branchs = newRes.Branchs;
-                            }
-                        }
-                        , readBranchCallback: (sender, task, branch, isOnBranch) =>
-                        {
-                            if (branch != null)
-                            {
-                                ReleasingProjectManager
-                                    .Current.AddBranchToCurrentProject(branch.Branch);
-                            }
-
-                            if (isOnBranch && branch != null)
-                            {
-                                pMViewModel.ForceSetSelectedBranch(branch);
-                            }
-                        });
+                    , estimatedTime: 2000
+                    , delayTime: 2000
+                    , cancellationTokenSource: new CancellationTokenSource()
+                    , name: "Importing project");
 
                     List<BaseAsyncTask> tasks = new List<BaseAsyncTask>();
-                    tasks.Add(listAllBranch);
+                    tasks.Add(importProject);
 
-                    MultiAsyncTask multiTask = new MultiAsyncTask(mainFunc: tasks
-                        , cancellationTokenSource: new CancellationTokenSource()
-                        , name: "Importing project"
-                        , delayTime: 0
-                        , reportDelay: 100);
-
-                    var message = HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox("Importing project", multiTask);
-
-                    if (message != CyberContactMessage.Cancel
-                        && pMViewModel.VersionPropertiesPath != "")
-                    {
-                        ReleasingProjectManager
-                            .Current
-                            .UpdateVersionHistoryTimelineInBackground();
-                    }
-                    else if (message == CyberContactMessage.Cancel)
-                    {
-                    }
+                    MultiAsyncTask multiTask = new MultiAsyncTask(tasks
+                       , new CancellationTokenSource()
+                       , null
+                       , name: "Importing project"
+                       , delayTime: 0
+                       , reportDelay: 10);
+                    HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox(
+                        title: "Importing project"
+                        , task: multiTask
+                        , isCancelable: false);
                 }
             }
         }
     }
 }
+

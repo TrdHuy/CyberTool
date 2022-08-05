@@ -43,7 +43,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.notebook
 
                 if (selectedProjectItem == releasingProjectManager.CurrentImportedProjectVO)
                 {
-                    viewModelManager.PMViewModel.ProjectPath = "";
+                    releasingProjectManager.SetCurrentImportedProject(null);
                     releasingProjectManager.VersionHistoryItemContexts.Clear();
                     viewModelManager.PMViewModel.RefreshViewModel();
                 }
