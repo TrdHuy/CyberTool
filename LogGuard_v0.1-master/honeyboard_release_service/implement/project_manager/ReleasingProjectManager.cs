@@ -494,6 +494,24 @@ namespace honeyboard_release_service.implement.project_manager
 
             if (currentProject != null && currentProject.OnBranch != null)
             {
+
+                BaseAsyncTask setParserTask = new CancelableAsyncTask(
+                    mainFunc: async (cts, res) =>
+                    {
+                        _versionAttrParsingManager.SetCurrentParserSyntax(currentProject.VersionAttrSyntax);
+                        var versionFileContent = "";
+                        if (File.Exists(currentProject.VersionFilePath))
+                        {
+                            versionFileContent = await File.ReadAllTextAsync(currentProject.VersionFilePath);
+                        }
+                        _versionAttrParsingManager.SetVersionAttrFileContent(versionFileContent);
+                        return res;
+                    }
+                    , cancellationTokenSource: new CancellationTokenSource()
+                    , estimatedTime: 2000
+                    , delayTime: 2000
+                    , name: "Setting version attribute parser");
+
                 BaseAsyncTask importProjectBranchTask = new ParseProjectBranchsFromVOTask(
                    new object[] { currentProject.Branchs, currentProject.OnBranch }
                    , (result) =>
@@ -502,7 +520,9 @@ namespace honeyboard_release_service.implement.project_manager
                         as CyberTreeViewObservableCollection<ICyberTreeViewItemContext>;
                        CurrentProjectBranchContextSource = source;
                    });
+
                 List<BaseAsyncTask> tasks = new List<BaseAsyncTask>();
+                tasks.Add(setParserTask);
                 tasks.Add(importProjectBranchTask);
 
                 MultiAsyncTask multiTask = new MultiAsyncTask(tasks
@@ -514,7 +534,8 @@ namespace honeyboard_release_service.implement.project_manager
                 HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox(
                     title: "Importing branchs from user data"
                    , task: multiTask
-                   , isCancelable: false);
+                   , isCancelable: false
+                   , isUseMultiTaskReport: false);
             }
             _userDataImported?.Invoke(this);
             UpdateVersionHistoryTimelineInBackground(updateLevel: Level.Normal);
