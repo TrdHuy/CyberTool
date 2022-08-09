@@ -16,6 +16,8 @@ namespace honeyboard_release_service.definitions
         
         public const string PLM_CASE_CODE_REGEX = @"P([0-9]{6})-([0-9]{5})";
 
+        public static readonly string PLUGIN_BASE_FOLDER_PATH = AppDomain.CurrentDomain.BaseDirectory
+            + "\\plugins\\publisher";
     }
 
     internal class PublisherKeyFeatureTag

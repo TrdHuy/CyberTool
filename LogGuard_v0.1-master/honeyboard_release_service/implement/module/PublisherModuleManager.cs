@@ -77,6 +77,7 @@ namespace honeyboard_release_service.implement.module
             _LM_Instance = null;
             _UDM_Instance = null;
         }
+
         public static UserDataManager UDM_Instance
         {
             get

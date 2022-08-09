@@ -186,7 +186,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
 
             BaseAsyncTask modifyVersionTask = new ModifyVersionPropertiesFileTask(
                 param: new object[] { PMViewModel.ProjectPath
-                    , PMViewModel.VersionPropertiesPath
+                    , PMViewModel.VersionPropertiesFileName
                     , RTViewModel.ModifiedVersionPropVO }
                 , completedCallback: (result) =>
                 {
@@ -199,12 +199,12 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
                 });
 
             BaseAsyncTask addModifiedFileTask = new CommonGitTask(folderPath: PMViewModel.ProjectPath
-              , gitCmd: "git add " + PMViewModel.VersionPropertiesPath
+              , gitCmd: "git add " + PMViewModel.VersionPropertiesFileName
               , callback: (result) =>
               {
                   // Append log for user here
               }
-              , name: "Adding \"" + PMViewModel.VersionPropertiesPath + "\" to commit"
+              , name: "Adding \"" + PMViewModel.VersionPropertiesFileName + "\" to commit"
               , estimatedTime: 2000);
             BaseAsyncTask commitTask = new CommonGitTask(folderPath: PMViewModel.ProjectPath
               , gitCmd: "git commit -m \"[" + RTViewModel.TaskID + "]" + RTViewModel.CommitTitle + "\""

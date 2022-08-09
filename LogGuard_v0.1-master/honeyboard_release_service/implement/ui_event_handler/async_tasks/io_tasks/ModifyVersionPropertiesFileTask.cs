@@ -18,7 +18,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.io_t
         private string _versionFileName = "";
         private VersionPropertiesVO? _modifiedVersion;
 
-
+        //TODO : Sử dụng version parser manager thay cho bộ parser cũ 
         private static readonly Regex _majorRegex
             = new Regex(@"(?<front>\s*(?<property>major)=)(?<value>\d+)");
         private static readonly Regex _minorRegex

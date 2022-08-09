@@ -56,7 +56,6 @@ namespace honeyboard_release_service.views.controls.path_text_box
         }
         #endregion
 
-
         #region FileBoxFilter
         public static readonly DependencyProperty FileBoxFilterProperty =
            DependencyProperty.RegisterAttached(
@@ -112,6 +111,21 @@ namespace honeyboard_release_service.views.controls.path_text_box
 
         #endregion
 
+        #region IsShouldOpenFileChooser
+        public static readonly DependencyProperty IsShouldOpenFileChooserProperty =
+           DependencyProperty.RegisterAttached(
+           "IsShouldOpenFileChooser",
+           typeof(Func<bool>),
+           typeof(PathTextBox),
+           new PropertyMetadata(defaultValue: default(Func<bool>)));
+
+        public Func<bool> IsShouldOpenFileChooser
+        {
+            get { return (Func<bool>)GetValue(IsShouldOpenFileChooserProperty); }
+            set { SetValue(IsShouldOpenFileChooserProperty, value); }
+        }
+        #endregion
+
         public PathTextBox()
         {
             DefaultStyleKey = typeof(PathTextBox);
@@ -148,31 +162,37 @@ namespace honeyboard_release_service.views.controls.path_text_box
                 onRecCmdMouseBinding.MouseAction = MouseAction.LeftClick;
                 onRecCmdMouseBinding.Command = new BaseDotNetCommandImpl((s) =>
                 {
-                    if (PathType == Type.Folder)
+                    var isShouldContinue = IsShouldOpenFileChooser?.Invoke() ?? true;
+
+                    if (isShouldContinue)
                     {
-                        var path = HoneyboardReleaseService
-                            .Current
-                            .ServiceManager?
-                            .App.OpenFolderChooserDialogWindow();
-                        if (!string.IsNullOrEmpty(path))
+                        if (PathType == Type.Folder)
                         {
-                            Text = path;
-                            PathSelected?.Execute(null);
+                            var path = HoneyboardReleaseService
+                                .Current
+                                .ServiceManager?
+                                .App.OpenFolderChooserDialogWindow();
+                            if (!string.IsNullOrEmpty(path))
+                            {
+                                Text = path;
+                                PathSelected?.Execute(null);
+                            }
+                        }
+                        else if (PathType == Type.File)
+                        {
+                            var path = HoneyboardReleaseService
+                                .Current
+                                .ServiceManager?
+                                .App
+                                .OpenFileChooserDialogWindow(DialogBoxTitle ?? "", FileBoxFilter ?? "");
+                            if (!string.IsNullOrEmpty(path))
+                            {
+                                Text = path;
+                                PathSelected?.Execute(null);
+                            }
                         }
                     }
-                    else if (PathType == Type.File)
-                    {
-                        var path = HoneyboardReleaseService
-                            .Current
-                            .ServiceManager?
-                            .App
-                            .OpenFileChooserDialogWindow(DialogBoxTitle ?? "", FileBoxFilter ?? "");
-                        if (!string.IsNullOrEmpty(path))
-                        {
-                            Text = path;
-                            PathSelected?.Execute(null);
-                        }
-                    }
+                    
                 });
                 RecogRec.InputBindings.Add(onRecCmdMouseBinding);
             }

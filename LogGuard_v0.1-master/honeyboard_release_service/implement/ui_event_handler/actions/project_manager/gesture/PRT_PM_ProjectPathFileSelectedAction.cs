@@ -29,13 +29,34 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
         {
             var branchCache = new CyberTreeViewObservableCollection<ICyberTreeViewItemContext>();
 
-            BaseAsyncTask findVersionPathTask = new FindVersionPropertiesFileTask(PMViewModel.ProjectPath
+            var param = new object[]
+            {
+                ReleasingProjectManager
+                    .Current
+                    .VAParsingManager
+                    .GetVersionPropertiesFileName() ?? Array.Empty<string>(),
+                ReleasingProjectManager
+                    .Current
+                    .VAParsingManager
+                    .GetVersionPropertiesParserMainSyntax() ?? Array.Empty<string>(),
+                PMViewModel.ProjectPath
+            };
+            BaseAsyncTask findVersionPathTask = new FindVersionPropertiesFileTask(param
                 , (result) =>
                 {
-                    if (result.MesResult == MessageAsyncTaskResult.Done
-                    || result.MesResult == MessageAsyncTaskResult.Finished)
+                    if (result.Result != null)
                     {
-                        PMViewModel.VersionPropertiesPath = result.Result?.ToString() ?? "";
+                        if (result.MesResult == MessageAsyncTaskResult.Done
+                        || result.MesResult == MessageAsyncTaskResult.Finished)
+                        {
+                            dynamic res = result.Result;
+                            var filePath = res.VersionFilePath;
+                            var fileSyntax = res.VersionSyntax;
+                            var versionFileContent = res.VersionFileContent;
+                            ReleasingProjectManager
+                                .Current
+                                .SetVersionAttrFilePathAndSyntaxOfCurrentImportProject(filePath, fileSyntax, versionFileContent);
+                        }
                     }
                 });
             BaseAsyncTask listAllBranch = new GetAllProjectBranchsTask(PMViewModel.ProjectPath
@@ -83,7 +104,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.project_
             var message = HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox("Importing project", multiTask);
 
             if (message != CyberContactMessage.Cancel
-                && PMViewModel.VersionPropertiesPath != "")
+                && PMViewModel.VersionPropertiesFileName != "")
             {
                 ReleasingProjectManager
                     .Current

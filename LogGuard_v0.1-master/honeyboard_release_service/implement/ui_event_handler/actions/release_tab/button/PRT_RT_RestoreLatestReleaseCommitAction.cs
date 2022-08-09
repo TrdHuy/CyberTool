@@ -31,7 +31,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
             var versionPropertiesFileName = ViewModelManager
                 .Current
                 .PMViewModel
-                .VersionPropertiesPath;
+                .VersionPropertiesFileName;
 
             if (string.IsNullOrEmpty(versionPropertiesFileName)
                 || string.IsNullOrEmpty(projectPath))

@@ -97,13 +97,14 @@ namespace honeyboard_release_service.models.VOs
         public static bool operator ==(VersionPropertiesVO? t1, VersionPropertiesVO? t2)
         {
             if (!ReferenceEquals(t1, null) && !ReferenceEquals(t2, null))
-                return new Version(Convert.ToInt32(t1.Major)
-                , Convert.ToInt32(t1.Minor)
-                , Convert.ToInt32(t1.Patch)
-                , Convert.ToInt32(t1.Revision)) == new Version(Convert.ToInt32(t2.Major)
-                , Convert.ToInt32(t2.Minor)
-                , Convert.ToInt32(t2.Patch)
-                , Convert.ToInt32(t2.Revision));
+                return new Version(Convert.ToInt32(string.IsNullOrEmpty(t1.Major) ? "0" : t1.Major)
+                , Convert.ToInt32(string.IsNullOrEmpty(t1.Minor) ? "0" : t1.Minor)
+                , Convert.ToInt32(string.IsNullOrEmpty(t1.Patch) ? "0" : t1.Patch)
+                , Convert.ToInt32(string.IsNullOrEmpty(t1.Revision) ? "0" : t1.Revision))
+                == new Version(Convert.ToInt32(string.IsNullOrEmpty(t2.Major) ? "0" : t2.Major)
+                , Convert.ToInt32(string.IsNullOrEmpty(t2.Minor) ? "0" : t2.Minor)
+                , Convert.ToInt32(string.IsNullOrEmpty(t2.Patch) ? "0" : t2.Patch)
+                , Convert.ToInt32(string.IsNullOrEmpty(t2.Revision) ? "0" : t2.Revision));
             if (!ReferenceEquals(t1, null) && ReferenceEquals(t2, null))
                 return false;
             if (ReferenceEquals(t1, null) && !ReferenceEquals(t2, null))
@@ -116,13 +117,14 @@ namespace honeyboard_release_service.models.VOs
         public static bool operator !=(VersionPropertiesVO? t1, VersionPropertiesVO? t2)
         {
             if (!ReferenceEquals(t1, null) && !ReferenceEquals(t2, null))
-                return new Version(Convert.ToInt32(t1.Major)
-                    , Convert.ToInt32(t1.Minor)
-                    , Convert.ToInt32(t1.Patch)
-                    , Convert.ToInt32(t1.Revision)) != new Version(Convert.ToInt32(t2.Major)
-                    , Convert.ToInt32(t2.Minor)
-                    , Convert.ToInt32(t2.Patch)
-                    , Convert.ToInt32(t2.Revision));
+                return new Version(Convert.ToInt32(string.IsNullOrEmpty(t1.Major) ? "0" : t1.Major)
+                , Convert.ToInt32(string.IsNullOrEmpty(t1.Minor) ? "0" : t1.Minor)
+                , Convert.ToInt32(string.IsNullOrEmpty(t1.Patch) ? "0" : t1.Patch)
+                , Convert.ToInt32(string.IsNullOrEmpty(t1.Revision) ? "0" : t1.Revision))
+                != new Version(Convert.ToInt32(string.IsNullOrEmpty(t2.Major) ? "0" : t2.Major)
+                , Convert.ToInt32(string.IsNullOrEmpty(t2.Minor) ? "0" : t2.Minor)
+                , Convert.ToInt32(string.IsNullOrEmpty(t2.Patch) ? "0" : t2.Patch)
+                , Convert.ToInt32(string.IsNullOrEmpty(t2.Revision) ? "0" : t2.Revision));
             if (!ReferenceEquals(t1, null) && ReferenceEquals(t2, null))
                 return true;
             if (ReferenceEquals(t1, null) && !ReferenceEquals(t2, null))
