@@ -10,12 +10,12 @@
 			 d:DesignHeight="450"
 			 d:DesignWidth="800"
 			 x:Name="PART_NotebookChartItemUserControl">
-	<cb:ClippingBorder CornerRadius="20"
+	<cb:ClippingBorder CornerRadius="5"
 					   Background="{DynamicResource Background_Level3}">
 		<Grid>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition />
-				<ColumnDefinition Width="1.2*"/>
+				<ColumnDefinition Width="1.2*" />
 				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
 			<Canvas x:Name="PART_MainCanvas"
@@ -23,8 +23,24 @@
 					Grid.ColumnSpan="3">
 				<Path x:Name="PART_LinePath"
 					  Stroke="#B27DE2DE"
-					  Fill="#4C86DDDA"
 					  StrokeThickness="1">
+					<Path.Effect>
+						<DropShadowEffect Color="#4C86DDDA"
+										  ShadowDepth="0"
+										  Direction="0"
+										  BlurRadius="10"
+										  RenderingBias="Quality" />
+					</Path.Effect>
+					<Path.Fill>
+						<LinearGradientBrush EndPoint="0.5,1"
+											 StartPoint="0.5,0">
+							<GradientStop Color="#00000000"
+										  Offset="1" />
+							
+							<GradientStop Color="#4C86DDDA"
+										  Offset="0" />
+						</LinearGradientBrush>
+					</Path.Fill>
 					<Path.Data>
 						<PathGeometry>
 							<PathGeometry.Figures>

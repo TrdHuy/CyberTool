@@ -13,6 +13,42 @@
 			 x:Name="PART_CalendarNotebook"
 			 Loaded="HandleViewLoadedEvent">
 	<UserControl.Resources>
+		<ContextMenu x:Key="HeaderContextMenu">
+			<MenuItem Header="Rename"
+					  CommandParameter="{Binding .}"
+					  Command="{Binding RenameProjectCommand}">
+				<MenuItem.Icon>
+					<Path Width="12"
+						  Height="12"
+						  Fill="{StaticResource Background_Level2}"
+						  Data="{Binding Source={StaticResource EditIcon}}"
+						  Stretch="Uniform" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Delete"
+					  CommandParameter="{Binding .}"
+					  Command="{Binding DeleteProjectCommand}">
+				<MenuItem.Icon>
+					<Path Width="12"
+						  Height="12"
+						  Fill="{StaticResource Background_Level2}"
+						  Data="{Binding Source={StaticResource TrashIcon}}"
+						  Stretch="Uniform" />
+				</MenuItem.Icon>
+			</MenuItem>
+            <MenuItem Header="Import this project"
+                      CommandParameter="{Binding .}"
+                      Command="{Binding ImportProjectCommand}">
+                <MenuItem.Icon>
+                    <Path Width="12"
+                          Height="12"
+                          Fill="{StaticResource Background_Level2}"
+                          Data="{Binding Source={StaticResource RT_ImportProjectIconPathGeomerty}}"
+                          Stretch="Uniform" />
+                </MenuItem.Icon>
+            </MenuItem>
+		</ContextMenu>
+		
 		<Style x:Key="NotebookScrollviewStyle"
 			   TargetType="{x:Type cs:CyberScrollView}">
 			<Setter Property="Template">

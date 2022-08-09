@@ -105,8 +105,6 @@ namespace cyber_base.implement.command
             }
         }
 
-
-
         protected virtual void ExetcuteAction(object? dataTransfer)
         {
             if (CommandExecuterCache == null)

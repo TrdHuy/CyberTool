@@ -65,7 +65,7 @@
 
 			</TabItem>
 			<TabItem Header="Version manager">
-
+				<uc_ti:VersionManagerTab />
 			</TabItem>
 		</TabControl>
 

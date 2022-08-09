@@ -1,4 +1,8 @@
-﻿using cyber_base.view_model;
+﻿using cyber_base.implement.command;
+using cyber_base.ui_event_handler.action.executer;
+using cyber_base.view_model;
+using honeyboard_release_service.definitions;
+using honeyboard_release_service.implement.ui_event_handler;
 using honeyboard_release_service.implement.view_model;
 using honeyboard_release_service.models.VOs;
 using honeyboard_release_service.views.elements.calendar_notebook.@base;
@@ -13,6 +17,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace honeyboard_release_service.view_models.calendar_notebook.items
 {
@@ -22,8 +27,12 @@ namespace honeyboard_release_service.view_models.calendar_notebook.items
         private object? _itemView;
         private bool _isLoadingData;
         private CalendarNotebookItemCollection<ICalendarNotebookCommitItemContext> _commitSource;
+        private ICommand _renameProjectCommand;
+        private ICommand _deleteProjectCommand;
+        private ICommand _importProjectCommand;
 
         public CalendarNotebookItemCollection<ICalendarNotebookCommitItemContext> CommitSource => _commitSource;
+        public ProjectVO SelectedProjectItem => _projectVO;
 
         [Bindable(true)]
         public string ProjectName
@@ -67,10 +76,49 @@ namespace honeyboard_release_service.view_models.calendar_notebook.items
             }
         }
 
+        public ICommand RenameProjectCommand { get => _renameProjectCommand; }
+        public ICommand DeleteProjectCommand { get => _deleteProjectCommand; }
+        public ICommand ImportProjectCommand { get => _importProjectCommand; }
+
         public CalendarNotebookProjectItemViewModel(ProjectVO vo)
         {
             _commitSource = new CalendarNotebookItemCollection<ICalendarNotebookCommitItemContext>();
             _projectVO = vo;
+
+            _renameProjectCommand = new CommandExecuterModel((paramaters) =>
+            {
+                if (paramaters != null)
+                {
+                    return PublisherKeyActionListener.Current
+                        .OnKey(PublisherDefinition.PUBLISHER_PLUGIN_TAG,
+                        PublisherKeyFeatureTag.KEY_TAG_PRT_NB_RENAME_PROJECT_ITEM_FEATURE, paramaters) as ICommandExecuter;
+                }
+                return null;
+            });
+
+            _deleteProjectCommand = new CommandExecuterModel((paramaters) =>
+            {
+                if (paramaters != null)
+                {
+                    return PublisherKeyActionListener.Current
+                        .OnKey(PublisherDefinition.PUBLISHER_PLUGIN_TAG, 
+                        PublisherKeyFeatureTag.KEY_TAG_PRT_NB_DELETE_PROJECT_ITEM_FEATURE, paramaters) as ICommandExecuter;
+                }
+
+                return null;
+            });
+
+            _importProjectCommand = new CommandExecuterModel((paramaters) =>
+            {
+                if (paramaters != null)
+                {
+                    return PublisherKeyActionListener.Current
+                        .OnKey(PublisherDefinition.PUBLISHER_PLUGIN_TAG,
+                        PublisherKeyFeatureTag.KEY_TAG_PRT_NB_IMPORT_PROJECT_ITEM_FEATURE, paramaters) as ICommandExecuter;
+                }
+
+                return null;
+            });
         }
 
         public async override void OnBegin()

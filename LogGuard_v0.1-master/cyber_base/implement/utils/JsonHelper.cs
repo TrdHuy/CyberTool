@@ -26,5 +26,11 @@ namespace cyber_base.implement.utils
             var items = JsonConvert.DeserializeObject(json);
             return items;
         }
+
+        public static object? DeserializeObject(string json)
+        {
+            return JsonConvert.DeserializeObject(json);
+        }
+
     }
 }

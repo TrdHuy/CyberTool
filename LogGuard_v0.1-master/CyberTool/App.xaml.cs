@@ -119,6 +119,39 @@ namespace cyber_tool
             return message;
         }
 
+
+
+        public void ShowUserControlWindow(UserControl uc
+            , CyberOwner ownerType = CyberOwner.Default
+            , double width = 500
+            , double height = 400
+            , Action<object>? windowShowedCallback = null
+            , string title = "Floating window")
+        {
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                switch (ownerType)
+                {
+                    case CyberOwner.Default:
+                        _WindowDirector.ShowPopupUserControlWindow(uc
+                            , CyberOwnerWindow.Default
+                            , width
+                            , height
+                            , windowShowedCallback
+                            , title);
+                        break;
+                    case CyberOwner.ServiceManager:
+                        _WindowDirector.ShowPopupUserControlWindow(uc
+                            , CyberOwnerWindow.CyberIFace
+                            , width
+                            , height
+                            , windowShowedCallback
+                            , title);
+                        break;
+                }
+            });
+        }
+
         public void ShowPopupCControl(ContentControl cc
            , UIElement opener
            , CyberOwner ownerType = CyberOwner.Default
@@ -171,5 +204,9 @@ namespace cyber_tool
             return _WindowDirector.OpenFolderChooserDialogWindow();
         }
 
+        public string OpenEditTextDialogWindow(string oldText, bool isMultiLine)
+        {
+            return _WindowDirector.OpenEditTextDialogWindow(oldText, isMultiLine);
+        }
     }
 }

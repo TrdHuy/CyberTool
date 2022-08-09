@@ -20,19 +20,19 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
     {
         private string _versionFileName;
         private string _projectPath;
+        private string _fromCommitId = "";
+        private string _toCommitId = "";
+        private string _getGitLogCmd = "";
+
         private static readonly Regex _gitLogRegex =
             new Regex(@"huy.td1_hashid:(?<hashid>[a-z0-9]{5,20}) " +
                 @"huy.td1_subject:(?<subject>.+) " +
-                @"huy.td1_datetime:(?<datetime>\d{2}:\d{2}:\d{2} \d{4}-\d{2}-\d{2}) " +
+                @"huy.td1_datetime:(?<datetime>.+) " +
                 @"huy.td1_email:(?<email>\S+\@samsung.com)");
         private static readonly Regex _subjectLogRegex = new Regex(@"(?<subjectid>\[\S+\])(?<title>.+)");
 
-        private static readonly Regex _majorRegex = new Regex(@"\s*(?<property>" + VersionPropertiesVO.VERSION_MAJOR_PROPERTY_NAME + @")=(?<value>\d+)");
-        private static readonly Regex _minorRegex = new Regex(@"\s*(?<property>" + VersionPropertiesVO.VERSION_MINOR_PROPERTY_NAME + @")=(?<value>\d+)");
-        private static readonly Regex _patchRegex = new Regex(@"\s*(?<property>" + VersionPropertiesVO.VERSION_PATCH_PROPERTY_NAME + @")=(?<value>\d+)");
-        private static readonly Regex _revisionRegex = new Regex(@"\s*(?<property>" + VersionPropertiesVO.VERSION_REVISION_PROPERTY_NAME + @")=(?<value>\d+)");
         private Action<object, GetVersionHistoryTask>? _versionPropertiesFoundCallback;
-
+        
         public GetVersionHistoryTask(object param
             , Action<AsyncTaskResult>? taskFinishedCallback = null
             , Action<object, GetVersionHistoryTask>? versionPropertiesFoundCallback = null
@@ -45,14 +45,37 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
                     {
                         _projectPath = data[0];
                         _versionFileName = data[1];
+
+                        _getGitLogCmd = "git log " +
+                            "--pretty=format:\"huy.td1_hashid:%h " +
+                            "huy.td1_subject:%s " +
+                            "huy.td1_datetime:%ad " +
+                            "huy.td1_email:%ae\" " +
+                            "--date=format:\"%H:%M:%S %Y-%m-%d\" " +
+                            "-s " + _versionFileName;
+                    }
+                    else if (data.Length == 4)
+                    {
+                        _projectPath = data[0];
+                        _versionFileName = data[1];
+                        _fromCommitId = data[2];
+                        _toCommitId = data[3];
+
+                        _getGitLogCmd = "git log " +
+                            "--pretty=format:\"huy.td1_hashid:%h " +
+                            "huy.td1_subject:%s " +
+                            "huy.td1_datetime:%ad " +
+                            "huy.td1_email:%ae\" " +
+                            "--date=format:\"%d-%m-%Y %H:%M\" " +
+                            _fromCommitId + ".." + _toCommitId;
                     }
                     else
                     {
-                        throw new InvalidDataException("Param must be an array of string has 2 elements");
+                        throw new InvalidDataException("Param must be an array of string has at least 2 elements");
                     }
                     break;
                 default:
-                    throw new InvalidDataException("Param must be an array of string has 2 elements");
+                    throw new InvalidDataException("Param must be an array of string has at least 2 elements");
             }
 
             _estimatedTime = 8000;
@@ -63,14 +86,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
 
         protected override void DoMainTask(object param, AsyncTaskResult result, CancellationTokenSource token)
         {
-            string getGitLogCmd = "git log " +
-                "--pretty=format:\"huy.td1_hashid:%h " +
-                    "huy.td1_subject:%s " +
-                    "huy.td1_datetime:%ad " +
-                    "huy.td1_email:%ae\" " +
-                "--date=format:\"%H:%M:%S %Y-%m-%d\" " +
-                "-s " + _versionFileName;
-            var pSI = new ProcessStartInfo("cmd", "/c" + getGitLogCmd);
+            var pSI = new ProcessStartInfo("cmd", "/c" + _getGitLogCmd);
             pSI.WorkingDirectory = _projectPath;
             pSI.RedirectStandardInput = true;
             pSI.RedirectStandardOutput = true;
@@ -79,7 +95,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
             pSI.UseShellExecute = false;
             pSI.StandardOutputEncoding = Encoding.UTF8;
 
-            LogManager.Current.AppendLogLine(getGitLogCmd, true);
+            LogManager.Current.AppendLogLine(_getGitLogCmd, true);
             using (var process = Process.Start(pSI))
             {
                 if (process != null)
@@ -105,8 +121,8 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
                             var matchSubject = _subjectLogRegex.Match(subject);
                             if (matchSubject.Success)
                             {
-                                subjectId = match.Groups["subjectid"].Value ?? "";
-                                title = match.Groups["title"].Value ?? "";
+                                subjectId = matchSubject.Groups["subjectid"].Value ?? "";
+                                title = matchSubject.Groups["title"].Value ?? "";
                             }
 
                             dynamic ele = new ExpandoObject();
@@ -131,7 +147,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
             {
                 case string[] data:
                     return !string.IsNullOrEmpty(data[1])
-                   && File.Exists(data[0] + "\\" + data[1]);
+                   && File.Exists(data[1]);
                 default:
                     return false;
             }

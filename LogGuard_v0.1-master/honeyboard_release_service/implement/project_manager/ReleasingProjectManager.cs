@@ -2,44 +2,109 @@
 using cyber_base.implement.async_task;
 using cyber_base.implement.utils;
 using cyber_base.implement.views.cyber_treeview;
+using honeyboard_release_service.definitions;
 using honeyboard_release_service.implement.module;
+using honeyboard_release_service.implement.project_manager.version_parser;
 using honeyboard_release_service.implement.ui_event_handler.async_tasks.git_tasks;
 using honeyboard_release_service.implement.ui_event_handler.async_tasks.others;
 using honeyboard_release_service.implement.user_data_manager;
-using honeyboard_release_service.implement.view_model;
 using honeyboard_release_service.models.VOs;
-using honeyboard_release_service.view_models.calendar_notebook.items;
+using honeyboard_release_service.utils;
 using honeyboard_release_service.view_models.project_manager.items;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace honeyboard_release_service.implement.project_manager
 {
     internal class ReleasingProjectManager : BasePublisherModule
     {
-        private ProjectVO? _currentProjectVO;
+        private ProjectVO? _currentImportedProjectVO;
         private Dictionary<string, ProjectVO> _importedProjects = new Dictionary<string, ProjectVO>();
-        private VersionUpCommitVO? _latestCommitVO;
         private BaseAsyncTask? _getVersionHistoryTaskCache;
-        private bool _isLatestVersionSet = false;
         private CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? _currentProjectBranchContextSource;
+        private FirstLastObservableCollection<VersionHistoryItemViewModel> _versionHistoryItemContexts;
+        private VersionAttributeParsingManager _versionAttrParsingManager;
 
         private event UserDataImportedHandler? _userDataImported;
         private event ImportedProjectsCollectionChangedHandler? _importedProjectsCollectionChanged;
         private event CurrentProjectChangedHandler? _currentProjectChanged;
         private event CurrentProjectBranchContextSourceChangedHandler? _currentProjectBranchContextSourceChanged;
+        private event LatestVersionUpCommitChangedHandler? _latestVersionUpCommitChanged;
+        private event PreUpdateVersionTimelineBackgroundHandler? _preUpdateVersionTimelineBackground;
+        private event VersionTimelineUpdatedHandler? _versionTimelineUpdated;
+        private event VersionPropertiesFoundHandler? _versionPropertiesFound;
+        private event CurrentProjectVersionFilePathChangedHandler? _currentProjectVersionFilePathChanged;
 
         public static ReleasingProjectManager Current
         {
             get
             {
                 return PublisherModuleManager.RPM_Instance;
+            }
+        }
+
+        public event CurrentProjectVersionFilePathChangedHandler CurrentProjectVersionFilePathChanged
+        {
+            add
+            {
+                _currentProjectVersionFilePathChanged += value;
+            }
+            remove
+            {
+                _currentProjectVersionFilePathChanged -= value;
+            }
+
+        }
+
+        public event VersionPropertiesFoundHandler VersionPropertiesFound
+        {
+            add
+            {
+                _versionPropertiesFound += value;
+            }
+            remove
+            {
+                _versionPropertiesFound -= value;
+            }
+
+        }
+
+        public event VersionTimelineUpdatedHandler VersionTimelineUpdated
+        {
+            add
+            {
+                _versionTimelineUpdated += value;
+            }
+            remove
+            {
+                _versionTimelineUpdated -= value;
+            }
+
+        }
+
+        public event PreUpdateVersionTimelineBackgroundHandler PreUpdateVersionTimelineBackground
+        {
+            add
+            {
+                _preUpdateVersionTimelineBackground += value;
+            }
+            remove
+            {
+                _preUpdateVersionTimelineBackground -= value;
+            }
+        }
+
+        public event LatestVersionUpCommitChangedHandler LatestVersionUpCommitChanged
+        {
+            add
+            {
+                _latestVersionUpCommitChanged += value;
+            }
+            remove
+            {
+                _latestVersionUpCommitChanged -= value;
             }
         }
 
@@ -108,7 +173,9 @@ namespace honeyboard_release_service.implement.project_manager
             }
         }
 
-        public ProjectVO? CurrentProjectVO { get => _currentProjectVO; }
+        public ProjectVO? CurrentImportedProjectVO { get => _currentImportedProjectVO; }
+
+        public VersionAttributeParsingManager VAParsingManager { get => _versionAttrParsingManager; }
 
         public Dictionary<string, ProjectVO> ImportedProjects
         {
@@ -119,11 +186,20 @@ namespace honeyboard_release_service.implement.project_manager
             }
         }
 
+        public VersionHistoryItemViewModel? LatestCommitVM
+        {
+            get
+            {
+                return _versionHistoryItemContexts.First;
+            }
+
+        }
+
         public VersionUpCommitVO? LatestCommitVO
         {
             get
             {
-                return _latestCommitVO;
+                return _versionHistoryItemContexts.First?.VersionCommitVO;
             }
 
         }
@@ -132,7 +208,7 @@ namespace honeyboard_release_service.implement.project_manager
         {
             get
             {
-                return _currentProjectVO?.OnBranch?.BranchPath ?? "";
+                return _currentImportedProjectVO?.OnBranch?.BranchPath ?? "";
             }
         }
 
@@ -140,7 +216,7 @@ namespace honeyboard_release_service.implement.project_manager
         {
             get
             {
-                return _currentProjectVO?.Path ?? "";
+                return _currentImportedProjectVO?.Path ?? "";
             }
         }
 
@@ -148,80 +224,189 @@ namespace honeyboard_release_service.implement.project_manager
         {
             get
             {
-                return _currentProjectVO?.VersionFilePath ?? "";
+                return _currentImportedProjectVO?.VersionFilePath ?? "";
             }
         }
 
-        public BranchVO? GetBranchOfCurrentProjectFromPath(string path)
+        public FirstLastObservableCollection<VersionHistoryItemViewModel> VersionHistoryItemContexts
         {
-            return CurrentProjectVO?.Branchs[path];
+            get
+            {
+                return _versionHistoryItemContexts;
+            }
         }
 
+        private ReleasingProjectManager()
+        {
+            _versionAttrParsingManager = new VersionAttributeParsingManager();
+            _versionHistoryItemContexts = new FirstLastObservableCollection<VersionHistoryItemViewModel>();
+            _versionHistoryItemContexts.FirstChanged -= OnVersionHistoryItemContextsFirstChanged;
+            _versionHistoryItemContexts.FirstChanged += OnVersionHistoryItemContextsFirstChanged;
+        }
+
+        public override void OnModuleStart()
+        {
+            base.OnModuleStart();
+            _versionAttrParsingManager.LoadParserInformationFromFile();
+        }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            // Memory leak issue
+            // Ref: https://michaelscodingspot.com/5-techniques-to-avoid-memory-leaks-by-events-in-c-net-you-should-know/
+            _versionHistoryItemContexts.FirstChanged -= OnVersionHistoryItemContextsFirstChanged;
+        }
+
+        /// <summary>
+        /// Set model cho project hiện tại
+        /// Thông thường sẽ được gọi khi người dùng import project đã được lưu
+        /// lại trước đó.
+        /// </summary>
+        /// <param name="projectVO"></param>
+        public void SetCurrentImportedProject(ProjectVO? projectVO)
+        {
+            var oldProject = _currentImportedProjectVO;
+            _currentImportedProjectVO = projectVO;
+            UserDataManager.Current.SetCurrentImportedProject(_currentImportedProjectVO);
+
+            if (oldProject != projectVO)
+            {
+                var branchSource = CreateBranchSourceForImportProject(projectVO);
+                SetCurrentProjectBranchContextSource(branchSource);
+                _currentProjectChanged?.Invoke(this, oldProject, _currentImportedProjectVO);
+            }
+
+            if (projectVO != null)
+            {
+                _versionAttrParsingManager.SetCurrentParserSyntax(projectVO.VersionAttrSyntax);
+                var versionFileContent = "";
+                if (File.Exists(projectVO.VersionFilePath))
+                {
+                    versionFileContent = File.ReadAllText(projectVO.VersionFilePath);
+                }
+                _versionAttrParsingManager.SetVersionAttrFileContent(versionFileContent);
+            }
+        }
+
+        /// <summary>
+        /// Set đường dẫn và cú pháp cho file version của project hiện tại 
+        /// </summary>
+        /// <param name="filePath">Đường dẫn tới file version attr</param>
+        /// <param name="syntax">Cú pháp phân tích file version attr</param>
+        /// <param name="versionAttrFileContent"> Nội dung của file version attr</param>
+        public void SetVersionAttrFilePathAndSyntaxOfCurrentImportProject(string filePath
+            , string syntax
+            , string versionAttrFileContent)
+        {
+            if (CurrentImportedProjectVO != null)
+            {
+                var oldValue = CurrentImportedProjectVO.VersionFilePath;
+                CurrentImportedProjectVO.VersionFilePath = filePath;
+                CurrentImportedProjectVO.VersionAttrSyntax = syntax;
+                _versionAttrParsingManager.SetCurrentParserSyntax(syntax);
+                _versionAttrParsingManager.SetVersionAttrFileContent(versionAttrFileContent);
+
+                if (oldValue != filePath)
+                {
+                    var arg = new ReleasingProjectEventArg(new
+                    {
+                        OldPath = oldValue,
+                        NewPath = filePath,
+                    });
+                    _currentProjectVersionFilePathChanged?.Invoke(this, arg);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Lấy ra nhánh trong 1 project theo key là đường dẫn đến nhánh đó
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public BranchVO? GetBranchOfCurrentProjectFromPath(string path)
+        {
+            return CurrentImportedProjectVO?.Branchs[path];
+        }
+
+        /// <summary>
+        /// Tạo mới project hiện tại từ 1 đường dẫn đến project đó
+        /// </summary>
+        /// <param name="proPath"></param>
         public void CreateNewProjectForCurrentProjectVO(string proPath)
         {
-            var oldProject = _currentProjectVO;
-            _currentProjectVO = new ProjectVO(proPath);
-            if (!ImportedProjects.ContainsKey(proPath))
+            var oldProject = _currentImportedProjectVO;
+            _currentImportedProjectVO = new ProjectVO(proPath);
+            if (string.IsNullOrEmpty(proPath))
             {
-                ImportedProjects[proPath] = _currentProjectVO;
-                _importedProjectsCollectionChanged?.Invoke(this
-                    , new ProjectsCollectionChangedEventArg(_currentProjectVO
-                        , null
-                        , ProjectsCollectionChangedType.Add));
+                _currentImportedProjectVO = null;
             }
             else
             {
-                var oldProjectVO = ImportedProjects[proPath];
-                ImportedProjects[proPath] = _currentProjectVO;
-                _importedProjectsCollectionChanged?.Invoke(this
-                    , new ProjectsCollectionChangedEventArg(_currentProjectVO
-                        , oldProjectVO
-                        , ProjectsCollectionChangedType.Modified));
+                if (!ImportedProjects.ContainsKey(proPath))
+                {
+                    ImportedProjects[proPath] = _currentImportedProjectVO;
+                    _importedProjectsCollectionChanged?.Invoke(this
+                        , new ProjectsCollectionChangedEventArg(_currentImportedProjectVO
+                            , null
+                            , ProjectsCollectionChangedType.Add));
+                }
+                else
+                {
+                    var oldProjectVO = ImportedProjects[proPath];
+                    ImportedProjects[proPath] = _currentImportedProjectVO;
+                    _importedProjectsCollectionChanged?.Invoke(this
+                        , new ProjectsCollectionChangedEventArg(_currentImportedProjectVO
+                            , oldProjectVO
+                            , ProjectsCollectionChangedType.Modified));
+                }
+                UserDataManager.Current.AddImportedProject(proPath, _currentImportedProjectVO);
+                UserDataManager.Current.SetCurrentImportedProject(_currentImportedProjectVO);
             }
-            UserDataManager.Current.AddImportedProject(proPath, _currentProjectVO);
-            UserDataManager.Current.SetCurrentImportedProject(_currentProjectVO);
-            _currentProjectChanged?.Invoke(this, oldProject, _currentProjectVO);
-
+            _currentProjectChanged?.Invoke(this, oldProject, _currentImportedProjectVO);
         }
 
-        public void SetLatestCommitVO(VersionUpCommitVO commitVO)
-        {
-            _latestCommitVO = commitVO;
-        }
-
+        /// <summary>
+        /// Set source context (view model) cho các nhánh của project hiện tại
+        /// </summary>
+        /// <param name="source"></param>
         public void SetCurrentProjectBranchContextSource(
             CyberTreeViewObservableCollection<ICyberTreeViewItemContext> source)
         {
             CurrentProjectBranchContextSource = source;
         }
 
+        /// <summary>
+        /// Set nhánh check out hiện tại của project
+        /// </summary>
+        /// <param name="branch"></param>
         public void SetCurrentProjectOnBranch(string branch)
         {
-            if (CurrentProjectVO?.OnBranch?.BranchPath != branch)
+            if (CurrentImportedProjectVO?.OnBranch?.BranchPath != branch)
             {
-                if (CurrentProjectVO != null)
+                if (CurrentImportedProjectVO != null)
                 {
-                    CurrentProjectVO.SetOnBranch(branch);
+                    CurrentImportedProjectVO.SetOnBranch(branch);
                 }
             }
         }
 
-        public VersionUpCommitVO? AddCommitToCurrentBranch(VersionUpCommitVO vVO)
+        /// <summary>
+        /// Thêm thông tin nhánh cho project hiện tại
+        /// Thường được gọi sau quá trình import mới project, fetch project
+        /// </summary>
+        /// <param name="bVO"></param>
+        public void AddBranchToCurrentProject(BranchVO bVO)
         {
-            return CurrentProjectVO?.AddCommitVOToCurrentBranch(vVO);
+            CurrentImportedProjectVO?.AddProjectBranch(bVO);
         }
 
-        public void AddProjectBranch(BranchVO bVO)
+        /// <summary>
+        /// Cập nhật lại version history timeline của project hiện tại
+        /// </summary>
+        public async void UpdateVersionHistoryTimelineInBackground(Level updateLevel = Level.Hard)
         {
-            CurrentProjectVO?.AddProjectBranch(bVO);
-        }
-
-        public async void UpdateVersionHistoryTimelineInBackground(bool isNeedToUpdateCurrentPorjectOnCalendarNotebook = true)
-        {
-            _isLatestVersionSet = false;
-            var pMViewmodel = ViewModelManager.Current.PMViewModel;
-            var cnViewmodel = ViewModelManager.Current.CNViewModel;
-
             if (_getVersionHistoryTaskCache != null
                 && !_getVersionHistoryTaskCache.IsCompleted
                 && !_getVersionHistoryTaskCache.IsCanceled
@@ -229,9 +414,21 @@ namespace honeyboard_release_service.implement.project_manager
             {
                 _getVersionHistoryTaskCache.Cancel();
             }
-            BaseAsyncTask getVersionHistory = new GetVersionHistoryTask(
-                new string[] { ProjectPath
-                    , VersionPropertiesPath }
+            dynamic eventData = new
+            {
+                UpdateLevel = updateLevel,
+            };
+
+            var eventArg = new ReleasingProjectEventArg(eventData);
+
+            if (_currentImportedProjectVO != null)
+            {
+                BaseAsyncTask getVersionHistory = new GetVersionHistoryTask(
+                new string[]
+                {
+                    ProjectPath,
+                    VersionPropertiesPath
+                }
                 , versionPropertiesFoundCallback: (prop, task) =>
                 {
                     dynamic data = prop;
@@ -243,54 +440,36 @@ namespace honeyboard_release_service.implement.project_manager
                         AuthorEmail = data.Email,
                         CommitId = data.HashId,
                     };
-                    if (!_isLatestVersionSet)
-                    {
-                        SetLatestCommitVO(vVO);
-                        _isLatestVersionSet = true;
-                    }
 
                     // Xử lý trên model
-                    var vOInCurrentBranch = AddCommitToCurrentBranch(vVO);
+                    var vOInCurrentBranch = _currentImportedProjectVO?.AddCommitVOToCurrentBranch(vVO);
 
                     // Xử lý trên viewmodel
                     if (vOInCurrentBranch != null)
                     {
-                        pMViewmodel.VersionHistoryItemContexts.Add(
+                        _versionHistoryItemContexts.Add(
                             new VersionHistoryItemViewModel(vOInCurrentBranch));
 
-                        if (isNeedToUpdateCurrentPorjectOnCalendarNotebook)
+                        dynamic versionUpCommitFoundEventData = new
                         {
-                            cnViewmodel.CurrentSelectedProjectItemContext?
-                                .CommitSource.Add(new CalendarNotebookCommitItemViewModel(
-                                    vOInCurrentBranch
-                                    , cnViewmodel.CurrentSelectedProjectItemContext));
-                        }
+                            UpdateLevel = updateLevel,
+                            VersionUpCommit = vOInCurrentBranch,
+                        };
+
+                        _versionPropertiesFound?.Invoke(this, new ReleasingProjectEventArg(versionUpCommitFoundEventData));
                     }
                 }
                 , taskFinishedCallback: (s) =>
                 {
-                    pMViewmodel.IsLoadingProjectVersionHistory = false;
-                    if (isNeedToUpdateCurrentPorjectOnCalendarNotebook
-                        && cnViewmodel.CurrentSelectedProjectItemContext != null)
-                    {
-                        cnViewmodel.CurrentSelectedProjectItemContext.IsLoadingData = false;
-                    }
+                    _versionTimelineUpdated?.Invoke(this, eventArg);
                 });
-            _getVersionHistoryTaskCache = getVersionHistory;
+                _getVersionHistoryTaskCache = getVersionHistory;
+                _versionHistoryItemContexts.Clear();
 
-            // Xử lý project manager viewmodel trước khi thực hiện task
-            pMViewmodel.VersionHistoryItemContexts.Clear();
-            pMViewmodel.VersionHistoryListTipVisibility = Visibility.Collapsed;
-            pMViewmodel.IsLoadingProjectVersionHistory = true;
+                _preUpdateVersionTimelineBackground?.Invoke(this, eventArg);
 
-            // Xử lý calendar notebook viewmodel trước khi thực hiện task
-            if (isNeedToUpdateCurrentPorjectOnCalendarNotebook
-                && cnViewmodel.CurrentSelectedProjectItemContext != null)
-            {
-                cnViewmodel.CurrentSelectedProjectItemContext.IsLoadingData = true;
-                cnViewmodel.CurrentSelectedProjectItemContext.CommitSource.Clear();
+                await getVersionHistory.Execute();
             }
-            await getVersionHistory.Execute();
         }
 
         /// <summary>
@@ -308,9 +487,9 @@ namespace honeyboard_release_service.implement.project_manager
             {
                 _getVersionHistoryTaskCache.Cancel();
             }
-            var pMViewmodel = ViewModelManager.Current.PMViewModel;
-            var oldProject = _currentProjectVO;
-            _currentProjectVO = currentProject;
+
+            var oldProject = _currentImportedProjectVO;
+            _currentImportedProjectVO = currentProject;
             ImportedProjects = importedProjects;
 
             if (currentProject != null && currentProject.OnBranch != null)
@@ -336,23 +515,115 @@ namespace honeyboard_release_service.implement.project_manager
                     title: "Importing branchs from user data"
                    , task: multiTask
                    , isCancelable: false);
-                _userDataImported?.Invoke(this);
-                UpdateVersionHistoryTimelineInBackground(isNeedToUpdateCurrentPorjectOnCalendarNotebook: false);
+            }
+            _userDataImported?.Invoke(this);
+            UpdateVersionHistoryTimelineInBackground(updateLevel: Level.Normal);
+            // Nên gọi sự kiện này sau khi toàn bộ user data đã được imported thành công
+            _currentProjectChanged?.Invoke(this, oldProject, _currentImportedProjectVO);
+        }
+
+        private void OnVersionHistoryItemContextsFirstChanged(object sender, VersionHistoryItemViewModel? oldFirst, VersionHistoryItemViewModel? newFirst)
+        {
+            _latestVersionUpCommitChanged?.Invoke(this);
+        }
+
+        private CyberTreeViewObservableCollection<ICyberTreeViewItemContext> CreateBranchSourceForImportProject(ProjectVO? projectVO)
+        {
+            var source = new CyberTreeViewObservableCollection<ICyberTreeViewItemContext>();
+
+            if (projectVO == null)
+            {
+                return source;
             }
 
-            // Nên gọi sự kiện này sau khi toàn bộ user data đã được imported thành công
-            _currentProjectChanged?.Invoke(this, oldProject, _currentProjectVO);
+            foreach (var branch in projectVO.Branchs)
+            {
+                var path = branch.Key;
+
+                var splits = path.Split("/", StringSplitOptions.TrimEntries);
+                string rootFolder = "";
+                int startFolderIndex = 1;
+                int lenght = splits.Length;
+                var isRemote = false;
+                BranchItemViewModel? parents;
+
+                if (splits[0].Equals("remotes", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    rootFolder = "Remote";
+                    isRemote = true;
+                }
+                else if (splits[0].Equals("origin", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    rootFolder = "Remote";
+                    isRemote = true;
+                    startFolderIndex = 0;
+                }
+                else
+                {
+                    rootFolder = "Local";
+                    startFolderIndex = 0;
+                }
+
+                parents = source[rootFolder] as BranchItemViewModel;
+
+                if (parents == null)
+                {
+                    var bVO = new BranchVO("", rootFolder);
+                    parents = new BranchItemViewModel(bVO);
+                    source.Add(parents);
+                }
+
+                string branchPath = "";
+
+                for (int i = startFolderIndex; i < lenght; i++)
+                {
+                    var current = parents?.Items[splits[i]];
+
+                    if (i == lenght - 1)
+                        branchPath += splits[i];
+                    else
+                        branchPath += splits[i] + "/";
+
+                    if (current == null)
+                    {
+                        var bVO = new BranchVO(path: i == lenght - 1 ? branchPath : ""
+                            , title: splits[i]
+                            , isNode: i == lenght - 1
+                            , isRemote: isRemote);
+                        current = new BranchItemViewModel(bVO);
+                        parents?.AddItem(current);
+                    }
+                    parents = current as BranchItemViewModel;
+                }
+            }
+
+            return source;
         }
     }
 
     internal delegate void UserDataImportedHandler(object sender);
+    internal delegate void PreUpdateVersionTimelineBackgroundHandler(object sender, ReleasingProjectEventArg arg);
+    internal delegate void VersionTimelineUpdatedHandler(object sender, ReleasingProjectEventArg arg);
+    internal delegate void VersionPropertiesFoundHandler(object sender, ReleasingProjectEventArg arg);
+    internal delegate void CurrentProjectVersionFilePathChangedHandler(object sender, ReleasingProjectEventArg arg);
+    internal delegate void LatestVersionUpCommitChangedHandler(object sender);
     internal delegate void ImportedProjectsCollectionChangedHandler(object sender, ProjectsCollectionChangedEventArg arg);
     internal delegate void CurrentProjectChangedHandler(object sender, ProjectVO? oldProject, ProjectVO? newProject);
     internal delegate void CurrentProjectBranchContextSourceChangedHandler(object sender
         , CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? oldSource
         , CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? newSource);
 
-    internal class ProjectsCollectionChangedEventArg
+    internal class ReleasingProjectEventArg
+    {
+        public object? EventData { get; private set; }
+
+        public ReleasingProjectEventArg(object? eventData)
+        {
+            EventData = eventData;
+        }
+    }
+
+    internal class ProjectsCollectionChangedEventArg : ReleasingProjectEventArg
     {
         public ProjectVO? OldValue { get; private set; }
         public ProjectVO? NewValue { get; private set; }
@@ -360,7 +631,7 @@ namespace honeyboard_release_service.implement.project_manager
         public ProjectsCollectionChangedEventArg(
             ProjectVO? newValue
             , ProjectVO? oldValue
-            , ProjectsCollectionChangedType changedType)
+            , ProjectsCollectionChangedType changedType) : base(null)
         {
             OldValue = oldValue;
             NewValue = newValue;

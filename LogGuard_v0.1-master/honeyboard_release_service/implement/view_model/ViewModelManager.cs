@@ -68,6 +68,14 @@ namespace honeyboard_release_service.implement.view_model
             }
         }
 
+        public VersionManagerTabViewModel VMTViewModel
+        {
+            get
+            {
+                return (VersionManagerTabViewModel)DataContextCache[typeof(VersionManagerTabViewModel)];
+            }
+        }
+
         public static ViewModelManager Current
         {
             get

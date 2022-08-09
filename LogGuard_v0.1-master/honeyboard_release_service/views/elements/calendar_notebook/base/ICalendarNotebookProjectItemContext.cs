@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace honeyboard_release_service.views.elements.calendar_notebook.@base
 {
@@ -21,5 +22,14 @@ namespace honeyboard_release_service.views.elements.calendar_notebook.@base
 
         [Bindable(true)]
         bool IsLoadingData { get; set; }
+
+        [Bindable(true)]
+        ICommand RenameProjectCommand { get; }
+
+        [Bindable(true)]
+        ICommand DeleteProjectCommand { get; }
+
+        [Bindable(true)]
+        ICommand ImportProjectCommand { get; }
     }
 }

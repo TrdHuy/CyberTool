@@ -25,6 +25,9 @@ namespace honeyboard_release_service.view_models.calendar_notebook
 
         private CalendarNotebookProjectItemViewModel? _currentSelectedProjectItemContext;
         public CalendarNotebookProjectItemViewModel? CurrentSelectedProjectItemContext => _currentSelectedProjectItemContext;
+        public Dictionary<string, ICalendarNotebookProjectItemContext> NotebookItemContextsMap => _notebookItemContextsMap;
+        public ObservableCollection<ICalendarNotebookProjectItemContext> NotebookItemContexts => _notebookItemContexts;
+
 
         [Bindable(true)]
         public ObservableCollection<ICalendarNotebookProjectItemContext> ProjectItemContexts
@@ -40,8 +43,6 @@ namespace honeyboard_release_service.view_models.calendar_notebook
             }
         }
 
-
-
         public CalendarNotebookViewModel(BaseViewModel parent) : base(parent)
         {
             _notebookItemContexts = new ObservableCollection<ICalendarNotebookProjectItemContext>();
@@ -53,6 +54,53 @@ namespace honeyboard_release_service.view_models.calendar_notebook
             ReleasingProjectManager.Current.ImportedProjectsCollectionChanged += HandleImportedProjectCollectionChanged;
             ReleasingProjectManager.Current.CurrentProjectChanged -= HandleCurrentProjectChanged;
             ReleasingProjectManager.Current.CurrentProjectChanged += HandleCurrentProjectChanged;
+            ReleasingProjectManager.Current.PreUpdateVersionTimelineBackground -= PreHandleUpdateVersionTimelineBackground;
+            ReleasingProjectManager.Current.PreUpdateVersionTimelineBackground += PreHandleUpdateVersionTimelineBackground;
+            ReleasingProjectManager.Current.VersionTimelineUpdated -= HandleVersionTimelineUpdated;
+            ReleasingProjectManager.Current.VersionTimelineUpdated += HandleVersionTimelineUpdated;
+            ReleasingProjectManager.Current.VersionPropertiesFound -= HandleVersionPropertiesFound;
+            ReleasingProjectManager.Current.VersionPropertiesFound += HandleVersionPropertiesFound;
+        }
+
+        private void HandleVersionPropertiesFound(object sender, ReleasingProjectEventArg arg)
+        {
+            dynamic eventData = arg.EventData ?? throw new ArgumentNullException("EventData of VersionPropertiesFound must not be null");
+
+            if (eventData.UpdateLevel >= Level.Hard && eventData.VersionUpCommit != null)
+            {
+                CurrentSelectedProjectItemContext?
+                    .CommitSource
+                    .Add(new CalendarNotebookCommitItemViewModel(eventData.VersionUpCommit, CurrentSelectedProjectItemContext));
+            }
+
+        }
+
+        private void HandleVersionTimelineUpdated(object sender, ReleasingProjectEventArg arg)
+        {
+            dynamic eventData = arg.EventData ?? throw new ArgumentNullException("EventData of VersionTimelineUpdated must not be null");
+
+            if (eventData.UpdateLevel >= Level.Hard)
+            {
+                if (CurrentSelectedProjectItemContext != null)
+                {
+                    CurrentSelectedProjectItemContext.IsLoadingData = false;
+                }
+            }
+        }
+
+        private void PreHandleUpdateVersionTimelineBackground(object sender, ReleasingProjectEventArg arg)
+        {
+            dynamic eventData = arg.EventData ?? throw new ArgumentNullException("EventData of PreUpdateVersionTimelineBackground must not be null");
+
+            // Cập nhật lại commit source của project đang được import hiện tại
+            if (eventData.UpdateLevel >= Level.Hard)
+            {
+                if (CurrentSelectedProjectItemContext != null)
+                {
+                    CurrentSelectedProjectItemContext.IsLoadingData = true;
+                    CurrentSelectedProjectItemContext.CommitSource.Clear();
+                }
+            }
         }
 
         private void HandleCurrentProjectChanged(object sender, ProjectVO? oldProject, ProjectVO? newProject)
@@ -102,5 +150,15 @@ namespace honeyboard_release_service.view_models.calendar_notebook
             base.OnViewInstantiated();
         }
 
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            ReleasingProjectManager.Current.UserDataImported -= HandleUserDataImported;
+            ReleasingProjectManager.Current.ImportedProjectsCollectionChanged -= HandleImportedProjectCollectionChanged;
+            ReleasingProjectManager.Current.CurrentProjectChanged -= HandleCurrentProjectChanged;
+            ReleasingProjectManager.Current.PreUpdateVersionTimelineBackground -= PreHandleUpdateVersionTimelineBackground;
+            ReleasingProjectManager.Current.VersionTimelineUpdated -= HandleVersionTimelineUpdated;
+            ReleasingProjectManager.Current.VersionPropertiesFound -= HandleVersionPropertiesFound;
+        }
     }
 }

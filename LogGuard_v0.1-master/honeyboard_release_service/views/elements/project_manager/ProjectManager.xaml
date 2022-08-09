@@ -69,10 +69,11 @@
 			<ptb:PathTextBox Grid.Row="2"
 							 PathType="File"
 							 IconGeometry="{Binding Source={StaticResource RT_OpenFileIconPathGeomerty}}"
-							 Text="{Binding VersionPropertiesPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							 Text="{Binding VersionPropertiesFileName, Mode=OneWay}"
 							 Tag="Version properties file"
 							 Margin="0,0,0,10"
 							 Grid.Column="1"
+							 IsShouldOpenFileChooser="{Binding IsShouldOpenVersionAttrFileChooserWindow}"
 							 Background="{StaticResource Background_Level3}"
 							 Foreground="{StaticResource Foreground_Level3}" />
 
@@ -167,6 +168,7 @@
 						   Foreground="{StaticResource Foreground_Level2}" />
 				<vhl:VersionHistoryListView Grid.Row="2"
 											Grid.ColumnSpan="3"
+											SelectionMode="Single"
 											BorderThickness="0"
 											ItemsSource="{Binding VersionHistoryItemContexts}"
 											VirtualizingPanel.CacheLength="1"
@@ -184,183 +186,6 @@
 							<ControlTemplate.Resources>
 								<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
 								<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
-
-								<Style TargetType="{x:Type csv:CyberScrollView}"
-									   x:Key="RT_OverlapScrollbarStyle">
-									<Setter Property="Template">
-										<Setter.Value>
-											<ControlTemplate TargetType="{x:Type csv:CyberScrollView}">
-												<Grid>
-													<Grid.ColumnDefinitions>
-														<ColumnDefinition Width="*" />
-														<ColumnDefinition Width="Auto" />
-													</Grid.ColumnDefinitions>
-													<Grid.RowDefinitions>
-														<RowDefinition Height="*" />
-														<RowDefinition Height="Auto" />
-													</Grid.RowDefinitions>
-
-													<Border x:Name="Bd"
-															Background="{TemplateBinding Background}"
-															Margin="{TemplateBinding Padding}"
-															Grid.ColumnSpan="2">
-														<Grid>
-															<Grid.RowDefinitions>
-																<RowDefinition Height="*" />
-																<RowDefinition Height="Auto" />
-															</Grid.RowDefinitions>
-															<ScrollContentPresenter Name="PART_ScrollContentPresenter"
-																					Width="{Binding ElementName=Bd, Path=ActualWidth}"
-																					KeyboardNavigation.DirectionalNavigation="Local"
-																					CanContentScroll="{TemplateBinding CanContentScroll}"
-																					CanHorizontallyScroll="False"
-																					HorizontalAlignment="Left"
-																					CanVerticallyScroll="False"
-																					Grid.RowSpan="2" />
-															<anim:LoadingAnimation IsBusy="{Binding RelativeSource={RelativeSource AncestorType=vhl:VersionHistoryListView, Mode=FindAncestor}, Path=(atp:ElementAttProperties.Proxy)}"
-																				   Grid.Row="1"
-																				   Margin="0,30,0,0"
-																				   ElipseFill="{DynamicResource Foreground_Level3}"
-																				   Width="60"
-																				   Height="20" />
-														</Grid>
-													</Border>
-
-													<ScrollBar Name="PART_VerticalScrollBar"
-															   Grid.Column="1"
-															   Grid.RowSpan="2"
-															   Maximum="{TemplateBinding ScrollableHeight}"
-															   ViewportSize="{TemplateBinding ViewportHeight}"
-															   Value="{TemplateBinding VerticalOffset}"
-															   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
-															   Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type csv:CyberScrollView}, Mode=FindAncestor}, Path=ScrollBarBackground}">
-														<ScrollBar.Template>
-															<ControlTemplate TargetType="{x:Type ScrollBar}">
-																<Grid x:Name="Bg"
-																	  SnapsToDevicePixels="True">
-																	<Border x:Name="border"
-																			BorderBrush="{TemplateBinding BorderBrush}"
-																			BorderThickness="0"
-																			Background="{TemplateBinding Background}"
-																			Grid.Row="1" />
-																	<Track x:Name="PART_Track"
-																		   IsDirectionReversed="True"
-																		   IsEnabled="True"
-																		   Grid.Row="1">
-																		<Track.DecreaseRepeatButton>
-																			<RepeatButton Command="ScrollBar.PageUpCommand">
-																				<RepeatButton.Style>
-																					<Style TargetType="{x:Type RepeatButton}">
-																						<Setter Property="OverridesDefaultStyle"
-																								Value="True" />
-																						<Setter Property="Background"
-																								Value="Transparent" />
-																						<Setter Property="Focusable"
-																								Value="False" />
-																						<Setter Property="IsTabStop"
-																								Value="False" />
-																						<Setter Property="Template">
-																							<Setter.Value>
-																								<ControlTemplate TargetType="{x:Type RepeatButton}">
-																									<Rectangle Fill="{TemplateBinding Background}"
-																											   Height="{TemplateBinding Height}"
-																											   Width="{TemplateBinding Width}" />
-																								</ControlTemplate>
-																							</Setter.Value>
-																						</Setter>
-																					</Style>
-																				</RepeatButton.Style>
-																			</RepeatButton>
-																		</Track.DecreaseRepeatButton>
-																		<Track.IncreaseRepeatButton>
-																			<RepeatButton Command="ScrollBar.PageDownCommand">
-																				<RepeatButton.Style>
-																					<Style TargetType="{x:Type RepeatButton}">
-																						<Setter Property="OverridesDefaultStyle"
-																								Value="True" />
-																						<Setter Property="Background"
-																								Value="Transparent" />
-																						<Setter Property="Focusable"
-																								Value="False" />
-																						<Setter Property="IsTabStop"
-																								Value="False" />
-																						<Setter Property="Template">
-																							<Setter.Value>
-																								<ControlTemplate TargetType="{x:Type RepeatButton}">
-																									<Rectangle Fill="{TemplateBinding Background}"
-																											   Height="{TemplateBinding Height}"
-																											   Width="{TemplateBinding Width}" />
-																								</ControlTemplate>
-																							</Setter.Value>
-																						</Setter>
-																					</Style>
-																				</RepeatButton.Style>
-																			</RepeatButton>
-																		</Track.IncreaseRepeatButton>
-																		<Track.Thumb>
-																			<Thumb>
-																				<Thumb.Style>
-																					<Style TargetType="{x:Type Thumb}">
-																						<Setter Property="OverridesDefaultStyle"
-																								Value="True" />
-																						<Setter Property="IsTabStop"
-																								Value="False" />
-																						<Setter Property="Template">
-																							<Setter.Value>
-																								<ControlTemplate TargetType="{x:Type Thumb}">
-																									<Rectangle x:Name="rectangle"
-																											   Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type csv:CyberScrollView},Mode=FindAncestor},Path=ThumbBackground}"
-																											   Height="{TemplateBinding Height}"
-																											   SnapsToDevicePixels="True"
-																											   Width="{TemplateBinding Width}" />
-																									<ControlTemplate.Triggers>
-																										<Trigger Property="IsEnabled"
-																												 Value="False">
-																											<Setter Property="Width"
-																													TargetName="rectangle"
-																													Value="2" />
-																											<Setter Property="HorizontalAlignment"
-																													TargetName="rectangle"
-																													Value="Right" />
-																										</Trigger>
-																									</ControlTemplate.Triggers>
-																								</ControlTemplate>
-																							</Setter.Value>
-																						</Setter>
-																					</Style>
-																				</Thumb.Style>
-																			</Thumb>
-																		</Track.Thumb>
-																	</Track>
-																</Grid>
-																<ControlTemplate.Triggers>
-																	<MultiDataTrigger>
-																		<MultiDataTrigger.Conditions>
-																			<Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=csv:CyberScrollView, Mode=FindAncestor}, Path=IsMouseOverExpandScrollbar}"
-																					   Value="True" />
-																			<Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}"
-																					   Value="False" />
-																		</MultiDataTrigger.Conditions>
-																		<Setter TargetName="border"
-																				Property="Background"
-																				Value="Transparent" />
-																		<Setter TargetName="PART_Track"
-																				Property="IsEnabled"
-																				Value="False" />
-																	</MultiDataTrigger>
-
-
-																</ControlTemplate.Triggers>
-															</ControlTemplate>
-														</ScrollBar.Template>
-													</ScrollBar>
-
-												</Grid>
-											</ControlTemplate>
-										</Setter.Value>
-									</Setter>
-								</Style>
-
 							</ControlTemplate.Resources>
 							<Grid>
 								<Border x:Name="RecMask"

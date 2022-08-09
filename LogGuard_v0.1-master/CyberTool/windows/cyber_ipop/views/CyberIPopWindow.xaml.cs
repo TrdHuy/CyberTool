@@ -32,22 +32,11 @@ namespace cyber_tool.windows.cyber_ipop.views
             InitializeComponent();
         }
 
-        public CyberIPopWindow(double startX, double startY, double toX, double toY)
-        {
-            InitializeComponent();
-            _startX = startX;
-            _startY = startY;
-            _toX = toX;
-            _toY = toY;
-        }
-
-        public CyberIPopWindow(UIElement opener, UIElement? owner, double offsetOwnerX, double offsetOwnerY)
+        public CyberIPopWindow(UIElement? opener, UIElement? owner)
         {
             InitializeComponent();
             _opener = opener;
             _owner = owner;
-            _offsetOwnerX = offsetOwnerX;
-            _offsetOwnerY = offsetOwnerY;
             Owner = _owner as Window;
             if (Owner != null)
             {
@@ -60,13 +49,7 @@ namespace cyber_tool.windows.cyber_ipop.views
         }
 
         private UIElement? _opener;
-        private double _offsetOwnerX;
-        private double _offsetOwnerY;
         private UIElement? _owner;
-        private double _startX = 1200;
-        private double _startY = 1200;
-        private double _toX = 300;
-        private double _toY = 300;
         private Button? _minimizeBtn;
         private Button? _maximizeBtn;
         private Button? _closeBtn;
@@ -134,36 +117,6 @@ namespace cyber_tool.windows.cyber_ipop.views
             fadeAnim.To = 1d;
             fadeAnim.Duration = TimeSpan.FromMilliseconds(animTime);
 
-            if (_opener != null && _owner != null)
-            {
-                //var startPoint = GetWindowPositionFromOpener();
-                //var endPoint = GetWindowPositionFromOwner();
-                //moveLeftAnim.From = startPoint.X;
-                //moveLeftAnim.To = endPoint.X;
-                //moveTopAnim.From = startPoint.Y;
-                //moveTopAnim.To = endPoint.Y;
-            }
-            else
-            {
-                DoubleAnimation moveLeftAnim = new DoubleAnimation();
-                Storyboard.SetTargetName(moveLeftAnim, "mainWindow");
-                Storyboard.SetTargetProperty(moveLeftAnim, new PropertyPath(Window.LeftProperty));
-                moveLeftAnim.Duration = TimeSpan.FromMilliseconds(animTime);
-
-                DoubleAnimation moveTopAnim = new DoubleAnimation();
-                Storyboard.SetTargetName(moveTopAnim, "mainWindow");
-                Storyboard.SetTargetProperty(moveTopAnim, new PropertyPath(Window.TopProperty));
-                moveTopAnim.Duration = TimeSpan.FromMilliseconds(animTime);
-
-                moveLeftAnim.From = _startX;
-                moveLeftAnim.To = _toX;
-                moveTopAnim.From = _startY;
-                moveTopAnim.To = _toY;
-
-                moveBoard.Children.Add(moveLeftAnim);
-                moveBoard.Children.Add(moveTopAnim);
-            }
-
             moveBoard.Children.Add(fadeAnim);
 
 
@@ -200,37 +153,6 @@ namespace cyber_tool.windows.cyber_ipop.views
             fadeAnim.From = 1d;
             fadeAnim.To = 0d;
             fadeAnim.Duration = TimeSpan.FromMilliseconds(animTime);
-
-
-            if (_opener != null && _owner != null)
-            {
-                //var startPoint = this.PointToScreen(new Point(0,0));
-                //var endPoint = GetWindowPositionFromOpener();
-                //moveLeftAnim.From = startPoint.X;
-                //moveLeftAnim.To = endPoint.X;
-                //moveTopAnim.From = startPoint.Y;
-                //moveTopAnim.To = endPoint.Y;
-            }
-            else
-            {
-                DoubleAnimation moveLeftAnim = new DoubleAnimation();
-                Storyboard.SetTargetName(moveLeftAnim, "mainWindow");
-                Storyboard.SetTargetProperty(moveLeftAnim, new PropertyPath(Window.LeftProperty));
-                moveLeftAnim.Duration = TimeSpan.FromMilliseconds(animTime);
-
-                DoubleAnimation moveTopAnim = new DoubleAnimation();
-                Storyboard.SetTargetName(moveTopAnim, "mainWindow");
-                Storyboard.SetTargetProperty(moveTopAnim, new PropertyPath(Window.TopProperty));
-                moveTopAnim.Duration = TimeSpan.FromMilliseconds(animTime);
-
-                moveLeftAnim.From = _toX;
-                moveLeftAnim.To = _startX;
-                moveTopAnim.From = _toY;
-                moveTopAnim.To = _startY;
-
-                moveBoard.Children.Add(moveLeftAnim);
-                moveBoard.Children.Add(moveTopAnim);
-            }
 
             moveBoard.Children.Add(fadeAnim);
 

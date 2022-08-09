@@ -126,10 +126,10 @@ namespace honeyboard_release_service.implement.user_data_manager
 
         public void AddImportedProject(string projectPath, ProjectVO projectVO)
         {
-            _importedProjects[projectPath] = projectVO;
+           _importedProjects[projectPath] = projectVO;
         }
 
-        public void SetCurrentImportedProject(ProjectVO projectVO)
+        public void SetCurrentImportedProject(ProjectVO? projectVO)
         {
             _currentImportedProject = projectVO;
         }
@@ -169,7 +169,6 @@ namespace honeyboard_release_service.implement.user_data_manager
                 catch { }
                 try
                 {
-
                     var currentImportedPorjectPath = obj.CurrentImportedProject.ToObject<string>();
                     _currentImportedProject = _importedProjects[currentImportedPorjectPath];
                 }

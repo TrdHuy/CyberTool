@@ -6,9 +6,11 @@ using cyber_base.view_model;
 using honeyboard_release_service.definitions;
 using honeyboard_release_service.implement.ui_event_handler.actions.log_monitor.button;
 using honeyboard_release_service.implement.ui_event_handler.actions.merge_tab.button;
+using honeyboard_release_service.implement.ui_event_handler.actions.notebook.context_menu;
 using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.button;
 using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.gesture;
 using honeyboard_release_service.implement.ui_event_handler.actions.release_tab.button;
+using honeyboard_release_service.implement.ui_event_handler.actions.version_manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +35,25 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions
 
         public override ICommandExecuter? BuildCommandExecuter(string keyTag, ILogger? logger = null)
         {
-            return null;
+            ICommandExecuter? commandExecuter = null;
+            switch (keyTag)
+            {
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_NB_DELETE_PROJECT_ITEM_FEATURE:
+                    commandExecuter = new PRT_NB_DeleteProjectItemContextMenuAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_VM_SHOW_COMMIT_DATA_GRID_FEATURE:
+                    commandExecuter = new PRT_VM_ShowCommitDataGridAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_NB_RENAME_PROJECT_ITEM_FEATURE:
+                    commandExecuter = new PRT_NB_RenameProjectItemContextMenuAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_NB_IMPORT_PROJECT_ITEM_FEATURE:
+                    commandExecuter = new PRT_NB_ImportProjectItemContextMenuAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, logger);
+                    break;
+                default:
+                    break;
+            }
+            return commandExecuter;
         }
 
         public override IViewModelCommandExecuter? BuildViewModelCommandExecuter(string keyTag, BaseViewModel viewModel, ILogger? logger = null)
