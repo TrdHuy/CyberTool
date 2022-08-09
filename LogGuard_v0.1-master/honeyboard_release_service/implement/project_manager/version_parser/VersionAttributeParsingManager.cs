@@ -38,6 +38,12 @@ namespace honeyboard_release_service.implement.project_manager.version_parser
                 File.Create(PARSER_INFO_DATA_FILE_PATH).Dispose();
             }
             var jsonString = await File.ReadAllTextAsync(PARSER_INFO_DATA_FILE_PATH);
+
+            if (string.IsNullOrEmpty(jsonString))
+            {
+                jsonString = Properties.Resources.default_parser_information;
+            }
+
             _parserInformation = JsonHelper.DeserializeObject<JSONVersionAttributeParserInformation>(jsonString);
 
             if (_parserInformation?.SyntaxArr != null)
