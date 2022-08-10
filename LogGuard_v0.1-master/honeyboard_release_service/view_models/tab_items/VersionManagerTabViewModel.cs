@@ -108,6 +108,7 @@ namespace honeyboard_release_service.view_models.tab_items
 
             ReleasingProjectManager.Current.LatestVersionUpCommitChanged += CurrentLatestVersionCommitChanged;
             ReleasingProjectManager.Current.CurrentProjectChanged += CurrentProjectChanged;
+            ReleasingProjectManager.Current.CurrentFocusVersionCommitChanged += CurrentFocusVersionCommitChanged;
         }
 
         private void CurrentLatestVersionCommitChanged(object sender)
@@ -126,11 +127,17 @@ namespace honeyboard_release_service.view_models.tab_items
             }
         }
 
+        private void CurrentFocusVersionCommitChanged(object sender)
+        {
+            CurrentFocusVersionCommitVM = ReleasingProjectManager.Current.CurrentFocusVersionCommitVM;
+        }
+
         public override void OnDestroy()
         {
             base.OnDestroy();
             ReleasingProjectManager.Current.LatestVersionUpCommitChanged -= CurrentLatestVersionCommitChanged;
             ReleasingProjectManager.Current.CurrentProjectChanged -= CurrentProjectChanged;
+            ReleasingProjectManager.Current.CurrentFocusVersionCommitChanged -= CurrentFocusVersionCommitChanged;
         }
     }
 }

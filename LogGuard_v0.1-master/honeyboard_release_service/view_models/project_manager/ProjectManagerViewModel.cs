@@ -40,7 +40,7 @@ namespace honeyboard_release_service.view_models.project_manager
         {
             get
             {
-                return _selectedVersionHistoryItem;
+                return _RPM_Instance.CurrentFocusVersionCommitVM;
             }
             set
             {
@@ -231,7 +231,6 @@ namespace honeyboard_release_service.view_models.project_manager
             _branchsSource = new CyberTreeViewObservableCollection<ICyberTreeViewItemContext>();
             GestureCommandVM = new PM_GestureCommandVM(this);
             ButtonCommandVM = new PM_ButtonCommandVM(this);
-            _VMTViewModel = ViewModelManager.Current.VMTViewModel;
             VersionHistoryItemContexts.CollectionChanged += (s, e) =>
             {
                 Invalidate("IsVirtualizingVersionHistoryList");
