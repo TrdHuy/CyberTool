@@ -44,7 +44,7 @@ namespace honeyboard_release_service.view_models.tab_items
                 {
                     CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_3;
                 }
-                else if (_currentFocusVersionCommitVM?.VersionCommitVO.Properties == ReleasingProjectManager.Current.LatestCommitVO?.Properties)
+                else if (_currentFocusVersionCommitVM?.VersionCommitVO.CommitId == ReleasingProjectManager.Current.LatestCommitVO?.CommitId)
                 {
                     CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_1;
                 }

@@ -169,6 +169,7 @@
 											Grid.ColumnSpan="3"
 											SelectionMode="Single"
 											BorderThickness="0"
+                                            SelectedItem="{Binding SelectedVersionHistoryItem}"
 											ItemsSource="{Binding VersionHistoryItemContexts}"
 											VirtualizingPanel.CacheLength="1"
 											VirtualizingPanel.CacheLengthUnit="Pixel"
@@ -219,28 +220,22 @@
 										<Grid x:Name="MainGrid"
 											  Background="{StaticResource Background_Level3}"
 											  Width="{Binding RelativeSource={RelativeSource AncestorType=ItemsPresenter, Mode=FindAncestor}, Path=ActualWidth}">
-											<Grid.ContextMenu>
-												<ContextMenu>
-													<MenuItem Header="Sync version"
+                                            <Grid.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Sync version"
 															  CommandParameter="{Binding .}"
 															  Command="{Binding SyncVersionCommand}">
-														<MenuItem.Icon>
-															<Path Width="12"
+                                                        <MenuItem.Icon>
+                                                            <Path Width="12"
 																  Height="12"
 																  Fill="{StaticResource Background_Level2}"
 																  Data="{Binding Source={StaticResource RT_SyncVersionIconPathGeomerty}}"
 																  Stretch="Uniform" />
-														</MenuItem.Icon>
-													</MenuItem>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
 
-												</ContextMenu>
-											</Grid.ContextMenu>
-
-                                            <Grid.InputBindings>
-                                                <MouseBinding Gesture="LeftClick"
-															  CommandParameter="{Binding .}"
-															  Command="{Binding ForcusVersionHistoryItemCommand}" />
-                                            </Grid.InputBindings>
+                                                </ContextMenu>
+                                            </Grid.ContextMenu>
 
                                             <Grid.ColumnDefinitions>
 												<ColumnDefinition />

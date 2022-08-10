@@ -9,7 +9,6 @@ using honeyboard_release_service.implement.ui_event_handler.actions.merge_tab.bu
 using honeyboard_release_service.implement.ui_event_handler.actions.notebook.context_menu;
 using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.button;
 using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.gesture;
-using honeyboard_release_service.implement.ui_event_handler.actions.project_manager.listview;
 using honeyboard_release_service.implement.ui_event_handler.actions.release_tab.button;
 using honeyboard_release_service.implement.ui_event_handler.actions.version_manager;
 using System;
@@ -44,9 +43,6 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions
                     break;
                 case PublisherKeyFeatureTag.KEY_TAG_PRT_VM_SHOW_COMMIT_DATA_GRID_FEATURE:
                     commandExecuter = new PRT_VM_ShowCommitDataGridAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, logger);
-                    break;
-                case PublisherKeyFeatureTag.KEY_TAG_PRT_SELECTED_VERSION_FEATURE:
-                    commandExecuter = new PRT_PM_UpdateVersionManagerTab(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, logger);
                     break;
                 default:
                     break;

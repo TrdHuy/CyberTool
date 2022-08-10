@@ -5,10 +5,12 @@ using cyber_base.implement.view_models.cyber_treeview;
 using cyber_base.implement.views.cyber_treeview;
 using cyber_base.view_model;
 using honeyboard_release_service.implement.project_manager;
+using honeyboard_release_service.implement.view_model;
 using honeyboard_release_service.models.VOs;
 using honeyboard_release_service.utils;
 using honeyboard_release_service.view_models.command.project_manager;
 using honeyboard_release_service.view_models.project_manager.items;
+using honeyboard_release_service.view_models.tab_items;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,6 +30,26 @@ namespace honeyboard_release_service.view_models.project_manager
         private Visibility _versionHistoryListTipVisibility = Visibility.Visible;
         private CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? _branchsSource;
         private ReleasingProjectManager _RPM_Instance = ReleasingProjectManager.Current;
+        private VersionManagerTabViewModel _VMTViewModel;
+        private object? _selectedVersionHistoryItem;
+
+        [Bindable(true)]
+        public object? SelectedVersionHistoryItem
+        {
+            get
+            {
+                return _selectedVersionHistoryItem;
+            }
+            set
+            {
+                if(value != _selectedVersionHistoryItem)
+                {
+                    _selectedVersionHistoryItem = value;
+                    _VMTViewModel.CurrentFocusVersionCommitVM = value as VersionHistoryItemViewModel;
+                    InvalidateOwn();
+                }
+            }
+        }
 
         [Bindable(true)]
         public Visibility VersionHistoryListTipVisibility
@@ -192,6 +214,7 @@ namespace honeyboard_release_service.view_models.project_manager
             _branchsSource = new CyberTreeViewObservableCollection<ICyberTreeViewItemContext>();
             GestureCommandVM = new PM_GestureCommandVM(this);
             ButtonCommandVM = new PM_ButtonCommandVM(this);
+            _VMTViewModel = ViewModelManager.Current.VMTViewModel;
             VersionHistoryItemContexts.CollectionChanged += (s, e) =>
             {
                 Invalidate("IsVirtualizingVersionHistoryList");

@@ -34,9 +34,6 @@ namespace honeyboard_release_service.view_models.project_manager.items
         private BaseAsyncTask? _loadingTaskCache;
 
         [Bindable(true)]
-        public CommandExecuterModel ForcusVersionHistoryItemCommand { get; set; }
-
-        [Bindable(true)]
         public CommandExecuterModel ShowCommitDataGridCommand { get; set; }
 
         [Bindable(true)]
@@ -195,18 +192,6 @@ namespace honeyboard_release_service.view_models.project_manager.items
                     return PublisherKeyActionListener.Current
                         .OnKey(PublisherDefinition.PUBLISHER_PLUGIN_TAG,
                         PublisherKeyFeatureTag.KEY_TAG_PRT_VM_SHOW_COMMIT_DATA_GRID_FEATURE, paramaters) as ICommandExecuter;
-                }
-                return null;
-            });
-
-            ForcusVersionHistoryItemCommand = new CommandExecuterModel((paramaters) =>
-            {
-                if (paramaters != null)
-                {
-                    return PublisherKeyActionListener.Current
-                           .OnKey(PublisherDefinition.PUBLISHER_PLUGIN_TAG, 
-                           PublisherKeyFeatureTag.KEY_TAG_PRT_SELECTED_VERSION_FEATURE
-                                        , paramaters) as ICommandExecuter;
                 }
                 return null;
             });
