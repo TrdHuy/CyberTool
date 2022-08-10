@@ -41,9 +41,9 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.notebook
                 var notebookItemContextsMap = viewModelManager.CNViewModel.NotebookItemContextsMap;
                 var importedProjectMap = releasingProjectManager.ImportedProjects;
 
-                if (selectedProjectItem == releasingProjectManager.CurrentProjectVO)
+                if (selectedProjectItem == releasingProjectManager.CurrentImportedProjectVO)
                 {
-                    viewModelManager.PMViewModel.ProjectPath = "";
+                    releasingProjectManager.SetCurrentImportedProject(null);
                     releasingProjectManager.VersionHistoryItemContexts.Clear();
                     viewModelManager.PMViewModel.RefreshViewModel();
                 }

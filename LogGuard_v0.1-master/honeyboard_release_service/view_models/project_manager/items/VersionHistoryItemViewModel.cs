@@ -5,6 +5,7 @@ using cyber_base.view_model;
 using honeyboard_release_service.@base.view_model;
 using honeyboard_release_service.definitions;
 using honeyboard_release_service.implement.async_task_execute_helper;
+using honeyboard_release_service.implement.project_manager;
 using honeyboard_release_service.implement.ui_event_handler;
 using honeyboard_release_service.implement.ui_event_handler.async_tasks.git_tasks;
 using honeyboard_release_service.implement.view_model;
@@ -211,59 +212,33 @@ namespace honeyboard_release_service.view_models.project_manager.items
             {
                 _versionVO.Properties = new VersionPropertiesVO();
 
-                BaseAsyncTask getVersionPropFromCommit = new GetReleasedCommitVersionPropertiesTask(
-                new string[] { ViewModelManager.Current.PMViewModel.ProjectPath
-                    ,ViewModelManager.Current.PMViewModel.VersionPropertiesPath
-                    , _versionVO.CommitId}
+                BaseAsyncTask getVersionPropFromCommit = new GetVersionPropertiesFromCommitIDTask(
+                new string[] {
+                    ViewModelManager.Current.PMViewModel.ProjectPath
+                    , ViewModelManager.Current.PMViewModel.VersionPropertiesFileName
+                    , _versionVO.CommitId
+                }
                 , callback: (result) =>
                 {
                     if (result.MesResult != MessageAsyncTaskResult.Aborted)
                     {
-                        if (_versionVO.Properties.Major != "")
+                        var fileContent = result.Result?.ToString();
+                        if (!string.IsNullOrEmpty(fileContent))
                         {
-                            _version = _versionVO.Properties.Major;
-                            if (_versionVO.Properties.Minor != "")
+                            _versionVO.Properties = ReleasingProjectManager
+                               .Current
+                               .VAParsingManager
+                               .GetVersionPropertiesFromVersionFileContent(fileContent);
+                            if (_versionVO.Properties.Major != "")
                             {
-                                _version += "." + _versionVO.Properties.Minor;
+                                var versionToString = _versionVO.Properties.ToString();
+                                _isVersionTitleLoaded = true;
+                                IsLoadingVersionTitle = false;
+                                _versionVO.Version = versionToString;
+                                Version = versionToString;
                             }
-                            if (_versionVO.Properties.Patch != "")
-                            {
-                                _version += "." + _versionVO.Properties.Patch;
-                            }
-                            if (_versionVO.Properties.Revision != "")
-                            {
-                                _version += "." + _versionVO.Properties.Revision;
-                            }
-
-                            _versionVO.Version = _version;
-                            Invalidate("Version");
                         }
-                        _isVersionTitleLoaded = true;
-                        IsLoadingVersionTitle = false;
-                    }
 
-                }
-                , versionPropertiesFoundCallback: (property, value, task) =>
-                {
-                    if (property.ToString()
-                        == VersionPropertiesVO.VERSION_MAJOR_PROPERTY_NAME)
-                    {
-                        _versionVO.Properties.Major = value.ToString() ?? "";
-                    }
-                    else if (property.ToString()
-                        == VersionPropertiesVO.VERSION_MINOR_PROPERTY_NAME)
-                    {
-                        _versionVO.Properties.Minor = value.ToString() ?? "";
-                    }
-                    else if (property.ToString()
-                        == VersionPropertiesVO.VERSION_PATCH_PROPERTY_NAME)
-                    {
-                        _versionVO.Properties.Patch = value.ToString() ?? "";
-                    }
-                    else if (property.ToString()
-                        == VersionPropertiesVO.VERSION_REVISION_PROPERTY_NAME)
-                    {
-                        _versionVO.Properties.Revision = value.ToString() ?? "";
                     }
                 });
 
@@ -294,7 +269,6 @@ namespace honeyboard_release_service.view_models.project_manager.items
                 IsLoadingVersionTitle = false;
                 Version = _versionVO.Version;
             }
-
         }
     }
 }

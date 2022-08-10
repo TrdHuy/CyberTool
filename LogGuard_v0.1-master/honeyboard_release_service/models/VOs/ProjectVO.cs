@@ -15,6 +15,7 @@ namespace honeyboard_release_service.models.VOs
         public string PackageName { get; set; } = "";
         public string Path { get; set; } = "";
         public string VersionFilePath { get; set; } = "";
+        public string VersionAttrSyntax { get; set; } = "";
 
         public BranchVO? OnBranch { get; set; }
         public Dictionary<string, BranchVO> Branchs { get; set; }

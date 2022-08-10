@@ -63,6 +63,8 @@
 					 x:Key="Background_Level1" />
 	<SolidColorBrush Color="#1e2024"
 					 x:Key="Background_Level2" />
+	<SolidColorBrush Color="#232529"
+					 x:Key="Background_Level2_1" />
 	<SolidColorBrush Color="#26292e"
 					 x:Key="Background_Level3" />
 	<SolidColorBrush Color="#FF262930"

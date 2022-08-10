@@ -36,7 +36,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.merge_ta
 
             if (ReleasingProjectManager
                     .Current
-                    .CurrentProjectVO == null)
+                    .CurrentImportedProjectVO == null)
             {
                 HoneyboardReleaseService.Current
                     .ServiceManager?
@@ -78,7 +78,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.merge_ta
                     .GetBranchOfCurrentProjectFromPath(mTViewModel.SelectedInceptionBranch);
             var destinationBranchVO = ReleasingProjectManager
                     .Current
-                    .CurrentProjectVO.OnBranch;
+                    .CurrentImportedProjectVO.OnBranch;
 
             if (destinationBranchVO == null)
             {

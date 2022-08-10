@@ -31,10 +31,6 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
                 @"huy.td1_email:(?<email>\S+\@samsung.com)");
         private static readonly Regex _subjectLogRegex = new Regex(@"(?<subjectid>\[\S+\])(?<title>.+)");
 
-        private static readonly Regex _majorRegex = new Regex(@"\s*(?<property>" + VersionPropertiesVO.VERSION_MAJOR_PROPERTY_NAME + @")=(?<value>\d+)");
-        private static readonly Regex _minorRegex = new Regex(@"\s*(?<property>" + VersionPropertiesVO.VERSION_MINOR_PROPERTY_NAME + @")=(?<value>\d+)");
-        private static readonly Regex _patchRegex = new Regex(@"\s*(?<property>" + VersionPropertiesVO.VERSION_PATCH_PROPERTY_NAME + @")=(?<value>\d+)");
-        private static readonly Regex _revisionRegex = new Regex(@"\s*(?<property>" + VersionPropertiesVO.VERSION_REVISION_PROPERTY_NAME + @")=(?<value>\d+)");
         private Action<object, GetVersionHistoryTask>? _versionPropertiesFoundCallback;
         
         public GetVersionHistoryTask(object param
@@ -151,7 +147,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.async_tasks.git_
             {
                 case string[] data:
                     return !string.IsNullOrEmpty(data[1])
-                   && File.Exists(data[0] + "\\" + data[1]);
+                   && File.Exists(data[1]);
                 default:
                     return false;
             }

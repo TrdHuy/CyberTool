@@ -121,6 +121,13 @@ namespace cyber_tool.app_resources.controls.cyber_window
         /// </summary>
         private const int WM_GETMINMAXINFO = 0x0024;
 
+        /// <summary>
+        /// Nonclient area double left click event
+        /// Message detail:
+        /// https://docs.microsoft.com/vi-vn/windows/win32/inputdev/wm-nclbuttondown
+        /// </summary>
+        private const int WM_NCLBUTTONDBLCLK = 0x00A3;
+        
         private System.IntPtr WindowProc(
               System.IntPtr hwnd,
               int msg,
@@ -132,6 +139,17 @@ namespace cyber_tool.app_resources.controls.cyber_window
             {
                 case WM_GETMINMAXINFO:
                     WmGetMinMaxInfo(hwnd, lParam);
+                    handled = true;
+                    break;
+                case WM_NCLBUTTONDBLCLK:
+                    if(WindowState == WindowState.Normal)
+                    {
+                        WindowState = WindowState.Maximized;
+                    }
+                    else if (WindowState == WindowState.Maximized)
+                    {
+                        WindowState = WindowState.Normal;
+                    }
                     handled = true;
                     break;
             }

@@ -6,6 +6,7 @@ using cyber_tool.windows.cyber_iface.views;
 using cyber_tool.windows.cyber_imes.views;
 using cyber_tool.windows.cyber_ipop.views;
 using cyber_tool.windows.cyber_istand.views;
+using cyber_tool.windows.cyber_itext.views;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -284,6 +285,16 @@ namespace cyber_tool.windows
                 }
             }
             return "";
+        }
+
+        public string OpenEditTextDialogWindow(string oldText, bool isMultiLine)
+        {
+            var editTextWindow = new CyberITextWindow(oldText, isMultiLine);
+            editTextWindow.Title = "Edit box";
+            editTextWindow.Owner = _IFaceWindow;
+            editTextWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            var newText = editTextWindow.ShowDialog();
+            return newText;
         }
 
         private void StartDispandCCAnim(ContentControl cc

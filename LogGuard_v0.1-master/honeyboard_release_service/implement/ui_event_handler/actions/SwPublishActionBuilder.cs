@@ -44,6 +44,12 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions
                 case PublisherKeyFeatureTag.KEY_TAG_PRT_VM_SHOW_COMMIT_DATA_GRID_FEATURE:
                     commandExecuter = new PRT_VM_ShowCommitDataGridAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, logger);
                     break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_NB_RENAME_PROJECT_ITEM_FEATURE:
+                    commandExecuter = new PRT_NB_RenameProjectItemContextMenuAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, logger);
+                    break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_NB_IMPORT_PROJECT_ITEM_FEATURE:
+                    commandExecuter = new PRT_NB_ImportProjectItemContextMenuAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, logger);
+                    break;
                 default:
                     break;
             }

@@ -2,8 +2,8 @@
 using cyber_base.implement.async_task;
 using cyber_base.utils;
 using cyber_base.view_model;
+using honeyboard_release_service.implement.project_manager;
 using honeyboard_release_service.implement.ui_event_handler.async_tasks.git_tasks;
-using honeyboard_release_service.implement.ui_event_handler.async_tasks.io_tasks;
 using honeyboard_release_service.implement.view_model;
 using System;
 using System.Collections.Generic;
@@ -31,7 +31,7 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
             var versionPropertiesFileName = ViewModelManager
                 .Current
                 .PMViewModel
-                .VersionPropertiesPath;
+                .VersionPropertiesFileName;
 
             if (string.IsNullOrEmpty(versionPropertiesFileName)
                 || string.IsNullOrEmpty(projectPath))
@@ -50,37 +50,49 @@ namespace honeyboard_release_service.implement.ui_event_handler.actions.release_
                    RTViewModel.CommitTitle = res.Subject;
                    RTViewModel.TaskID = res.TaskId;
                });
-            BaseAsyncTask parseVersionPropFromFile = new ParseVersionPropertiesFromFile(pathsParam
-               , (result) =>
-               {
-                   var dict = result.Result as Dictionary<string, string>;
-                   if (dict == null) return;
 
-                   if (dict.ContainsKey("major"))
-                   {
-                       RTViewModel.Major = dict["major"];
-                   }
+            CancelableAsyncTask parseVersionPropFromFileTask = new CancelableAsyncTask(
+                mainFunc: async (cts, res) =>
+                {
+                    await Task.Delay(1);
 
-                   if (dict.ContainsKey("minor"))
-                   {
-                       RTViewModel.Minor = dict["minor"];
-                   }
+                    var versionPropertiesVO = ReleasingProjectManager
+                                                .Current
+                                                .VAParsingManager
+                                                .GetVersionPropertiesFromVersionFileContent();
 
-                   if (dict.ContainsKey("patch"))
-                   {
-                       RTViewModel.Patch = dict["patch"];
-                   }
+                    if (versionPropertiesVO == null) return res;
 
-                   if (dict.ContainsKey("revision"))
-                   {
-                       RTViewModel.Revision = dict["revision"];
-                   }
-               });
+                    if (!string.IsNullOrEmpty(versionPropertiesVO.Major))
+                    {
+                        RTViewModel.Major = versionPropertiesVO.Major;
+                    }
 
+                    if (!string.IsNullOrEmpty(versionPropertiesVO.Minor))
+                    {
+                        RTViewModel.Minor = versionPropertiesVO.Minor;
+                    }
+
+                    if (!string.IsNullOrEmpty(versionPropertiesVO.Patch))
+                    {
+                        RTViewModel.Patch = versionPropertiesVO.Patch;
+                    }
+
+                    if (!string.IsNullOrEmpty(versionPropertiesVO.Revision))
+                    {
+                        RTViewModel.Revision = versionPropertiesVO.Revision;
+                    }
+
+                    return res;
+                }
+                , cancellationTokenSource: new CancellationTokenSource()
+                , estimatedTime: 2000
+                , delayTime: 0
+                , name: "Parse version properties from file");
 
             List<BaseAsyncTask> tasks = new List<BaseAsyncTask>();
             tasks.Add(getLatestReleaseCommitTask);
-            tasks.Add(parseVersionPropFromFile);
+            tasks.Add(parseVersionPropFromFileTask);
 
             MultiAsyncTask multiTask = new MultiAsyncTask(tasks
                 , new CancellationTokenSource()
