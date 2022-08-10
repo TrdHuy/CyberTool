@@ -28,7 +28,6 @@ namespace honeyboard_release_service.view_models.project_manager.items
         private string _hour = "10:20:30";
         private string _dayOfWeek = "MON";
         private string _dayOfMonth = "23";
-        private string _date = "2/8/2022";
         private VersionUpCommitVO _versionVO;
         private bool _isVersionTitleLoaded = false;
         private bool _isLoadingVersionTitle;
@@ -114,20 +113,6 @@ namespace honeyboard_release_service.view_models.project_manager.items
         }
 
         [Bindable(true)]
-        public string Date
-        {
-            get
-            {
-                return _date;
-            }
-            set 
-            { 
-                _date = value;
-                InvalidateOwn();
-            }
-        }
-
-        [Bindable(true)]
         public string Version
         {
             get
@@ -182,7 +167,6 @@ namespace honeyboard_release_service.view_models.project_manager.items
             _dayOfMonth = vo.ReleaseDateTime.ToString("dd");
             _dayOfWeek = vo.ReleaseDateTime.ToString("ddd").ToUpper();
             _hour = vo.ReleaseDateTime.ToString("hh:mm tt");
-            _date = vo.ReleaseDateTime.ToString("dd-MM-yyyy");
             _version = vo.CommitTitle;
             _email = vo.AuthorEmail;
             _versionVO = vo;

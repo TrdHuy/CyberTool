@@ -1,5 +1,6 @@
 ﻿using cyber_base.view_model;
 using honeyboard_release_service.implement.project_manager;
+using honeyboard_release_service.models.VOs;
 using honeyboard_release_service.utils;
 using honeyboard_release_service.view_models.project_manager.items;
 using System;
@@ -38,18 +39,20 @@ namespace honeyboard_release_service.view_models.tab_items
             set
             {
                 _currentFocusVersionCommitVM = value;
-                if (_currentFocusVersionCommitVM?.VersionCommitVO.Properties == ReleasingProjectManager.Current.LatestCommitVO?.Properties)
-                {
-                    CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_1;
-                }
-                else if (_currentFocusVersionCommitVM != null)
-                {
-                    CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_2;
-                }
-                else
+                
+                if(_currentFocusVersionCommitVM == null)
                 {
                     CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_3;
                 }
+                else if (_currentFocusVersionCommitVM?.VersionCommitVO.Properties == ReleasingProjectManager.Current.LatestCommitVO?.Properties)
+                {
+                    CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_1;
+                }
+                else 
+                {
+                    CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_2;
+                }
+                Invalidate("CurrentFocusCommitReleaseDate");
                 InvalidateOwn();
             }
         }
@@ -66,6 +69,16 @@ namespace honeyboard_release_service.view_models.tab_items
                 _currentFocusVersionTitle = value;
                 InvalidateOwn();
             }
+        }
+
+        [Bindable(true)]
+        public string CurrentFocusCommitReleaseDate
+        {
+            get
+            {
+                return CurrentFocusVersionCommitVM?.VersionCommitVO.ReleaseDateTime.ToString("dd-MM-yyyy") ?? "NA";
+            }
+
         }
 
         [Bindable(true)]
@@ -93,8 +106,8 @@ namespace honeyboard_release_service.view_models.tab_items
                 Invalidate("IsVirtualizingVersionHistoryList");
             };
 
-            CurrentFocusVersionCommitVM = ReleasingProjectManager.Current.LatestCommitVM;
             ReleasingProjectManager.Current.LatestVersionUpCommitChanged += CurrentLatestVersionCommitChanged;
+            ReleasingProjectManager.Current.CurrentProjectChanged += CurrentProjectChanged;
         }
 
         private void CurrentLatestVersionCommitChanged(object sender)
@@ -103,10 +116,21 @@ namespace honeyboard_release_service.view_models.tab_items
             Invalidate("CurrentFocusProjectBranch");
         }
 
+        private void CurrentProjectChanged(object sender, ProjectVO? oldProject, ProjectVO? newProject)
+        {
+            // cur_project is deleted 
+            if (ReleasingProjectManager.Current.CurrentProjectVO == null)
+            {
+                CurrentFocusVersionCommitVM = null;
+                Invalidate("CurrentFocusProjectBranch");
+            }
+        }
+
         public override void OnDestroy()
         {
             base.OnDestroy();
             ReleasingProjectManager.Current.LatestVersionUpCommitChanged -= CurrentLatestVersionCommitChanged;
+            ReleasingProjectManager.Current.CurrentProjectChanged -= CurrentProjectChanged;
         }
     }
 }

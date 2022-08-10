@@ -87,7 +87,7 @@
 						 Grid.Column="1">
 					<TextBlock Width="270">
 					<Run Text="Release date  :" />
-					<Run Text="{Binding CurrentFocusVersionCommitVM.Date, FallbackValue=NA, Mode=OneWay}" />
+					<Run Text="{Binding CurrentFocusCommitReleaseDate, FallbackValue=NA, Mode=OneWay}" />
 					</TextBlock>
 				</Viewbox>
 			</Grid>
