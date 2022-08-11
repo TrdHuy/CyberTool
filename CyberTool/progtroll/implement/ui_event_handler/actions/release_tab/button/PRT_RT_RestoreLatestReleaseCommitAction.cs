@@ -63,22 +63,22 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
 
                     if (versionPropertiesVO == null) return res;
 
-                    if (!string.IsNullOrEmpty(versionPropertiesVO.Major))
+                    if (versionPropertiesVO.Major != null)
                     {
                         RTViewModel.Major = versionPropertiesVO.Major;
                     }
 
-                    if (!string.IsNullOrEmpty(versionPropertiesVO.Minor))
+                    if (versionPropertiesVO.Minor != null)
                     {
                         RTViewModel.Minor = versionPropertiesVO.Minor;
                     }
 
-                    if (!string.IsNullOrEmpty(versionPropertiesVO.Patch))
+                    if (versionPropertiesVO.Patch != null)
                     {
                         RTViewModel.Patch = versionPropertiesVO.Patch;
                     }
 
-                    if (!string.IsNullOrEmpty(versionPropertiesVO.Revision))
+                    if (versionPropertiesVO.Revision != null)
                     {
                         RTViewModel.Revision = versionPropertiesVO.Revision;
                     }
