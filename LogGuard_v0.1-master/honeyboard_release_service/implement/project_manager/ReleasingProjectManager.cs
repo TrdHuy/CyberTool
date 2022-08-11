@@ -26,6 +26,7 @@ namespace honeyboard_release_service.implement.project_manager
         private CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? _currentProjectBranchContextSource;
         private FirstLastObservableCollection<VersionHistoryItemViewModel> _versionHistoryItemContexts;
         private VersionAttributeParsingManager _versionAttrParsingManager;
+        private VersionHistoryItemViewModel? _currentForcusVersionCommitVM;
 
         private event UserDataImportedHandler? _userDataImported;
         private event ImportedProjectsCollectionChangedHandler? _importedProjectsCollectionChanged;
@@ -36,6 +37,7 @@ namespace honeyboard_release_service.implement.project_manager
         private event VersionTimelineUpdatedHandler? _versionTimelineUpdated;
         private event VersionPropertiesFoundHandler? _versionPropertiesFound;
         private event CurrentProjectVersionFilePathChangedHandler? _currentProjectVersionFilePathChanged;
+        private event CurrentFocusVersionCommitChangedHandler? _currentFocusVersionCommitChanged;
 
         public static ReleasingProjectManager Current
         {
@@ -120,6 +122,18 @@ namespace honeyboard_release_service.implement.project_manager
             }
         }
 
+        public event CurrentFocusVersionCommitChangedHandler CurrentFocusVersionCommitChanged
+        {
+            add
+            {
+                _currentFocusVersionCommitChanged += value;
+            }
+            remove
+            {
+                _currentFocusVersionCommitChanged -= value;
+            }
+        }
+
         public event CurrentProjectChangedHandler CurrentProjectChanged
         {
             add
@@ -183,6 +197,22 @@ namespace honeyboard_release_service.implement.project_manager
             private set
             {
                 _importedProjects = value;
+            }
+        }
+
+        public VersionHistoryItemViewModel? CurrentFocusVersionCommitVM
+        {
+            get
+            {
+                return _currentForcusVersionCommitVM;
+            }
+            set
+            {
+                if (_currentForcusVersionCommitVM != value)
+                {
+                    _currentForcusVersionCommitVM = value;
+                    _currentFocusVersionCommitChanged?.Invoke(this);
+                }
             }
         }
 
@@ -622,6 +652,7 @@ namespace honeyboard_release_service.implement.project_manager
         }
     }
 
+    internal delegate void CurrentFocusVersionCommitChangedHandler(object sender);
     internal delegate void UserDataImportedHandler(object sender);
     internal delegate void PreUpdateVersionTimelineBackgroundHandler(object sender, ReleasingProjectEventArg arg);
     internal delegate void VersionTimelineUpdatedHandler(object sender, ReleasingProjectEventArg arg);

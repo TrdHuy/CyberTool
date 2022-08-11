@@ -5,10 +5,12 @@ using cyber_base.implement.view_models.cyber_treeview;
 using cyber_base.implement.views.cyber_treeview;
 using cyber_base.view_model;
 using honeyboard_release_service.implement.project_manager;
+using honeyboard_release_service.implement.view_model;
 using honeyboard_release_service.models.VOs;
 using honeyboard_release_service.utils;
 using honeyboard_release_service.view_models.command.project_manager;
 using honeyboard_release_service.view_models.project_manager.items;
+using honeyboard_release_service.view_models.tab_items;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,7 +32,20 @@ namespace honeyboard_release_service.view_models.project_manager
         private ReleasingProjectManager _RPM_Instance = ReleasingProjectManager.Current;
         private string _versionFileName = "";
         private Func<bool> _isShouldOpenVersionAttrFileChooserWindow;
-
+        
+        [Bindable(true)]
+        public object? SelectedVersionHistoryItem
+        {
+            get
+            {
+                return _RPM_Instance.CurrentFocusVersionCommitVM;
+            }
+            set
+            {
+                _RPM_Instance.CurrentFocusVersionCommitVM = value as VersionHistoryItemViewModel;
+            }
+        }
+       
         [Bindable(true)]
         public Visibility VersionHistoryListTipVisibility
         {

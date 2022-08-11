@@ -58,7 +58,7 @@
 				<Viewbox Grid.ColumnSpan="2"
 						 HorizontalAlignment="Left"
 						 VerticalAlignment="Bottom">
-					<TextBlock Text="Latest Version"
+                    <TextBlock Text="{Binding CurrentFocusVersionTitle, FallbackValue=NA, Mode=OneWay}"
 							   FontWeight="Bold"
 							   Width="135" />
 				</Viewbox>
@@ -204,30 +204,30 @@
 									<ControlTemplate TargetType="vhl:VersionHistoryListViewItem">
 										<Grid x:Name="MainGrid"
 											  Width="{Binding RelativeSource={RelativeSource AncestorType=ItemsPresenter, Mode=FindAncestor}, Path=ActualWidth}">
-											<Grid.ContextMenu>
-												<ContextMenu>
-													<MenuItem Header="Sync version"
+                                            <Grid.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Sync version"
 															  CommandParameter="{Binding .}"
 															  Command="{Binding SyncVersionCommand}">
-														<MenuItem.Icon>
-															<Path Width="12"
+                                                        <MenuItem.Icon>
+                                                            <Path Width="12"
 																  Height="12"
 																  Fill="{StaticResource Background_Level2}"
 																  Data="{Binding Source={StaticResource RT_SyncVersionIconPathGeomerty}}"
 																  Stretch="Uniform" />
-														</MenuItem.Icon>
-													</MenuItem>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
 
-												</ContextMenu>
-											</Grid.ContextMenu>
+                                                </ContextMenu>
+                                            </Grid.ContextMenu>
 
-											<Grid.InputBindings>
-												<MouseBinding Gesture="LeftDoubleClick"
+                                            <Grid.InputBindings>
+                                                <MouseBinding Gesture="LeftDoubleClick"
 															  CommandParameter="{Binding .}"
 															  Command="{Binding ShowCommitDataGridCommand}" />
-											</Grid.InputBindings>
-											
-											<Grid.ColumnDefinitions>
+                                            </Grid.InputBindings>
+
+                                            <Grid.ColumnDefinitions>
 												<ColumnDefinition Width="0.4*" />
 												<ColumnDefinition Width="10" />
 												<ColumnDefinition Width="3*" />

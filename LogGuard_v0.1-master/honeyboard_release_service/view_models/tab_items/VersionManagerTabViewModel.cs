@@ -39,18 +39,20 @@ namespace honeyboard_release_service.view_models.tab_items
             set
             {
                 _currentFocusVersionCommitVM = value;
-                if (_currentFocusVersionCommitVM?.VersionCommitVO.Properties == ReleasingProjectManager.Current.LatestCommitVO?.Properties)
-                {
-                    CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_1;
-                }
-                else if (_currentFocusVersionCommitVM != null)
-                {
-                    CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_2;
-                }
-                else
+                
+                if(_currentFocusVersionCommitVM == null)
                 {
                     CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_3;
                 }
+                else if (_currentFocusVersionCommitVM?.VersionCommitVO.CommitId == ReleasingProjectManager.Current.LatestCommitVO?.CommitId)
+                {
+                    CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_1;
+                }
+                else 
+                {
+                    CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_2;
+                }
+                Invalidate("CurrentFocusCommitReleaseDate");
                 InvalidateOwn();
             }
         }
@@ -67,6 +69,16 @@ namespace honeyboard_release_service.view_models.tab_items
                 _currentFocusVersionTitle = value;
                 InvalidateOwn();
             }
+        }
+
+        [Bindable(true)]
+        public string CurrentFocusCommitReleaseDate
+        {
+            get
+            {
+                return CurrentFocusVersionCommitVM?.VersionCommitVO.ReleaseDateTime.ToString("dd-MM-yyyy") ?? "NA";
+            }
+
         }
 
         [Bindable(true)]
@@ -87,16 +99,6 @@ namespace honeyboard_release_service.view_models.tab_items
             }
         }
 
-        [Bindable(true)]
-        public string CurrentFocusCommitReleaseDate
-        {
-            get
-            {
-                return CurrentFocusVersionCommitVM?.VersionCommitVO.ReleaseDateTime.ToString("dd-MM-yyyy") ?? "NA";
-            }
-
-        }
-
         public VersionManagerTabViewModel(BaseViewModel parents) : base(parents)
         {
             VersionHistoryItemContexts.CollectionChanged += (s, e) =>
@@ -104,27 +106,38 @@ namespace honeyboard_release_service.view_models.tab_items
                 Invalidate("IsVirtualizingVersionHistoryList");
             };
 
-            CurrentFocusVersionCommitVM = ReleasingProjectManager.Current.LatestCommitVM;
-            ReleasingProjectManager.Current.CurrentProjectChanged += CurrentFocusProjectChanged;
             ReleasingProjectManager.Current.LatestVersionUpCommitChanged += CurrentLatestVersionCommitChanged;
+            ReleasingProjectManager.Current.CurrentProjectChanged += CurrentProjectChanged;
+            ReleasingProjectManager.Current.CurrentFocusVersionCommitChanged += CurrentFocusVersionCommitChanged;
         }
 
         private void CurrentLatestVersionCommitChanged(object sender)
         {
             CurrentFocusVersionCommitVM = ReleasingProjectManager.Current.LatestCommitVM;
-            Invalidate("CurrentFocusCommitReleaseDate");
+            Invalidate("CurrentFocusProjectBranch");
         }
 
-        private void CurrentFocusProjectChanged(object sender, ProjectVO? oldProject, ProjectVO? newProject)
+        private void CurrentProjectChanged(object sender, ProjectVO? oldProject, ProjectVO? newProject)
         {
-            Invalidate("CurrentFocusProjectBranch");
+            // cur_project is deleted 
+            if (ReleasingProjectManager.Current.CurrentImportedProjectVO == null)
+            {
+                CurrentFocusVersionCommitVM = null;
+                Invalidate("CurrentFocusProjectBranch");
+            }
+        }
+
+        private void CurrentFocusVersionCommitChanged(object sender)
+        {
+            CurrentFocusVersionCommitVM = ReleasingProjectManager.Current.CurrentFocusVersionCommitVM;
         }
 
         public override void OnDestroy()
         {
             base.OnDestroy();
-            ReleasingProjectManager.Current.CurrentProjectChanged -= CurrentFocusProjectChanged;
             ReleasingProjectManager.Current.LatestVersionUpCommitChanged -= CurrentLatestVersionCommitChanged;
+            ReleasingProjectManager.Current.CurrentProjectChanged -= CurrentProjectChanged;
+            ReleasingProjectManager.Current.CurrentFocusVersionCommitChanged -= CurrentFocusVersionCommitChanged;
         }
     }
 }
