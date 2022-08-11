@@ -120,7 +120,7 @@ namespace honeyboard_release_service.view_models.tab_items
         private void CurrentProjectChanged(object sender, ProjectVO? oldProject, ProjectVO? newProject)
         {
             // cur_project is deleted 
-            if (ReleasingProjectManager.Current.CurrentProjectVO == null)
+            if (ReleasingProjectManager.Current.CurrentImportedProjectVO == null)
             {
                 CurrentFocusVersionCommitVM = null;
                 Invalidate("CurrentFocusProjectBranch");

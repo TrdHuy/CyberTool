@@ -30,8 +30,6 @@ namespace honeyboard_release_service.view_models.project_manager
         private Visibility _versionHistoryListTipVisibility = Visibility.Visible;
         private CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? _branchsSource;
         private ReleasingProjectManager _RPM_Instance = ReleasingProjectManager.Current;
-        private VersionManagerTabViewModel _VMTViewModel;
-        private object? _selectedVersionHistoryItem;
         private string _versionFileName = "";
         private Func<bool> _isShouldOpenVersionAttrFileChooserWindow;
         
@@ -44,12 +42,7 @@ namespace honeyboard_release_service.view_models.project_manager
             }
             set
             {
-                if(value != _selectedVersionHistoryItem)
-                {
-                    _selectedVersionHistoryItem = value;
-                    _VMTViewModel.CurrentFocusVersionCommitVM = value as VersionHistoryItemViewModel;
-                    InvalidateOwn();
-                }
+                _RPM_Instance.CurrentFocusVersionCommitVM = value as VersionHistoryItemViewModel;
             }
         }
        

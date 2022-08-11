@@ -26,6 +26,7 @@ namespace honeyboard_release_service.implement.project_manager
         private CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? _currentProjectBranchContextSource;
         private FirstLastObservableCollection<VersionHistoryItemViewModel> _versionHistoryItemContexts;
         private VersionAttributeParsingManager _versionAttrParsingManager;
+        private VersionHistoryItemViewModel? _currentForcusVersionCommitVM;
 
         private event UserDataImportedHandler? _userDataImported;
         private event ImportedProjectsCollectionChangedHandler? _importedProjectsCollectionChanged;
@@ -36,6 +37,7 @@ namespace honeyboard_release_service.implement.project_manager
         private event VersionTimelineUpdatedHandler? _versionTimelineUpdated;
         private event VersionPropertiesFoundHandler? _versionPropertiesFound;
         private event CurrentProjectVersionFilePathChangedHandler? _currentProjectVersionFilePathChanged;
+        private event CurrentFocusVersionCommitChangedHandler? _currentFocusVersionCommitChanged;
 
         public static ReleasingProjectManager Current
         {
@@ -117,6 +119,18 @@ namespace honeyboard_release_service.implement.project_manager
             remove
             {
                 _currentProjectBranchContextSourceChanged -= value;
+            }
+        }
+
+        public event CurrentFocusVersionCommitChangedHandler CurrentFocusVersionCommitChanged
+        {
+            add
+            {
+                _currentFocusVersionCommitChanged += value;
+            }
+            remove
+            {
+                _currentFocusVersionCommitChanged -= value;
             }
         }
 
