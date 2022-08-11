@@ -5,10 +5,7 @@ using cyber_base.view_model;
 using progtroll.implement.project_manager;
 using progtroll.implement.ui_event_handler.async_tasks.git_tasks;
 using progtroll.implement.view_model;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -62,27 +59,12 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                                                 .GetVersionPropertiesFromVersionFileContent();
 
                     if (versionPropertiesVO == null) return res;
-
-                    if (versionPropertiesVO.Major != null)
-                    {
-                        RTViewModel.Major = versionPropertiesVO.Major;
-                    }
-
-                    if (versionPropertiesVO.Minor != null)
-                    {
-                        RTViewModel.Minor = versionPropertiesVO.Minor;
-                    }
-
-                    if (versionPropertiesVO.Patch != null)
-                    {
-                        RTViewModel.Patch = versionPropertiesVO.Patch;
-                    }
-
-                    if (versionPropertiesVO.Revision != null)
-                    {
-                        RTViewModel.Revision = versionPropertiesVO.Revision;
-                    }
-
+                    
+                    RTViewModel.Major = versionPropertiesVO.Major;
+                    RTViewModel.Minor = versionPropertiesVO.Minor;
+                    RTViewModel.Patch = versionPropertiesVO.Patch;
+                    RTViewModel.Revision = versionPropertiesVO.Revision;
+                    
                     return res;
                 }
                 , cancellationTokenSource: new CancellationTokenSource()

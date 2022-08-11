@@ -7,12 +7,8 @@ using progtroll.implement.ui_event_handler.async_tasks.git_tasks;
 using progtroll.implement.ui_event_handler.async_tasks.io_tasks;
 using progtroll.implement.view_model;
 using progtroll.view_models.project_manager;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace progtroll.implement.ui_event_handler.actions.release_tab.button
 {
@@ -167,6 +163,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                 }
                 , name: "Checking out branch: " + _branchPath
                 , estimatedTime: 2000);
+
             BaseAsyncTask resetTask = new CommonGitTask(folderPath: PMViewModel.ProjectPath
                , gitCmd: "git reset --hard " + _branchPath
                , callback: (result) =>
@@ -175,6 +172,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                }
                , name: "Reseting"
                , estimatedTime: 2000);
+
             BaseAsyncTask cleanTask = new CommonGitTask(folderPath: PMViewModel.ProjectPath
               , gitCmd: "git clean -f -fd"
               , callback: (result) =>
@@ -206,6 +204,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
               }
               , name: "Adding \"" + PMViewModel.VersionPropertiesFileName + "\" to commit"
               , estimatedTime: 2000);
+
             BaseAsyncTask commitTask = new CommonGitTask(folderPath: PMViewModel.ProjectPath
               , gitCmd: "git commit -m \"[" + RTViewModel.TaskID + "]" + RTViewModel.CommitTitle + "\""
               , callback: (result) =>
@@ -214,6 +213,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
               }
               , name: "Commiting \"" + RTViewModel.TaskID + "\""
               , estimatedTime: 5000);
+
             BaseAsyncTask pushTask = new CommonGitTask(folderPath: PMViewModel.ProjectPath
               , gitCmd: "git push --no-thin origin " + _branchPathForPushing
               , callback: (result) =>

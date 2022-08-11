@@ -1,14 +1,11 @@
 ﻿using cyber_base.async_task;
 using progtroll.implement.log_manager;
+using progtroll.implement.project_manager;
 using progtroll.models.VOs;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace progtroll.implement.ui_event_handler.async_tasks.io_tasks
 {
@@ -17,16 +14,6 @@ namespace progtroll.implement.ui_event_handler.async_tasks.io_tasks
         private string _folderPath = "";
         private string _versionFileName = "";
         private VersionPropertiesVO? _modifiedVersion;
-
-        //TODO : Sử dụng version parser manager thay cho bộ parser cũ 
-        private static readonly Regex _majorRegex
-            = new Regex(@"(?<front>\s*(?<property>major)=)(?<value>\d+)");
-        private static readonly Regex _minorRegex
-            = new Regex(@"(?<front>\s*(?<property>minor)=)(?<value>\d+)");
-        private static readonly Regex _patchRegex
-            = new Regex(@"(?<front>\s*(?<property>patch)=)(?<value>\d+)");
-        private static readonly Regex _revisionRegex
-            = new Regex(@"(?<front>\s*(?<property>revision)=)(?<value>\d+)");
 
         private Dictionary<string, string> _propertiesMap = new Dictionary<string, string>();
 
@@ -68,48 +55,19 @@ namespace progtroll.implement.ui_event_handler.async_tasks.io_tasks
         {
             LogManager.Current.AppendLogLine("Modifying version properties file", true);
 
-            if (File.Exists(_folderPath + "\\" + _versionFileName))
-            {
-                string[] lines = File.ReadAllLines(_folderPath + "\\" + _versionFileName);
+            if (_modifiedVersion == null) return;
 
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    if (_majorRegex.IsMatch(lines[i])
-                        && !string.IsNullOrEmpty(_modifiedVersion?.Major))
-                    {
-                        lines[i] = _majorRegex.Replace(lines[i], (m) =>
-                        {
-                            return m.Groups["front"] + _modifiedVersion.Major;
-                        });
-                    }
-                    else if (_minorRegex.IsMatch(lines[i])
-                        && !string.IsNullOrEmpty(_modifiedVersion?.Minor))
-                    {
-                        lines[i] = _minorRegex.Replace(lines[i], (m) =>
-                        {
-                            return m.Groups["front"] + _modifiedVersion.Minor;
-                        });
-                    }
-                    else if (_patchRegex.IsMatch(lines[i])
-                        && !string.IsNullOrEmpty(_modifiedVersion?.Patch))
-                    {
-                        lines[i] = _patchRegex.Replace(lines[i], (m) =>
-                        {
-                            return m.Groups["front"] + _modifiedVersion.Patch;
-                        });
-                    }
-                    else if (_revisionRegex.IsMatch(lines[i])
-                        && !string.IsNullOrEmpty(_modifiedVersion?.Revision))
-                    {
-                        lines[i] = _revisionRegex.Replace(lines[i], (m) =>
-                        {
-                            return m.Groups["front"] + _modifiedVersion.Revision;
-                        });
-                    }
-                }
-
-                File.WriteAllText(_folderPath + "\\" + _versionFileName, string.Join("\n", lines));
-            }
+            _propertiesMap.Add("major", _modifiedVersion.Major);
+            _propertiesMap.Add("minor", _modifiedVersion.Minor);
+            _propertiesMap.Add("patch", _modifiedVersion.Patch);
+            _propertiesMap.Add("revision", _modifiedVersion.Revision);
+            
+            var content = ReleasingProjectManager
+                                .Current
+                                .VAParsingManager
+                                .ModifyVersionAttributeOfOriginText(_propertiesMap);
+            
+            File.WriteAllText(_folderPath + "\\" + _versionFileName, content);
         }
 
         protected override bool IsTaskPossible(object param)
