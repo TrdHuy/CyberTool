@@ -1,0 +1,41 @@
+﻿<Application x:Class="cyber_core.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:cyber_core"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="debug-mode">
+    <Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<!--Base resource such as string, color,.. define here-->
+				<ResourceDictionary Source="app_resources/ResourceThemes.xaml" />
+				<ResourceDictionary Source="app_resources/MenuThemes.xaml" />
+
+				<!--Custom controller resource-->
+				<ResourceDictionary Source="app_resources/controls/cyber_window/CyberWindow.xaml" />
+				<ResourceDictionary Source="app_resources/controls/cyber_scroll/CyberScrollView.xaml" />
+				<ResourceDictionary Source="app_resources/controls/cyber_circle_progress/CircleProgress.xaml" />
+				<ResourceDictionary Source="app_resources/controls/cyber_treeview/CyberTreeViewItem.xaml" />
+				<ResourceDictionary Source="app_resources/controls/cyber_treeview/CyberTreeViewer.xaml" />
+				<ResourceDictionary Source="app_resources/controls/cyber_anim/LoadingAnimation.xaml" />
+
+				<!--Variable controller styles-->
+				<ResourceDictionary Source="app_resources/Themes.xaml" />
+
+				<!--Resource cho chế độ debug:
+				res này sử dụng để quá trình build file xaml trong lúc dev được hiển 
+				thị các style, template, res...
+				Chỉ add các resource của các project khác nằm ngoài phạm vi cyber_tool
+				-->
+				<ResourceDictionary Source="pack://application:,,,/log_guard;component/themes/Themes.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/progtroll;component/themes/Themes.xaml" />
+				<mc:AlternateContent>
+					<mc:Choice Requires="d">
+					</mc:Choice>
+				</mc:AlternateContent>
+
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+
+	</Application.Resources>
+</Application>
