@@ -17,7 +17,7 @@ namespace progtroll.definitions
         public const string PLM_CASE_CODE_REGEX = @"P([0-9]{6})-([0-9]{5})";
 
         public static readonly string PLUGIN_BASE_FOLDER_PATH = AppDomain.CurrentDomain.BaseDirectory
-            + "\\plugins\\publisher";
+            + "\\plugins\\progtroll";
     }
 
     internal class PublisherKeyFeatureTag
