@@ -49,22 +49,9 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                 return false;
             }
 
-            var branchPath = ReleasingProjectManager
-                                .Current
-                                .CurrentImportedProjectVO
-                                .OnBranch
-                                .IsRemote
-            ? ReleasingProjectManager
-                        .Current
-                        .CurrentImportedProjectVO
-                        .OnBranch
-                        .BranchPath
-
-            : "origin/" + ReleasingProjectManager
-                            .Current
-                            .CurrentImportedProjectVO
-                            .OnBranch
-                            .BranchPath;
+            var branchPath = ReleasingProjectManager.Current.CurrentImportedProjectVO.OnBranch.IsRemote
+                                ? ReleasingProjectManager.Current.CurrentImportedProjectVO.OnBranch.BranchPath
+                                : "origin/" + ReleasingProjectManager.Current.CurrentImportedProjectVO.OnBranch.BranchPath;
 
             _branchPathForPushing = "HEAD:" + branchPath.Substring(7);
 

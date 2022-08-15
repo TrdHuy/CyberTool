@@ -172,23 +172,9 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                 return false;
             }
 
-            _branchPath = ReleasingProjectManager
-                            .Current
-                            .CurrentImportedProjectVO
-                            .OnBranch
-                            .IsRemote
-
-            ? ReleasingProjectManager
-                .Current
-                .CurrentImportedProjectVO
-                .OnBranch
-                .BranchPath
-
-            : "origin/" + ReleasingProjectManager
-                            .Current
-                            .CurrentImportedProjectVO
-                            .OnBranch
-                            .BranchPath;
+            _branchPath = ReleasingProjectManager.Current.CurrentImportedProjectVO.OnBranch.IsRemote
+                                ? ReleasingProjectManager.Current.CurrentImportedProjectVO.OnBranch.BranchPath
+                                : "origin/" + ReleasingProjectManager.Current.CurrentImportedProjectVO.OnBranch.BranchPath;
 
             var confirm = HoneyboardReleaseService
                 .Current
@@ -242,8 +228,6 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
             CancelableAsyncTask modifyVersionTask = new CancelableAsyncTask(
                 mainFunc: async (cts, res) =>
                 {
-                    await Task.Delay(1);
-
                     var _propertiesMap = new Dictionary<string, string>();
 
                     if (RTViewModel.ModifiedVersionPropVO == null) return res;
@@ -258,7 +242,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                                 .VAParsingManager
                                 .ModifyVersionAttributeOfOriginText(_propertiesMap);
 
-                    File.WriteAllText(PMViewModel.ProjectPath + "\\" + PMViewModel.VersionPropertiesFileName, content);
+                    await File.WriteAllTextAsync(PMViewModel.ProjectPath + "\\" + PMViewModel.VersionPropertiesFileName, content);
 
                     return res;
                 }
