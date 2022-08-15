@@ -1,14 +1,18 @@
 ﻿using cyber_base.async_task;
+using cyber_base.definition;
 using cyber_base.implement.async_task;
 using cyber_base.utils;
+using cyber_base.view.window;
 using cyber_base.view_model;
+using progtroll.definitions;
 using progtroll.implement.project_manager;
 using progtroll.implement.ui_event_handler.async_tasks.git_tasks;
-using progtroll.implement.ui_event_handler.async_tasks.io_tasks;
 using progtroll.implement.view_model;
 using progtroll.view_models.project_manager;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace progtroll.implement.ui_event_handler.actions.release_tab.button
 {
@@ -16,7 +20,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
     {
         private ProjectManagerViewModel PMViewModel;
         private string _branchPath = "";
-        private string _branchPathForPushing = "";
+        private readonly string EMPTY_STRING = "";
 
         public PRT_RT_CreateReleaseCommitAction(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger)
             : base(actionID, builderID, viewModel, logger)
@@ -52,15 +56,6 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                     .ServiceManager?
                     .App
                     .ShowWaringBox("You must enter commit title");
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(RTViewModel.Major))
-            {
-                HoneyboardReleaseService.Current
-                    .ServiceManager?
-                    .App
-                    .ShowWaringBox("Major property can not be empty!");
                 return false;
             }
 
@@ -128,22 +123,84 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                 return false;
             }
 
+            var versionPropertiesVO = ReleasingProjectManager
+                                        .Current
+                                        .VAParsingManager
+                                        .GetVersionPropertiesFromVersionFileContent();
+
+            if ((versionPropertiesVO.Major == EMPTY_STRING && RTViewModel.Major != EMPTY_STRING)
+                || (versionPropertiesVO.Major != EMPTY_STRING && RTViewModel.Major == EMPTY_STRING))
+            {
+                HoneyboardReleaseService.Current
+                   .ServiceManager?
+                   .App
+                   .ShowWaringBox("Please re-check major of project!");
+
+                return false;
+            }
+
+            if ((versionPropertiesVO.Minor == EMPTY_STRING && RTViewModel.Minor != EMPTY_STRING)
+                || (versionPropertiesVO.Minor != EMPTY_STRING && RTViewModel.Minor == EMPTY_STRING))
+            {
+                HoneyboardReleaseService.Current
+                   .ServiceManager?
+                   .App
+                   .ShowWaringBox("Please re-check minor of project!");
+
+                return false;
+            }
+
+            if ((versionPropertiesVO.Patch == EMPTY_STRING && RTViewModel.Patch != EMPTY_STRING)
+                || (versionPropertiesVO.Patch != EMPTY_STRING && RTViewModel.Patch == EMPTY_STRING))
+            {
+                HoneyboardReleaseService.Current
+                   .ServiceManager?
+                   .App
+                   .ShowWaringBox("Please re-check path of project!");
+
+                return false;
+            }
+
+            if ((versionPropertiesVO.Revision == EMPTY_STRING && RTViewModel.Revision != EMPTY_STRING) 
+                || (versionPropertiesVO.Revision != EMPTY_STRING && RTViewModel.Revision == EMPTY_STRING))
+            {
+                HoneyboardReleaseService.Current
+                   .ServiceManager?
+                   .App
+                   .ShowWaringBox("Please re-check revision of project!");
+
+                return false;
+            }
+
             _branchPath = ReleasingProjectManager
                             .Current
                             .CurrentImportedProjectVO
                             .OnBranch
                             .IsRemote
-                ? ReleasingProjectManager
-                            .Current.CurrentImportedProjectVO.OnBranch.BranchPath
-                : "origin/" + ReleasingProjectManager
-                            .Current.CurrentImportedProjectVO.OnBranch.BranchPath;
-            _branchPathForPushing = "HEAD:refs/for/" + _branchPath.Substring(7);
-            return base.CanExecute(dataTransfer);
+
+            ? ReleasingProjectManager
+                .Current
+                .CurrentImportedProjectVO
+                .OnBranch
+                .BranchPath
+
+            : "origin/" + ReleasingProjectManager
+                            .Current
+                            .CurrentImportedProjectVO
+                            .OnBranch
+                            .BranchPath;
+
+            var confirm = HoneyboardReleaseService
+                .Current
+                .ServiceManager?
+                .App
+                .ShowYesNoQuestionBox("Do you want to release for '" + _branchPath + "'?");
+
+            return confirm == CyberContactMessage.Yes;
         }
 
         protected override void ExecuteCommand()
         {
-            base.ExecuteCommand();
             var releaseTaskCancelTokenSource = new CancellationTokenSource();
 
             BaseAsyncTask fetchTask = new CommonGitTask(folderPath: PMViewModel.ProjectPath
@@ -182,19 +239,33 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
               , name: "Cleaning"
               , estimatedTime: 2000);
 
-            BaseAsyncTask modifyVersionTask = new ModifyVersionPropertiesFileTask(
-                param: new object[] { PMViewModel.ProjectPath
-                    , PMViewModel.VersionPropertiesFileName
-                    , RTViewModel.ModifiedVersionPropVO }
-                , completedCallback: (result) =>
+            CancelableAsyncTask modifyVersionTask = new CancelableAsyncTask(
+                mainFunc: async (cts, res) =>
                 {
-                    if (result.MesResult == MessageAsyncTaskResult.Aborted
-                    || result.MesResult == MessageAsyncTaskResult.Faulted)
-                    {
-                        releaseTaskCancelTokenSource.Cancel();
-                    }
-                    // Append log for user here
-                });
+                    await Task.Delay(1);
+
+                    var _propertiesMap = new Dictionary<string, string>();
+
+                    if (RTViewModel.ModifiedVersionPropVO == null) return res;
+
+                    _propertiesMap.Add("major", RTViewModel.ModifiedVersionPropVO.Major);
+                    _propertiesMap.Add("minor", RTViewModel.ModifiedVersionPropVO.Minor);
+                    _propertiesMap.Add("patch", RTViewModel.ModifiedVersionPropVO.Patch);
+                    _propertiesMap.Add("revision", RTViewModel.ModifiedVersionPropVO.Revision);
+
+                    var content = ReleasingProjectManager
+                                .Current
+                                .VAParsingManager
+                                .ModifyVersionAttributeOfOriginText(_propertiesMap);
+
+                    File.WriteAllText(PMViewModel.ProjectPath + "\\" + PMViewModel.VersionPropertiesFileName, content);
+
+                    return res;
+                }
+                , cancellationTokenSource: new CancellationTokenSource()
+                , estimatedTime: 2000
+                , delayTime: 0
+                , name: "Modifying version properties file");
 
             BaseAsyncTask addModifiedFileTask = new CommonGitTask(folderPath: PMViewModel.ProjectPath
               , gitCmd: "git add " + PMViewModel.VersionPropertiesFileName
@@ -214,15 +285,6 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
               , name: "Commiting \"" + RTViewModel.TaskID + "\""
               , estimatedTime: 5000);
 
-            BaseAsyncTask pushTask = new CommonGitTask(folderPath: PMViewModel.ProjectPath
-              , gitCmd: "git push --no-thin origin " + _branchPathForPushing
-              , callback: (result) =>
-              {
-                  // Append log for user here
-              }
-              , name: "Pushing to Gerrit"
-              , estimatedTime: 3000);
-
             List<BaseAsyncTask> tasks = new List<BaseAsyncTask>();
             tasks.Add(fetchTask);
             tasks.Add(checkoutTask);
@@ -231,7 +293,6 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
             tasks.Add(modifyVersionTask);
             tasks.Add(addModifiedFileTask);
             tasks.Add(commitTask);
-            tasks.Add(pushTask);
 
             MultiAsyncTask multiTask = new MultiAsyncTask(tasks
                 , releaseTaskCancelTokenSource
@@ -240,7 +301,30 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                 , delayTime: 0
                 , reportDelay: 100);
 
-            HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox("Releasing", multiTask);
+            HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox(
+                "Releasing"
+                , multiTask
+                , isCancelable: false
+                , multiTaskDoneCallback: (param) =>
+                {
+                    var waitingBox = param as IStandBox;
+
+                    if (commitTask.IsCompleted)
+                    {
+                        waitingBox?.UpdateMessageAndTitle("Commit sucess", "Finished");
+                        RTViewModel.ReleaseTabGitStatus = ProjectGitStatus.HavingCommit;
+                        HoneyboardReleaseService
+                            .Current
+                            .ServiceManager?
+                            .App
+                            .ShowWaringBox("Commit successfully!");
+                    }
+                    else if (commitTask.IsCanceled || commitTask.IsFaulted)
+                    {
+                        waitingBox?.UpdateMessageAndTitle("Cancel commit process", "Finished");
+                        RTViewModel.ReleaseTabGitStatus = ProjectGitStatus.None;
+                    }
+                });
         }
     }
 }

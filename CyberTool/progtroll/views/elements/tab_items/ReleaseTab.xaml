@@ -212,6 +212,7 @@
 					Command="{Binding ButtonCommandVM.CreateReleaseCLButtonCommand}"
 					Background="{StaticResource ButtonBackground_Level1}"
 					HorizontalAlignment="Left"
+                    Visibility="{Binding CommitButtonVisibility}"
 					Template="{DynamicResource CircleBtnTmpl}">
 				<Path Fill="#FFF0F0F0"
 					  Margin="5"
@@ -219,7 +220,21 @@
 					  Stretch="Uniform" />
 			</Button>
 
-			<Button x:Name="ClearButton"
+            <Button x:Name="PushButton"
+					Grid.Column="1"
+					ToolTip="Push change list to gerrit"
+					Command="{Binding ButtonCommandVM.PushReleaseCLButtonCommand}"
+					Background="{StaticResource ButtonBackground_Level1}"
+					HorizontalAlignment="Left"
+                    Visibility="{Binding PushButtonVisibility}"
+					Template="{DynamicResource CircleBtnTmpl}">
+                <Path Fill="#FFF0F0F0"
+					  Margin="5"
+					  Data="{Binding Source={StaticResource RT_PushIconPathGeomerty}}"
+					  Stretch="Uniform" />
+            </Button>
+
+            <Button x:Name="ClearButton"
 					Grid.Column="2"
 					ToolTip="Clear template"
 					Background="{StaticResource ButtonBackground_Level1}"
