@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace progtroll.view_models.tab_items
 {
@@ -19,6 +20,35 @@ namespace progtroll.view_models.tab_items
         private string _commitTitle = "";
         private string _commitDescription = "";
         private VersionPropertiesVO _modifiedVersionPropVO;
+
+        private Visibility _commitButtonVisibility = Visibility.Visible;
+        private Visibility _pushButtonVisibility = Visibility.Hidden;
+        private ProjectGitStatus _releaseTabGitStatus;
+
+        public ProjectGitStatus ReleaseTabGitStatus
+        {
+            get
+            {
+                return _releaseTabGitStatus;
+            }
+            set
+            {
+                _releaseTabGitStatus = value;
+                switch (value)
+                {
+                    case ProjectGitStatus.None:
+                        _commitButtonVisibility = Visibility.Visible;
+                        _pushButtonVisibility = Visibility.Hidden;
+                        break;
+                    case ProjectGitStatus.HavingCommit:
+                        _commitButtonVisibility = Visibility.Hidden;
+                        _pushButtonVisibility = Visibility.Visible;
+                        break;
+                }
+                Invalidate("CommitButtonVisibility");
+                Invalidate("PushButtonVisibility");
+            }
+        }
 
         public VersionPropertiesVO ModifiedVersionPropVO
         {
@@ -147,9 +177,38 @@ namespace progtroll.view_models.tab_items
             }
         }
 
+        [Bindable(true)]
+        public Visibility CommitButtonVisibility
+        {
+            get
+            {
+                return _commitButtonVisibility;
+            }
+            set
+            {
+                _commitButtonVisibility = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public Visibility PushButtonVisibility
+        {
+            get
+            {
+                return _pushButtonVisibility;
+            }
+            set
+            {
+                _pushButtonVisibility = value;
+                InvalidateOwn();
+            }
+        }
+
         public ReleaseTabViewModel(BaseViewModel parents) : base(parents)
         {
             ButtonCommandVM = new RT_ButtonCommandVM(this);
+            ReleaseTabGitStatus = ProjectGitStatus.None;
             _modifiedVersionPropVO = new VersionPropertiesVO();
         }
     }
