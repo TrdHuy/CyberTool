@@ -1,6 +1,9 @@
 using cyber_base.implement.service;
 using cyber_base.service;
+using cyber_base.view_model;
 using extension_manager_service.definitions;
+using extension_manager_service.implement.module;
+using extension_manager_service.views.usercontrols;
 using System;
 
 namespace extension_manager_service
@@ -17,7 +20,7 @@ namespace extension_manager_service
 
         public override string Header { get; protected set; }
 
-        public override bool IsUnderconstruction => true;
+        public override bool IsUnderconstruction => false;
 
         public override Uri ServiceResourceUri { get; protected set; }
 
@@ -44,10 +47,14 @@ namespace extension_manager_service
 
         public override void OnPreServiceViewInit(ICyberServiceManager cyberServiceManager)
         {
+            ModuleManager.Init();
         }
 
         public override void OnServiceViewInstantiated(ICyberServiceManager cyberServiceManager)
         {
+            ModuleManager.OnViewInstantiated();
+            (ServiceViewContext as BaseViewModel)?.OnViewInstantiated();
+
         }
 
         public override void OnServiceViewLoaded(ICyberServiceManager cyberServiceManager)
@@ -58,11 +65,12 @@ namespace extension_manager_service
         public override void OnServiceUnloaded(ICyberServiceManager cyberServiceManager)
         {
             base.OnServiceUnloaded(cyberServiceManager);
+            ModuleManager.Destroy();
         }
 
         protected override object? GenerateServiceView()
         {
-            return null;
+            return new ExtensionManager();
         }
     }
 }

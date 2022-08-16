@@ -5,7 +5,9 @@
 	
 	<Color x:Key="ButtonColor_Level1">#009a76</Color>
 	<Color x:Key="ButtonColor_Level2">#eb2838</Color>
-
+	<Color x:Key="BackgroundColor_Level2">#1e2024</Color>
+	<Color x:Key="BackgroundColor_Level2_2">#2B2F35</Color>
+	
 	<LinearGradientBrush x:Key="HorizontalFench1pixel_Background"
 						 EndPoint="0.5,1"
 						 StartPoint="0.5,0">
@@ -65,6 +67,8 @@
 					 x:Key="Background_Level2" />
 	<SolidColorBrush Color="#232529"
 					 x:Key="Background_Level2_1" />
+	<SolidColorBrush Color="#2B2F35"
+					 x:Key="Background_Level2_2" />
 	<SolidColorBrush Color="#26292e"
 					 x:Key="Background_Level3" />
 	<SolidColorBrush Color="#FF262930"
@@ -103,6 +107,11 @@
 					 x:Key="ButtonBackground_Level2" />
 	<SolidColorBrush Color="#FF9A9300"
 					 x:Key="ButtonBackground_Level3" />
+
+	<SolidColorBrush Color="#008000"
+                     x:Key="ObjectFill_Type1" />
+	<SolidColorBrush Color="Aqua"
+					 x:Key="ObjectFill_Type2" />
 	
 	<sys:String x:Key="DashboardBtnPathGeomerty">
 		M46.14,38.13A24.66,24.66,0,0,0,50,24.86a25,25,0,0,0-50,0A24.66,24.66,0,0,0,3.86,38.13Zm2.24-15.52a2.77,2.77,0,1,1-2.77-2.77A2.78,2.78,0,0,1,48.38,22.61Zm-5.86-11.9a2.78,2.78,0,1,1-2.77,2.77A2.77,2.77,0,0,1,42.52,10.71ZM35.43,3.83A2.77,2.77,0,1,1,32.65,6.6,2.77,2.77,0,0,1,35.43,3.83ZM25.11.74a2.78,2.78,0,1,1-2.78,2.77A2.77,2.77,0,0,1,25.11.74ZM25,17.42h.15l2.6-5A3.6,3.6,0,0,1,32.59,11h0A3.61,3.61,0,0,1,34.1,15.8l-2.58,4.9A8.11,8.11,0,1,1,25,17.42ZM14.85,3.83A2.77,2.77,0,1,1,12.08,6.6,2.78,2.78,0,0,1,14.85,3.83ZM7.62,10.71a2.78,2.78,0,1,1-2.77,2.77A2.77,2.77,0,0,1,7.62,10.71ZM4.39,19.84a2.78,2.78,0,1,1-2.77,2.77A2.77,2.77,0,0,1,4.39,19.84Z

@@ -29,6 +29,7 @@
 				-->
 				<ResourceDictionary Source="pack://application:,,,/log_guard;component/themes/Themes.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/progtroll;component/themes/Themes.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/extension_manager_service;component/themes/Themes.xaml" />
 				<mc:AlternateContent>
 					<mc:Choice Requires="d">
 					</mc:Choice>
