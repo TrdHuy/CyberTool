@@ -9,7 +9,6 @@ using progtroll.implement.ui_event_handler.async_tasks.git_tasks;
 using progtroll.implement.ui_event_handler.async_tasks.others;
 using progtroll.implement.user_data_manager;
 using progtroll.models.VOs;
-using progtroll.utils;
 using progtroll.view_models.project_manager.items;
 using System;
 using System.Collections.Generic;

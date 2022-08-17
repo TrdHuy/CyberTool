@@ -87,8 +87,6 @@ namespace log_guard.models.info
                 {
                     return null;
                 }
-
-                ;
             }
 
             set { _parts[key] = value; }

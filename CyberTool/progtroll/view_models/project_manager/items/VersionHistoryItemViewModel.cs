@@ -1,5 +1,6 @@
 ﻿using cyber_base.async_task;
 using cyber_base.implement.command;
+using cyber_base.implement.utils;
 using cyber_base.ui_event_handler.action.executer;
 using cyber_base.view_model;
 using progtroll.@base.view_model;
@@ -10,13 +11,7 @@ using progtroll.implement.ui_event_handler;
 using progtroll.implement.ui_event_handler.async_tasks.git_tasks;
 using progtroll.implement.view_model;
 using progtroll.models.VOs;
-using progtroll.utils;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace progtroll.view_models.project_manager.items
 {

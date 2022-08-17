@@ -1,24 +1,12 @@
-﻿using cyber_base.implement.async_task;
-using cyber_base.implement.models.cyber_treeview;
-using cyber_base.implement.utils;
-using cyber_base.implement.view_models.cyber_treeview;
+﻿using cyber_base.implement.utils;
 using cyber_base.implement.views.cyber_treeview;
 using cyber_base.view_model;
 using progtroll.implement.project_manager;
-using progtroll.implement.view_model;
 using progtroll.models.VOs;
-using progtroll.utils;
 using progtroll.view_models.command.project_manager;
 using progtroll.view_models.project_manager.items;
-using progtroll.view_models.tab_items;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace progtroll.view_models.project_manager

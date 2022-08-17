@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace progtroll.utils
+namespace cyber_base.implement.utils
 {
-    internal class FirstLastObservableCollection<T> : ObservableCollection<T>
+    public class FirstLastObservableCollection<T> : ObservableCollection<T>
         where T : IFirstLastElement
     {
         private T? _first;
@@ -104,10 +104,10 @@ namespace progtroll.utils
         }
     }
 
-    internal delegate void FirstChangedHandler<T>(object sender, T? oldFirst, T? newFirst);
-    internal delegate void LastChangedHandler<T>(object sender, T? oldLast, T? newLast);
+    public delegate void FirstChangedHandler<T>(object sender, T? oldFirst, T? newFirst);
+    public delegate void LastChangedHandler<T>(object sender, T? oldLast, T? newLast);
 
-    internal interface IFirstLastElement
+    public interface IFirstLastElement
     {
         bool IsFirst { get; set; }
         bool IsLast { get; set; }
