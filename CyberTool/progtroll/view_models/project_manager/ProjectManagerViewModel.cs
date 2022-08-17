@@ -32,7 +32,7 @@ namespace progtroll.view_models.project_manager
         private ReleasingProjectManager _RPM_Instance = ReleasingProjectManager.Current;
         private string _versionFileName = "";
         private Func<bool> _isShouldOpenVersionAttrFileChooserWindow;
-        
+
         [Bindable(true)]
         public object? SelectedVersionHistoryItem
         {
@@ -45,7 +45,7 @@ namespace progtroll.view_models.project_manager
                 _RPM_Instance.CurrentFocusVersionCommitVM = value as VersionHistoryItemViewModel;
             }
         }
-       
+
         [Bindable(true)]
         public Visibility VersionHistoryListTipVisibility
         {
@@ -195,7 +195,7 @@ namespace progtroll.view_models.project_manager
             }
         }
 
-        
+
         [Bindable(true)]
         public Func<bool> IsShouldOpenVersionAttrFileChooserWindow
         {
@@ -209,7 +209,7 @@ namespace progtroll.view_models.project_manager
         {
             _isShouldOpenVersionAttrFileChooserWindow = () =>
             {
-                if(_RPM_Instance.CurrentImportedProjectVO == null)
+                if (_RPM_Instance.CurrentImportedProjectVO == null)
                 {
                     HoneyboardReleaseService
                         .Current
@@ -334,6 +334,10 @@ namespace progtroll.view_models.project_manager
                 if (filePath.IndexOf(ProjectPath) != -1)
                 {
                     _versionFileName = filePath.Substring(ProjectPath.Length + 1);
+                }
+                else if (string.IsNullOrEmpty(filePath))
+                {
+                    _versionFileName = "";
                 }
 
                 Invalidate("VersionPropertiesFileName");
