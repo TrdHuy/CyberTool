@@ -69,13 +69,11 @@ namespace progtroll.Properties {
         ///  ],
         ///  &quot;SyntaxArr&quot;: [
         ///    {
-        ///      &quot;MainSyntax&quot;: &quot;version\\s*{(\\n.*)*(\\n\\s*number\\s+\\\&quot;(?&lt;major&gt;\\d+)\\.(?&lt;minor&gt;\\d+)(\\.(?&lt;patch&gt;\\d+)){0,1}(\\.(?&lt;revision&gt;\\d+)){0,1}\\\&quot;)\\s*(\\n.*)*}&quot;,
+        ///      &quot;MainSyntax&quot;: &quot;version\\s*{(\\n.*)*(\\n\\s*number\\s+[\\\&quot;\\&apos;](?&lt;major&gt;\\d+)\\.(?&lt;minor&gt;\\d+)(\\.(?&lt;patch&gt;\\d+)){0,1}(\\.(?&lt;revision&gt;\\d+)){0,1}[\\\&quot;\\&apos;])\\s*(\\n.*)*}&quot;,
         ///      &quot;SubSyntaxs&quot;: [
-        ///        &quot;version\\s*{(\\r\\n.*)*(\\r\\n\\s*number\\s+\\\&quot;(?&lt;major&gt;\\d+)\\.(?&lt;minor&gt;\\d+)(\\.(?&lt;patch&gt;\\d+)){0,1}(\\.(?&lt;revision&gt;\\d+)){0,1}\\\&quot;)\\s*(\\r\\n.*)*}&quot;
+        ///        &quot;version\\s*{(\\r\\n.*)*(\\r\\n\\s*number\\s+[\\\&quot;\\&apos;](?&lt;major&gt;\\d+)\\.(?&lt;minor&gt;\\d+)(\\.(?&lt;patch&gt;\\d+)){0,1}(\\.(?&lt;revision&gt;\\d+)){0,1}[\\\&quot;\\&apos;])\\s*(\\r\\n.*)*}&quot;
         ///      ]
-        ///    },
-        ///    {
-        ///      &quot;Main [rest of string was truncated]&quot;;.
+        ///    }, [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string default_parser_information {
             get {
