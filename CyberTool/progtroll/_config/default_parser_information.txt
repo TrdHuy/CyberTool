@@ -1,0 +1,25 @@
+﻿{
+  "FileNameArr": [
+    "version.properties",
+    "build.gradle",
+    "version.gradle"
+  ],
+  "SyntaxArr": [
+    {
+      "MainSyntax": "version\\s*{(\\n.*)*(\\n\\s*number\\s+[\\\"\\'](?<major>\\d+)\\.(?<minor>\\d+)(\\.(?<patch>\\d+)){0,1}(\\.(?<revision>\\d+)){0,1}[\\\"\\'])\\s*(\\n.*)*}",
+      "SubSyntaxs": [
+        "version\\s*{(\\r\\n.*)*(\\r\\n\\s*number\\s+[\\\"\\'](?<major>\\d+)\\.(?<minor>\\d+)(\\.(?<patch>\\d+)){0,1}(\\.(?<revision>\\d+)){0,1}[\\\"\\'])\\s*(\\r\\n.*)*}"
+      ]
+    },
+    {
+      "MainSyntax": "version\\s*{(\\r\\n.*)*(\\r\\n\\s*number\\s+[\\\"\\'](?<major>\\d+)\\.(?<minor>\\d+)(\\.(?<patch>\\d+)){0,1}(\\.(?<revision>\\d+)){0,1}[\\\"\\'])\\s*(\\r\\n.*)*}",
+      "SubSyntaxs": [
+        "version\\s*{(\\n.*)*(\\n\\s*number\\s+[\\\"\\'](?<major>\\d+)\\.(?<minor>\\d+)(\\.(?<patch>\\d+)){0,1}(\\.(?<revision>\\d+)){0,1}[\\\"\\'])\\s*(\\n.*)*}"
+      ]
+    },
+    {
+      "MainSyntax": ".*major\\s*=\\s*(?<major>\\d+).*\\n.*minor\\s*=\\s*(?<minor>\\d+).*\\n.*patch\\s*=\\s*(?<patch>\\d+).*(\\n.*revision\\s*=\\s*(?<revision>\\d+).*)*",
+      "SubSyntaxs": []
+    }
+  ]
+}
