@@ -64,6 +64,9 @@ namespace progtroll.implement.ui_event_handler.actions
                 case PublisherKeyFeatureTag.KEY_TAG_PRT_PM_PROJECT_PATH_SELECTED_FEATURE:
                     viewModelCommandExecuter = new PRT_PM_ProjectPathFileSelectedAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
                     break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_PM_VERSION_FILE_PATH_SELECTED_FEATUER:
+                    viewModelCommandExecuter = new PRT_PM_VersionFilePathSelectedAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
+                    break;
                 case PublisherKeyFeatureTag.KEY_TAG_PRT_PM_SELECTED_BRANCH_CHANGED_FEATURE:
                     viewModelCommandExecuter = new PRT_PM_SelectedBranchChangedAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
                     break;
