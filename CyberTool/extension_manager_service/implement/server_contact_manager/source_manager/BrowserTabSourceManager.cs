@@ -91,7 +91,10 @@ namespace extension_manager_service.implement.server_contact_manager.source_mana
                 }
                 response.Dispose();
             }
-            catch { }
+            catch (HttpRequestException ex)
+            {
+                throw ex;
+            }
             finally
             {
                 _requestDataSemaphore.Release();
