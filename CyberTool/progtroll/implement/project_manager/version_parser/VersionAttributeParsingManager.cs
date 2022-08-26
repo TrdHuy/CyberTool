@@ -88,7 +88,7 @@ namespace progtroll.implement.project_manager.version_parser
             return _parserInformation?.FileNameArr;
         }
 
-        public string[]? GetVersionPropertiesParserMainSyntax()
+        public string[] GetVersionPropertiesParserMainSyntax()
         {
             return _syntaxMap.Keys.ToArray();
         }

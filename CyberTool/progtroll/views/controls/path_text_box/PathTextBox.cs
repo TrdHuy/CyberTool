@@ -126,6 +126,21 @@ namespace progtroll.views.controls.path_text_box
         }
         #endregion
 
+        #region IsAutoTextPath
+        public static readonly DependencyProperty IsAutoTextPathProperty =
+           DependencyProperty.RegisterAttached(
+           "IsAutoTextPath",
+           typeof(bool),
+           typeof(PathTextBox),
+           new PropertyMetadata(defaultValue: true));
+
+        public bool IsAutoTextPath
+        {
+            get { return (bool)GetValue(IsAutoTextPathProperty); }
+            set { SetValue(IsAutoTextPathProperty, value); }
+        }
+        #endregion
+
         public PathTextBox()
         {
             DefaultStyleKey = typeof(PathTextBox);
@@ -174,7 +189,10 @@ namespace progtroll.views.controls.path_text_box
                                 .App.OpenFolderChooserDialogWindow();
                             if (!string.IsNullOrEmpty(path))
                             {
-                                Text = path;
+                                if (IsAutoTextPath)
+                                {
+                                    Text = path;
+                                }
                                 PathSelected?.Execute(null);
                             }
                         }
@@ -187,8 +205,11 @@ namespace progtroll.views.controls.path_text_box
                                 .OpenFileChooserDialogWindow(DialogBoxTitle ?? "", FileBoxFilter ?? "");
                             if (!string.IsNullOrEmpty(path))
                             {
-                                Text = path;
-                                PathSelected?.Execute(null);
+                                if (IsAutoTextPath)
+                                {
+                                    Text = path;
+                                }
+                                PathSelected?.Execute(path);
                             }
                         }
                     }

@@ -12,10 +12,16 @@ namespace progtroll.implement.ui_event_handler.async_tasks.io_tasks
     {
         private readonly string[] VERSION_PROPERTIES_PARSER_SYNTAX = new string[] {
                     @".*major\s*=\s*(?<major>\d+).*\n.*minor\s*=\s*(?<minor>\d+).*\n.*patch\s*=\s*(?<patch>\d+).*(\n.*revision\s*=\s*(?<revision>\d+).*)*",
-                    @"version\s*{(\r\n.*)*(\r\n\s*number\s+\""(?<major>\d+)\.(?<minor>\d+)(\.(?<patch>\d+)){0,1}(\.(?<revision>\d+)){0,1}\"")\s*(\r\n.*)*}",
-                    @"version\s*{(\n.*)*(\n\s*number\s+\""(?<major>\d+)\.(?<minor>\d+)(\.(?<patch>\d+)){0,1}(\.(?<revision>\d+)){0,1}\"")\s*(\n.*)*}"
+                    @"version\s*{(\r\n.*)*(\r\n\s*number\s+[\""\'](?<major>\d+)\.(?<minor>\d+)(\.(?<patch>\d+)){0,1}(\.(?<revision>\d+)){0,1}[\""\'])\s*(\r\n.*)*}",
+                    @"version\s*{(\n.*)*(\n\s*number\s+[\""\'](?<major>\d+)\.(?<minor>\d+)(\.(?<patch>\d+)){0,1}(\.(?<revision>\d+)){0,1}[\""\'])\s*(\n.*)*}"
                 };
-        private readonly string[] VERSION_PROPERTIES_FILE_NAME = new string[] { "version.properties", "version.gradle" };
+
+        private readonly string[] VERSION_PROPERTIES_FILE_NAME = new string[] { 
+                    "version.properties",
+                    "version.gradle",
+                    "build.gradle"
+                };
+
         private string[] _versionAttrFileName;
         private string[] _versionAttrParserSyntax;
         private string _projectPath;
@@ -90,7 +96,5 @@ namespace progtroll.implement.ui_event_handler.async_tasks.io_tasks
                     return false;
             }
         }
-
-
     }
 }
