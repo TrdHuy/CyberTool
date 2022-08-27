@@ -14,48 +14,49 @@
 			 xmlns:vmp="clr-namespace:progtroll.view_models"
 			 xmlns:vhl="clr-namespace:progtroll.views.controls.version_history_list"
 			 mc:Ignorable="d"
+             local:ProjectManager.CommitTaskIdSource="{Binding TaskIdCommitListSource}"
 			 d:DesignHeight="450"
 			 d:DesignWidth="800">
 
-	<UserControl.DataContext>
-		<vmm:ViewModelManagerME DataContextType="{x:Type vm:ProjectManagerViewModel}"
+    <UserControl.DataContext>
+        <vmm:ViewModelManagerME DataContextType="{x:Type vm:ProjectManagerViewModel}"
 								ParentDataContextType="{x:Type vmp:HoneyReleaseServiceViewModel}"
 								GeneratorType="CreateNew" />
-	</UserControl.DataContext>
+    </UserControl.DataContext>
 
-	<Border Background="{StaticResource Background_Level2}"
+    <Border Background="{StaticResource Background_Level2}"
 			CornerRadius="10">
-		<Grid>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="30" />
-				<RowDefinition />
-				<RowDefinition />
-				<RowDefinition />
-				<RowDefinition Height="0.2*" />
-				<RowDefinition Height="0.8*" />
-				<RowDefinition Height="6*" />
-				<RowDefinition Height="10" />
-			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="10" />
-				<ColumnDefinition />
-				<ColumnDefinition Width="10" />
-			</Grid.ColumnDefinitions>
-			<StackPanel Orientation="Horizontal"
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition Height="0.2*" />
+                <RowDefinition Height="0.8*" />
+                <RowDefinition Height="6*" />
+                <RowDefinition Height="10" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="10" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal"
 						Grid.ColumnSpan="2">
-				<TextBlock Text="Project"
+                <TextBlock Text="Project"
 						   VerticalAlignment="Center"
 						   FontSize="9"
 						   Margin="7,0,5,0"
 						   FontWeight="Bold"
 						   Foreground="{StaticResource Foreground_Level1}" />
-				<Path Data="{Binding Source={StaticResource RT_ProjectIconPathGeomerty}}"
+                <Path Data="{Binding Source={StaticResource RT_ProjectIconPathGeomerty}}"
 					  Fill="{StaticResource Foreground_Level1}"
 					  Height="13"
 					  Stretch="Uniform" />
-			</StackPanel>
+            </StackPanel>
 
-			<ptb:PathTextBox Grid.Row="1"
+            <ptb:PathTextBox Grid.Row="1"
 							 PathType="Folder"
 							 IconGeometry="{Binding Source={StaticResource RT_OpenFileIconPathGeomerty}}"
 							 PathSelected="{Binding GestureCommandVM.PathSelectedGestureCommand}"
@@ -66,7 +67,7 @@
 							 Grid.Column="1"
 							 Background="{StaticResource Background_Level3}" />
 
-			<ptb:PathTextBox Grid.Row="2"
+            <ptb:PathTextBox Grid.Row="2"
 							 PathType="File"
 							 IconGeometry="{Binding Source={StaticResource RT_OpenFileIconPathGeomerty}}"
 							 Text="{Binding VersionPropertiesFileName, Mode=OneWay}"
@@ -77,7 +78,7 @@
 							 Background="{StaticResource Background_Level3}"
 							 Foreground="{StaticResource Foreground_Level3}" />
 
-			<ComboBox Grid.Row="3"
+            <ComboBox Grid.Row="3"
 					  Tag="Branch"
 					  Margin="0,0,0,10"
 					  Foreground="{StaticResource Foreground_Level3}"
@@ -87,35 +88,35 @@
 					  Background="{StaticResource Background_Level3}"
 					  ItemsSource="{Binding BranchsSource}"
 					  Style="{StaticResource RT_BranchsComboboxStyle}">
-			</ComboBox>
+            </ComboBox>
 
-			<Rectangle Grid.Row="4"
+            <Rectangle Grid.Row="4"
 					   Height="1"
 					   Fill="{StaticResource HorizontalFench1pixel_Background}"
 					   Grid.Column="1" />
 
-			<StackPanel Orientation="Horizontal"
+            <StackPanel Orientation="Horizontal"
 						Grid.Row="5"
 						Grid.ColumnSpan="2">
-				<TextBlock Text="Version history"
+                <TextBlock Text="Version history"
 						   VerticalAlignment="Center"
 						   FontSize="9"
 						   Margin="7,0,5,0"
 						   FontWeight="Bold"
 						   Foreground="{StaticResource Foreground_Level1}" />
-				<Path Data="{Binding Source={StaticResource RT_HistoryIconPathGeomerty}}"
+                <Path Data="{Binding Source={StaticResource RT_HistoryIconPathGeomerty}}"
 					  Fill="{StaticResource Foreground_Level1}"
 					  Height="15"
 					  Margin="0,0,5,0"
 					  Stretch="Uniform" />
-			</StackPanel>
+            </StackPanel>
 
-			<StackPanel Orientation="Horizontal"
+            <StackPanel Orientation="Horizontal"
 						Grid.Row="5"
 						Margin="5"
 						HorizontalAlignment="Right"
 						Grid.ColumnSpan="2">
-				<Button ToolTip="Fetch"
+                <Button ToolTip="Fetch"
 						Height="15"
 						Width="15"
 						Command="{Binding ButtonCommandVM.FetchPrjectButtonCommand}"
@@ -124,40 +125,40 @@
 						Background="{DynamicResource ButtonBackground_Level1}"
 						HorizontalAlignment="Left"
 						Template="{DynamicResource IconBtnTmpl}" />
-			</StackPanel>
-			
-			<Grid Grid.Row="6"
+            </StackPanel>
+
+            <Grid Grid.Row="6"
 				  Grid.Column="1"
 				  Grid.ColumnSpan="2">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*" />
-					<RowDefinition Height="1" />
-					<RowDefinition Height="4*" />
-				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition />
-					<ColumnDefinition Width="10" />
-					<ColumnDefinition Width="3*" />
-					<ColumnDefinition Width="10" />
-				</Grid.ColumnDefinitions>
-				<Border Background="{StaticResource Background_Level3}"
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="4*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="10" />
+                </Grid.ColumnDefinitions>
+                <Border Background="{StaticResource Background_Level3}"
 						Grid.ColumnSpan="3"
 						Grid.RowSpan="3"
 						BorderThickness="0"
 						CornerRadius="10" />
-				<Rectangle Grid.Column="0"
+                <Rectangle Grid.Column="0"
 						   Grid.ColumnSpan="3"
 						   Grid.Row="1"
 						   Height="1"
 						   Fill="{StaticResource Foreground_Level3}" />
-				<TextBlock Text="DATE"
+                <TextBlock Text="DATE"
 						   Grid.RowSpan="2"
 						   FontSize="10"
 						   HorizontalAlignment="Center"
 						   VerticalAlignment="Center"
 						   FontWeight="Bold"
 						   Foreground="{StaticResource Foreground_Level2}" />
-				<TextBlock Text="VERSIONS"
+                <TextBlock Text="VERSIONS"
 						   Grid.RowSpan="2"
 						   FontSize="10"
 						   Grid.Column="2"
@@ -166,7 +167,28 @@
 						   VerticalAlignment="Center"
 						   FontWeight="Bold"
 						   Foreground="{StaticResource Foreground_Level2}" />
-				<vhl:VersionHistoryListView Grid.Row="2"
+                <Button x:Name="PART_FilterTaskIdBtn"
+                        Height="15"
+						Width="15"
+                        Margin="0,0,7,0"
+                        Grid.RowSpan="2"
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Click="HandleButtonAndMenuItemClick"
+                        ContextMenuService.IsEnabled="False"
+						Content="{StaticResource RT_SettingButtonIconPathGeometry}" 
+                        Foreground="{DynamicResource Foreground_Level3}"
+						Background="{DynamicResource ButtonBackground_Level1}"
+						Template="{DynamicResource IconBtnTmpl}" >
+                    <Button.ContextMenu>
+                        <ContextMenu x:Name="PART_TaskIdItem"
+                                     Style="{StaticResource CyberScrollableContextMenu}">
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+                <vhl:VersionHistoryListView x:Name="PART_VersionHistoryListView"
+											Grid.Row="2"
 											Grid.ColumnSpan="3"
 											SelectionMode="Single"
 											BorderThickness="0"
@@ -182,43 +204,43 @@
 											ScrollViewer.CanContentScroll="{Binding IsVirtualizingVersionHistoryList}"
 											Background="{StaticResource Background_Level3}"
 											atp:ElementAttProperties.Proxy="{Binding IsLoadingProjectVersionHistory}">
-					<ListView.Template>
-						<ControlTemplate TargetType="ListView">
-							<ControlTemplate.Resources>
-								<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
-								<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
-							</ControlTemplate.Resources>
-							<Grid>
-								<Border x:Name="RecMask"
+                    <ListView.Template>
+                        <ControlTemplate TargetType="ListView">
+                            <ControlTemplate.Resources>
+                                <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
+                                <sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Border x:Name="RecMask"
 										CornerRadius="0,0,10,10"
 										Background="{TemplateBinding Background}" />
-								<Border Name="Border"
+                                <Border Name="Border"
 										Background="{TemplateBinding Background}">
-									<Border.OpacityMask>
-										<VisualBrush Visual="{Binding ElementName=RecMask}" />
-									</Border.OpacityMask>
-									<csv:CyberScrollView ThumbBackground="{StaticResource ButtonBackground_Level1}"
+                                    <Border.OpacityMask>
+                                        <VisualBrush Visual="{Binding ElementName=RecMask}" />
+                                    </Border.OpacityMask>
+                                    <csv:CyberScrollView ThumbBackground="{StaticResource ButtonBackground_Level1}"
 														 CanContentScroll="{TemplateBinding ScrollViewer.CanContentScroll}"
 														 IsMouseOverExpandScrollbar="True"
 														 Style="{StaticResource RT_OverlapScrollbarStyle}"
 														 VerticalAlignment="Top"
 														 VerticalContentAlignment="Center">
-										<ItemsPresenter />
-									</csv:CyberScrollView>
-								</Border>
-							</Grid>
+                                        <ItemsPresenter />
+                                    </csv:CyberScrollView>
+                                </Border>
+                            </Grid>
 
 
-						</ControlTemplate>
-					</ListView.Template>
-					<ListView.ItemContainerStyle>
-						<Style TargetType="{x:Type vhl:VersionHistoryListViewItem}">
-							<Setter Property="Height"
+                        </ControlTemplate>
+                    </ListView.Template>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type vhl:VersionHistoryListViewItem}">
+                            <Setter Property="Height"
 									Value="63" />
-							<Setter Property="Template">
-								<Setter.Value>
-									<ControlTemplate TargetType="vhl:VersionHistoryListViewItem">
-										<Grid x:Name="MainGrid"
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="vhl:VersionHistoryListViewItem">
+                                        <Grid x:Name="MainGrid"
 											  Background="{StaticResource Background_Level3}"
 											  Width="{Binding RelativeSource={RelativeSource AncestorType=ItemsPresenter, Mode=FindAncestor}, Path=ActualWidth}">
                                             <Grid.ContextMenu>
@@ -239,49 +261,49 @@
                                             </Grid.ContextMenu>
 
                                             <Grid.ColumnDefinitions>
-												<ColumnDefinition />
-												<ColumnDefinition Width="10" />
-												<ColumnDefinition Width="3*" />
-											</Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="10" />
+                                                <ColumnDefinition Width="3*" />
+                                            </Grid.ColumnDefinitions>
 
-											<Grid.RowDefinitions>
-												<RowDefinition />
-												<RowDefinition Height="10" />
-												<RowDefinition Height="2*" />
-											</Grid.RowDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition Height="10" />
+                                                <RowDefinition Height="2*" />
+                                            </Grid.RowDefinitions>
 
-											<Rectangle x:Name="BgRec"
+                                            <Rectangle x:Name="BgRec"
 													   Grid.RowSpan="3"
 													   Grid.ColumnSpan="3" />
-											<Rectangle x:Name="UpLine"
+                                            <Rectangle x:Name="UpLine"
 													   Grid.Column="1"
 													   Width="1"
 													   Fill="{StaticResource Foreground_Level3}" />
-											<Ellipse x:Name="Dot"
+                                            <Ellipse x:Name="Dot"
 													 Grid.Row="1"
 													 Grid.Column="1" />
-											<Rectangle x:Name="BotLine"
+                                            <Rectangle x:Name="BotLine"
 													   Grid.Column="1"
 													   Width="1"
 													   Grid.Row="2"
 													   Fill="{StaticResource Foreground_Level3}" />
 
-											<StackPanel Grid.RowSpan="3"
+                                            <StackPanel Grid.RowSpan="3"
 														VerticalAlignment="Top"
 														HorizontalAlignment="Center"
 														Margin="0,1,0,0"
 														Orientation="Vertical">
-												<TextBlock Text="{Binding DayOfMonth}"
+                                                <TextBlock Text="{Binding DayOfMonth}"
 														   FontSize="20"
 														   Foreground="{DynamicResource Foreground_Level3}" />
-												<TextBlock Text="{Binding DayOfWeek}"
+                                                <TextBlock Text="{Binding DayOfWeek}"
 														   FontWeight="Bold"
 														   FontSize="10"
 														   Foreground="{DynamicResource Foreground_Level3}" />
-											</StackPanel>
+                                            </StackPanel>
 
 
-											<TextBlock FontSize="10"
+                                            <TextBlock FontSize="10"
 													   Grid.Row="1"
 													   Grid.Column="2"
 													   VerticalAlignment="Center"
@@ -291,105 +313,105 @@
 													   Foreground="{DynamicResource Foreground_Level3}"
 													   Text="{Binding Version}" />
 
-											<StackPanel Grid.Row="2"
+                                            <StackPanel Grid.Row="2"
 														Margin="0,7,10,0"
 														Grid.Column="2"
 														VerticalAlignment="Top"
 														HorizontalAlignment="Right"
 														Orientation="Vertical">
 
-												<TextBlock Text="{Binding Email}"
+                                                <TextBlock Text="{Binding Email}"
 														   FontSize="9"
 														   Foreground="{DynamicResource Foreground_Level3}" />
-												<TextBlock x:Name="HourTextBlock"
+                                                <TextBlock x:Name="HourTextBlock"
 														   Text="{Binding Hour}"
 														   FontSize="8"
 														   Margin="0,0,7,0"
 														   HorizontalAlignment="Right"
 														   Foreground="{DynamicResource Foreground_Level1}" />
-												<anim:LoadingAnimation Height="7"
+                                                <anim:LoadingAnimation Height="7"
 																	   HorizontalAlignment="Right"
 																	   IsBusy="{Binding IsLoadingVersionTitle}" />
-											</StackPanel>
-										</Grid>
-										<ControlTemplate.Triggers>
-											<Trigger Property="ListView.AlternationIndex"
+                                            </StackPanel>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="ListView.AlternationIndex"
 													 Value="0">
-												<Setter Property="Fill"
+                                                <Setter Property="Fill"
 														TargetName="Dot"
 														Value="{StaticResource ButtonBackground_Level1}" />
-											</Trigger>
-											<Trigger Property="ListView.AlternationIndex"
+                                            </Trigger>
+                                            <Trigger Property="ListView.AlternationIndex"
 													 Value="1">
-												<Setter Property="Fill"
+                                                <Setter Property="Fill"
 														TargetName="Dot"
 														Value="{StaticResource Foreground_Level3}" />
-											</Trigger>
-											<Trigger Property="IsMouseOver"
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver"
 													 Value="True">
-												<Setter Property="Fill"
+                                                <Setter Property="Fill"
 														TargetName="BgRec"
 														Value="{StaticResource MouseOverFillEffect_Level1}" />
-											</Trigger>
-											<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self},Path=IsSelected}"
+                                            </Trigger>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self},Path=IsSelected}"
 														 Value="True">
-												<Setter Property="Foreground"
+                                                <Setter Property="Foreground"
 														TargetName="HourTextBlock"
 														Value="{StaticResource Foreground_Level3}" />
-												<Setter Property="Fill"
+                                                <Setter Property="Fill"
 														TargetName="Dot"
 														Value="{StaticResource Foreground_Level3}" />
-												<Setter Property="Fill"
+                                                <Setter Property="Fill"
 														TargetName="BgRec"
 														Value="{StaticResource ButtonBackground_Level1}" />
-											</DataTrigger>
+                                            </DataTrigger>
 
-											<DataTrigger Binding="{Binding IsFirst}"
+                                            <DataTrigger Binding="{Binding IsFirst}"
 														 Value="True">
-												<Setter Property="Visibility"
+                                                <Setter Property="Visibility"
 														TargetName="UpLine"
 														Value="Hidden" />
-											</DataTrigger>
+                                            </DataTrigger>
 
-											<DataTrigger Binding="{Binding IsLast}"
+                                            <DataTrigger Binding="{Binding IsLast}"
 														 Value="True">
-												<Setter Property="Visibility"
+                                                <Setter Property="Visibility"
 														TargetName="BotLine"
 														Value="Hidden" />
-											</DataTrigger>
-										</ControlTemplate.Triggers>
-									</ControlTemplate>
+                                            </DataTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
 
-								</Setter.Value>
-							</Setter>
+                                </Setter.Value>
+                            </Setter>
 
-						</Style>
-					</ListView.ItemContainerStyle>
-				</vhl:VersionHistoryListView>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </vhl:VersionHistoryListView>
 
-			</Grid>
+            </Grid>
 
-			<StackPanel Grid.Row="6"
+            <StackPanel Grid.Row="6"
 						Grid.Column="0"
 						Grid.ColumnSpan="3"
 						VerticalAlignment="Center"
 						HorizontalAlignment="Center"
 						Visibility="{Binding VersionHistoryListTipVisibility}"
 						Margin="10">
-				<Path MaxWidth="50"
+                <Path MaxWidth="50"
 					  MaxHeight="50"
 					  Data="{Binding Source={StaticResource RT_ImportProjectIconPathGeomerty}}"
 					  Fill="{DynamicResource Foreground_Level2}"
 					  Stretch="Uniform" />
 
-				<TextBlock Text="Import your project to display version history"
+                <TextBlock Text="Import your project to display version history"
 						   Foreground="{DynamicResource Foreground_Level2}"
 						   FontFamily="Calibri"
 						   TextWrapping="Wrap"
 						   Margin="0,15,0,0" />
-			</StackPanel>
-		</Grid>
+            </StackPanel>
+        </Grid>
 
-	</Border>
+    </Border>
 
 </UserControl>
