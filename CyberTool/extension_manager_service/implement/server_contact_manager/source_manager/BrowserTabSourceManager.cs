@@ -151,7 +151,7 @@ namespace extension_manager_service.implement.server_contact_manager.source_mana
         {
             await Task.Delay(100);
             var source = new FirstLastObservableCollection<IVersionHistoryItemViewHolderContext>();
-            foreach (var item in pluginVersions)
+            foreach (var item in pluginVersions.OrderByDescending(p => Version.Parse(p.Version)))
             {
                 source.Add(new VersionHistoryItemViewModel()
                 {
@@ -192,7 +192,7 @@ namespace extension_manager_service.implement.server_contact_manager.source_mana
                 var rate = votes.Average(s => s.Stars);
                 return rate;
             }
-            return 1.5;
+            return 0.5;
         }
 
     }
