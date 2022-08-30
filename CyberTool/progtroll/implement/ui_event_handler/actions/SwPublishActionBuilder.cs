@@ -82,6 +82,9 @@ namespace progtroll.implement.ui_event_handler.actions
                 case PublisherKeyFeatureTag.KEY_TAG_PRT_PUSH_RELEASE_COMMIT_FEATURE:
                     viewModelCommandExecuter = new PRT_RT_PushReleaseCommitAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
                     break;
+                case PublisherKeyFeatureTag.KEY_TAG_PRT_SAVE_RELEASE_TEMPLATE_FEATURE:
+                    viewModelCommandExecuter = new PRT_RT_SaveReleaseTemplateAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
+                    break;
                 case PublisherKeyFeatureTag.KEY_TAG_PRT_PM_FETCH_PROJECT_FEATURE:
                     viewModelCommandExecuter = new PRT_PM_FetchProjectButtonAction(keyTag, PublisherDefinition.PUBLISHER_PLUGIN_TAG, viewModel, logger);
                     break;

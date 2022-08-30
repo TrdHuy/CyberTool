@@ -3,12 +3,13 @@ using cyber_base.implement.async_task;
 using cyber_base.implement.utils;
 using progtroll.implement.module;
 using progtroll.implement.project_manager;
+using progtroll.models.UDs;
 using progtroll.models.VOs;
+using progtroll.view_models.tab_items;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
+using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -16,29 +17,23 @@ using System.Threading.Tasks;
 
 namespace progtroll.implement.user_data_manager
 {
-    internal class UserDataManager : BasePublisherModule
+    internal class UserDataManager
     {
         private const string TAG = "h2sw_solution";
         private const string DATA_FOLDER_NAME = "data";
         private const string DATA_FILE_NAME = "user_data.json";
+
         private string directory = "";
         private string folderName = "";
         private string dataFolderName = "";
-        private Dictionary<string, ProjectVO> _importedProjects;
-        private ProjectVO? _currentImportedProject;
+
+        private RWableJsonUD _rWableJsonUD;
+
         private bool _isThisModuleLoaded = false;
 
-        public static UserDataManager Current
+        public UserDataManager()
         {
-            get
-            {
-                return PublisherModuleManager.UDM_Instance;
-            }
-        }
-
-        private UserDataManager()
-        {
-            _importedProjects = new Dictionary<string, ProjectVO>();
+            _rWableJsonUD = new RWableJsonUD();
             try
             {
                 var dateTimeNow = DateTime.Now.ToString("ddMMyyHHmmss");
@@ -93,7 +88,7 @@ namespace progtroll.implement.user_data_manager
             }
         }
 
-        public override async void OnModuleStart()
+        public async void OnInit()
         {
             var loadUserDataTask = new CancelableAsyncTask(LoadUserData
                 , new CancellationTokenSource()
@@ -102,18 +97,23 @@ namespace progtroll.implement.user_data_manager
                 {
                     _isThisModuleLoaded = true;
                     await Task.Delay(1);
-                    ReleasingProjectManager
-                        .Current
-                        .UpdateWorkingProjectsAfterLoadedFromUserData(
-                            _currentImportedProject
-                            , _importedProjects);
+
+                    if (_rWableJsonUD != null)
+                    {
+                        ReleasingProjectManager
+                            .Current
+                            .UpdateWorkingProjectsAfterLoadedFromUserData(
+                                _rWableJsonUD);
+                    }
+
                     return result;
                 }
                 , name: "Loading user data from json file");
+
             await loadUserDataTask.Execute();
         }
 
-        public override async void OnDestroy()
+        public async void OnDestroy()
         {
             if (_isThisModuleLoaded)
             {
@@ -126,12 +126,21 @@ namespace progtroll.implement.user_data_manager
 
         public void AddImportedProject(string projectPath, ProjectVO projectVO)
         {
-           _importedProjects[projectPath] = projectVO;
+            if (_rWableJsonUD != null)
+            {
+                _rWableJsonUD.ImportProjects[projectPath] = projectVO;
+            }
+
         }
 
         public void SetCurrentImportedProject(ProjectVO? projectVO)
         {
-            _currentImportedProject = projectVO;
+            _rWableJsonUD.CurrentImportedProjectPath = projectVO?.Path ?? "";
+        }
+
+        public void AddReleaseTemplateItemSource(ReleaseTemplateUD item)
+        {
+            _rWableJsonUD.ReleaseTemplateSource.Add(item);
         }
 
         private async Task<AsyncTaskResult> ExportUserDataAsJson(
@@ -139,11 +148,10 @@ namespace progtroll.implement.user_data_manager
             , AsyncTaskResult result)
         {
             var path = dataFolderName + @"\" + DATA_FILE_NAME;
-            dynamic obj = new ExpandoObject();
-            obj.CurrentImportedProject = _currentImportedProject?.Path ?? "";
-            obj.ImportedProjects = _importedProjects;
-            var json = JsonHelper.SerializeObject(obj);
+
+            var json = JsonHelper.SerializeObject(_rWableJsonUD);
             await File.WriteAllTextAsync(path, json);
+
             return result;
         }
 
@@ -152,28 +160,16 @@ namespace progtroll.implement.user_data_manager
            , AsyncTaskResult result)
         {
             var path = dataFolderName + @"\" + DATA_FILE_NAME;
+
             if (!File.Exists(path))
             {
                 File.Create(path).Dispose();
             }
+
             string json = await File.ReadAllTextAsync(path, Encoding.UTF8);
-            dynamic? obj = JsonHelper.Decode(json);
 
-            if (obj != null)
-            {
+            _rWableJsonUD = JsonHelper.DeserializeObject<RWableJsonUD>(json) ?? new RWableJsonUD();
 
-                try
-                {
-                    _importedProjects = obj.ImportedProjects.ToObject<Dictionary<string, ProjectVO>>();
-                }
-                catch { }
-                try
-                {
-                    var currentImportedPorjectPath = obj.CurrentImportedProject.ToObject<string>();
-                    _currentImportedProject = _importedProjects[currentImportedPorjectPath];
-                }
-                catch { }
-            }
             return result;
         }
 
