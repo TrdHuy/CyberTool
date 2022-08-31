@@ -120,5 +120,9 @@ namespace cyber_core.services
             args.Previous?.OnServiceUnloaded(this);
         }
 
+        public string GetServicesBaseFolderLocation()
+        {
+            return "services";
+        }
     }
 }
