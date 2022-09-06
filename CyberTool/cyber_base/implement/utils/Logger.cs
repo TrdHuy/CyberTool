@@ -251,6 +251,42 @@ namespace cyber_base.implement.utils
             TaskQueue.Enqueue(task);
         }
 
+        public void I(string message, string callMemberName, string callFilePath)
+        {
+            var task = GenerateTask("I", TAG, callFilePath, callMemberName, message, isTrimFilePath: true);
+            TaskQueue.Enqueue(task);
+        }
+
+        public void D(string message, string callMemberName, string callFilePath)
+        {
+            var task = GenerateTask("D", TAG, callFilePath, callMemberName, message, isTrimFilePath: true);
+            TaskQueue.Enqueue(task);
+        }
+
+        public void E(string message, string callMemberName, string callFilePath)
+        {
+            var task = GenerateTask("E", TAG, callFilePath, callMemberName, message, isTrimFilePath: true);
+            TaskQueue.Enqueue(task);
+        }
+
+        public void W(string message, string callMemberName, string callFilePath)
+        {
+            var task = GenerateTask("W", TAG, callFilePath, callMemberName, message, isTrimFilePath: true);
+            TaskQueue.Enqueue(task);
+        }
+
+        public void F(string message, string callMemberName, string callFilePath)
+        {
+            var task = GenerateTask("F", TAG, callFilePath, callMemberName, message, isTrimFilePath: true);
+            TaskQueue.Enqueue(task);
+        }
+
+        public void V(string message, string callMemberName, string callFilePath)
+        {
+            var task = GenerateTask("V", TAG, callFilePath, callMemberName, message, isTrimFilePath: true);
+            TaskQueue.Enqueue(task);
+        }
+
         /// <summary>
         /// Process the queue when a task was pushed in
         /// do the task and remove it from queue if it is done
@@ -293,12 +329,18 @@ namespace cyber_base.implement.utils
         /// <param name="message"></param>
         /// <param name="isExportLogFile"></param>
         /// <returns></returns>
-        private Task<bool> GenerateTask(string logLV, string TAG, string className, string callMemberName, string message, bool isExportLogFile = false)
+        private Task<bool> GenerateTask(string logLV
+            , string TAG
+            , string className
+            , string callMemberName
+            , string message
+            , bool isExportLogFile = false
+            , bool isTrimFilePath = false)
         {
             var task = !isExportLogFile ?
                 new Task<bool>(() =>
                 {
-                    return WriteLog(logLV, TAG, className, callMemberName, message);
+                    return WriteLog(logLV, TAG, className, callMemberName, message, isTrimFilePath);
                 }) :
              new Task<bool>(() =>
              {
@@ -341,12 +383,17 @@ namespace cyber_base.implement.utils
         /// <param name="tag"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        private bool WriteLog(string logLv, string tag, string className, string methodName, string message)
+        private bool WriteLog(string logLv, string tag, string className, string methodName, string message, bool isTrimFilePath = false)
         {
             try
             {
-                // Log format
-                // (dd-MM HH:mm:ss) (Log lv) (Pid) (Tid) (Tag) (Class name:Method name:Message)
+                var newClassName = "";
+                if (isTrimFilePath)
+                {
+                    var classFileName = className.Substring(className.LastIndexOf("\\") + 1);
+                    newClassName = classFileName.Substring(0, classFileName.IndexOf("."));
+                }
+
                 var dateTimeNow = DateTime.Now.ToString("dd-MM HH:mm:ss:ffffff");
                 var newLogLine = dateTimeNow + " " +
                     logLv + " " +
@@ -354,7 +401,8 @@ namespace cyber_base.implement.utils
                     TId + " " +
                     tag + " " +
                     moduleName + " " +
-                    className + " " + methodName + ":" + message;
+                    newClassName == "" ? className : newClassName + " " +
+                    methodName + ":" + message;
 
                 if (_logBuilder != null)
                 {

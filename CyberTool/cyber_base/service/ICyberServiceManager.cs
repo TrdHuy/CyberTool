@@ -13,5 +13,8 @@ namespace cyber_base.service
         public ICyberApplication App { get; }
 
         public string GetServicesBaseFolderLocation();
+
+        public string GetPluginsBaseFolderLocation();
+
     }
 }
