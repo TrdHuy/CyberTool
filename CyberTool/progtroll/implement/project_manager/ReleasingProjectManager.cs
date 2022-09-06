@@ -26,6 +26,7 @@ namespace progtroll.implement.project_manager
         private FirstLastObservableCollection<VersionHistoryItemViewModel> _versionHistoryItemContexts;
         private VersionAttributeParsingManager _versionAttrParsingManager;
         private VersionHistoryItemViewModel? _currentForcusVersionCommitVM;
+        private List<string> _taskIdCommitList = new List<string>();
 
         private event UserDataImportedHandler? _userDataImported;
         private event ImportedProjectsCollectionChangedHandler? _importedProjectsCollectionChanged;
@@ -265,6 +266,18 @@ namespace progtroll.implement.project_manager
             }
         }
 
+        public List<string> TaskIdCommitList
+        {
+            get
+            {
+                return _taskIdCommitList;
+            }
+            set
+            {
+                _taskIdCommitList = value;
+            }
+        }
+
         private ReleasingProjectManager()
         {
             _versionAttrParsingManager = new VersionAttributeParsingManager();
@@ -448,6 +461,11 @@ namespace progtroll.implement.project_manager
                 UpdateLevel = updateLevel,
             };
 
+            if (_taskIdCommitList.Count != 0)
+            {
+                _taskIdCommitList.Clear();
+            }
+
             var eventArg = new ReleasingProjectEventArg(eventData);
 
             if (_currentImportedProjectVO != null)
@@ -468,10 +486,15 @@ namespace progtroll.implement.project_manager
                                    System.Globalization.CultureInfo.InvariantCulture),
                         AuthorEmail = data.Email,
                         CommitId = data.HashId,
+                        TaskId = data.SubjectID,
                     };
 
                     // Xử lý trên model
                     var vOInCurrentBranch = _currentImportedProjectVO?.AddCommitVOToCurrentBranch(vVO);
+                    if (data.SubjectID != "" && !_taskIdCommitList.Contains(data.SubjectID))
+                    {
+                        _taskIdCommitList.Add(data.SubjectID);
+                    }
 
                     // Xử lý trên viewmodel
                     if (vOInCurrentBranch != null)
