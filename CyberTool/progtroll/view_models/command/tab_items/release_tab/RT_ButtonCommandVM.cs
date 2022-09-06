@@ -1,11 +1,6 @@
 ﻿using cyber_base.implement.command;
 using cyber_base.view_model;
 using progtroll.definitions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace progtroll.view_models.command.tab_items.release_tab
 {
@@ -15,7 +10,8 @@ namespace progtroll.view_models.command.tab_items.release_tab
         public CommandExecuterModel QuickReleaseButtonCommand { get; set; }
         public CommandExecuterModel CreateReleaseCLButtonCommand { get; set; }
         public CommandExecuterModel PushReleaseCLButtonCommand { get; set; }
-        
+        public CommandExecuterModel SaveReleaseTemplateButtonCommand { get; set; }
+
         public RT_ButtonCommandVM(BaseViewModel parentsModel, string commandVMTag = "RT_ButtonCommandVM")
             : base(parentsModel, commandVMTag)
         {
@@ -40,6 +36,12 @@ namespace progtroll.view_models.command.tab_items.release_tab
             PushReleaseCLButtonCommand = new CommandExecuterModel((paramaters) =>
             {
                 return OnKey(PublisherKeyFeatureTag.KEY_TAG_PRT_PUSH_RELEASE_COMMIT_FEATURE
+                    , paramaters);
+            });
+
+            SaveReleaseTemplateButtonCommand = new CommandExecuterModel((paramaters) =>
+            {
+                return OnKey(PublisherKeyFeatureTag.KEY_TAG_PRT_SAVE_RELEASE_TEMPLATE_FEATURE
                     , paramaters);
             });
         }
