@@ -8,12 +8,17 @@ using progtroll.implement.project_manager.version_parser;
 using progtroll.implement.ui_event_handler.async_tasks.git_tasks;
 using progtroll.implement.ui_event_handler.async_tasks.others;
 using progtroll.implement.user_data_manager;
+using progtroll.implement.view_model;
+using progtroll.models.UDs;
 using progtroll.models.VOs;
 using progtroll.view_models.project_manager.items;
+using progtroll.view_models.tab_items;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace progtroll.implement.project_manager
 {
@@ -21,6 +26,7 @@ namespace progtroll.implement.project_manager
     {
         private ProjectVO? _currentImportedProjectVO;
         private Dictionary<string, ProjectVO> _importedProjects = new Dictionary<string, ProjectVO>();
+        private ObservableCollection<ReleaseTemplateItemViewModel> _releaseTemplateItemSource;
         private BaseAsyncTask? _getVersionHistoryTaskCache;
         private CyberTreeViewObservableCollection<ICyberTreeViewItemContext>? _currentProjectBranchContextSource;
         private FirstLastObservableCollection<VersionHistoryItemViewModel> _versionHistoryItemContexts;
@@ -38,6 +44,8 @@ namespace progtroll.implement.project_manager
         private event VersionPropertiesFoundHandler? _versionPropertiesFound;
         private event CurrentProjectVersionFilePathChangedHandler? _currentProjectVersionFilePathChanged;
         private event CurrentFocusVersionCommitChangedHandler? _currentFocusVersionCommitChanged;
+
+        private UserDataManager _userDataManager = new UserDataManager();
 
         public static ReleasingProjectManager Current
         {
@@ -200,6 +208,15 @@ namespace progtroll.implement.project_manager
             }
         }
 
+        public ObservableCollection<ReleaseTemplateItemViewModel> ReleaseTemplateItemSource
+        {
+            get => _releaseTemplateItemSource;
+            private set
+            {
+                _releaseTemplateItemSource = value;
+            }
+        }
+
         public VersionHistoryItemViewModel? CurrentFocusVersionCommitVM
         {
             get
@@ -282,6 +299,7 @@ namespace progtroll.implement.project_manager
         {
             _versionAttrParsingManager = new VersionAttributeParsingManager();
             _versionHistoryItemContexts = new FirstLastObservableCollection<VersionHistoryItemViewModel>();
+            _releaseTemplateItemSource = new ObservableCollection<ReleaseTemplateItemViewModel>();
             _versionHistoryItemContexts.FirstChanged -= OnVersionHistoryItemContextsFirstChanged;
             _versionHistoryItemContexts.FirstChanged += OnVersionHistoryItemContextsFirstChanged;
         }
@@ -290,6 +308,7 @@ namespace progtroll.implement.project_manager
         {
             base.OnModuleStart();
             _versionAttrParsingManager.LoadParserInformationFromFile();
+            _userDataManager.OnInit();
         }
 
         public override void OnDestroy()
@@ -299,6 +318,18 @@ namespace progtroll.implement.project_manager
             // Memory leak issue
             // Ref: https://michaelscodingspot.com/5-techniques-to-avoid-memory-leaks-by-events-in-c-net-you-should-know/
             _versionHistoryItemContexts.FirstChanged -= OnVersionHistoryItemContextsFirstChanged;
+            _userDataManager.OnDestroy();
+        }
+
+        public void AddReleaseTemplateViewModelItem(ReleaseTemplateItemViewModel itemContext)
+        {
+            _releaseTemplateItemSource.Add(itemContext);
+            _userDataManager.AddReleaseTemplateItemSource(new ReleaseTemplateUD()
+            {
+                CommitTitle = itemContext.CommitTitle,
+                DisplayName = itemContext.DisplayName,
+                TaskID = itemContext.TaskID
+            }) ;
         }
 
         /// <summary>
@@ -311,7 +342,7 @@ namespace progtroll.implement.project_manager
         {
             var oldProject = _currentImportedProjectVO;
             _currentImportedProjectVO = projectVO;
-            UserDataManager.Current.SetCurrentImportedProject(_currentImportedProjectVO);
+            _userDataManager.SetCurrentImportedProject(_currentImportedProjectVO);
 
             if (oldProject != projectVO)
             {
@@ -403,8 +434,8 @@ namespace progtroll.implement.project_manager
                             , oldProjectVO
                             , ProjectsCollectionChangedType.Modified));
                 }
-                UserDataManager.Current.AddImportedProject(proPath, _currentImportedProjectVO);
-                UserDataManager.Current.SetCurrentImportedProject(_currentImportedProjectVO);
+                _userDataManager.AddImportedProject(proPath, _currentImportedProjectVO);
+                _userDataManager.SetCurrentImportedProject(_currentImportedProjectVO);
             }
             _currentProjectChanged?.Invoke(this, oldProject, _currentImportedProjectVO);
         }
@@ -529,8 +560,7 @@ namespace progtroll.implement.project_manager
         /// </summary>
         /// <param name="currentProject"></param>
         /// <param name="importedProjects"></param>
-        public void UpdateWorkingProjectsAfterLoadedFromUserData(ProjectVO? currentProject
-            , Dictionary<string, ProjectVO> importedProjects)
+        public void UpdateWorkingProjectsAfterLoadedFromUserData(RWableJsonUD rWableJsonUD)
         {
             if (_getVersionHistoryTaskCache != null
                 && !_getVersionHistoryTaskCache.IsCompleted
@@ -541,20 +571,31 @@ namespace progtroll.implement.project_manager
             }
 
             var oldProject = _currentImportedProjectVO;
-            _currentImportedProjectVO = currentProject;
-            ImportedProjects = importedProjects;
+            _currentImportedProjectVO = rWableJsonUD.ImportProjects[rWableJsonUD.CurrentImportedProjectPath];
 
-            if (currentProject != null && currentProject.OnBranch != null)
+            ImportedProjects = rWableJsonUD.ImportProjects;
+            ReleaseTemplateItemSource.Clear();
+            foreach (var item in rWableJsonUD.ReleaseTemplateSource)
+            {
+                ReleaseTemplateItemSource.Add(new ReleaseTemplateItemViewModel()
+                {
+                    DisplayName = item.DisplayName,
+                    TaskID = item.TaskID,
+                    CommitTitle = item.CommitTitle,
+                });
+            }
+
+            if (_currentImportedProjectVO != null && _currentImportedProjectVO.OnBranch != null)
             {
 
                 BaseAsyncTask setParserTask = new CancelableAsyncTask(
                     mainFunc: async (cts, res) =>
                     {
-                        _versionAttrParsingManager.SetCurrentParserSyntax(currentProject.VersionAttrSyntax);
+                        _versionAttrParsingManager.SetCurrentParserSyntax(_currentImportedProjectVO.VersionAttrSyntax);
                         var versionFileContent = "";
-                        if (File.Exists(currentProject.VersionFilePath))
+                        if (File.Exists(_currentImportedProjectVO.VersionFilePath))
                         {
-                            versionFileContent = await File.ReadAllTextAsync(currentProject.VersionFilePath);
+                            versionFileContent = await File.ReadAllTextAsync(_currentImportedProjectVO.VersionFilePath);
                         }
                         _versionAttrParsingManager.SetVersionAttrFileContent(versionFileContent);
                         return res;
@@ -565,7 +606,7 @@ namespace progtroll.implement.project_manager
                     , name: "Setting version attribute parser");
 
                 BaseAsyncTask importProjectBranchTask = new ParseProjectBranchsFromVOTask(
-                   new object[] { currentProject.Branchs, currentProject.OnBranch }
+                   new object[] { _currentImportedProjectVO.Branchs, _currentImportedProjectVO.OnBranch }
                    , (result) =>
                    {
                        var source = result.Result

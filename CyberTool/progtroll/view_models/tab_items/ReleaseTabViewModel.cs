@@ -1,14 +1,11 @@
 ﻿using cyber_base.view_model;
 using progtroll.definitions;
+using progtroll.implement.project_manager;
 using progtroll.models.VOs;
 using progtroll.view_models.command.tab_items.release_tab;
-using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace progtroll.view_models.tab_items
@@ -24,6 +21,8 @@ namespace progtroll.view_models.tab_items
         private Visibility _commitButtonVisibility = Visibility.Visible;
         private Visibility _pushButtonVisibility = Visibility.Hidden;
         private ProjectGitStatus _releaseTabGitStatus;
+
+        private ReleaseTemplateItemViewModel? _selectedReleaseTemplateItem;
 
         public ProjectGitStatus ReleaseTabGitStatus
         {
@@ -201,6 +200,38 @@ namespace progtroll.view_models.tab_items
             set
             {
                 _pushButtonVisibility = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public ObservableCollection<ReleaseTemplateItemViewModel> ReleaseTemplateItemSource
+        {
+            get
+            {
+                return ReleasingProjectManager.Current.ReleaseTemplateItemSource;
+            }
+        }
+
+        [Bindable(true)]
+        public ReleaseTemplateItemViewModel? SelectedReleaseTemplateItem
+        {
+            get
+            {
+                return _selectedReleaseTemplateItem;
+            }
+            set
+            {
+                _selectedReleaseTemplateItem = value;
+
+                if (_selectedReleaseTemplateItem != null)
+                {
+                    _taskID = _selectedReleaseTemplateItem.TaskID;
+                    _commitTitle = _selectedReleaseTemplateItem.CommitTitle;
+                }
+
+                Invalidate("TaskID");
+                Invalidate("CommitTitle");
                 InvalidateOwn();
             }
         }

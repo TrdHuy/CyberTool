@@ -17,7 +17,7 @@ namespace cyber_base.implement.utils
 
         public static string SerializeObject(object obj)
         {
-            var json = JsonConvert.SerializeObject(obj);
+            var json = JsonConvert.SerializeObject(obj, Formatting.Indented);
             return json;
         }
 
