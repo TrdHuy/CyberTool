@@ -8,13 +8,9 @@ using cyber_base.view_model;
 using progtroll.implement.project_manager;
 using progtroll.implement.ui_event_handler.async_tasks.git_tasks;
 using progtroll.implement.ui_event_handler.async_tasks.io_tasks;
-using progtroll.models.VOs;
-using progtroll.view_models.project_manager.items;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace progtroll.implement.ui_event_handler.actions.project_manager.gesture
 {
@@ -31,16 +27,11 @@ namespace progtroll.implement.ui_event_handler.actions.project_manager.gesture
 
             var param = new object[]
             {
-                ReleasingProjectManager
-                    .Current
-                    .VAParsingManager
-                    .GetVersionPropertiesFileName() ?? Array.Empty<string>(),
-                ReleasingProjectManager
-                    .Current
-                    .VAParsingManager
-                    .GetVersionPropertiesParserMainSyntax() ?? Array.Empty<string>(),
+                ReleasingProjectManager.Current.VAParsingManager.GetVersionPropertiesFileName() ?? Array.Empty<string>(),
+                ReleasingProjectManager.Current.VAParsingManager.GetVersionPropertiesParserMainSyntax(),
                 PMViewModel.ProjectPath
             };
+
             BaseAsyncTask findVersionPathTask = new FindVersionPropertiesFileTask(param
                 , (result) =>
                 {
@@ -59,6 +50,7 @@ namespace progtroll.implement.ui_event_handler.actions.project_manager.gesture
                         }
                     }
                 });
+
             BaseAsyncTask listAllBranch = new GetAllProjectBranchsTask(PMViewModel.ProjectPath
                 , prepareGetAllProjectBranchs: () =>
                 {
@@ -101,14 +93,21 @@ namespace progtroll.implement.ui_event_handler.actions.project_manager.gesture
                 , name: "Importing project"
                 , delayTime: 0
                 , reportDelay: 100);
+
             var message = HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox("Importing project", multiTask);
 
-            if (message != CyberContactMessage.Cancel
-                && PMViewModel.VersionPropertiesFileName != "")
+            if (message != CyberContactMessage.Cancel)
             {
-                ReleasingProjectManager
-                    .Current
-                    .UpdateVersionHistoryTimelineInBackground();
+                if (PMViewModel.VersionPropertiesFileName != "")
+                {
+                    ReleasingProjectManager
+                        .Current
+                        .UpdateVersionHistoryTimelineInBackground();
+                }
+                else
+                {
+                    ReleasingProjectManager.Current.VersionHistoryItemContexts.Clear();
+                }
             }
             else if (message == CyberContactMessage.Cancel)
             {

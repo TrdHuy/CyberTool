@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace extension_manager_service.views.elements.plugin_browser.items.@base
 {
-    internal enum PluginItemViewMode
+    public enum PluginItemViewMode
     {
         Full = 0,
         Half = 1,

@@ -13,6 +13,7 @@ namespace progtroll.view_models.command.project_manager
     {
         public CommandExecuterModel PathSelectedGestureCommand { get; set; }
         public CommandExecuterModel SelectedBranchChangedCommand { get; set; }
+        public CommandExecuterModel VersionFilePathSelectedGestureCommand { get; set; }
 
         public PM_GestureCommandVM(BaseViewModel parentsModel, string commandVMTag = "PM_GestureCommandVM")
             : base(parentsModel, commandVMTag)
@@ -26,6 +27,12 @@ namespace progtroll.view_models.command.project_manager
             SelectedBranchChangedCommand = new CommandExecuterModel((paramaters) =>
             {
                 return OnKey(PublisherKeyFeatureTag.KEY_TAG_PRT_PM_SELECTED_BRANCH_CHANGED_FEATURE
+                    , paramaters);
+            });
+
+            VersionFilePathSelectedGestureCommand = new CommandExecuterModel((paramaters) =>
+            {
+                return OnKey(PublisherKeyFeatureTag.KEY_TAG_PRT_PM_VERSION_FILE_PATH_SELECTED_FEATUER
                     , paramaters);
             });
         }

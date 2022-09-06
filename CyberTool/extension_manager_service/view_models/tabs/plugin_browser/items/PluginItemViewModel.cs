@@ -1,4 +1,5 @@
-﻿using cyber_base.view_model;
+﻿using cyber_base.implement.utils;
+using cyber_base.view_model;
 using extension_manager_service.views.elements.plugin_browser.items.@base;
 using System;
 using System.Collections.Generic;
@@ -14,12 +15,18 @@ namespace extension_manager_service.view_models.tabs.plugin_browser.items
         private string _pluginName = "";
         private string _pluginAuthor = "";
         private string _pluginDescription = "";
-        private bool _isAuthenticated = false;
+        private string _version = "";
+        private string _datePublished = "";
+        private string _projectURL = "";
         private Uri? _iconSource;
+        private bool _isAuthenticated = false;
         private bool _isInstalled = false;
         private int _downLoads = 0;
         private double _rates = 0;
-        private PluginItemViewMode _viewMode;
+        private string[] _tags = new string[0];
+        private FirstLastObservableCollection<IVersionHistoryItemViewHolderContext> _versionHistorySource 
+            = new FirstLastObservableCollection<IVersionHistoryItemViewHolderContext>();
+
 
         [Bindable(true)]
         public string PluginName
@@ -110,12 +117,55 @@ namespace extension_manager_service.view_models.tabs.plugin_browser.items
         }
 
         [Bindable(true)]
-        public PluginItemViewMode ViewMode
+        public string Version
         {
-            get => _viewMode;
+            get => _version;
             set
             {
-                _viewMode = value;
+                _version = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public string DatePublished
+        {
+            get => _datePublished;
+            set
+            {
+                _datePublished = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public string ProjectURL
+        {
+            get => _projectURL;
+            set
+            {
+                _projectURL = value;
+                InvalidateOwn();
+            }
+        }
+
+        [Bindable(true)]
+        public string[] Tags
+        {
+            get => _tags;
+            set
+            {
+                _tags = value;
+                InvalidateOwn();
+            }
+        }
+
+        public FirstLastObservableCollection<IVersionHistoryItemViewHolderContext> VersionHistorySource
+        {
+            get => _versionHistorySource;
+            set
+            {
+                _versionHistorySource = value;
                 InvalidateOwn();
             }
         }

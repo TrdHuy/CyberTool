@@ -67,7 +67,8 @@
 					 FontSize="13.33" />
 			</TextBlock>
 
-			<TextBlock Grid.Column="2"
+			<TextBlock x:Name="PART_DownloadsTB"
+					   Grid.Column="2"
 					   Foreground="White"
 					   FontSize="12"
 					   VerticalAlignment="Center">
@@ -147,7 +148,8 @@
 				</Button.Style>
 			</Button>
 
-			<Button Grid.Column="2"
+			<Button x:Name="PART_InstallButton2"
+					Grid.Column="2"
 					Visibility="Hidden"
 					Height="14.4"
 					Width="12.48"

@@ -50,7 +50,7 @@ namespace progtroll.view_models.project_manager
                 InvalidateOwn();
             }
         }
-       
+
         [Bindable(true)]
         public Visibility VersionHistoryListTipVisibility
         {
@@ -200,7 +200,7 @@ namespace progtroll.view_models.project_manager
             }
         }
 
-        
+
         [Bindable(true)]
         public Func<bool> IsShouldOpenVersionAttrFileChooserWindow
         {
@@ -214,7 +214,7 @@ namespace progtroll.view_models.project_manager
         {
             _isShouldOpenVersionAttrFileChooserWindow = () =>
             {
-                if(_RPM_Instance.CurrentImportedProjectVO == null)
+                if (_RPM_Instance.CurrentImportedProjectVO == null)
                 {
                     HoneyboardReleaseService
                         .Current
@@ -342,6 +342,10 @@ namespace progtroll.view_models.project_manager
                 if (filePath.IndexOf(ProjectPath) != -1)
                 {
                     _versionFileName = filePath.Substring(ProjectPath.Length + 1);
+                }
+                else if (string.IsNullOrEmpty(filePath))
+                {
+                    _versionFileName = "";
                 }
 
                 Invalidate("VersionPropertiesFileName");
