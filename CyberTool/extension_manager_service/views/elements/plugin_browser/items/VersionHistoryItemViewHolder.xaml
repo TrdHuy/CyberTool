@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="extension_manager_service.views.elements.plugin_browser.items.VersionHistoryItemViewHolder"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="clr-namespace:extension_manager_service.views.elements.plugin_browser.items"
+			 mc:Ignorable="d"
+			 FontFamily="Calibri"
+			 d:DesignHeight="33.6"
+			 d:DesignWidth="206.4">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition Height="2" />
+			<RowDefinition Height="3.68" />
+			<RowDefinition Height="2" />
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="0.47*" />
+			<ColumnDefinition Width="7.68" />
+			<ColumnDefinition Width="0.16*" />
+			<ColumnDefinition Width="1.2*" />
+			<ColumnDefinition Width="10" />
+			<ColumnDefinition Width="0.15*" />
+		</Grid.ColumnDefinitions>
+		<TextBlock Text="{Binding Version}"
+				   Grid.RowSpan="5"
+				   Foreground="{DynamicResource Foreground_Level3}"
+				   FontSize="10.66"
+				   VerticalAlignment="Center" />
+		<Rectangle x:Name="PART_TopLine"
+				   Grid.Column="1"
+				   Width="1"
+				   Grid.Row="0"
+				   Grid.RowSpan="2"
+				   Fill="{DynamicResource Background_Level2_2}">
+			<Rectangle.Style>
+				<Style TargetType="Rectangle">
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding IsFirst}"
+									 Value="True">
+							<Setter Property="Visibility"
+									Value="Hidden" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Rectangle.Style>
+		</Rectangle>
+		
+		<Rectangle x:Name="PART_BotLine"
+				   Grid.Column="1"
+				   Grid.Row="3"
+				   Width="1"
+				   Grid.RowSpan="2"
+				   Fill="{DynamicResource Background_Level2_2}">
+			<Rectangle.Style>
+				<Style TargetType="Rectangle">
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding IsLast}"
+									 Value="True">
+							<Setter Property="Visibility"
+									Value="Hidden" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Rectangle.Style>
+		</Rectangle>
+		
+		<Ellipse Grid.Row="1"
+				 Grid.RowSpan="3"
+				 Grid.Column="1"
+				 Fill="{DynamicResource ButtonBackground_Level1}" />
+		<TextBlock Text="{Binding Description}"
+				   Grid.Column="3"
+				   Foreground="{DynamicResource Foreground_Level3}"
+				   Grid.RowSpan="5"
+				   FontSize="10.66"
+				   VerticalAlignment="Center" />
+
+		<Button x:Name="PART_InstallButton2"
+				Grid.Column="4"
+				Grid.RowSpan="6"
+				Height="10"
+				Foreground="{DynamicResource Foreground_Level3}"
+				Background="{StaticResource Foreground_Level1}"
+				Content="m -177.80563,-87.529023 c -1.54568,0 -2.79004,1.244357 -2.79004,2.790038 v 20.510599 l -2.34974,-2.350281 c -0.54647,-0.546476 -1.25945,-0.819574 -1.97264,-0.819574 -0.71318,0 -1.4267,0.273098 -1.97319,0.819574 l -1.38085,1.381398 c -1.09296,1.092962 -1.09296,2.852327 0,3.945288 l 8.08893,8.089478 1.38085,1.380851 c 0.54649,0.54648 1.26001,0.820118 1.97319,0.820118 0.71302,-1.39e-4 1.42631,-0.273778 1.97265,-0.820118 l 1.38085,-1.380851 8.08893,-8.089478 c 1.09296,-1.092961 1.09296,-2.852326 0,-3.945288 l -1.38085,-1.381398 c -1.09296,-1.092959 -2.85287,-1.092959 -3.94584,0 l -2.34973,2.350281 V -84.73844 c 0,-1.545679 -1.24436,-2.790039 -2.79004,-2.790039 z m -17.57725,35.393167 c -1.54567,0 -2.79003,1.244361 -2.79003,2.790039 v 7.21323 0.877883 0.935642 c 0,1.545684 1.24436,2.790039 2.79003,2.790039 h 37.10752 c 1.54568,0 2.79004,-1.244355 2.79004,-2.790039 v -0.935642 -0.877883 -7.21323 c 0,-1.545681 -1.24436,-2.790039 -2.79004,-2.790039 h -1.81353 c -1.54567,0 -2.79003,1.244358 -2.79003,2.790039 v 4.423191 h -27.90039 v -4.423191 c 0,-1.545678 -1.24437,-2.790039 -2.79004,-2.790039 z"
+				Template="{StaticResource IconBtnTmpl}">
+			<Button.Style>
+				<Style TargetType="Button">
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding IsInstalled}"
+									 Value="True">
+							<Setter Property="IsEnabled"
+									Value="False" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Button.Style>
+		</Button>
+	</Grid>
+	
+</UserControl>

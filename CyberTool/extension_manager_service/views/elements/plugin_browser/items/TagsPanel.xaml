@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="extension_manager_service.views.elements.plugin_browser.items.TagsPanel"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="clr-namespace:extension_manager_service.views.elements.plugin_browser.items"
+			 xmlns:cb="clr-namespace:cyber_base.implement.views.clipping_border;assembly=cyber_base"
+			 mc:Ignorable="d"
+			 FontFamily="Calibri"
+			 d:DesignHeight="450"
+			 d:DesignWidth="120">
+	<UserControl.Resources>
+		<Style TargetType="{x:Type TextBox}"
+			   x:Key="{x:Type TextBox}">
+			<Setter Property="FontSize"
+					Value="10.66" />
+			<Setter Property="Foreground"
+					Value="{DynamicResource Foreground_Level3}" />
+			<Setter Property="Background"
+					Value="{DynamicResource ButtonBackground_Level1}" />
+			<Setter Property="Margin"
+					Value="1" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="TextBox">
+						<cb:ClippingBorder CornerRadius="3"
+										   Background="{TemplateBinding Background}">
+							<TextBlock Margin="8,1"
+									   Foreground="{TemplateBinding Foreground}"
+									   FontSize="{TemplateBinding FontSize}"
+									   VerticalAlignment="Center"
+									   Text="{TemplateBinding Text}" />
+						</cb:ClippingBorder>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</UserControl.Resources>
+	<WrapPanel x:Name="PART_MainPanel">
+		<TextBox Text="#Hellowrold" />
+	</WrapPanel>
+</UserControl>

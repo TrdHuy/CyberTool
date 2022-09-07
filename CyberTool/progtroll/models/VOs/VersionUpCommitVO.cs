@@ -14,6 +14,7 @@ namespace progtroll.models.VOs
         public string AuthorEmail { get; set; } = "";
         public VersionPropertiesVO? Properties { get; set; }
         public string Version { get; set; } = "";
+        public string TaskId { get; set; } = "";
 
         public static bool operator <(VersionUpCommitVO t1, VersionUpCommitVO t2)
         {

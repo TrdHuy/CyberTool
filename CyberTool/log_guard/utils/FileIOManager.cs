@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using cyber_base.implement.utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -71,7 +71,7 @@ namespace log_guard.utils
             }
         }
 
-        public static T LoadJsonFromDataFile<T>(string fileName)
+        public static T? LoadJsonFromDataFile<T>(string fileName)
         {
             var path = dataFolderName + fileName;
             if (!File.Exists(path))
@@ -79,14 +79,14 @@ namespace log_guard.utils
                 File.Create(path).Dispose();
             }
             string json = File.ReadAllText(path, Encoding.UTF8);
-            T items = JsonConvert.DeserializeObject<T>(json);
+            T? items = JsonHelper.DeserializeObject<T>(json);
             return items;
         }
 
         public static void ExportJsonToDataFile(string fileName, object obj)
         {
             var path = dataFolderName + fileName;
-            var json = JsonConvert.SerializeObject(obj);
+            var json = JsonHelper.SerializeObject(obj);
             File.WriteAllText(path, json);
         }
     }

@@ -106,7 +106,12 @@
 						TargetName="FeedbackPath"
 						Value="#2c000000" />
 			</Trigger>
-
+			<Trigger Property="IsEnabled"
+					 Value="False">
+				<Setter Property="Visibility"
+						TargetName="FeedbackPath"
+						Value="Visible" />
+			</Trigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
 
@@ -226,7 +231,7 @@
 			<MultiTrigger>
 				<MultiTrigger.Conditions>
 					<Condition Property="IsMouseOver"
-							Value="True" />
+							   Value="True" />
 					<Condition Property="IsPressed"
 							   Value="False" />
 				</MultiTrigger.Conditions>
@@ -803,6 +808,7 @@
 						Value="30" />
 				<Setter Property="OverridesDefaultStyle"
 						Value="true" />
+		
 				<Setter Property="Template">
 					<Setter.Value>
 						<ControlTemplate TargetType="{x:Type ComboBoxItem}">
@@ -812,11 +818,7 @@
 									BorderBrush="Transparent"
 									SnapsToDevicePixels="true"
 									Background="Transparent">
-								<Border.InputBindings>
-									<MouseBinding MouseAction="LeftClick"
-												  CommandParameter="{Binding .}"
-												  Command="{Binding OnComboBoxItemSelected}" />
-								</Border.InputBindings>
+
 								<ContentPresenter VerticalAlignment="Center" />
 							</Border>
 
@@ -955,8 +957,8 @@
 
 	<Style x:Key="CyberRoundedButtonStyle"
 		   TargetType="Button">
-		<Setter Property="Template" 
-				Value="{StaticResource RoundedBtnTmpl}"/>
+		<Setter Property="Template"
+				Value="{StaticResource RoundedBtnTmpl}" />
 		<Style.Triggers>
 			<Trigger Property="IsEnabled"
 					 Value="False">

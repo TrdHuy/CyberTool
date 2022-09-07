@@ -31,7 +31,7 @@ namespace progtroll
 
         public HoneyboardReleaseService()
         {
-            Header = "HBD Release";
+            Header = "Progtroll";
             HeaderGeometryData = PublisherDefinition.PUBLISHER_PLUGIN_GEOMETRY_DATA;
             ServiceID = PublisherDefinition.SERVICE_PAGE_URI_ORIGINAL_STRING;
             ServicePageLoadingDelayTime = PublisherDefinition.SERVICE_PAGE_LOADING_DELAY_TIME;

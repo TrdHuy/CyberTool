@@ -105,22 +105,24 @@
 					 Template="{StaticResource RoundedCommonTextBoxTmpl}" />
 		</Grid>
 
-		<ComboBox Grid.Row="5"
+        <ComboBox Grid.Row="5"
 				  Foreground="{StaticResource Foreground_Level3}"
 				  Margin="0,0,0,10"
 				  MaxDropDownHeight="100"
 				  Tag="Template"
 				  Grid.Column="1"
 				  Background="{StaticResource Background_Level3}"
-				  Style="{StaticResource CyberNoEditComboboxStyle}">
-			<ComboBoxItem Content="Item1" />
-			<ComboBoxItem Content="Item1" />
-			<ComboBoxItem Content="Item1" />
-			<ComboBoxItem Content="Item1" />
-			<ComboBoxItem Content="Item1" />
-			<ComboBoxItem Content="Item1" />
-			<ComboBoxItem Content="Item1" />
-		</ComboBox>
+				  Style="{StaticResource CyberNoEditComboboxStyle}"
+                  SelectedItem="{Binding SelectedReleaseTemplateItem}"
+                  ItemsSource="{Binding ReleaseTemplateItemSource}">
+            <ComboBox.ItemTemplate>
+                <ItemContainerTemplate>
+                    <TextBlock	Text="{Binding Path=DisplayName}"
+                                Margin="5,0,0,0"
+                                Foreground="{StaticResource Foreground_Level3}"/>
+                </ItemContainerTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
 
 		<Border Grid.Column="4"
 				Grid.Row="0"
@@ -249,6 +251,7 @@
 			<Button x:Name="SaveButton"
 					Grid.Column="3"
 					ToolTip="Save template"
+                    Command="{Binding ButtonCommandVM.SaveReleaseTemplateButtonCommand}"
 					Background="{StaticResource ButtonBackground_Level1}"
 					HorizontalAlignment="Left"
 					Template="{DynamicResource CircleBtnTmpl}">

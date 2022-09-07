@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace cyber_base.async_task
 {
-    public abstract class BaseAsyncTask : IAsyncTask
+    public abstract class BaseAsyncTask : IAsyncTask, IDisposable
     {
         private static Logger _logger = new Logger("BaseAsyncTask");
 
@@ -20,13 +20,13 @@ namespace cyber_base.async_task
         private bool _isCompletedCallback;
         private bool _isCanceled;
         private bool _isExecuting;
-        protected AsyncTaskResult _result;
-        protected string _name;
-        protected ulong _delayTime = 0;
-        protected ulong _estimatedTime = 0;
-        protected double _progress = 0d;
-        protected int _reportDelay = 0;
-        protected bool _isEnableReport = true;
+        protected AsyncTaskResult _result { get; set; }
+        protected string _name { get; set; }
+        protected ulong _delayTime { get; set; } = 0;
+        protected ulong _estimatedTime { get; set; } = 0;
+        protected double _progress { get; set; } = 0d;
+        protected int _reportDelay { get; set; } = 0;
+        protected bool _isEnableReport { get; set; } = true;
 
         public ulong DelayTime => _delayTime;
         public AsyncTaskResult Result => _result;

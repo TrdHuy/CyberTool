@@ -27,7 +27,6 @@ namespace progtroll.implement.module
         private static IPublisherModule? _ATM_Instance;
         private static IPublisherModule? _RPM_Instance;
         private static IPublisherModule? _LM_Instance;
-        private static IPublisherModule? _UDM_Instance;
         
         static PublisherModuleManager()
         {
@@ -45,7 +44,6 @@ namespace progtroll.implement.module
             _Modules.Add(ATM_Instance);
             _Modules.Add(RPM_Instance);
             _Modules.Add(LM_Instance);
-            _Modules.Add(UDM_Instance);
 
             foreach (var module in _Modules)
             {
@@ -75,20 +73,6 @@ namespace progtroll.implement.module
             _ATM_Instance = null;
             _RPM_Instance = null;
             _LM_Instance = null;
-            _UDM_Instance = null;
-        }
-
-        public static UserDataManager UDM_Instance
-        {
-            get
-            {
-                if (_UDM_Instance == null)
-                {
-                    _UDM_Instance = Activator.CreateInstance(typeof(UserDataManager), true) as UserDataManager;
-                }
-                ArgumentNullException.ThrowIfNull(_UDM_Instance);
-                return (UserDataManager)_UDM_Instance;
-            }
         }
 
         public static LogManager LM_Instance

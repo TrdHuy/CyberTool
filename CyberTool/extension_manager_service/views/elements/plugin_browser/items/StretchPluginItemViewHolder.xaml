@@ -22,6 +22,7 @@
 								  MinWidth="80.64" />
 				<ColumnDefinition Width="2.99*"
 								  MinWidth="287" />
+				<ColumnDefinition Width="30" />
 				<ColumnDefinition Width="1.46*" />
 				<ColumnDefinition Width="1.18*" />
 				<ColumnDefinition Width="1.12*" />
@@ -43,7 +44,8 @@
 					  HorizontalAlignment="Right" />
 			</Grid>
 
-			<TextBlock Grid.Column="1"
+			<TextBlock x:Name="PART_PluginTitleFullModeTb"
+					   Grid.Column="1"
 					   Foreground="White"
 					   VerticalAlignment="Center">
 				<Run Text="{Binding PluginName}"
@@ -67,12 +69,37 @@
 					 FontSize="13.33" />
 			</TextBlock>
 
-			<TextBlock Grid.Column="2"
+			<TextBlock x:Name="PART_PluginTitleHalfModeTb"
+					   Grid.Column="1"
+					   Visibility="Collapsed"
+					   Foreground="White"
+					   VerticalAlignment="Center">
+				<Run Text="{Binding PluginName}"
+					 FontSize="16"
+					 FontWeight="Bold" />
+				<InlineUIContainer>
+					<Path Fill="{DynamicResource ObjectFill_Type2}"
+						  Width="11.52"
+						  Visibility="{Binding IsAuthenticated, Converter={StaticResource VisibilityConverter}}"
+						  Margin="3,0,3,0"
+						  Height="11.52"
+						  Stretch="Uniform"
+						  Data="m 55.565374,103.08583 a 20.486208,20.486208 0 0 0 -20.486087,20.48609 20.486208,20.486208 0 0 0 20.486087,20.48609 20.486208,20.486208 0 0 0 20.486089,-20.48609 20.486208,20.486208 0 0 0 -20.486089,-20.48609 z m 10.333219,9.98079 c 0.421601,0 0.843288,0.16167 1.166337,0.48472 l 2.277898,2.2779 c 0.646099,0.64609 0.646099,1.68607 0,2.33216 l -13.334587,13.33458 -1.541507,1.54203 -0.368454,0.36793 c -0.646096,0.64611 -1.68606,0.64611 -2.332156,0 l -0.368454,-0.36793 -1.909445,-1.90996 -5.863725,-5.86321 c -0.850037,-0.85004 -0.850037,-2.21903 0,-3.06906 l 1.542026,-1.54151 c 0.850038,-0.85003 2.218508,-0.85003 3.068545,0 l 4.696873,4.69739 11.800313,-11.80032 c 0.323049,-0.32305 0.744747,-0.48472 1.166336,-0.48472 z" />
+				</InlineUIContainer>
+				<LineBreak />
+				<Run Text="by"
+					 FontSize="13.33" />
+				<Run Text="{Binding PluginAuthor}"
+					 FontSize="13.33" />
+			</TextBlock>
+
+			<TextBlock x:Name="PART_DownloadsTB"
+					   Grid.Column="3"
 					   Foreground="White"
 					   FontSize="12"
 					   VerticalAlignment="Center">
 				<InlineUIContainer>
-					<Path Margin="0,0,0,-2"
+					<Path Margin="0,0,5,-2"
 						  Fill="{DynamicResource Foreground_Level3}"
 						  Width="12.48"
 						  Height="14.4"
@@ -81,12 +108,12 @@
 				</InlineUIContainer>
 				<Run Text="{Binding Downloads}"
 					 FontSize="13.33" />
-				<Run Text="downloads"
+				<Run Text="download(s)"
 					 FontSize="13.33" />
 			</TextBlock>
 
 			<StackPanel x:Name="PART_RatePanel"
-						Grid.Column="3"
+						Grid.Column="4"
 						Orientation="Horizontal">
 				<Path Width="10.56"
 					  Margin="3"
@@ -121,7 +148,7 @@
 			</StackPanel>
 
 			<Button x:Name="PART_InstallButton"
-					Grid.Column="4"
+					Grid.Column="5"
 					Background="Transparent"
 					VerticalAlignment="Center"
 					HorizontalAlignment="Left"
@@ -136,18 +163,23 @@
 										 Value="True">
 								<Setter Property="Content"
 										Value="Uninstall" />
+								<Setter Property="Command"
+										Value="{Binding ButtonCommandVM.UninstallButtonCommand}" />
 							</DataTrigger>
 							<DataTrigger Binding="{Binding IsInstalled}"
 										 Value="False">
 								<Setter Property="Content"
 										Value="Install" />
+								<Setter Property="Command"
+										Value="{Binding ButtonCommandVM.InstallButtonCommand}" />
 							</DataTrigger>
 						</Style.Triggers>
 					</Style>
 				</Button.Style>
 			</Button>
 
-			<Button Grid.Column="2"
+			<Button x:Name="PART_InstallButton2"
+					Grid.Column="2"
 					Visibility="Hidden"
 					Height="14.4"
 					Width="12.48"

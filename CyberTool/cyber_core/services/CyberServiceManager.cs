@@ -74,7 +74,7 @@ namespace cyber_core.services
             CyberServiceMaper.Add(FAQSvc.ServiceID, FAQSvc);
             CyberServiceMaper.Add(HBDRelSvc.ServiceID, HBDRelSvc);
 
-            foreach(var service in CyberServiceMaper.Values)
+            foreach (var service in CyberServiceMaper.Values)
             {
                 service.OnServiceCreate(this);
             }
@@ -120,5 +120,14 @@ namespace cyber_core.services
             args.Previous?.OnServiceUnloaded(this);
         }
 
+        public string GetServicesBaseFolderLocation()
+        {
+            return "services";
+        }
+
+        public string GetPluginsBaseFolderLocation()
+        {
+            return "plugins";
+        }
     }
 }

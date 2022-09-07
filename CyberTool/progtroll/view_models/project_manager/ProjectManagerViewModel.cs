@@ -6,6 +6,7 @@ using progtroll.models.VOs;
 using progtroll.view_models.command.project_manager;
 using progtroll.view_models.project_manager.items;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 
@@ -20,7 +21,22 @@ namespace progtroll.view_models.project_manager
         private ReleasingProjectManager _RPM_Instance = ReleasingProjectManager.Current;
         private string _versionFileName = "";
         private Func<bool> _isShouldOpenVersionAttrFileChooserWindow;
-        
+        private List<string> _taskIdCommitListSource;
+
+        [Bindable(true)]
+        public List<string> TaskIdCommitListSource
+        {
+            get
+            {
+                return _taskIdCommitListSource;
+            }
+            set
+            {
+                _taskIdCommitListSource = value;
+                InvalidateOwn();
+            }
+        }
+
         [Bindable(true)]
         public object? SelectedVersionHistoryItem
         {
@@ -31,9 +47,10 @@ namespace progtroll.view_models.project_manager
             set
             {
                 _RPM_Instance.CurrentFocusVersionCommitVM = value as VersionHistoryItemViewModel;
+                InvalidateOwn();
             }
         }
-       
+
         [Bindable(true)]
         public Visibility VersionHistoryListTipVisibility
         {
@@ -183,7 +200,7 @@ namespace progtroll.view_models.project_manager
             }
         }
 
-        
+
         [Bindable(true)]
         public Func<bool> IsShouldOpenVersionAttrFileChooserWindow
         {
@@ -197,7 +214,7 @@ namespace progtroll.view_models.project_manager
         {
             _isShouldOpenVersionAttrFileChooserWindow = () =>
             {
-                if(_RPM_Instance.CurrentImportedProjectVO == null)
+                if (_RPM_Instance.CurrentImportedProjectVO == null)
                 {
                     HoneyboardReleaseService
                         .Current
@@ -209,6 +226,7 @@ namespace progtroll.view_models.project_manager
                 return true;
             };
 
+            _taskIdCommitListSource = new List<string>();
             _branchsSource = new CyberTreeViewObservableCollection<ICyberTreeViewItemContext>();
             GestureCommandVM = new PM_GestureCommandVM(this);
             ButtonCommandVM = new PM_ButtonCommandVM(this);
@@ -276,12 +294,14 @@ namespace progtroll.view_models.project_manager
         private void HandleVersionTimelineUpdated(object sender, ReleasingProjectEventArg arg)
         {
             IsLoadingProjectVersionHistory = false;
+            TaskIdCommitListSource = _RPM_Instance.TaskIdCommitList;
         }
 
         private void PreHandleUpdateVersionTimelineBackground(object sender, ReleasingProjectEventArg arg)
         {
             VersionHistoryListTipVisibility = Visibility.Collapsed;
             IsLoadingProjectVersionHistory = true;
+            TaskIdCommitListSource = new List<String>();
         }
 
         private void HandleProjectBranchContextSourceChanged(object sender
@@ -322,6 +342,10 @@ namespace progtroll.view_models.project_manager
                 if (filePath.IndexOf(ProjectPath) != -1)
                 {
                     _versionFileName = filePath.Substring(ProjectPath.Length + 1);
+                }
+                else if (string.IsNullOrEmpty(filePath))
+                {
+                    _versionFileName = "";
                 }
 
                 Invalidate("VersionPropertiesFileName");
