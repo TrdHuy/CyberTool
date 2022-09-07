@@ -42,6 +42,7 @@ namespace progtroll.implement.project_manager.version_parser
             if (string.IsNullOrEmpty(jsonString))
             {
                 jsonString = Properties.Resources.default_parser_information;
+                await File.WriteAllTextAsync(PARSER_INFO_DATA_FILE_PATH, jsonString);
             }
 
             _parserInformation = JsonHelper.DeserializeObject<JSONVersionAttributeParserInformation>(jsonString);
@@ -49,7 +50,7 @@ namespace progtroll.implement.project_manager.version_parser
             if (_parserInformation?.SyntaxArr != null)
             {
                 _syntaxMap.Clear();
-                foreach(var syntax in _parserInformation.SyntaxArr)
+                foreach (var syntax in _parserInformation.SyntaxArr)
                 {
                     _syntaxMap.Add(syntax.MainSyntax, syntax.SubSyntaxs);
                 }
