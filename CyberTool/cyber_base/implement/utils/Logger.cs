@@ -387,7 +387,7 @@ namespace cyber_base.implement.utils
         {
             try
             {
-                var newClassName = "";
+                var newClassName = className;
                 if (isTrimFilePath)
                 {
                     var classFileName = className.Substring(className.LastIndexOf("\\") + 1);
@@ -401,7 +401,7 @@ namespace cyber_base.implement.utils
                     TId + " " +
                     tag + " " +
                     moduleName + " " +
-                    newClassName == "" ? className : newClassName + " " +
+                    (newClassName == "" ? className : newClassName) + " " +
                     methodName + ":" + message;
 
                 if (_logBuilder != null)
