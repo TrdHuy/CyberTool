@@ -1,5 +1,6 @@
 ﻿using cyber_base.implement.utils;
 using cyber_base.view_model;
+using extension_manager_service.view_models.commands.plugin_item;
 using extension_manager_service.views.elements.plugin_browser.items.@base;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,10 @@ namespace extension_manager_service.view_models.tabs.plugin_browser.items
         private FirstLastObservableCollection<IVersionHistoryItemViewHolderContext> _versionHistorySource 
             = new FirstLastObservableCollection<IVersionHistoryItemViewHolderContext>();
 
+        public string PluginKey { get; private set; }
+
+        [Bindable(true)]
+        public PI_ButtonCommandVM ButtonCommandVM { get; set; }
 
         [Bindable(true)]
         public string PluginName
@@ -116,6 +121,9 @@ namespace extension_manager_service.view_models.tabs.plugin_browser.items
             }
         }
 
+        /// <summary>
+        /// Latest version
+        /// </summary>
         [Bindable(true)]
         public string Version
         {
@@ -168,6 +176,12 @@ namespace extension_manager_service.view_models.tabs.plugin_browser.items
                 _versionHistorySource = value;
                 InvalidateOwn();
             }
+        }
+
+        public PluginItemViewModel(string pluginKey)
+        {
+            PluginKey = pluginKey;
+            ButtonCommandVM = new PI_ButtonCommandVM(this);
         }
     }
 }

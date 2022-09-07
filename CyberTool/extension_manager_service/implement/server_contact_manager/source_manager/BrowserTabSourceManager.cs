@@ -1,8 +1,8 @@
 ﻿using cyber_base.implement.utils;
+using extension_manager_service.implement.plugin_manager;
 using extension_manager_service.models;
 using extension_manager_service.view_models.tabs.plugin_browser.items;
 using extension_manager_service.views.elements.plugin_browser.items.@base;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,7 +83,7 @@ namespace extension_manager_service.implement.server_contact_manager.source_mana
 
                 var responseContent = await response.Content.ReadAsStringAsync();
 
-                var pluginSource = JsonConvert.DeserializeObject<List<PluginVO>>(responseContent);
+                var pluginSource = JsonHelper.DeserializeObject<List<PluginVO>>(responseContent);
 
                 if (pluginSource != null)
                 {
@@ -106,7 +106,7 @@ namespace extension_manager_service.implement.server_contact_manager.source_mana
             _currentSourceCount += vOSource.Count;
             foreach (var plugin in vOSource)
             {
-                var item = new PluginItemViewModel()
+                var item = new PluginItemViewModel(plugin.StringId)
                 {
                     PluginName = plugin.Name,
                     PluginAuthor = plugin.Author,
@@ -115,7 +115,7 @@ namespace extension_manager_service.implement.server_contact_manager.source_mana
                     ProjectURL = plugin.ProjectURL,
                     IsAuthenticated = plugin.IsAuthenticated,
                 };
-                CheckCurrentPluginIsInstalled(item);
+                CheckCurrentPluginIsInstalled(item, plugin);
                 CalculateRateForPlugin(item, plugin.Votes);
                 InitIconSource(item, plugin.IconSource);
                 InitTagItemForPlugin(item, plugin.Tags);
@@ -137,14 +137,15 @@ namespace extension_manager_service.implement.server_contact_manager.source_mana
             }
         }
 
-        private void CheckCurrentPluginIsInstalled(PluginItemViewModel item)
+        private void CheckCurrentPluginIsInstalled(PluginItemViewModel item, PluginVO plugin)
         {
-            ///TODO: Triển khai kiểm tra việc check plugin này đã đc cài đặt hay chưa
+            item.IsInstalled = CyberPluginManager.Current.CheckPlugiIsInstalled(plugin.StringId);
         }
 
         private async void InitVersionItemForPluginAsync(PluginItemViewModel item, ICollection<PluginVersionVO> pluginVersions)
         {
             item.VersionHistorySource = await GetVersionHistorySource(pluginVersions);
+            item.Version = item.VersionHistorySource.First().Version;
         }
 
         private async Task<FirstLastObservableCollection<IVersionHistoryItemViewHolderContext>> GetVersionHistorySource(ICollection<PluginVersionVO> pluginVersions)
@@ -155,7 +156,7 @@ namespace extension_manager_service.implement.server_contact_manager.source_mana
             {
                 source.Add(new VersionHistoryItemViewModel()
                 {
-                    Version = item.Version,
+                    Version = item.Version.Trim(),
                     Description = item.Description,
                 });
             }

@@ -14,6 +14,7 @@ namespace extension_manager_service.models
         public int PluginId { get; set; }
         public System.DateTime DatePublished { get; set; }
         public string FilePath { get; set; } = "";
+        public string ExecutePath { get; set; } = "";
 
     }
 }

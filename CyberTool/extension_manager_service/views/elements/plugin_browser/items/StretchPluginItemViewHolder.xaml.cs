@@ -142,16 +142,20 @@ namespace extension_manager_service.views.elements.plugin_browser.items
             switch (newMode)
             {
                 case PluginItemViewMode.Half:
+                    PART_PluginTitleFullModeTb.Visibility = Visibility.Collapsed;
                     PART_DownloadsTB.Visibility = Visibility.Collapsed;
                     PART_InstallButton.Visibility = Visibility.Collapsed;
                     PART_RatePanel.Visibility = Visibility.Collapsed;
                     PART_InstallButton2.Visibility = Visibility.Visible;
+                    PART_PluginTitleHalfModeTb.Visibility = Visibility.Visible;
                     break;
                 case PluginItemViewMode.Full:
+                    PART_PluginTitleFullModeTb.Visibility = Visibility.Visible;
                     PART_DownloadsTB.Visibility = Visibility.Visible;
                     PART_InstallButton.Visibility = Visibility.Visible;
                     PART_RatePanel.Visibility = Visibility.Visible;
                     PART_InstallButton2.Visibility = Visibility.Collapsed;
+                    PART_PluginTitleHalfModeTb.Visibility = Visibility.Collapsed;
                     break;
             }
         }

@@ -24,6 +24,7 @@ namespace extension_manager_service.models
         public string IconSource { get; set; } = "";
         public bool IsAuthenticated { get; set; }
         public int Downloads { get; set; }
+        public bool IsPreReleased { get; set; }
 
         public virtual ICollection<PluginVersionVO> PluginVersions { get; set; }
         public virtual ICollection<VoteVO> Votes { get; set; }
