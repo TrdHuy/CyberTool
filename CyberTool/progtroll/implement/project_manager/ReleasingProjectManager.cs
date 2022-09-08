@@ -510,6 +510,7 @@ namespace progtroll.implement.project_manager
                 , versionPropertiesFoundCallback: (prop, task) =>
                 {
                     dynamic data = prop;
+
                     VersionUpCommitVO vVO = new VersionUpCommitVO()
                     {
                         CommitTitle = data.Title,
@@ -522,7 +523,7 @@ namespace progtroll.implement.project_manager
 
                     // Xử lý trên model
                     var vOInCurrentBranch = _currentImportedProjectVO?.AddCommitVOToCurrentBranch(vVO);
-                    if (data.SubjectID != "" && !_taskIdCommitList.Contains(data.SubjectID))
+                    if (!_taskIdCommitList.Contains(data.SubjectID))
                     {
                         _taskIdCommitList.Add(data.SubjectID);
                     }

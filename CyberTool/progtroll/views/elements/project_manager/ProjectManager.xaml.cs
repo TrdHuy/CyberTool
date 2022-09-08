@@ -48,7 +48,7 @@ namespace progtroll.views.elements.project_manager
         }
         #endregion
 
-       
+
         public ProjectManager()
         {
             InitializeComponent();
@@ -60,36 +60,59 @@ namespace progtroll.views.elements.project_manager
         {
             PART_TaskIdItem.Items.Clear();
             _filterTaskIdList = newSource;
+            PART_VersionHistoryListView.Items.Filter = null;
 
             if (newSource != null)
             {
+                PART_TaskIdItem.Items.Add(PART_AllFilterTaskId);
+                PART_AllFilterTaskId.IsChecked = true;
+                if (newSource.Contains(""))
+                {
+                    PART_TaskIdItem.Items.Add(PART_NoneTaskIdFilter);
+                    PART_NoneTaskIdFilter.IsChecked = true;
+                    PART_NoneTaskIdFilter.Checked += (s, e) =>
+                    {
+                        _filterTaskIdList?.Add("");
+                        PART_VersionHistoryListView.Items.Filter = DoFilter;
+                    };
+                    PART_NoneTaskIdFilter.Unchecked += (s, e) =>
+                    {
+                        _filterTaskIdList?.Remove("");
+                        PART_VersionHistoryListView.Items.Filter = DoFilter;
+                    };
+                }
+                PART_TaskIdItem.Items.Add(PART_SeparatorTaskIdList);
+
                 foreach (var item in newSource)
                 {
-                    var menuItem = new MenuItem()
+                    if (item != "")
                     {
-                        Header = item,
-                        IsCheckable = true,
-                        IsChecked = true,
-                        StaysOpenOnClick = true,
-                    };
+                        var menuItem = new MenuItem()
+                        {
+                            Header = item,
+                            IsCheckable = true,
+                            IsChecked = true,
+                            StaysOpenOnClick = true,
+                        };
 
-                    menuItem.Unchecked += (s, e) =>
-                    {
-                        _filterTaskIdList?.Remove(item);
-                        PART_VersionHistoryListView.Items.Filter = DoFilter;
-                    };
+                        menuItem.Unchecked += (s, e) =>
+                        {
+                            _filterTaskIdList?.Remove(item);
+                            PART_VersionHistoryListView.Items.Filter = DoFilter;
+                        };
 
-                    menuItem.Checked += (s, e) =>
-                    {
-                        _filterTaskIdList?.Add(item);
-                        PART_VersionHistoryListView.Items.Filter = DoFilter;
-                    };
-                    PART_TaskIdItem.Items.Add(menuItem);
+                        menuItem.Checked += (s, e) =>
+                        {
+                            _filterTaskIdList?.Add(item);
+                            PART_VersionHistoryListView.Items.Filter = DoFilter;
+                        };
+                        PART_TaskIdItem.Items.Add(menuItem);
+                    }
                 }
             }
         }
 
-        private bool DoFilter (object item)
+        private bool DoFilter(object item)
         {
             var versionHistoryItem = item as VersionHistoryItemViewModel;
             if (_filterTaskIdList != null && versionHistoryItem != null)
@@ -101,9 +124,39 @@ namespace progtroll.views.elements.project_manager
 
         private void HandleButtonAndMenuItemClick(object sender, RoutedEventArgs e)
         {
-            if (PART_TaskIdItem.Items.Count != 0)
+            if (PART_TaskIdItem.Items.Count > 2)
             {
                 PART_TaskIdItem.IsOpen = true;
+            }
+        }
+
+        private void HandleAllFilterChecked(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in PART_TaskIdItem.Items)
+            {
+                if (item != PART_AllFilterTaskId && item != PART_SeparatorTaskIdList)
+                {
+                    MenuItem? menuItem = item as MenuItem;
+                    if (menuItem != null)
+                    {
+                        menuItem.IsChecked = true;
+                    }
+                }
+            }
+        }
+
+        private void HandleAllFilterUnChecked(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in PART_TaskIdItem.Items)
+            {
+                if (item != PART_AllFilterTaskId && item != PART_SeparatorTaskIdList)
+                {
+                    MenuItem? menuItem = item as MenuItem;
+                    if (menuItem != null)
+                    {
+                        menuItem.IsChecked = false;
+                    }
+                }
             }
         }
     }
