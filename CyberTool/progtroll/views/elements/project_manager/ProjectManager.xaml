@@ -186,6 +186,19 @@
                     <Button.ContextMenu>
                         <ContextMenu x:Name="PART_TaskIdItem"
                                      Style="{StaticResource CyberScrollableContextMenu}">
+                            <MenuItem x:Name="PART_AllFilterTaskId"
+									  Header="All"
+                                      IsCheckable="True"
+                                      IsChecked="True"
+                                      StaysOpenOnClick="True" 
+                                      Checked="HandleAllFilterChecked" 
+                                      Unchecked="HandleAllFilterUnChecked" />
+                            <MenuItem x:Name="PART_NoneTaskIdFilter"
+									  Header="None id"
+                                      IsCheckable="True"
+                                      IsChecked="True"
+                                      StaysOpenOnClick="True" />
+                            <Separator x:Name="PART_SeparatorTaskIdList"/>
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
