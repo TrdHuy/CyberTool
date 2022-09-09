@@ -33,7 +33,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
             if (string.IsNullOrEmpty(versionPropertiesFileName)
                 || string.IsNullOrEmpty(projectPath))
             {
-                HoneyboardReleaseService.Current.ServiceManager?.App.ShowWaringBox("Please import project and version properties file first!");
+                ProgTroll.Current.ServiceManager?.App.ShowWaringBox("Please import project and version properties file first!");
                 return;
             }
 
@@ -83,7 +83,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                 , delayTime: 0
                 , reportDelay: 100);
 
-            HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox("Restoring latest release commit", multiTask);
+            ProgTroll.Current.ServiceManager?.App.OpenMultiTaskBox("Restoring latest release commit", multiTask);
         }
 
         private async Task<AsyncTaskResult> Callback(List<AsyncTaskResult> results, AsyncTaskResult result)

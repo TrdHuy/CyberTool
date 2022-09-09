@@ -50,7 +50,7 @@ namespace extension_manager_service.implement.view_model
         {
         }
 
-        public void OnDestroy()
+        public void OnModuleDestroy()
         {
         }
 

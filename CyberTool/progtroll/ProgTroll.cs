@@ -1,3 +1,4 @@
+using cyber_base.extension;
 using cyber_base.implement.service;
 using cyber_base.service;
 using cyber_base.view_model;
@@ -8,9 +9,9 @@ using System;
 
 namespace progtroll
 {
-    public class HoneyboardReleaseService : AbstractCyberService
+    public class ProgTroll : AbstractCyberService, ICyberExtension
     {
-        public static HoneyboardReleaseService Current { get; private set; }
+        public static ProgTroll Current { get; private set; }
 
         public override string ServiceID { get; protected set; }
 
@@ -24,12 +25,12 @@ namespace progtroll
 
         public override Uri ServiceResourceUri { get; protected set; }
 
-        static HoneyboardReleaseService()
+        static ProgTroll()
         {
-            Current = new HoneyboardReleaseService();
+            Current = new ProgTroll();
         }
 
-        public HoneyboardReleaseService()
+        public ProgTroll()
         {
             Header = "Progtroll";
             HeaderGeometryData = PublisherDefinition.PUBLISHER_PLUGIN_GEOMETRY_DATA;

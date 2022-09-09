@@ -29,7 +29,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
 
             if (string.IsNullOrEmpty(projectPath))
             {
-                HoneyboardReleaseService.Current.ServiceManager?.App.ShowWaringBox("Please import project and version properties file first!");
+                ProgTroll.Current.ServiceManager?.App.ShowWaringBox("Please import project and version properties file first!");
                 return;
             }
             
@@ -54,7 +54,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                 , delayTime: 0
                 , reportDelay: 100);
 
-            HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox("Restoring latest merge commit", multiTask);
+            ProgTroll.Current.ServiceManager?.App.OpenMultiTaskBox("Restoring latest merge commit", multiTask);
         }
 
     }

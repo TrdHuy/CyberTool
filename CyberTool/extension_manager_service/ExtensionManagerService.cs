@@ -43,18 +43,18 @@ namespace extension_manager_service
         public override void OnServiceCreate(ICyberServiceManager cyberServiceManager)
         {
             base.OnServiceCreate(cyberServiceManager);
+            ModuleManager.InitAppModule();
         }
 
         public override void OnPreServiceViewInit(ICyberServiceManager cyberServiceManager)
         {
-            ModuleManager.Init();
+            ModuleManager.InitEMSModule();
         }
 
         public override void OnServiceViewInstantiated(ICyberServiceManager cyberServiceManager)
         {
             ModuleManager.OnViewInstantiated();
             (ServiceViewContext as BaseViewModel)?.OnViewInstantiated();
-
         }
 
         public override void OnServiceViewLoaded(ICyberServiceManager cyberServiceManager)
@@ -65,7 +65,7 @@ namespace extension_manager_service
         public override void OnServiceUnloaded(ICyberServiceManager cyberServiceManager)
         {
             base.OnServiceUnloaded(cyberServiceManager);
-            ModuleManager.Destroy();
+            ModuleManager.DestroyEMSModule();
         }
 
         protected override object? GenerateServiceView()

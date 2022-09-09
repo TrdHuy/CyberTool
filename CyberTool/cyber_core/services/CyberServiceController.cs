@@ -3,10 +3,6 @@ using cyber_core.@base.module;
 using cyber_core.utils;
 using cyber_core.windows.cyber_iface.views.usercontrols;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace cyber_core.services
@@ -15,7 +11,7 @@ namespace cyber_core.services
     /// Class này dùng để điều khiển trạng thái các service 
     /// trên CyberTool
     /// </summary>
-    internal class CyberServiceController : ICyberModule
+    internal class CyberServiceController : ICyberCoreModule
     {
         public static CyberServiceController Current
         {
@@ -60,10 +56,20 @@ namespace cyber_core.services
                 return;
             }
 
-            if (CyberServiceManager.Current.CyberServiceMaper[id] != null)
+            ICyberService? selectedService = null;
+            if (CyberServiceManager.Current.CyberServiceMaper.ContainsKey(id))
+            {
+                selectedService = CyberServiceManager.Current.CyberServiceMaper[id];
+            }
+            else if (CyberServiceManager.Current.CyberExtensionServiceMapper.ContainsKey(id))
+            {
+                selectedService = CyberServiceManager.Current.CyberExtensionServiceMapper[id];
+            }
+
+            if (selectedService != null)
             {
                 PreviousService = CurrentService;
-                CurrentService = CyberServiceManager.Current.CyberServiceMaper[id];
+                CurrentService = selectedService;
                 var arg = new ServiceEventArgs(CurrentService, PreviousService);
 
                 UpdateCurrentServiceView(arg);
@@ -76,7 +82,7 @@ namespace cyber_core.services
 
             BeforeServiceChange?.Invoke(this, args);
 
-            if(CurrentService == null)
+            if (CurrentService == null)
             {
                 CurrentServiceView = new Underconstruction();
             }
@@ -102,7 +108,7 @@ namespace cyber_core.services
 
                 }
             }
-            
+
 
             if (!args.Handled)
             {
@@ -113,7 +119,6 @@ namespace cyber_core.services
                 ServiceChanged?.Invoke(this, args);
             }
         }
-
 
         internal delegate void BeforeServiceChangeHandler(object sender, ServiceEventArgs args);
         internal delegate void ServiceChangeHandler(object sender, ServiceEventArgs args);

@@ -23,6 +23,7 @@ namespace extension_manager_service.implement.server_contact_manager.plugin_down
         private const string RESPONSE_IS_PLUGIN_DOWNLOADABLE_HEADER_ID = "CHECK_DOWNLOADABLE_PLUGIN__IS_DOWNLOADABLE";
         private const string RESPONSE_PLUGIN_FILE_NAME_HEADER_ID = "CHECK_DOWNLOADABLE_PLUGIN__PLUGIN_FILE_NAME";
         private const string RESPONSE_PLUGIN_EXECUTE_PATH_HEADER_ID = "CHECK_DOWNLOADABLE_PLUGIN__PLUGIN_EXECUTE_PATH";
+        private const string RESPONSE_PLUGIN_MAIN_CLASS_NAME_HEADER_ID = "CHECK_DOWNLOADABLE_PLUGIN__PLUGIN_MAIN_CLASS_NAME";
 
         private const string REQUEST_DOWNLOAD_PLUGIN_HEADER_ID = "DOWNLOAD_PLUGIN";
         private const string REQUEST_DOWNLOAD_PLUGIN_KEY_HEADER_ID = "DOWNLOAD_PLUGIN__PLUGIN_KEY";
@@ -53,6 +54,7 @@ namespace extension_manager_service.implement.server_contact_manager.plugin_down
                 var isDownloadable = false;
                 var fileName = "";
                 var executePath = "";
+                var mainClassName = "";
                 try
                 {
                     isDownloadable = response.Headers.GetValues(RESPONSE_IS_PLUGIN_DOWNLOADABLE_HEADER_ID)
@@ -61,13 +63,18 @@ namespace extension_manager_service.implement.server_contact_manager.plugin_down
                         .FirstOrDefault();
                     executePath = response.Headers.GetValues(RESPONSE_PLUGIN_EXECUTE_PATH_HEADER_ID)
                         .FirstOrDefault();
+                    mainClassName = response.Headers.GetValues(RESPONSE_PLUGIN_MAIN_CLASS_NAME_HEADER_ID)
+                        .FirstOrDefault();
                 }
                 catch
                 {
                     isDownloadable = false;
                 }
 
-                if (!isDownloadable)
+                if (!isDownloadable 
+                    || string.IsNullOrEmpty(fileName) 
+                    || string.IsNullOrEmpty(executePath)
+                    || string.IsNullOrEmpty(mainClassName))
                 {
                     return null;
                 }
@@ -104,6 +111,7 @@ namespace extension_manager_service.implement.server_contact_manager.plugin_down
                         result.Version = pluginVersion;
                         result.DownloadFilePath = downloadFilePath;
                         result.ExecutePath = versionExecutePath;
+                        result.MainClassName = mainClassName;
                     }
                 }
 

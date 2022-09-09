@@ -1,4 +1,5 @@
 ﻿using cyber_base.app;
+using cyber_base.extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Windows;
 
 namespace cyber_base.service
 {
-    public interface ICyberServiceManager
+    public interface ICyberServiceManager 
     {
         public ICyberApplication App { get; }
 
@@ -16,5 +17,6 @@ namespace cyber_base.service
 
         public string GetPluginsBaseFolderLocation();
 
+        public void RegisterExtensionAsCyberService(ICyberExtension cyberExtension);
     }
 }

@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogGuard", "LogGuard_v0.1\L
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestImportLib", "TestImportLib\TestImportLib.csproj", "{6A9B3AF8-8A71-4D8D-8B67-A7D2341E68ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cyber_extension", "cyber_extension\cyber_extension.csproj", "{A0965E65-C480-4CA5-B7B6-DAF7F4D07508}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dashboard_service", "dashboard_service\dashboard_service.csproj", "{D8EA7CA5-765D-4296-A1B7-492099F73418}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cyber_base", "cyber_base\cyber_base.csproj", "{F84CF938-74C3-4477-8E7F-78F3853692E9}"
@@ -39,10 +37,6 @@ Global
 		{6A9B3AF8-8A71-4D8D-8B67-A7D2341E68ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A9B3AF8-8A71-4D8D-8B67-A7D2341E68ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A9B3AF8-8A71-4D8D-8B67-A7D2341E68ED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A0965E65-C480-4CA5-B7B6-DAF7F4D07508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0965E65-C480-4CA5-B7B6-DAF7F4D07508}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A0965E65-C480-4CA5-B7B6-DAF7F4D07508}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A0965E65-C480-4CA5-B7B6-DAF7F4D07508}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D8EA7CA5-765D-4296-A1B7-492099F73418}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D8EA7CA5-765D-4296-A1B7-492099F73418}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8EA7CA5-765D-4296-A1B7-492099F73418}.Release|Any CPU.ActiveCfg = Release|Any CPU

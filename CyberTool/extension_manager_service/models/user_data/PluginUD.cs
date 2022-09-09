@@ -11,5 +11,6 @@ namespace extension_manager_service.models.user_data
         public string PluginKey { get; set; } = "";
         public ICollection<PluginVersionUD>? PluginVersionSource { get; set; }
         public string CurrentInstalledVersionPath { get; set; } = "";
+        public string CurrentInstalledVersionMainClassName { get; set; } = "";
     }
 }

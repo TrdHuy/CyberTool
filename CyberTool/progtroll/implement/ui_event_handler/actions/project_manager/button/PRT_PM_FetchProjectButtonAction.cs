@@ -30,7 +30,7 @@ namespace progtroll.implement.ui_event_handler.actions.project_manager.button
                     .Current
                     .CurrentImportedProjectVO == null)
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                     .ServiceManager?
                     .App
                     .ShowWaringBox("Please import project first!");
@@ -96,7 +96,7 @@ namespace progtroll.implement.ui_event_handler.actions.project_manager.button
                , name: "Fetching"
                , delayTime: 0
                , reportDelay: 100);
-            HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox(
+            ProgTroll.Current.ServiceManager?.App.OpenMultiTaskBox(
                 title: "Fetching"
                 , task: multiTask
                 , isCancelable: false);

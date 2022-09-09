@@ -49,7 +49,7 @@ namespace extension_manager_service.implement.ui_event_handler
         {
         }
 
-        public void OnDestroy()
+        public void OnModuleDestroy()
         {
         }
     }

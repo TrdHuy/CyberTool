@@ -625,7 +625,7 @@ namespace progtroll.implement.project_manager
                   , name: "Importing branchs from user data"
                   , delayTime: 0
                   , reportDelay: 100);
-                HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox(
+                ProgTroll.Current.ServiceManager?.App.OpenMultiTaskBox(
                     title: "Importing branchs from user data"
                    , task: multiTask
                    , isCancelable: false

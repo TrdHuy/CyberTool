@@ -55,7 +55,7 @@ namespace progtroll.implement.ui_event_handler.actions.project_manager.gesture
                 , delayTime: 0
                 , reportDelay: 100);
 
-            HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox("Checking out", multiTask, isCancelable: false);
+            ProgTroll.Current.ServiceManager?.App.OpenMultiTaskBox("Checking out", multiTask, isCancelable: false);
 
             ReleasingProjectManager
                     .Current

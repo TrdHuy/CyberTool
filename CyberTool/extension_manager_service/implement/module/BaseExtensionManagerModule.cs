@@ -9,7 +9,7 @@ namespace extension_manager_service.implement.module
 {
     internal class BaseExtensionManagerModule : IExtensionManagerModule
     {
-        public virtual void OnDestroy()
+        public virtual void OnModuleDestroy()
         {
         }
 

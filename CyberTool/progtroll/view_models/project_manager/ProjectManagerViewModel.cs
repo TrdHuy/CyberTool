@@ -216,7 +216,7 @@ namespace progtroll.view_models.project_manager
             {
                 if (_RPM_Instance.CurrentImportedProjectVO == null)
                 {
-                    HoneyboardReleaseService
+                    ProgTroll
                         .Current
                         .ServiceManager?
                         .App
@@ -251,7 +251,7 @@ namespace progtroll.view_models.project_manager
 
         public void ForceSetSelectedBranch(BranchItemViewModel parents)
         {
-            HoneyboardReleaseService
+            ProgTroll
                 .Current
                 .ServiceManager?
                 .App
@@ -326,7 +326,7 @@ namespace progtroll.view_models.project_manager
 
         private bool HandlePreSelectedItemChange(string newBranchPath)
         {
-            var res = HoneyboardReleaseService.Current
+            var res = ProgTroll.Current
                 .ServiceManager?
                 .App
                 .ShowWaringBox("You are about to checkout \"" + newBranchPath + "\"");

@@ -38,7 +38,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                     .Current
                     .CurrentImportedProjectVO == null)
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                     .ServiceManager?
                     .App
                     .ShowWaringBox("Please import project first!");
@@ -47,7 +47,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
 
             if (string.IsNullOrEmpty(mTViewModel.TaskID))
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                     .ServiceManager?
                     .App
                     .ShowWaringBox("You must enter task id");
@@ -56,7 +56,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
 
             if (string.IsNullOrEmpty(mTViewModel.CommitTitle))
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                     .ServiceManager?
                     .App
                     .ShowWaringBox("You must enter commit title");
@@ -66,7 +66,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
             if (string.IsNullOrEmpty(mTViewModel
                     .SelectedInceptionBranch))
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                    .ServiceManager?
                    .App
                    .ShowWaringBox("Please select a branch you intend to merge");
@@ -82,7 +82,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
 
             if (destinationBranchVO == null)
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                    .ServiceManager?
                    .App
                    .ShowWaringBox("Please select a branch you intend to merge into");
@@ -91,7 +91,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
 
             if (inceptionBranchVO == null)
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                    .ServiceManager?
                    .App
                    .ShowWaringBox("Branch " + mTViewModel.SelectedInceptionBranch + " not found!");
@@ -111,7 +111,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                 .Current
                 .GetBranchOfCurrentProjectFromPath(_inceptionBranchPath) == null)
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                    .ServiceManager?
                    .App
                    .ShowWaringBox("Branch " + _inceptionBranchPath + " not found!");
@@ -122,14 +122,14 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                 .Current
                 .GetBranchOfCurrentProjectFromPath(_destinationBranchPath) == null)
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                    .ServiceManager?
                    .App
                    .ShowWaringBox("Branch " + _destinationBranchPath + " not found!");
                 return false;
             }
 
-            var confirm = HoneyboardReleaseService
+            var confirm = ProgTroll
                 .Current
                 .ServiceManager?
                 .App
@@ -222,7 +222,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                       }
 
                       message += "Do you want to abort merge process?";
-                      abortMergeProcess = HoneyboardReleaseService
+                      abortMergeProcess = ProgTroll
                         .Current
                         .ServiceManager?
                         .App
@@ -273,7 +273,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                 , name: taskName
                 , delayTime: 0
                 , reportDelay: 100);
-            HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox(
+            ProgTroll.Current.ServiceManager?.App.OpenMultiTaskBox(
                 title: taskName
                 , task: multiTask
                 , isCancelable: false
@@ -294,7 +294,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                         {
                             waitingBox?.UpdateMessageAndTitle("Merge sucess", "Finished");
                             mTViewModel.MergeTabGitStatus = ProjectGitStatus.HavingCommit;
-                            HoneyboardReleaseService
+                            ProgTroll
                                 .Current
                                 .ServiceManager?
                                 .App
@@ -304,7 +304,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                         {
                             waitingBox?.UpdateMessageAndTitle("Already up-to-date.", "Finished");
                             mTViewModel.MergeTabGitStatus = ProjectGitStatus.None;
-                            HoneyboardReleaseService
+                            ProgTroll
                                 .Current
                                 .ServiceManager?
                                 .App

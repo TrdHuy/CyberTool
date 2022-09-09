@@ -21,6 +21,6 @@ namespace extension_manager_service.@base
         /// <summary>
         /// Sự kiện xảy ra khi service bị hủy
         /// </summary>
-        void OnDestroy();
+        void OnModuleDestroy();
     }
 }

@@ -34,7 +34,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                     .Current
                     .CurrentImportedProjectVO == null)
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                     .ServiceManager?
                     .App
                     .ShowWaringBox("Please import project first!");
@@ -45,7 +45,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                    .Current
                    .CurrentImportedProjectVO.OnBranch == null)
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                    .ServiceManager?
                    .App
                    .ShowWaringBox("Please select a branch you intend to merge into");
@@ -63,7 +63,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                             .Current.CurrentImportedProjectVO.OnBranch.BranchPath;
             _branchPathForPushing = "HEAD:" + branchPath.Substring(7);
 
-            var confirmGerritPush = HoneyboardReleaseService
+            var confirmGerritPush = ProgTroll
                 .Current
                 .ServiceManager?
                 .App
@@ -113,7 +113,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                , delayTime: 0
                , reportDelay: 100);
 
-            HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox(
+            ProgTroll.Current.ServiceManager?.App.OpenMultiTaskBox(
                 title: pushTaskName
                 , task: multiTask
                 , isCancelable: false
@@ -123,7 +123,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                     {
                         if (_isPushToGerrit)
                         {
-                            HoneyboardReleaseService
+                            ProgTroll
                             .Current
                             .ServiceManager?
                             .App
@@ -131,7 +131,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                         }
                         else
                         {
-                            HoneyboardReleaseService
+                            ProgTroll
                             .Current
                             .ServiceManager?
                             .App
@@ -141,7 +141,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                     }
                     else if (pushResult == PushResult.Error)
                     {
-                        HoneyboardReleaseService
+                        ProgTroll
                             .Current
                             .ServiceManager?
                             .App
@@ -150,7 +150,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                     }
                     else if (pushResult == PushResult.UpToDate)
                     {
-                        HoneyboardReleaseService
+                        ProgTroll
                             .Current
                             .ServiceManager?
                             .App
