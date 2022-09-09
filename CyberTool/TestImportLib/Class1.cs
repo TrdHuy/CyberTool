@@ -1,5 +1,5 @@
-using cyber_extension.dll_base.extension;
 using System;
+using cyber_base.extension;
 
 namespace TestImportLib
 {

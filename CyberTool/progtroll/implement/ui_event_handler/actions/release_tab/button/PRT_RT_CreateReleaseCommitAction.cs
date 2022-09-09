@@ -34,7 +34,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                     .Current
                     .CurrentImportedProjectVO == null)
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                     .ServiceManager?
                     .App
                     .ShowWaringBox("Please import project first!");
@@ -43,7 +43,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
 
             if (string.IsNullOrEmpty(RTViewModel.TaskID))
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                     .ServiceManager?
                     .App
                     .ShowWaringBox("You must enter task id");
@@ -52,7 +52,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
 
             if (string.IsNullOrEmpty(RTViewModel.CommitTitle))
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                     .ServiceManager?
                     .App
                     .ShowWaringBox("You must enter commit title");
@@ -63,7 +63,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                     .Current
                     .CurrentImportedProjectVO.OnBranch == null)
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                    .ServiceManager?
                    .App
                    .ShowWaringBox("Please select a branch you planning to release new version");
@@ -84,7 +84,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                             .OnBranch
                             .BranchPath))
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                    .ServiceManager?
                    .App
                    .ShowWaringBox("Please select an origin branch");
@@ -100,7 +100,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                         .LatestCommitVO?
                         .Properties.IsEmpty() ?? false)))
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                    .ServiceManager?
                    .App
                    .ShowWaringBox("Please wait few minutes for loading latest version");
@@ -114,7 +114,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                     <= ReleasingProjectManager
                         .Current.LatestCommitVO.Properties)
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                    .ServiceManager?
                    .App
                    .ShowWaringBox("New version must be greater than "
@@ -131,7 +131,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
             if ((versionPropertiesVO.Major == EMPTY_STRING && RTViewModel.Major != EMPTY_STRING)
                 || (versionPropertiesVO.Major != EMPTY_STRING && RTViewModel.Major == EMPTY_STRING))
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                    .ServiceManager?
                    .App
                    .ShowWaringBox("Please re-check major of project!");
@@ -142,7 +142,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
             if ((versionPropertiesVO.Minor == EMPTY_STRING && RTViewModel.Minor != EMPTY_STRING)
                 || (versionPropertiesVO.Minor != EMPTY_STRING && RTViewModel.Minor == EMPTY_STRING))
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                    .ServiceManager?
                    .App
                    .ShowWaringBox("Please re-check minor of project!");
@@ -153,7 +153,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
             if ((versionPropertiesVO.Patch == EMPTY_STRING && RTViewModel.Patch != EMPTY_STRING)
                 || (versionPropertiesVO.Patch != EMPTY_STRING && RTViewModel.Patch == EMPTY_STRING))
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                    .ServiceManager?
                    .App
                    .ShowWaringBox("Please re-check path of project!");
@@ -164,7 +164,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
             if ((versionPropertiesVO.Revision == EMPTY_STRING && RTViewModel.Revision != EMPTY_STRING) 
                 || (versionPropertiesVO.Revision != EMPTY_STRING && RTViewModel.Revision == EMPTY_STRING))
             {
-                HoneyboardReleaseService.Current
+                ProgTroll.Current
                    .ServiceManager?
                    .App
                    .ShowWaringBox("Please re-check revision of project!");
@@ -176,7 +176,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                                 ? ReleasingProjectManager.Current.CurrentImportedProjectVO.OnBranch.BranchPath
                                 : "origin/" + ReleasingProjectManager.Current.CurrentImportedProjectVO.OnBranch.BranchPath;
 
-            var confirm = HoneyboardReleaseService
+            var confirm = ProgTroll
                 .Current
                 .ServiceManager?
                 .App
@@ -285,7 +285,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                 , delayTime: 0
                 , reportDelay: 100);
 
-            HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox(
+            ProgTroll.Current.ServiceManager?.App.OpenMultiTaskBox(
                 "Releasing"
                 , multiTask
                 , isCancelable: false
@@ -297,7 +297,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                     {
                         waitingBox?.UpdateMessageAndTitle("Commit sucess", "Finished");
                         RTViewModel.ReleaseTabGitStatus = ProjectGitStatus.HavingCommit;
-                        HoneyboardReleaseService
+                        ProgTroll
                             .Current
                             .ServiceManager?
                             .App

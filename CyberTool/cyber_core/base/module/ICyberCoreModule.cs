@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace cyber_core.@base.module
 {
-    internal interface ICyberModule
+    internal interface ICyberCoreModule
     {
         /// <summary>
         /// Sự kiện xảy ra khi bắt đầu khởi tạo module

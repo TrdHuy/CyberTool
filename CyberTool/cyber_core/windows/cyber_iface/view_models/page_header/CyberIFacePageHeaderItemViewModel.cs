@@ -14,7 +14,7 @@ namespace cyber_core.windows.cyber_iface.view_models.page_header
         public ICyberService? Service { get; private set; }
         public bool IsService { get; private set; }
 
-        public CyberIFacePageHeaderItemViewModel(ICyberService service)
+        public CyberIFacePageHeaderItemViewModel(ICyberService? service)
         {
             Service = service;
             IsService = service != null;

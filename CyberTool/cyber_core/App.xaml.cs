@@ -2,20 +2,11 @@
 using cyber_base.async_task;
 using cyber_base.definition;
 using cyber_base.implement.async_task;
-using cyber_extension.dll_base.extension;
 using cyber_core.definitions;
-using cyber_core.plugins;
 using cyber_core.utils;
 using cyber_core.windows;
-using cyber_core.windows.cyber_istand.views;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,6 +21,7 @@ namespace cyber_core
     {
         private static App? _instance;
         private WindowDirector _WindowDirector;
+        private List<ICyberAppModule> _appModules = new List<ICyberAppModule>();
 
         public static new App Current
         {
@@ -51,7 +43,6 @@ namespace cyber_core
             }
         }
 
-
         private App() : base()
         {
             _instance = this;
@@ -71,6 +62,15 @@ namespace cyber_core
             CyberToolModuleManager.OnIFaceShowed();
         }
 
+        protected override void OnExit(ExitEventArgs e)
+        {
+            foreach (var module in _appModules)
+            {
+                module.OnModuleDestroy();
+            }
+            _appModules.Clear();
+            base.OnExit(e);
+        }
 
         public CyberContactMessage OpenWaitingTaskBox(string content
             , string title
@@ -207,6 +207,15 @@ namespace cyber_core
         public string OpenEditTextDialogWindow(string oldText, bool isMultiLine)
         {
             return _WindowDirector.OpenEditTextDialogWindow(oldText, isMultiLine);
+        }
+
+        public void RegisterAppModule(ICyberAppModule appModule)
+        {
+            if (!_appModules.Contains(appModule))
+            {
+                _appModules.Add(appModule);
+                appModule.OnModuleStart();
+            }
         }
     }
 }

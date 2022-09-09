@@ -23,7 +23,7 @@ namespace progtroll.implement.ui_event_handler.actions.notebook.context_menu
                 {
                     var oldText = selectedCNProjectItemVM.ProjectName;
 
-                    var newText = HoneyboardReleaseService
+                    var newText = ProgTroll
                         .Current
                         .ServiceManager?
                         .App

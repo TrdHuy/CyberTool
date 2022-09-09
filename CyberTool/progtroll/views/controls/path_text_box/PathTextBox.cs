@@ -183,7 +183,7 @@ namespace progtroll.views.controls.path_text_box
                     {
                         if (PathType == Type.Folder)
                         {
-                            var path = HoneyboardReleaseService
+                            var path = ProgTroll
                                 .Current
                                 .ServiceManager?
                                 .App.OpenFolderChooserDialogWindow();
@@ -198,7 +198,7 @@ namespace progtroll.views.controls.path_text_box
                         }
                         else if (PathType == Type.File)
                         {
-                            var path = HoneyboardReleaseService
+                            var path = ProgTroll
                                 .Current
                                 .ServiceManager?
                                 .App

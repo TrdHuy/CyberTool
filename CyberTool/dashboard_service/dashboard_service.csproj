@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\cyber_base\cyber_base.csproj" />
-    <ProjectReference Include="..\cyber_extension\cyber_extension.csproj" />
   </ItemGroup>
 
 </Project>

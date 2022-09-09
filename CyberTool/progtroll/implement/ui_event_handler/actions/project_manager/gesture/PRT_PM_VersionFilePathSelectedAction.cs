@@ -57,7 +57,7 @@ namespace progtroll.implement.ui_event_handler.actions.project_manager.gesture
                     , delayTime: 0
                     , reportDelay: 100);
 
-                var message = HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox("Parsing version properties file", multiTask);
+                var message = ProgTroll.Current.ServiceManager?.App.OpenMultiTaskBox("Parsing version properties file", multiTask);
 
                 if (message != CyberContactMessage.Cancel
                     && PMViewModel.VersionPropertiesFileName != "")

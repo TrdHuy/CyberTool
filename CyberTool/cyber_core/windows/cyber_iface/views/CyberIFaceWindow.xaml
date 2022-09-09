@@ -6,6 +6,8 @@
 				 xmlns:cyw="clr-namespace:cyber_core.app_resources.controls.cyber_window"
 				 xmlns:vm="clr-namespace:cyber_core.windows.cyber_iface.view_models"
 				 xmlns:local="clr-namespace:cyber_core.windows.cyber_iface.views"
+				 xmlns:cs="clr-namespace:cyber_base.implement.views.cyber_scroll;assembly=cyber_base"
+				 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 				 mc:Ignorable="d"
 				 Title="CyberTool"
 				 Height="810"
@@ -28,12 +30,13 @@
 			  Background="{StaticResource Background_Level2}">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*" />
-				<RowDefinition Height="2*" />
-				<RowDefinition Height="*" />
+				<RowDefinition Height="7*"/>
+				<RowDefinition Height="3*" />
 			</Grid.RowDefinitions>
 			<ListView BorderThickness="0"
 					  Grid.Row="1"
 					  ItemsSource="{Binding PageHeaderItems}"
+					  VerticalAlignment="Center"
 					  SelectedItem="{Binding SelectedHeaderItem}"
 					  Background="{StaticResource Background_Level2}">
 				<ListView.ItemContainerStyle>
@@ -98,14 +101,28 @@
 									</Setter.Value>
 								</Setter>
 							</DataTrigger>
-
-
 						</Style.Triggers>
-
-
 					</Style>
 
 				</ListView.ItemContainerStyle>
+				<ListView.Template>
+					<ControlTemplate TargetType="{x:Type ListView}">
+						<ControlTemplate.Resources>
+							<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
+							<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
+						</ControlTemplate.Resources>
+						<Border Name="Border"
+								Background="{TemplateBinding Background}"
+								BorderThickness="{TemplateBinding BorderThickness}">
+
+							<cs:CyberScrollView CanContentScroll="False"
+												IsMouseOverExpandScrollbar="True"
+												ThumbBackground="{DynamicResource ButtonBackground_Level1}">
+								<ItemsPresenter />
+							</cs:CyberScrollView>
+						</Border>
+					</ControlTemplate>
+				</ListView.Template>
 
 			</ListView>
 		</Grid>
@@ -114,7 +131,7 @@
 						  Grid.RowSpan="3"
 						  Margin="0,20,10,10"
 						  Content="{Binding ServiceContent}">
-			
+
 		</ContentPresenter>
 	</Grid>
 </cyw:CyberWindow>

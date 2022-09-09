@@ -68,7 +68,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                       }
 
                       message += "Do you want to abort merge process?";
-                      abortMergeProcess = HoneyboardReleaseService
+                      abortMergeProcess = ProgTroll
                         .Current
                         .ServiceManager?
                         .App
@@ -103,7 +103,7 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
                , delayTime: 0
                , reportDelay: 100);
 
-            HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox(
+            ProgTroll.Current.ServiceManager?.App.OpenMultiTaskBox(
                 title: "Checking conflict"
                 , task: multiTask
                 , isCancelable: false

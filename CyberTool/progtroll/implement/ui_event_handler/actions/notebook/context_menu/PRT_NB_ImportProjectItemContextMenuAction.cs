@@ -16,19 +16,19 @@ namespace progtroll.implement.ui_event_handler.actions.notebook.context_menu
     {
         private ReleasingProjectManager releasingProjectManager;
         private ViewModelManager viewModelManager;
-        private HoneyboardReleaseService honeyboardReleaseService;
+        private ProgTroll progTrollInstance;
 
         public PRT_NB_ImportProjectItemContextMenuAction(string actionID, string builderID, ILogger? logger)
             : base(actionID, builderID, logger)
         {
             releasingProjectManager = ReleasingProjectManager.Current;
             viewModelManager = ViewModelManager.Current;
-            honeyboardReleaseService = HoneyboardReleaseService.Current;
+            progTrollInstance = ProgTroll.Current;
         }
 
         protected override bool CanExecute(object? dataTransfer)
         {
-            var confirm = honeyboardReleaseService
+            var confirm = progTrollInstance
                 .ServiceManager?
                 .App
                 .ShowYesNoQuestionBox("Do you want to import this project?");
@@ -48,7 +48,7 @@ namespace progtroll.implement.ui_event_handler.actions.notebook.context_menu
 
                 if (selectedProjectItem == currentImportProject)
                 {
-                    honeyboardReleaseService
+                    progTrollInstance
                         .ServiceManager?
                         .App
                         .ShowWaringBox("You've already imported this project!");
@@ -81,7 +81,7 @@ namespace progtroll.implement.ui_event_handler.actions.notebook.context_menu
                        , name: "Importing project"
                        , delayTime: 0
                        , reportDelay: 10);
-                    HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox(
+                    ProgTroll.Current.ServiceManager?.App.OpenMultiTaskBox(
                         title: "Importing project"
                         , task: multiTask
                         , isCancelable: false);

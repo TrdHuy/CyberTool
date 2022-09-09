@@ -84,7 +84,7 @@ namespace progtroll.implement.ui_event_handler.actions.version_manager
                , delayTime: 0
                , reportDelay: 100);
 
-            var message = HoneyboardReleaseService.Current.ServiceManager?.App.OpenMultiTaskBox("Getting commit history"
+            var message = ProgTroll.Current.ServiceManager?.App.OpenMultiTaskBox("Getting commit history"
                 , multiTask);
 
             if (message == cyber_base.definition.CyberContactMessage.Done)
@@ -95,7 +95,7 @@ namespace progtroll.implement.ui_event_handler.actions.version_manager
                 if (comparatorUCContext != null)
                 {
                     comparatorUCContext.CommitItemsSource = commitItemsSource;
-                    HoneyboardReleaseService.Current
+                    ProgTroll.Current
                     .ServiceManager?
                     .App
                     .ShowUserControlWindow(comparatorUC

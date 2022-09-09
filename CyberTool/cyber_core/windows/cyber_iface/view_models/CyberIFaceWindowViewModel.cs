@@ -5,26 +5,28 @@ using cyber_core.windows.cyber_iface.views.usercontrols;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO.Packaging;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace cyber_core.windows.cyber_iface.view_models
 {
     public class CyberIFaceWindowViewModel : BaseViewModel
     {
-        private CyberServiceController _ServiceController = CyberServiceController.Current;
-        private CyberServiceManager _ServiceManager = CyberServiceManager.Current;
-        private CyberIFacePageHeaderItemViewModel _selectedHeaderItem = null;
-
+        private SemaphoreSlim _pageHeaderItemsSourceSlim = new SemaphoreSlim(1, 1);
+        private CyberServiceController _serviceController = CyberServiceController.Current;
+        private CyberServiceManager _serviceManager = CyberServiceManager.Current;
+        private CyberIFacePageHeaderItemViewModel? _selectedHeaderItem = null;
 
         [Bindable(true)]
         public ObservableCollection<CyberIFacePageHeaderItemViewModel> PageHeaderItems { get; set; } = new ObservableCollection<CyberIFacePageHeaderItemViewModel>();
 
         [Bindable(true)]
-        public CyberIFacePageHeaderItemViewModel SelectedHeaderItem
+        public CyberIFacePageHeaderItemViewModel? SelectedHeaderItem
         {
             get
             {
@@ -32,12 +34,13 @@ namespace cyber_core.windows.cyber_iface.view_models
             }
             set
             {
-                if (value.IsService && value.Service != null)
+
+                if (value != null && value.IsService && value.Service != null)
                 {
                     if (IsShouldChangePage(_selectedHeaderItem, value))
                     {
                         _selectedHeaderItem = value;
-                        _ServiceController.UpdateCurrentServiceByID(value.Service.ServiceID);
+                        _serviceController.UpdateCurrentServiceByID(value.Service.ServiceID);
                     }
                 }
                 InvalidateOwn();
@@ -45,11 +48,11 @@ namespace cyber_core.windows.cyber_iface.view_models
         }
 
         [Bindable(true)]
-        public object ServiceContent
+        public object? ServiceContent
         {
             get
             {
-                return _ServiceController.CurrentServiceView;
+                return _serviceController.CurrentServiceView;
             }
         }
 
@@ -57,23 +60,60 @@ namespace cyber_core.windows.cyber_iface.view_models
         public CyberIFaceWindowViewModel()
         {
             InitServiceHeaderItemSource();
-            _ServiceController.ServiceChanged -= OnServiceChanged;
-            _ServiceController.ServiceChanged += OnServiceChanged;
+            _serviceController.ServiceChanged -= OnServiceChanged;
+            _serviceController.ServiceChanged += OnServiceChanged;
+            _serviceManager.ExtensionServiceMapperCollectionChanged -= HandleExtensionServiceCollectionChanged;
+            _serviceManager.ExtensionServiceMapperCollectionChanged += HandleExtensionServiceCollectionChanged;
+        }
+
+        private async void HandleExtensionServiceCollectionChanged(object sender, ExtensionServiceMapperCollectionChangedEventArgs args)
+        {
+            await _pageHeaderItemsSourceSlim.WaitAsync();
+            try
+            {
+                if(args.Action == NotifyCollectionChangedAction.Add)
+                {
+                    if(args.NewService != null)
+                    {
+                        var vm = new CyberIFacePageHeaderItemViewModel(args.NewService);
+                        PageHeaderItems.Add(vm);
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                _pageHeaderItemsSourceSlim.Release();
+            }
         }
 
         private void InitServiceHeaderItemSource()
         {
-            foreach (var vo in _ServiceManager.CyberServiceMaper.Values)
+            try
             {
-                if (vo != null)
+                _pageHeaderItemsSourceSlim.Wait();
+                foreach (var vo in _serviceManager.CyberServiceMaper.Values)
                 {
-                    var vm = new CyberIFacePageHeaderItemViewModel(vo);
-                    PageHeaderItems.Add(vm);
-                    if (_ServiceController.CurrentService == vo)
+                    if (vo != null)
                     {
-                        _selectedHeaderItem = vm;
+                        var vm = new CyberIFacePageHeaderItemViewModel(vo);
+                        PageHeaderItems.Add(vm);
+                        if (_serviceController.CurrentService == vo)
+                        {
+                            _selectedHeaderItem = vm;
+                        }
                     }
                 }
+            }
+            catch
+            {
+            }
+            finally
+            {
+                _pageHeaderItemsSourceSlim.Release();
             }
         }
 
@@ -82,10 +122,18 @@ namespace cyber_core.windows.cyber_iface.view_models
             Invalidate("ServiceContent");
         }
 
-        private bool IsShouldChangePage(CyberIFacePageHeaderItemViewModel oldValue
-            , CyberIFacePageHeaderItemViewModel newValue)
+        private bool IsShouldChangePage(CyberIFacePageHeaderItemViewModel? oldValue
+            , CyberIFacePageHeaderItemViewModel? newValue)
         {
             return true;
+        }
+
+        public override void OnDestroy()
+        {
+            _serviceController.ServiceChanged -= OnServiceChanged;
+            _serviceManager.ExtensionServiceMapperCollectionChanged -= HandleExtensionServiceCollectionChanged;
+            _pageHeaderItemsSourceSlim.Dispose();
+            base.OnDestroy();
         }
     }
 }

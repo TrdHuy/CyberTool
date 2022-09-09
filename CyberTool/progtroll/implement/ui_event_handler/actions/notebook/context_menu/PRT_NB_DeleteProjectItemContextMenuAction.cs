@@ -23,7 +23,7 @@ namespace progtroll.implement.ui_event_handler.actions.notebook.context_menu
 
         protected override bool CanExecute(object? dataTransfer)
         {
-            var confirm = HoneyboardReleaseService
+            var confirm = ProgTroll
                 .Current
                 .ServiceManager?
                 .App

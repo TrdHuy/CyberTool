@@ -1,27 +1,20 @@
 ﻿using cyber_core.@base.module;
-using cyber_core.plugins;
 using cyber_core.services;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace cyber_core.utils
 {
     public class CyberToolModuleManager
     {
-        private static Collection<ICyberModule> _CyberModules;
-        private static ICyberModule _CPM_Instance;
-        private static ICyberModule _CSM_Insatace;
-        private static ICyberModule _CSC_Insatace;
+        private static Collection<ICyberCoreModule> _CyberModules = new Collection<ICyberCoreModule>();
+        private static ICyberCoreModule? _CSM_Insatace;
+        private static ICyberCoreModule? _CSC_Insatace;
 
         public static void Init()
         {
-            _CyberModules = new Collection<ICyberModule>();
+            _CyberModules.Clear();
 
-            _CyberModules.Add(CPM_Instance);
             _CyberModules.Add(CSM_Insatace);
             _CyberModules.Add(CSC_Insatace);
 
@@ -44,19 +37,7 @@ namespace cyber_core.utils
                 module.OnIFaceWindowShowed();
             }
         }
-
-        public static CyberPluginsManager CPM_Instance
-        {
-            get
-            {
-                if (_CPM_Instance == null)
-                {
-                    _CPM_Instance = Activator.CreateInstance(typeof(CyberPluginsManager), true) as ICyberModule;
-                }
-                return (CyberPluginsManager)_CPM_Instance;
-            }
-        }
-
+        
 
         public static CyberServiceManager CSM_Insatace
         {
@@ -64,8 +45,9 @@ namespace cyber_core.utils
             {
                 if (_CSM_Insatace == null)
                 {
-                    _CSM_Insatace = Activator.CreateInstance(typeof(CyberServiceManager), true) as ICyberModule;
+                    _CSM_Insatace = Activator.CreateInstance(typeof(CyberServiceManager), true) as ICyberCoreModule;
                 }
+                ArgumentNullException.ThrowIfNull(_CSM_Insatace);
                 return (CyberServiceManager)_CSM_Insatace;
             }
         }
@@ -76,8 +58,9 @@ namespace cyber_core.utils
             {
                 if (_CSC_Insatace == null)
                 {
-                    _CSC_Insatace = Activator.CreateInstance(typeof(CyberServiceController), true) as ICyberModule;
+                    _CSC_Insatace = Activator.CreateInstance(typeof(CyberServiceController), true) as ICyberCoreModule;
                 }
+                ArgumentNullException.ThrowIfNull(_CSC_Insatace);
                 return (CyberServiceController)_CSC_Insatace;
             }
         }

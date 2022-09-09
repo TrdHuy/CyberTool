@@ -17,7 +17,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
         {
             if (string.IsNullOrEmpty(RTViewModel.TaskID))
             {
-                HoneyboardReleaseService
+                ProgTroll
                     .Current
                     .ServiceManager?
                     .App
@@ -28,7 +28,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
 
             if (string.IsNullOrEmpty(RTViewModel.CommitTitle))
             {
-                HoneyboardReleaseService
+                ProgTroll
                     .Current
                     .ServiceManager?
                     .App
@@ -42,7 +42,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
 
         protected override void ExecuteCommand()
         {
-            var displayName = HoneyboardReleaseService
+            var displayName = ProgTroll
                     .Current
                     .ServiceManager?
                     .App
@@ -50,7 +50,7 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
 
             if (string.IsNullOrEmpty(displayName))
             {
-                HoneyboardReleaseService
+                ProgTroll
                     .Current
                     .ServiceManager?
                     .App
