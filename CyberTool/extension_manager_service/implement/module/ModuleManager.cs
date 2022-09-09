@@ -1,4 +1,5 @@
-﻿using extension_manager_service.@base;
+﻿using cyber_base.app;
+using extension_manager_service.@base;
 using extension_manager_service.implement.log_manager;
 using extension_manager_service.implement.plugin_manager;
 using extension_manager_service.implement.server_contact_manager;
@@ -17,9 +18,10 @@ namespace extension_manager_service.implement.module
     {
         private static Collection<IExtensionManagerModule> _Modules;
 
+        private static ICyberAppModule? _CPM_Instance;
+
         private static IExtensionManagerModule? _VMM_Instance;
         private static IExtensionManagerModule? _SCM_Instance;
-        private static IExtensionManagerModule? _CPM_Instance;
         private static IExtensionManagerModule? _EKAL_Instance;
         private static IExtensionManagerModule? _ECEF_Instance;
         private static IExtensionManagerModule? _ELM_Instance;
@@ -33,6 +35,10 @@ namespace extension_manager_service.implement.module
                 }
                 ArgumentNullException.ThrowIfNull(_ELM_Instance);
                 return (EMSLogManager)_ELM_Instance;
+            }
+            private set
+            {
+                _ELM_Instance = value;
             }
         }
 
@@ -74,7 +80,7 @@ namespace extension_manager_service.implement.module
                 return (ViewModelManager)_VMM_Instance;
             }
         }
-        
+
         public static ServerContactManager SCM_Instance
         {
             get
@@ -106,12 +112,20 @@ namespace extension_manager_service.implement.module
             _Modules = new Collection<IExtensionManagerModule>();
         }
 
-        public static void Init()
+        public static void InitAppModule()
+        {
+            ExtensionManagerService
+                .Current
+                .ServiceManager?
+                .App
+                .RegisterAppModule(CPM_Instance);
+        }
+
+        public static void InitEMSModule()
         {
             _Modules.Clear();
             _Modules.Add(VMM_Instance);
             _Modules.Add(SCM_Instance);
-            _Modules.Add(CPM_Instance);
             _Modules.Add(EKAL_Instance);
             _Modules.Add(ECEF_Instance);
 
@@ -129,15 +143,18 @@ namespace extension_manager_service.implement.module
             }
         }
 
-        public static void Destroy()
+        public static void DestroyEMSModule()
         {
             foreach (var module in _Modules)
             {
-                module.OnDestroy();
+                if (!(module is ICyberAppModule))
+                {
+                    module.OnModuleDestroy();
+                }
             }
+
             _Modules.Clear();
             _VMM_Instance = null;
-            _CPM_Instance = null;
             _SCM_Instance = null;
             _EKAL_Instance = null;
             _ECEF_Instance = null;

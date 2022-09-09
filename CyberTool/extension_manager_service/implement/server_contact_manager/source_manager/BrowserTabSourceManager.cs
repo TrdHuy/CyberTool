@@ -137,9 +137,9 @@ namespace extension_manager_service.implement.server_contact_manager.source_mana
             }
         }
 
-        private void CheckCurrentPluginIsInstalled(PluginItemViewModel item, PluginVO plugin)
+        private async void CheckCurrentPluginIsInstalled(PluginItemViewModel item, PluginVO plugin)
         {
-            item.IsInstalled = CyberPluginManager.Current.CheckPlugiIsInstalled(plugin.StringId);
+            item.IsInstalled = await CyberPluginManager.Current.CheckPlugiIsInstalled(plugin.StringId);
         }
 
         private async void InitVersionItemForPluginAsync(PluginItemViewModel item, ICollection<PluginVersionVO> pluginVersions)

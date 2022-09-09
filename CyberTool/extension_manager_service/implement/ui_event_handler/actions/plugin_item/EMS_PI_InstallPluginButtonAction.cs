@@ -34,14 +34,6 @@ namespace extension_manager_service.implement.ui_event_handler.actions.plugin_it
                 return false;
             }
 
-            if (CyberPluginManager.Current.CheckPlugiIsInstalled(PIViewModel.PluginKey))
-            {
-                ExtensionManagerService
-                     .Current
-                     .ServiceManager?.App.ShowWaringBox("This plugin is already installed");
-                return false;
-            }
-
             var confirm = ExtensionManagerService
                 .Current
                 .ServiceManager?.App.ShowYesNoQuestionBox("Do you want to download and install this plugin!");
