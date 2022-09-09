@@ -92,17 +92,23 @@ namespace cyber_base.ui_event_handler.action.executer
 
         public bool Execute(object? dataTransfer)
         {
+            bool isExecuteable = false;
             if (dataTransfer != null)
                 AssignDataTransfer(dataTransfer);
 
             if (CanExecute(dataTransfer))
             {
+                isExecuteable = true;
                 //Execute the command
                 ExecuteCommand();
-                SetCompleteFlagAfterExecuteCommand();
-                return true;
             }
-            return false;
+            else
+            {
+                isExecuteable = false;
+            }
+
+            SetCompleteFlagAfterExecuteCommand();
+            return isExecuteable;
         }
 
         private void AssignDataTransfer(object dataTransfer)
@@ -127,15 +133,9 @@ namespace cyber_base.ui_event_handler.action.executer
         {
             if (dataTransfer != null)
                 AssignDataTransfer(dataTransfer);
-
-            if (CanExecute(dataTransfer))
-            {
-                //Execute alternative command
-                ExecuteAlternativeCommand();
-                SetCompleteFlagAfterExecuteCommand();
-                return true;
-            }
-            return false;
+            ExecuteAlternativeCommand();
+            SetCompleteFlagAfterExecuteCommand();
+            return true;
         }
 
         /// <summary>
