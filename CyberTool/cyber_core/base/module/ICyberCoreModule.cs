@@ -22,5 +22,10 @@ namespace cyber_core.@base.module
         /// Sự kiện xảy ra sau khi IFace window hiển thị
         /// </summary>
         void OnIFaceWindowShowed();
+
+        /// <summary>
+        /// Sự kiện xảy ra khi module bị phá bỏ
+        /// </summary>
+        void OnModuleDestroy();
     }
 }

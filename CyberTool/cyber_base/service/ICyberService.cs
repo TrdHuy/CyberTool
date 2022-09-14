@@ -57,6 +57,12 @@ namespace cyber_base.service
         void OnServiceCreate(ICyberServiceManager cyberServiceManager);
 
         /// <summary>
+        /// Sự kiện này xảy ra khi tắt app
+        /// </summary>
+        /// <param name="cyberServiceManager"> Người khởi tạo service</param>
+        void OnServiceDestroy(ICyberServiceManager cyberServiceManager);
+
+        /// <summary>
         /// Sự kiện này xảy ra khi service bắt đầu khởi tạo nội dung.
         /// </summary>
         /// <param name="cyberServiceManager"> Người khởi tạo service</param>

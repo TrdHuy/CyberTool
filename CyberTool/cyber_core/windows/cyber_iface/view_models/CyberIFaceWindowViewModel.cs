@@ -1,4 +1,5 @@
-﻿using cyber_base.view_model;
+﻿using cyber_base.implement.utils;
+using cyber_base.view_model;
 using cyber_core.services;
 using cyber_core.windows.cyber_iface.view_models.page_header;
 using cyber_core.windows.cyber_iface.views.usercontrols;
@@ -23,7 +24,8 @@ namespace cyber_core.windows.cyber_iface.view_models
         private CyberIFacePageHeaderItemViewModel? _selectedHeaderItem = null;
 
         [Bindable(true)]
-        public ObservableCollection<CyberIFacePageHeaderItemViewModel> PageHeaderItems { get; set; } = new ObservableCollection<CyberIFacePageHeaderItemViewModel>();
+        public RangeObservableCollection<CyberIFacePageHeaderItemViewModel> PageHeaderItems { get; set; }
+            = new RangeObservableCollection<CyberIFacePageHeaderItemViewModel>();
 
         [Bindable(true)]
         public CyberIFacePageHeaderItemViewModel? SelectedHeaderItem
@@ -71,12 +73,26 @@ namespace cyber_core.windows.cyber_iface.view_models
             await _pageHeaderItemsSourceSlim.WaitAsync();
             try
             {
-                if(args.Action == NotifyCollectionChangedAction.Add)
+                if (args.Action == NotifyCollectionChangedAction.Add)
                 {
-                    if(args.NewService != null)
+                    if (args.NewService != null)
                     {
                         var vm = new CyberIFacePageHeaderItemViewModel(args.NewService);
                         PageHeaderItems.Add(vm);
+                    }
+                }
+                else if (args.Action == NotifyCollectionChangedAction.Remove)
+                {
+                    if (args.OldService != null)
+                    {
+                        foreach (var vm in PageHeaderItems)
+                        {
+                            if (vm.Service == args.OldService)
+                            {
+                                PageHeaderItems.Remove(vm);
+                                break;
+                            }
+                        }
                     }
                 }
             }

@@ -43,7 +43,7 @@ namespace extension_manager_service
         public override void OnServiceCreate(ICyberServiceManager cyberServiceManager)
         {
             base.OnServiceCreate(cyberServiceManager);
-            ModuleManager.InitAppModule();
+            ModuleManager.InitGlobalModule();
         }
 
         public override void OnPreServiceViewInit(ICyberServiceManager cyberServiceManager)

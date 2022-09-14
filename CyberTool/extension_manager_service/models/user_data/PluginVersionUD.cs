@@ -12,6 +12,13 @@ namespace extension_manager_service.models.user_data
         public string DownloadFilePath { get; set; } = "";
         public string ExecutePath { get; set; } = "";
         public string MainClassName { get; set; } = "";
-        public bool IsExtractedZip { get; set; }
+        public PluginVersionStatus VersionStatus { get; set; } = PluginVersionStatus.None;
+    }
+
+    internal enum PluginVersionStatus
+    {
+        None = 0,
+        VersionDownloadedButWithoutInstalled = 1,
+        VersionInstalled = 2,
     }
 }

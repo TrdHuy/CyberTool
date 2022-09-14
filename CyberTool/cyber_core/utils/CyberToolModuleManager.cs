@@ -30,6 +30,14 @@ namespace cyber_core.utils
             }
         }
 
+        public static void Destroy()
+        {
+            foreach (var module in _CyberModules)
+            {
+                module.OnModuleDestroy();
+            }
+        }
+
         public static void OnIFaceShowed()
         {
             foreach (var module in _CyberModules)

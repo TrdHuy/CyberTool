@@ -95,6 +95,13 @@ namespace cyber_core.services
             CyberServiceController.Current.ServiceChanged += OnServiceChanged;
         }
 
+        public void OnModuleDestroy()
+        {
+            foreach (var service in CyberServiceMaper.Values)
+            {
+                service.OnServiceDestroy(this);
+            }
+        }
 
         public void OnIFaceWindowShowed()
         {
@@ -144,7 +151,19 @@ namespace cyber_core.services
             }
         }
 
-
+        public void UnregisterExtensionAsCyberService(ICyberExtension cyberExtension)
+        {
+            var service = cyberExtension as ICyberService;
+            if (service != null)
+            {
+                CyberExtensionServiceMapper.Remove(service.ServiceID);
+                service.OnServiceDestroy(this);
+                ExtensionServiceMapperCollectionChanged?.Invoke(this
+                    , new ExtensionServiceMapperCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove
+                        , null
+                        , service));
+            }
+        }
     }
 
     public delegate void ExtensionServiceMapperCollectionChangedEventHandler(object sender, ExtensionServiceMapperCollectionChangedEventArgs args);

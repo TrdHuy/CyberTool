@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace cyber_base.app
 {
-    public interface ICyberAppModule
+    public interface ICyberGlobalModule
     {
-        public void OnModuleStart();
+        public void OnGlobalModuleStart();
 
-        public void OnModuleDestroy();
+        public void OnGlobalModuleDestroy();
     }
 }

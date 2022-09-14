@@ -71,5 +71,17 @@ namespace progtroll
         {
             return new ServiceView();
         }
+
+        public void OnPluginInstalled()
+        {
+        }
+
+        public void OnPluginUninstalled()
+        {
+        }
+
+        public void OnPluginStart()
+        {
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace extension_manager_service.implement.module
     {
         private static Collection<IExtensionManagerModule> _Modules;
 
-        private static ICyberAppModule? _CPM_Instance;
+        private static ICyberGlobalModule? _CPM_Instance;
 
         private static IExtensionManagerModule? _VMM_Instance;
         private static IExtensionManagerModule? _SCM_Instance;
@@ -112,13 +112,13 @@ namespace extension_manager_service.implement.module
             _Modules = new Collection<IExtensionManagerModule>();
         }
 
-        public static void InitAppModule()
+        public static void InitGlobalModule()
         {
             ExtensionManagerService
                 .Current
                 .ServiceManager?
                 .App
-                .RegisterAppModule(CPM_Instance);
+                .RegisterGlobalModule(CPM_Instance);
         }
 
         public static void InitEMSModule()
@@ -147,7 +147,7 @@ namespace extension_manager_service.implement.module
         {
             foreach (var module in _Modules)
             {
-                if (!(module is ICyberAppModule))
+                if (!(module is ICyberGlobalModule))
                 {
                     module.OnModuleDestroy();
                 }

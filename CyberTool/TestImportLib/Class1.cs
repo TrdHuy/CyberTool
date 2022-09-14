@@ -7,6 +7,18 @@ namespace TestImportLib
     {
         public string ExtensionName => "Test extension";
 
+        public void OnPluginInstalled()
+        {
+        }
+
+        public void OnPluginStart()
+        {
+        }
+
+        public void OnPluginUninstalled()
+        {
+        }
+
         public void printf()
         {
             Console.WriteLine("some data");

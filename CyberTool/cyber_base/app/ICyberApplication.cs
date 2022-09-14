@@ -20,10 +20,10 @@ namespace cyber_base.app
         Application CyberApp { get; }
 
         /// <summary>
-        /// Đăng ký app module từ các service hoặc các plugin
+        /// Đăng ký global module từ các service hoặc các plugin
         /// </summary>
         /// <param name="appModule"></param>
-        void RegisterAppModule(ICyberAppModule appModule);
+        void RegisterGlobalModule(ICyberGlobalModule appModule);
 
         /// <summary>
         /// Mở cửa sổ thực hiện 1 task không đồng bộ

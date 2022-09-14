@@ -18,5 +18,7 @@ namespace cyber_base.service
         public string GetPluginsBaseFolderLocation();
 
         public void RegisterExtensionAsCyberService(ICyberExtension cyberExtension);
+
+        public void UnregisterExtensionAsCyberService(ICyberExtension cyberExtension);
     }
 }

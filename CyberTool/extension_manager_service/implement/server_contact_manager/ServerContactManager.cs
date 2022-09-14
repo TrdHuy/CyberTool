@@ -24,7 +24,7 @@ namespace extension_manager_service.implement.server_contact_manager
         private const string REQUEST_DOWNLOAD_PLUGIN_HEADER_KEY = "h2sw-download-plugin";
 
         private BrowserTabSourceManager? _browserTabSourceManager;
-        private PluginDownloadAndInstallManager? _pluginDownloadManager;
+        private PluginDownloadManager? _pluginDownloadManager;
 
         public static ServerContactManager Current
         {
@@ -44,7 +44,7 @@ namespace extension_manager_service.implement.server_contact_manager
         public override void OnModuleStart()
         {
             _browserTabSourceManager = new BrowserTabSourceManager();
-            _pluginDownloadManager = new PluginDownloadAndInstallManager();
+            _pluginDownloadManager = new PluginDownloadManager();
         }
 
         public bool IsBrowserTabPluginSourceFullOfDbset()

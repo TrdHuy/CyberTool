@@ -43,6 +43,10 @@ namespace cyber_core.services
             CurrentService = CyberServiceManager.Current.LogGuardSvc;
         }
 
+        public void OnModuleDestroy()
+        {
+        }
+
         public void OnIFaceWindowShowed()
         {
             UpdateCurrentServiceView(new ServiceEventArgs(CurrentService, PreviousService));

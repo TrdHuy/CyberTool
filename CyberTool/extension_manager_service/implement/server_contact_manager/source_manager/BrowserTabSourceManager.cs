@@ -139,7 +139,7 @@ namespace extension_manager_service.implement.server_contact_manager.source_mana
 
         private async void CheckCurrentPluginIsInstalled(PluginItemViewModel item, PluginVO plugin)
         {
-            item.IsInstalled = await CyberPluginManager.Current.CheckPlugiIsInstalled(plugin.StringId);
+            item.IsInstalled = await CyberPluginManager.Current.CheckPluginIsInstalled(plugin.StringId);
         }
 
         private async void InitVersionItemForPluginAsync(PluginItemViewModel item, ICollection<PluginVersionVO> pluginVersions)

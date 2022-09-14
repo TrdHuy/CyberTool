@@ -42,8 +42,8 @@ namespace extension_manager_service.implement.ui_event_handler.actions.plugin_it
                 , name: "Uninstalling " + PIViewModel.PluginName
                 , mainAct: (param, result, cancellationToken) =>
                 {
-                    var installedSuccessfully = CyberPluginManager.Current.UninstallDownloadedPlugin(PIViewModel.PluginKey);
-                    if (installedSuccessfully)
+                    var uninstalledSuccessfully = CyberPluginManager.Current.UninstallDownloadedPlugin(PIViewModel.PluginKey);
+                    if (uninstalledSuccessfully)
                     {
                         PIViewModel.IsInstalled = false;
                         result.MesResult = MessageAsyncTaskResult.OK;

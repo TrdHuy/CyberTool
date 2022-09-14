@@ -21,7 +21,7 @@ namespace cyber_core
     {
         private static App? _instance;
         private WindowDirector _WindowDirector;
-        private List<ICyberAppModule> _appModules = new List<ICyberAppModule>();
+        private List<ICyberGlobalModule> _globalModules = new List<ICyberGlobalModule>();
 
         public static new App Current
         {
@@ -53,8 +53,6 @@ namespace cyber_core
         {
             CyberToolModuleManager.Init();
 
-            //CyberPluginsManager.Current.LoadExternalPlugin();
-
             base.OnStartup(e);
 
             _WindowDirector.ShowCyberIFace();
@@ -64,11 +62,12 @@ namespace cyber_core
 
         protected override void OnExit(ExitEventArgs e)
         {
-            foreach (var module in _appModules)
+            CyberToolModuleManager.Destroy();
+            foreach (var module in _globalModules)
             {
-                module.OnModuleDestroy();
+                module.OnGlobalModuleDestroy();
             }
-            _appModules.Clear();
+            _globalModules.Clear();
             base.OnExit(e);
         }
 
@@ -209,12 +208,12 @@ namespace cyber_core
             return _WindowDirector.OpenEditTextDialogWindow(oldText, isMultiLine);
         }
 
-        public void RegisterAppModule(ICyberAppModule appModule)
+        public void RegisterGlobalModule(ICyberGlobalModule globalModule)
         {
-            if (!_appModules.Contains(appModule))
+            if (!_globalModules.Contains(globalModule))
             {
-                _appModules.Add(appModule);
-                appModule.OnModuleStart();
+                _globalModules.Add(globalModule);
+                globalModule.OnGlobalModuleStart();
             }
         }
     }

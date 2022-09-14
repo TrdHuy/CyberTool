@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace extension_manager_service.implement.server_contact_manager.plugin_download_manager
 {
-    internal class PluginDownloadAndInstallManager
+    internal class PluginDownloadManager
     {
         private const int TIME_OUT_FOR_REQUEST_OF_SEMAPHORE = 100;
 
@@ -29,7 +29,7 @@ namespace extension_manager_service.implement.server_contact_manager.plugin_down
         private const string REQUEST_DOWNLOAD_PLUGIN_KEY_HEADER_ID = "DOWNLOAD_PLUGIN__PLUGIN_KEY";
         private const string REQUEST_DOWNLOAD_PLUGIN_VERSION_HEADER_ID = "DOWNLOAD_PLUGIN__PLUGIN_VERSION";
 
-        public PluginDownloadAndInstallManager()
+        public PluginDownloadManager()
         {
             _downloadPluginSemaphore = new SemaphoreSlim(1, 1);
             _installPluginSemaphore = new SemaphoreSlim(1, 1);
@@ -112,6 +112,7 @@ namespace extension_manager_service.implement.server_contact_manager.plugin_down
                         result.DownloadFilePath = downloadFilePath;
                         result.ExecutePath = versionExecutePath;
                         result.MainClassName = mainClassName;
+                        result.VersionStatus = PluginVersionStatus.VersionDownloadedButWithoutInstalled;
                     }
                 }
 

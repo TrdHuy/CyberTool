@@ -70,5 +70,8 @@ namespace cyber_base.implement.service
 
         protected abstract object? GenerateServiceView();
 
+        public virtual void OnServiceDestroy(ICyberServiceManager cyberServiceManager)
+        {
+        }
     }
 }
