@@ -72,15 +72,15 @@ namespace progtroll
             return new ServiceView();
         }
 
-        public void OnPluginInstalled()
+        public void OnPluginInstalled(ICyberExtensionManager extensionManager)
         {
         }
 
-        public void OnPluginUninstalled()
+        public void OnPluginUninstalled(ICyberExtensionManager extensionManager)
         {
         }
 
-        public void OnPluginStart()
+        public void OnPluginStart(ICyberExtensionManager extensionManager)
         {
         }
     }
