@@ -12,6 +12,7 @@ namespace progtroll.view_models.tab_items
         private const string VERSION_MANAGER_PAGE_TITLE_1 = "Latest version";
         private const string VERSION_MANAGER_PAGE_TITLE_2 = "Selected version";
         private const string VERSION_MANAGER_PAGE_TITLE_3 = "Import a project";
+        private const string VERSION_MANAGER_PAGE_TITLE_4 = "Please select a version";
         private string _currentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_1;
         private VersionHistoryItemViewModel? _currentFocusVersionCommitVM;
 
@@ -34,16 +35,23 @@ namespace progtroll.view_models.tab_items
             set
             {
                 _currentFocusVersionCommitVM = value;
-                
-                if(_currentFocusVersionCommitVM == null)
+
+                if (_currentFocusVersionCommitVM == null)
                 {
-                    CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_3;
+                    if (ReleasingProjectManager.Current.CurrentImportedProjectVO != null)
+                    {
+                        CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_4;
+                    }
+                    else
+                    {
+                        CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_3;
+                    }
                 }
                 else if (_currentFocusVersionCommitVM?.VersionCommitVO.CommitId == ReleasingProjectManager.Current.LatestCommitVO?.CommitId)
                 {
                     CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_1;
                 }
-                else 
+                else
                 {
                     CurrentFocusVersionTitle = VERSION_MANAGER_PAGE_TITLE_2;
                 }

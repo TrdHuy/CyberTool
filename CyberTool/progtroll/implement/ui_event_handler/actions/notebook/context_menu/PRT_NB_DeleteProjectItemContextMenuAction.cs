@@ -5,6 +5,8 @@ using progtroll.implement.project_manager;
 using progtroll.implement.view_model;
 using progtroll.models.VOs;
 using progtroll.view_models.calendar_notebook.items;
+using System;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace progtroll.implement.ui_event_handler.actions.notebook.context_menu
@@ -45,6 +47,7 @@ namespace progtroll.implement.ui_event_handler.actions.notebook.context_menu
                 {
                     releasingProjectManager.SetCurrentImportedProject(null);
                     releasingProjectManager.VersionHistoryItemContexts.Clear();
+                    viewModelManager.PMViewModel.TaskIdCommitListSource = new List<String>();
                     viewModelManager.PMViewModel.RefreshViewModel();
                 }
                 if (selectedProjectItem != null)
