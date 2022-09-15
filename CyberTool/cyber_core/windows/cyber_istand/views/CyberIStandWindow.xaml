@@ -8,7 +8,7 @@
 				 xmlns:ccp="clr-namespace:cyber_base.implement.views.circle_progress;assembly=cyber_base"
 				 Background="{DynamicResource Background_Level2}"
 				 Style="{DynamicResource DefaultCyberStyle}"
-				 xmlns:cyw="clr-namespace:cyber_core.app_resources.controls.cyber_window"
+				 xmlns:cyw="clr-namespace:cyber_base.implement.views.cyber_window;assembly=cyber_base"
 				 mc:Ignorable="d"
 				 ResizeMode="NoResize"
 				 Title="{Binding Title}"

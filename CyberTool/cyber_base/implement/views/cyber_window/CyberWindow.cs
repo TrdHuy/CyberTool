@@ -7,10 +7,10 @@ using System.Windows;
 using System.Windows.Controls;
 using WinInterop = System.Windows.Interop;
 using System.Windows.Media;
-using cyber_core.utils;
 using System.Runtime.InteropServices;
+using cyber_base.implement.utils;
 
-namespace cyber_core.app_resources.controls.cyber_window
+namespace cyber_base.implement.views.cyber_window
 {
     public class CyberWindow : Window
     {
@@ -127,7 +127,7 @@ namespace cyber_core.app_resources.controls.cyber_window
         /// https://docs.microsoft.com/vi-vn/windows/win32/inputdev/wm-nclbuttondown
         /// </summary>
         private const int WM_NCLBUTTONDBLCLK = 0x00A3;
-        
+
         private System.IntPtr WindowProc(
               System.IntPtr hwnd,
               int msg,
@@ -142,7 +142,7 @@ namespace cyber_core.app_resources.controls.cyber_window
                     handled = true;
                     break;
                 case WM_NCLBUTTONDBLCLK:
-                    if(WindowState == WindowState.Normal)
+                    if (WindowState == WindowState.Normal)
                     {
                         WindowState = WindowState.Maximized;
                     }

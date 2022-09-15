@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-					xmlns:local="clr-namespace:cyber_core.app_resources.controls.cyber_window">
+					xmlns:local="clr-namespace:cyber_base.implement.views.cyber_window;assembly=cyber_base">
 	<Style TargetType="{x:Type local:CyberWindow}"
 		   x:Key="DefaultCyberStyle">
 		<Setter Property="ChromeBackground"

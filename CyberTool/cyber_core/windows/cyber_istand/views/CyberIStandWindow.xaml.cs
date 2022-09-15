@@ -1,5 +1,4 @@
-﻿using cyber_core.app_resources.controls.cyber_window;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using cyber_core.definitions;
@@ -18,6 +17,7 @@ using cyber_base.view.window;
 using cyber_base.async_task;
 using cyber_base.implement.async_task;
 using cyber_core.windows.cyber_istand.view_models;
+using cyber_base.implement.views.cyber_window;
 
 namespace cyber_core.windows.cyber_istand.views
 {

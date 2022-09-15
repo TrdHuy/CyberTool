@@ -1,4 +1,4 @@
-﻿using cyber_core.app_resources.controls.cyber_window;
+﻿using cyber_base.implement.views.cyber_window;
 using cyber_core.definitions;
 using System;
 using System.Collections.Generic;
