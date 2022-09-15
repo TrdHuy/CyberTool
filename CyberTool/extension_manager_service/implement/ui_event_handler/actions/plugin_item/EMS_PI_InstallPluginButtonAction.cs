@@ -89,7 +89,7 @@ namespace extension_manager_service.implement.ui_event_handler.actions.plugin_it
                     {
                         ExtensionManagerService
                               .Current
-                              .ServiceManager?.App.ShowWaringBox("Failed to install " + PIViewModel.PluginName + " !");
+                              .ServiceManager?.App.ShowWaringBox("Failed to install " + PIViewModel.PluginName + "!");
                     }
                     else if (result.MesResult == MessageAsyncTaskResult.OK)
                     {

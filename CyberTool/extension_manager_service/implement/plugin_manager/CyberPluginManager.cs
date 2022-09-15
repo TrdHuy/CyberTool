@@ -173,9 +173,9 @@ namespace extension_manager_service.implement.plugin_manager
                         pluginUD.CurrentInstalledVersionPath = pluginVersionUD.ExecutePath;
                         pluginUD.CurrentInstalledVersionMainClassName = pluginVersionUD.MainClassName;
                         pluginUD.PluginStatus = PluginStatus.Installed;
-                        var pluginDLL =  LoadAssemblyFromPluginData(pluginUD);
-               
-                        if(pluginDLL!= null)
+                        var pluginDLL = LoadAssemblyFromPluginData(pluginUD);
+
+                        if (pluginDLL != null)
                         {
                             pluginDLL.OnPluginInstalled(this);
                             pluginDLL.OnPluginStart(this);
@@ -287,6 +287,14 @@ namespace extension_manager_service.implement.plugin_manager
                             {
                                 var pluginDll = LoadAssemblyFromPluginData(pluginData);
                                 pluginDll?.OnPluginStart(this);
+
+                                if (pluginDll is ICyberService)
+                                {
+                                    ExtensionManagerService
+                                        .Current
+                                        .ServiceManager?
+                                        .RegisterExtensionAsCyberService(pluginDll);
+                                }
                             }
                             else
                             {
