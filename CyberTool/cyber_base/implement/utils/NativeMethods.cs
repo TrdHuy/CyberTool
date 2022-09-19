@@ -7,9 +7,20 @@ namespace cyber_base.implement.utils
     public static class NativeMethods
     {
 
+        /// <summary>
+        /// Logical pixels inch in X
+        /// </summary>
+        public const int LOGPIXELSX = 88;
+        /// <summary>
+        /// Logical pixels inch in Y
+        /// </summary>
+        public const int LOGPIXELSY = 90;
+
         [DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern IntPtr CreateDC(string lpszDriver, string lpszDeviceName, string lpszOutput, IntPtr devMode);
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetDC(IntPtr hWnd);
 
         [DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = true)]
         public static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
@@ -19,6 +30,32 @@ namespace cyber_base.implement.utils
 
         [DllImport("User32")]
         public static extern IntPtr MonitorFromWindow(IntPtr handle, int flags);
+
+        [DllImport("User32")]
+        public static extern bool ClientToScreen(IntPtr hWnd,out POINT flags);
+
+        [DllImport("user32")]
+        public static extern bool GetCursorPos(out POINT lpPoint);
+
+        public static Point GetCursorPosition()
+        {
+            POINT lpPoint;
+            GetCursorPos(out lpPoint);
+            // NOTE: If you need error handling
+            // bool success = GetCursorPos(out lpPoint);
+            // if (!success)
+
+            return lpPoint;
+        }
+
+        public static Point GetDeviceCaps()
+        {
+            IntPtr hdc = GetDC(IntPtr.Zero);
+
+            var dpiX = GetDeviceCaps(hdc, LOGPIXELSX);
+            var dpiY = GetDeviceCaps(hdc, LOGPIXELSY);
+            return new Point(dpiX, dpiX);
+        }
     }
 
     public enum DeviceCap
@@ -28,7 +65,6 @@ namespace cyber_base.implement.utils
         DESKTOPVERTRES = 117,
         LOGPIXELSY = 90,
         DESKTOPHORZRES = 118
-
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -51,6 +87,11 @@ namespace cyber_base.implement.utils
             this.x = x;
             this.y = y;
         }
+
+        public static implicit operator Point(POINT point)
+        {
+            return new Point(point.x, point.y);
+        }
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -61,6 +102,18 @@ namespace cyber_base.implement.utils
         public POINT ptMaxPosition;
         public POINT ptMinTrackSize;
         public POINT ptMaxTrackSize;
+    };
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct WINDOWPOS
+    {
+        public IntPtr hwnd;
+        public IntPtr hwndInsertAfter;
+        public int x;
+        public int y;
+        public int cx;
+        public int cy;
+        public int flags;
     };
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]

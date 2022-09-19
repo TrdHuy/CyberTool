@@ -267,7 +267,7 @@
 							</Grid.ColumnDefinitions>
 							<Grid.RowDefinitions>
 								<RowDefinition Height="*" />
-								<RowDefinition x:Name="BotShadowColumnDef"
+								<RowDefinition x:Name="BotShadowRowDef"
 											   Height="5" />
 							</Grid.RowDefinitions>
 
@@ -451,15 +451,6 @@
 							<Setter TargetName="MaximizeButton"
 									Property="Visibility"
 									Value="Collapsed" />
-							<Setter TargetName="BotShadowColumnDef"
-									Property="Height"
-									Value="0" />
-							<Setter TargetName="LeftShadowColumnDef"
-									Property="Width"
-									Value="0" />
-							<Setter TargetName="RightShadowColumnDef"
-									Property="Width"
-									Value="0" />
 						</Trigger>
 
 						<Trigger Property="WindowState"
