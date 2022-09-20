@@ -289,16 +289,49 @@ namespace cyber_base.implement.views.cyber_window
             {
                 if (newRect.IsEmpty) return;
 
+                double dockModeWidth = _currentCyberWorkArea.Width / 2;
+                var dpi = NativeMethods.GetDeviceCaps();
+                double cyberMinWidthInPixel = GetSizeInPixel(_cyberWindow.MinWidth, dpi.X);
+                double cyberMaxWidthInPixel = GetSizeInPixel(_cyberWindow.MaxWidth, dpi.X);
+                double cyberMinHeightInPixel = GetSizeInPixel(_cyberWindow.MinHeight, dpi.Y);
+                double cyberMaxHeightInPixel = GetSizeInPixel(_cyberWindow.MaxHeight, dpi.Y);
+
+                if (cyberMinWidthInPixel > _currentCyberWorkArea.Width / 2)
+                {
+                    dockModeWidth = cyberMinWidthInPixel;
+                }
+                else if (cyberMaxWidthInPixel < _currentCyberWorkArea.Width / 2)
+                {
+                    dockModeWidth = cyberMaxWidthInPixel;
+                }
+
+                double dockModeHeight = _currentCyberWorkArea.Height;
+                if (cyberMinHeightInPixel > _currentCyberWorkArea.Height)
+                {
+                    dockModeHeight = cyberMinHeightInPixel;
+                }
+                else if (cyberMaxHeightInPixel < _currentCyberWorkArea.Height)
+                {
+                    dockModeHeight = cyberMaxHeightInPixel;
+                }
+
                 var isLeftDocked = newRect.left == _currentCyberWorkArea.left
-                    && newRect.bottom == _currentCyberWorkArea.bottom
                     && newRect.top == _currentCyberWorkArea.top
-                    && newRect.right == (_currentCyberWorkArea.right + _currentCyberWorkArea.left) / 2;
+                    && newRect.Height == dockModeHeight
+                    && newRect.Width == dockModeWidth;
+
 
                 var isRightDocked = newRect.left == (_currentCyberWorkArea.right + _currentCyberWorkArea.left) / 2
-                    && newRect.bottom == _currentCyberWorkArea.bottom
                     && newRect.top == _currentCyberWorkArea.top
-                    && newRect.right == _currentCyberWorkArea.right;
+                    && newRect.Height == dockModeHeight
+                    && newRect.Width == dockModeWidth;
+                
                 IsCyberWindowDockCache = isLeftDocked || isRightDocked;
+            }
+
+            private double GetSizeInPixel(double size, double dpi)
+            {
+                return size * dpi / 96;
             }
 
             private double GetWidthByPixel(double pixel)
