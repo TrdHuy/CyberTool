@@ -12,6 +12,8 @@
 				 Title="CyberTool"
 				 Height="810"
 				 Width="1080"
+				 MinHeight="810"
+				 MinWidth="1080"
 				 Background="{StaticResource Background_Level1}"
 				 Style="{StaticResource DefaultCyberStyle}"
 				 FontFamily="Calibri">

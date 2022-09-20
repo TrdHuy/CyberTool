@@ -22,6 +22,9 @@ namespace cyber_base.implement.utils
         [DllImport("user32.dll")]
         public static extern IntPtr GetDC(IntPtr hWnd);
 
+        [DllImport("user32.dll")]
+        public static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);
+
         [DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = true)]
         public static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
 
@@ -33,6 +36,9 @@ namespace cyber_base.implement.utils
 
         [DllImport("User32")]
         public static extern bool ClientToScreen(IntPtr hWnd,out POINT flags);
+
+        [DllImport("user32.dll")]
+        public static extern bool GetWindowRect(IntPtr hwnd, ref RECT rectangle);
 
         [DllImport("user32")]
         public static extern bool GetCursorPos(out POINT lpPoint);

@@ -31,6 +31,13 @@ namespace cyber_base.implement.views.cyber_window
             private const int WM_NCLBUTTONDBLCLK = 0x00A3;
 
             /// <summary>
+            /// Sent one time to a window, after it has exited the moving or sizing modal loop.
+            /// Message detail:
+            /// https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-exitsizemove
+            /// </summary>
+            private const int WM_EXITSIZEMOVE = 0x0232;
+
+            /// <summary>
             /// Sent to a window whose size, position, or place in the Z order has 
             /// changed as a result of a call to the SetWindowPos function or 
             /// another window-management function.
@@ -73,9 +80,9 @@ namespace cyber_base.implement.views.cyber_window
             private const int SHADOW_DEF = 5;
 
             private CyberWindow _cyberWindow;
-            private WINDOWPOS _cyberWindowPos;
             private MINMAXINFO _cyberMinMaxInfo;
-            private RECT _cyberWorkArea;
+            private RECT _previousCyberWorkArea;
+            private RECT _currentCyberWorkArea;
             private WindowState _newState;
             private bool _isInitialized = false;
             private bool _isCyberWindowDockCache = false;
@@ -159,20 +166,46 @@ namespace cyber_base.implement.views.cyber_window
             {
                 switch (msg)
                 {
+                    case WM_EXITSIZEMOVE:
+                        {
+                            RECT cyberRect = new RECT();
+                            NativeMethods.GetWindowRect(hwnd, ref cyberRect);
+
+                            int MONITOR_DEFAULTTONEAREST = 0x00000002;
+                            IntPtr monitor = NativeMethods.MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+
+                            if (monitor != IntPtr.Zero)
+                            {
+                                MONITORINFO monitorInfo = new MONITORINFO();
+                                NativeMethods.GetMonitorInfo(monitor, monitorInfo);
+                                RECT rcWorkArea = monitorInfo.rcWork;
+                                RECT rcMonitorArea = monitorInfo.rcMonitor;
+                                SetWorkAreaInfo(rcWorkArea);
+                                SetWindowDockInfo(cyberRect);
+                            }
+                            break;
+                        }
                     case WM_SETTINGCHANGE:
                         {
                             if (wParam.ToInt32() == SPI_SETWORKAREA)
                             {
-                                int MONITOR_DEFAULTTONEAREST = 0x00000002;
-                                IntPtr monitor = NativeMethods.MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
-
-                                if (monitor != System.IntPtr.Zero)
+                                if (_cyberWindow.WindowState == WindowState.Maximized)
                                 {
-                                    MONITORINFO monitorInfo = new MONITORINFO();
-                                    NativeMethods.GetMonitorInfo(monitor, monitorInfo);
-                                    RECT rcWorkArea = monitorInfo.rcWork;
-                                    RECT rcMonitorArea = monitorInfo.rcMonitor;
-                                    SetWorkAreaInfo(rcWorkArea);
+                                    var isShouldUpdateWindowHeight = _previousCyberWorkArea.bottom < _currentCyberWorkArea.bottom;
+                                    if (isShouldUpdateWindowHeight)
+                                    {
+
+                                        // Chi tiết chế độ hiển thị:
+                                        // https://source.dot.net/#PresentationFramework/System/Windows/Standard/NativeMethods.cs
+                                        int SHOWNORMAL = 1;
+                                        int SHOWMAXIMIZED = 3;
+
+                                        // Hiển thị window ở trạng thái normal sau đó là maximized
+                                        // để cập nhật chiều cao cửa sổ
+                                        NativeMethods.ShowWindow(hwnd, SHOWNORMAL);
+                                        NativeMethods.ShowWindow(hwnd, SHOWMAXIMIZED);
+                                    }
+
                                 }
                                 handled = true;
                             }
@@ -199,28 +232,15 @@ namespace cyber_base.implement.views.cyber_window
                                 SetWorkAreaInfo(rcWorkArea);
                             }
                             Marshal.StructureToPtr(mmi, lParam, true);
-                            handled = true;
-                            break;
-                        }
-                    case WM_WINDOWPOSCHANGED:
-                        {
-                            SetWindowPos(Marshal.PtrToStructure<WINDOWPOS>(lParam));
                             break;
                         }
                 }
-                return (System.IntPtr)0;
+                return (IntPtr)0;
             }
 
             private void SetWindowFullScreen()
             {
-                if (_cyberWorkArea.Width > 0 && _cyberWorkArea.Height > 0)
-                {
-                    LastNormalWidthCache = _cyberWindow.ActualWidth;
-                    LastNormalHeightCache = _cyberWindow.ActualHeight;
-                    _cyberWindow.Height = GetHeightByPixel(_cyberWorkArea.Height);
-                    _cyberWindow.Width = GetWidthByPixel(_cyberWorkArea.Width);
-                }
-                else if (_cyberMinMaxInfo.ptMaxSize.x > 0 && _cyberMinMaxInfo.ptMaxSize.y > 0)
+                if (_cyberMinMaxInfo.ptMaxSize.x > 0 && _cyberMinMaxInfo.ptMaxSize.y > 0)
                 {
                     LastNormalWidthCache = _cyberWindow.ActualWidth;
                     LastNormalHeightCache = _cyberWindow.ActualHeight;
@@ -251,41 +271,34 @@ namespace cyber_base.implement.views.cyber_window
 
             private void SetWorkAreaInfo(RECT rcWorkArea)
             {
-                if (_cyberWorkArea != rcWorkArea)
+                if (_currentCyberWorkArea != rcWorkArea)
                 {
-                    _cyberWorkArea.left = rcWorkArea.left;
-                    _cyberWorkArea.top = rcWorkArea.top;
-                    _cyberWorkArea.right = rcWorkArea.right;
-                    _cyberWorkArea.bottom = rcWorkArea.bottom;
-                    if (_isInitialized && _cyberWindow.WindowState == WindowState.Maximized)
-                    {
-                        _cyberWindow.WindowState = WindowState.Normal;
-                        _cyberWindow.WindowState = WindowState.Maximized;
-                    }
+                    _previousCyberWorkArea.left = _currentCyberWorkArea.left;
+                    _previousCyberWorkArea.top = _currentCyberWorkArea.top;
+                    _previousCyberWorkArea.right = _currentCyberWorkArea.right;
+                    _previousCyberWorkArea.bottom = _currentCyberWorkArea.bottom;
+
+                    _currentCyberWorkArea.left = rcWorkArea.left;
+                    _currentCyberWorkArea.top = rcWorkArea.top;
+                    _currentCyberWorkArea.right = rcWorkArea.right;
+                    _currentCyberWorkArea.bottom = rcWorkArea.bottom;
                 }
             }
 
-            private void SetWindowPos(WINDOWPOS pos)
+            private void SetWindowDockInfo(RECT newRect)
             {
-                if (_cyberWindowPos.x != pos.x
-                    || _cyberWindowPos.y != pos.y
-                    || _cyberWindowPos.cx != pos.cx
-                    || _cyberWindowPos.cy != pos.cy)
-                {
-                    _cyberWindowPos = pos;
+                if (newRect.IsEmpty) return;
 
-                    var isLeftDocked = _cyberWindowPos.x == _cyberWorkArea.left
-                        && _cyberWindowPos.y == _cyberWorkArea.top
-                        && _cyberWindowPos.cx == _cyberWorkArea.Width / 2
-                        && _cyberWindowPos.cy == _cyberWorkArea.Height;
+                var isLeftDocked = newRect.left == _currentCyberWorkArea.left
+                    && newRect.bottom == _currentCyberWorkArea.bottom
+                    && newRect.top == _currentCyberWorkArea.top
+                    && newRect.right == (_currentCyberWorkArea.right + _currentCyberWorkArea.left) / 2;
 
-                    var isRightDocked = _cyberWindowPos.x == _cyberWorkArea.left + _cyberWorkArea.Width / 2
-                        && _cyberWindowPos.y == _cyberWorkArea.top
-                        && _cyberWindowPos.cx == _cyberWorkArea.Width / 2
-                        && _cyberWindowPos.cy == _cyberWorkArea.Height;
-
-                    IsCyberWindowDockCache = isLeftDocked || isRightDocked;
-                }
+                var isRightDocked = newRect.left == (_currentCyberWorkArea.right + _currentCyberWorkArea.left) / 2
+                    && newRect.bottom == _currentCyberWorkArea.bottom
+                    && newRect.top == _currentCyberWorkArea.top
+                    && newRect.right == _currentCyberWorkArea.right;
+                IsCyberWindowDockCache = isLeftDocked || isRightDocked;
             }
 
             private double GetWidthByPixel(double pixel)
@@ -298,12 +311,6 @@ namespace cyber_base.implement.views.cyber_window
             {
                 var dpi = NativeMethods.GetDeviceCaps();
                 return pixel * 96 / dpi.Y;
-            }
-
-            private void WmGetMinMaxInfo(System.IntPtr hwnd, System.IntPtr lParam)
-            {
-
-                
             }
         }
 
