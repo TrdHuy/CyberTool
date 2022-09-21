@@ -321,7 +321,7 @@ namespace cyber_base.implement.views.cyber_window
                     && newRect.Width == dockModeWidth;
 
 
-                var isRightDocked = newRect.left == (_currentCyberWorkArea.right + _currentCyberWorkArea.left) / 2
+                var isRightDocked = newRect.right == _currentCyberWorkArea.right
                     && newRect.top == _currentCyberWorkArea.top
                     && newRect.Height == dockModeHeight
                     && newRect.Width == dockModeWidth;
