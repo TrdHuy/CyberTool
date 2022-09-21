@@ -130,7 +130,14 @@ namespace cyber_base.implement.views.cyber_window
                     if (value != _isCyberWindowDockCache)
                     {
                         _isCyberWindowDockCache = value;
-                        _cyberWindow.UpdateWindowShadowEffect(_isCyberWindowDockCache ? 0 : SHADOW_DEF);
+                        if (_cyberWindow.WindowState == WindowState.Maximized)
+                        {
+                            _cyberWindow.UpdateWindowShadowEffect(0);
+                        }
+                        else
+                        {
+                            _cyberWindow.UpdateWindowShadowEffect(_isCyberWindowDockCache ? 0 : SHADOW_DEF);
+                        }
                     }
                 }
             }
@@ -325,7 +332,7 @@ namespace cyber_base.implement.views.cyber_window
                     && newRect.top == _currentCyberWorkArea.top
                     && newRect.Height == dockModeHeight
                     && newRect.Width == dockModeWidth;
-                
+
                 IsCyberWindowDockCache = isLeftDocked || isRightDocked;
             }
 
