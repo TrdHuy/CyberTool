@@ -7,4 +7,14 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\cyber_base\cyber_base.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="app_resources\ResourceThemes.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+  </ItemGroup>
+
 </Project>

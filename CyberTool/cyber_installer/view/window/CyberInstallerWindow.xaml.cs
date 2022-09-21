@@ -1,4 +1,5 @@
-﻿using System;
+﻿using cyber_base.implement.views.cyber_window;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,19 +11,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace cyber_installer
+namespace cyber_installer.view.window
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for CyberInstallerWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class CyberInstallerWindow : CyberWindow
     {
-        public MainWindow()
+        public CyberInstallerWindow()
         {
             InitializeComponent();
         }
+
     }
 }
