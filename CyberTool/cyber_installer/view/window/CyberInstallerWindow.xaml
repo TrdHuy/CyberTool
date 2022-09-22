@@ -4,6 +4,8 @@
 				xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 				xmlns:local="clr-namespace:cyber_installer.view.window"
+				xmlns:sys="clr-namespace:System;assembly=mscorlib"
+				xmlns:tabs="clr-namespace:cyber_installer.view.usercontrols.tabs"
 				xmlns:cw="clr-namespace:cyber_base.implement.views.cyber_window;assembly=cyber_base"
 				mc:Ignorable="d"
 				Style="{StaticResource CyberInstallerWindowStyle}"
@@ -11,6 +13,8 @@
 				Width="677">
 
 	<Window.Resources>
+		<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
+		<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
 		<Style x:Key="WindowInstallerTabItemStyle"
 			   TargetType="TabItem">
 			<Setter Property="Template">
@@ -79,6 +83,7 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="0.64*" />
 			<RowDefinition Height="3.47*" />
+			<RowDefinition Height="10" />
 		</Grid.RowDefinitions>
 		<TextBlock Text="Cyber Installer"
 				   FontSize="30.6"
@@ -146,6 +151,7 @@
 			</TabItem>
 			<TabItem Header="Available"
 					 Style="{StaticResource WindowInstallerTabItemStyle}">
+				<tabs:AvailableSoftwaresTab />
 			</TabItem>
 			
 		</TabControl>
