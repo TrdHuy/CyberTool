@@ -31,13 +31,13 @@ namespace cyber_installer.view.usercontrols.tabs
         private void HandleAvailableSoftwaresTabUnloaded(object sender, RoutedEventArgs e)
         {
             var context = DataContext as IAvailableTabContext;
-            context?.OnLoaded(this);
+            context?.OnUnloaded(this);
         }
 
         private void HandleAvailableSoftwaresTabLoaded(object sender, RoutedEventArgs e)
         {
             var context = DataContext as IAvailableTabContext;
-            context?.OnUnloaded(this);
+            context?.OnLoaded(this);
         }
     }
 }

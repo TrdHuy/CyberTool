@@ -61,7 +61,5 @@
 				</Setter>
 			</Style>
 		</ListView.ItemContainerStyle>
-
-		<ListViewItem />
 	</ListView>
 </UserControl>
