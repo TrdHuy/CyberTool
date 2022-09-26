@@ -181,6 +181,12 @@ namespace extension_manager_service.implement.plugin_manager
                             pluginDLL.OnPluginStart(this);
                             isSuccess = true;
                         }
+                        else
+                        {
+                            pluginVersionUD.VersionStatus = PluginVersionStatus.VersionInstalledFail;
+                            pluginUD.PluginStatus = PluginStatus.InstalledFail;
+                        }
+
                         if (pluginDLL is ICyberService)
                         {
                             ExtensionManagerService
@@ -208,6 +214,12 @@ namespace extension_manager_service.implement.plugin_manager
                             pluginDLL.OnPluginStart(this);
                             isSuccess = true;
                         }
+                        else
+                        {
+                            pluginVersionUD.VersionStatus = PluginVersionStatus.VersionInstalledFail;
+                            pluginUD.PluginStatus = PluginStatus.InstalledFail;
+                        }
+
                         if (pluginDLL is ICyberService)
                         {
                             ExtensionManagerService

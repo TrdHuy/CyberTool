@@ -20,5 +20,6 @@ namespace extension_manager_service.models.user_data
         None = 0,
         VersionDownloadedButWithoutInstalled = 1,
         VersionInstalled = 2,
+        VersionInstalledFail = 3,
     }
 }

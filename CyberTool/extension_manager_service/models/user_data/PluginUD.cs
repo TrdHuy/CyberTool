@@ -20,6 +20,7 @@ namespace extension_manager_service.models.user_data
     {
         Downloaded = 0,
         Installed = 1,
+        InstalledFail = 3,
         NeedToRemove = 2
     }
 }
