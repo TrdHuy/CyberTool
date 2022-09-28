@@ -1,4 +1,5 @@
-﻿using cyber_installer.view.usercontrols.tabs.@base;
+﻿using cyber_base.implement.views.cyber_scroll;
+using cyber_installer.view.usercontrols.tabs.@base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,20 +25,26 @@ namespace cyber_installer.view.usercontrols.tabs
         public AvailableSoftwaresTab()
         {
             InitializeComponent();
-            Loaded += HandleAvailableSoftwaresTabLoaded;
-            Unloaded += HandleAvailableSoftwaresTabUnloaded;
         }
 
-        private void HandleAvailableSoftwaresTabUnloaded(object sender, RoutedEventArgs e)
+        private void HandleScrollChangeEvent(object sender, ScrollChangedEventArgs e)
         {
-            var context = DataContext as IAvailableTabContext;
-            context?.OnUnloaded(this);
-        }
-
-        private void HandleAvailableSoftwaresTabLoaded(object sender, RoutedEventArgs e)
-        {
-            var context = DataContext as IAvailableTabContext;
-            context?.OnLoaded(this);
+            var scrollView = sender as CyberScrollView;
+            if (scrollView != null)
+            {
+                switch (scrollView.Name)
+                {
+                    case "ToolsScroller":
+                        if (e.VerticalChange > 0)
+                        {
+                            if (e.VerticalOffset + e.ViewportHeight == e.ExtentHeight)
+                            {
+                                (DataContext as IAvailableTabContext)?.OnScrollDownToBottom(scrollView);
+                            }
+                        }
+                        break;
+                }
+            }
         }
     }
 }

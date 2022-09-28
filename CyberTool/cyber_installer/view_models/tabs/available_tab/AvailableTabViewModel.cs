@@ -1,5 +1,7 @@
 ﻿using cyber_base.implement.utils;
 using cyber_base.view_model;
+using cyber_installer.implement.modules.server_contact_manager;
+using cyber_installer.model;
 using cyber_installer.view.usercontrols.list_item.available_item.@base;
 using cyber_installer.view.usercontrols.tabs;
 using cyber_installer.view.usercontrols.tabs.@base;
@@ -8,33 +10,86 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace cyber_installer.view_models.tabs.available_tab
 {
     internal class AvailableTabViewModel : BaseViewModel, IAvailableTabContext
     {
+        private Task? _requestDataTask;
+        private CancellationTokenSource? _requestDataTaskCancellationTokenSource;
+
         [Bindable(true)]
         public RangeObservableCollection<AvailableItemViewModel> ItemsSource { get; set; } = new RangeObservableCollection<AvailableItemViewModel>();
 
 
-        public void OnLoaded(AvailableSoftwaresTab sender)
+        public async void OnTabOpened(AvailableSoftwaresTab sender)
         {
-            // TODO: Load data from server here
             ItemsSource.Clear();
-
-            var testItem = new AvailableItemViewModel()
-            {
-                SoftwareName = "Cyber tool",
-                Version = "3.0.0.0",
-                ItemStatus = ItemStatus.Downloadable,
-                IconSource = new Uri("https://cdn.icon-icons.com/icons2/3191/PNG/512/cyclone_weather_world_time_icon_194253.png")
-            };
-            ItemsSource.Add(testItem);
+            _requestDataTaskCancellationTokenSource = new CancellationTokenSource();
+            _requestDataTask = ServerContactManager.Current.RequestSoftwareInfoFromCyberServer(isForce: true
+                , requestedCallback: (toolsSource) =>
+                {
+                    if (toolsSource != null)
+                    {
+                        GenerateAvailableTool(toolsSource);
+                    }
+                }
+                , cancellationToken: _requestDataTaskCancellationTokenSource.Token);
+            await _requestDataTask;
         }
 
-        public void OnUnloaded(AvailableSoftwaresTab sender)
+
+        public async void OnScrollDownToBottom(object sender)
         {
+            if (_requestDataTask != null && _requestDataTask.IsCompleted
+                || _requestDataTask == null)
+            {
+                _requestDataTaskCancellationTokenSource = new CancellationTokenSource();
+                _requestDataTask = ServerContactManager.Current.RequestSoftwareInfoFromCyberServer(
+                    requestedCallback: (toolsSource) =>
+                    {
+                        if (toolsSource != null)
+                        {
+                            GenerateAvailableTool(toolsSource);
+                        }
+                    }
+                    , cancellationToken: _requestDataTaskCancellationTokenSource.Token);
+                await _requestDataTask;
+            }
         }
+
+        public void OnTabClosed(AvailableSoftwaresTab sender)
+        {
+            if (_requestDataTask != null
+                && !_requestDataTask.IsCompleted
+                && _requestDataTaskCancellationTokenSource!= null)
+            {
+                _requestDataTaskCancellationTokenSource.Cancel();
+            }
+        }
+
+        private void GenerateAvailableTool(ICollection<ToolVO> toolsSource)
+        {
+            foreach (var tool in toolsSource)
+            {
+                var availableItem = new AvailableItemViewModel()
+                {
+                    SoftwareName = tool.Name,
+                    Version = tool.ToolVersions.Last().Version,
+                    ItemStatus = GetItemStatus(tool),
+                    IconSource = new Uri(tool.IconSource)
+                };
+                ItemsSource.Add(availableItem);
+            }
+        }
+        private ItemStatus GetItemStatus(ToolVO tool)
+        {
+            // TODO: Check item status here
+            return ItemStatus.None;
+        }
+
+
     }
 }

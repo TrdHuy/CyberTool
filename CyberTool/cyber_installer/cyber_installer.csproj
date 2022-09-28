@@ -8,7 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove=".config\user_config.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\cyber_base\cyber_base.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include=".config\user_config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

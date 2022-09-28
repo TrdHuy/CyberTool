@@ -31,12 +31,14 @@
 			  VirtualizingPanel.IsVirtualizingWhenGrouping="True">
 		<ListView.Template>
 			<ControlTemplate TargetType="ListView">
-				<csv:CyberScrollView x:Name="PluginScroller"
+				<csv:CyberScrollView x:Name="ToolsScroller"
 									 ThumbBackground="{StaticResource ButtonBackground_Level1}"
 									 CanContentScroll="False"
 									 IsMouseOverExpandScrollbar="True"
 									 VerticalAlignment="Top"
 									 Padding="0,0,5,0"
+									 VerticalScrollBarVisibility="Visible"
+									 ScrollChanged="HandleScrollChangeEvent"
 									 VerticalContentAlignment="Center"
 									 Style="{StaticResource ListScrollViewStyle}">
 					<ItemsPresenter />

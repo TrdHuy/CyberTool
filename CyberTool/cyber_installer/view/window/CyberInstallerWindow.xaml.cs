@@ -1,4 +1,5 @@
 ﻿using cyber_base.implement.views.cyber_window;
+using cyber_installer.view.usercontrols.tabs.@base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,5 +26,35 @@ namespace cyber_installer.view.window
             InitializeComponent();
         }
 
+        private void HandleLoadedEvent(object sender, RoutedEventArgs e)
+        {
+            var item = sender as FrameworkElement;
+            switch (item?.Name)
+            {
+                case "PART_AvailableSoftwaresTab":
+                    {
+                        if (PART_TabControl.SelectedItem == PART_AvailableSoftwaresTabItem)
+                        {
+                            var context = PART_AvailableSoftwaresTab.DataContext as IAvailableTabContext;
+                            context?.OnTabOpened(PART_AvailableSoftwaresTab);
+                        }
+                        break;
+                    }
+            }
+        }
+
+        private void HandleUnloadedEvent(object sender, RoutedEventArgs e)
+        {
+            var item = sender as FrameworkElement;
+            switch (item?.Name)
+            {
+                case "PART_AvailableSoftwaresTab":
+                    {
+                        var context = PART_AvailableSoftwaresTab.DataContext as IAvailableTabContext;
+                        context?.OnTabClosed(PART_AvailableSoftwaresTab);
+                        break;
+                    }
+            }
+        }
     }
 }

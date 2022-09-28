@@ -90,7 +90,8 @@
 				   Margin="25,0,0,0"
 				   FontWeight="Bold"
 				   Foreground="{StaticResource Foreground_Level3}" />
-		<TabControl Grid.Row="1"
+		<TabControl x:Name="PART_TabControl"
+					Grid.Row="1"
 					Background="{DynamicResource Background_Level2}">
 			<TabControl.Style>
 				<Style TargetType="{x:Type TabControl}">
@@ -126,8 +127,8 @@
 											  IsItemsHost="True"
 											  KeyboardNavigation.TabIndex="1"
 											  Background="Transparent" />
-									<Rectangle Grid.Row="1" 
-											   Fill="{DynamicResource Background_Level2_2}"/>
+									<Rectangle Grid.Row="1"
+											   Fill="{DynamicResource Background_Level2_2}" />
 									<Border x:Name="Border"
 											Grid.Row="2"
 											BorderThickness="0"
@@ -149,11 +150,14 @@
 			<TabItem Header="Installed"
 					 Style="{StaticResource WindowInstallerTabItemStyle}">
 			</TabItem>
-			<TabItem Header="Available"
+			<TabItem x:Name="PART_AvailableSoftwaresTabItem"
+					 Header="Available"
 					 Style="{StaticResource WindowInstallerTabItemStyle}">
-				<tabs:AvailableSoftwaresTab />
+				<tabs:AvailableSoftwaresTab x:Name="PART_AvailableSoftwaresTab"
+											Loaded="HandleLoadedEvent" 
+											Unloaded="HandleUnloadedEvent"/>
 			</TabItem>
-			
+
 		</TabControl>
 	</Grid>
 </cw:CyberWindow>
