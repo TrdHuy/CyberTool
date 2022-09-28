@@ -19,6 +19,24 @@ namespace cyber_base.implement.views.cyber_anim
 
         protected const string MainPanelName = "PART_MainPanel";
 
+        static LoadingAnimation()
+        {
+            var app = Application.Current;
+            if (app != null)
+            {
+                var controlStyle = app.TryFindResource(typeof(LoadingAnimation));
+                if (controlStyle == null)
+                {
+                    var resource = new ResourceDictionary
+                    {
+                        Source = new Uri("/cyber_base;component/implement/views/cyber_anim/LoadingAnimation.xaml", UriKind.Relative),
+                    };
+                    app.Resources.MergedDictionaries.Add(resource);
+                }
+            }
+        }
+
+
         #region IsBusy
         public static readonly DependencyProperty IsBusyProperty =
             DependencyProperty.Register("IsBusy",
