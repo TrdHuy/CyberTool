@@ -8,12 +8,14 @@ namespace cyber_installer.view.usercontrols.tabs.@base
 {
     internal interface IAvailableTabContext
     {
+        public bool IsLoading { get; set; }
+
         public void OnTabOpened(AvailableSoftwaresTab sender);
 
         public void OnTabClosed(AvailableSoftwaresTab sender);
-        
+
         public void OnScrollDownToBottom(object sender);
 
-        
+
     }
 }

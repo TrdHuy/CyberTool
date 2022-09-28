@@ -19,14 +19,25 @@ namespace cyber_installer.view_models.tabs.available_tab
     {
         private Task? _requestDataTask;
         private CancellationTokenSource? _requestDataTaskCancellationTokenSource;
+        private bool _isLoading;
 
         [Bindable(true)]
         public RangeObservableCollection<AvailableItemViewModel> ItemsSource { get; set; } = new RangeObservableCollection<AvailableItemViewModel>();
 
-
+        [Bindable(true)]
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                InvalidateOwn();
+            }
+        }
         public async void OnTabOpened(AvailableSoftwaresTab sender)
         {
             ItemsSource.Clear();
+            IsLoading = true;
             _requestDataTaskCancellationTokenSource = new CancellationTokenSource();
             _requestDataTask = ServerContactManager.Current.RequestSoftwareInfoFromCyberServer(isForce: true
                 , requestedCallback: (toolsSource) =>
@@ -35,6 +46,7 @@ namespace cyber_installer.view_models.tabs.available_tab
                     {
                         GenerateAvailableTool(toolsSource);
                     }
+                    IsLoading = false;
                 }
                 , cancellationToken: _requestDataTaskCancellationTokenSource.Token);
             await _requestDataTask;
@@ -46,6 +58,7 @@ namespace cyber_installer.view_models.tabs.available_tab
             if (_requestDataTask != null && _requestDataTask.IsCompleted
                 || _requestDataTask == null)
             {
+                IsLoading = true;
                 _requestDataTaskCancellationTokenSource = new CancellationTokenSource();
                 _requestDataTask = ServerContactManager.Current.RequestSoftwareInfoFromCyberServer(
                     requestedCallback: (toolsSource) =>
@@ -54,6 +67,7 @@ namespace cyber_installer.view_models.tabs.available_tab
                         {
                             GenerateAvailableTool(toolsSource);
                         }
+                        IsLoading = false;
                     }
                     , cancellationToken: _requestDataTaskCancellationTokenSource.Token);
                 await _requestDataTask;
@@ -64,7 +78,7 @@ namespace cyber_installer.view_models.tabs.available_tab
         {
             if (_requestDataTask != null
                 && !_requestDataTask.IsCompleted
-                && _requestDataTaskCancellationTokenSource!= null)
+                && _requestDataTaskCancellationTokenSource != null)
             {
                 _requestDataTaskCancellationTokenSource.Cancel();
             }
