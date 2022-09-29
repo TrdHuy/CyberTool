@@ -14,24 +14,24 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace cyber_installer.view.usercontrols.list_item.available_item
+namespace cyber_installer.view.usercontrols.list_item
 {
     /// <summary>
-    /// Interaction logic for AvailableItem.xaml
+    /// Interaction logic for ItemViewHolder.xaml
     /// </summary>
-    public partial class AvailableItemViewHolder : UserControl
+    public partial class ItemViewHolder : UserControl
     {
         #region ItemStatus
         public static readonly DependencyProperty ItemStatusProperty =
             DependencyProperty.Register(
                 "ItemStatus",
                 typeof(ItemStatus),
-                typeof(AvailableItemViewHolder),
+                typeof(ItemViewHolder),
                 new PropertyMetadata(ItemStatus.None, new PropertyChangedCallback(OnItemStatusChangedCallback)));
 
         private static void OnItemStatusChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var ctrl = d as AvailableItemViewHolder;
+            var ctrl = d as ItemViewHolder;
             ctrl?.OnItemStatusChanged((ItemStatus)e.OldValue, (ItemStatus)e.NewValue);
         }
 
@@ -41,8 +41,8 @@ namespace cyber_installer.view.usercontrols.list_item.available_item
             set => SetValue(ItemStatusProperty, value);
         }
         #endregion
-        
-        public AvailableItemViewHolder()
+
+        public ItemViewHolder()
         {
             InitializeComponent();
         }
@@ -62,6 +62,7 @@ namespace cyber_installer.view.usercontrols.list_item.available_item
                     break;
                 case ItemStatus.Installable:
                     PART_InstallSoftwareButton.Visibility = Visibility.Visible;
+                    PART_InstallSoftwareButton.Content = "Install";
                     break;
                 case ItemStatus.Downloading:
                     PART_SwHandlingProgressPanel.Visibility = Visibility.Visible;
@@ -71,9 +72,15 @@ namespace cyber_installer.view.usercontrols.list_item.available_item
                     PART_SwHandlingProgressPanel.Visibility = Visibility.Visible;
                     PART_HandlingTitleTextBlock.Text = "Installing";
                     break;
+                case ItemStatus.Installed:
+                    PART_InstallSoftwareButton.Visibility = Visibility.Visible;
+                    PART_InstallSoftwareButton.Content = "Uninstall";
+                    break;
+                case ItemStatus.Uninstalling:
+                    PART_SwHandlingProgressPanel.Visibility = Visibility.Visible;
+                    PART_HandlingTitleTextBlock.Text = "Uninstalling";
+                    break;
             }
         }
-
-        
     }
 }

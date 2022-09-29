@@ -13,6 +13,8 @@ namespace cyber_installer.view.usercontrols.list_item.available_item.@base
         Installable = 2,
         Updateable = 3,
         Downloading = 4,
-        Installing = 5
+        Installing = 5,
+        Installed = 6,
+        Uninstalling = 7
     }
 }

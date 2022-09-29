@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace cyber_installer.view.usercontrols.list_item.available_item.@base
 {
-    internal interface IAvailableItemContext
+    internal interface IItemContext
     {
         public ItemStatus ItemStatus { get; set; }
         public Uri IconSource { get; set; }

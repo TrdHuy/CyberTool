@@ -6,12 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cyber_installer.view_models.tabs.available_tab
+namespace cyber_installer.view_models.tabs.installed_tab
 {
-    internal class AvailableItemViewModel : ItemViewModel
-    { 
+    internal class InstalledItemViewModel : ItemViewModel
+    {
         
     }
 }
-
-
