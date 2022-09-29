@@ -1,6 +1,7 @@
 ﻿using cyber_installer.@base;
 using cyber_installer.implement.modules.server_contact_manager;
 using cyber_installer.implement.modules.user_config_manager;
+using cyber_installer.implement.modules.user_data_manager;
 using cyber_installer.implement.modules.view_model_manager;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace cyber_installer.implement.modules
         private static ICyberInstallerModule? _VMM_Instance;
         private static ICyberInstallerModule? _UCM_Instance;
         private static ICyberInstallerModule? _SCM_Instance;
+        private static ICyberInstallerModule? _UDM_Instance;
 
         public static void Init()
         {
@@ -25,6 +27,7 @@ namespace cyber_installer.implement.modules
             _CyberModules.Add(VMM_Instance);
             _CyberModules.Add(UCM_Instance);
             _CyberModules.Add(SCM_Instance);
+            _CyberModules.Add(UDM_Instance);
 
             foreach (var module in _CyberModules)
             {
@@ -82,6 +85,19 @@ namespace cyber_installer.implement.modules
                 }
                 ArgumentNullException.ThrowIfNull(_SCM_Instance);
                 return (ServerContactManager)_SCM_Instance;
+            }
+        }
+
+        public static UserDataManager UDM_Instance
+        {
+            get
+            {
+                if (_UDM_Instance == null)
+                {
+                    _UDM_Instance = Activator.CreateInstance(typeof(UserDataManager), true) as ICyberInstallerModule;
+                }
+                ArgumentNullException.ThrowIfNull(_UDM_Instance);
+                return (UserDataManager)_UDM_Instance;
             }
         }
     }

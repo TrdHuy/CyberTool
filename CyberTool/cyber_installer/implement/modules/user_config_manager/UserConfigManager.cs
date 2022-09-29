@@ -2,6 +2,7 @@
 using cyber_installer.@base;
 using cyber_installer.definitions;
 using cyber_installer.model;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -10,13 +11,13 @@ namespace cyber_installer.implement.modules.user_config_manager
     internal class UserConfigManager : ICyberInstallerModule
     {
         private readonly string _userConfigFilePath = CyberInstallerDefinition.USER_CONFIG_FILE_PATH;
-        private UserConfig? _currentUserConfig;
+        private UserConfig _currentUserConfig;
 
         public UserConfig CurrentConfig
         {
             get
             {
-                return (_currentUserConfig?.Clone() as UserConfig) ?? GetDefaultUserConfig();
+                return _currentUserConfig;
             }
         }
 
@@ -30,10 +31,16 @@ namespace cyber_installer.implement.modules.user_config_manager
 
         public void OnModuleCreate()
         {
-            if (File.Exists(_userConfigFilePath))
+            if (!File.Exists(_userConfigFilePath))
             {
-                string json = File.ReadAllText(_userConfigFilePath, Encoding.UTF8);
-                _currentUserConfig = JsonHelper.DeserializeObject<UserConfig>(json) ?? GetDefaultUserConfig();
+                File.Create(_userConfigFilePath).Dispose();
+            }
+
+            string json = File.ReadAllText(_userConfigFilePath, Encoding.UTF8);
+            _currentUserConfig = JsonHelper.DeserializeObject<UserConfig>(json);
+            if (string.IsNullOrEmpty(_currentUserConfig.RemoteAdress))
+            {
+                _currentUserConfig = GetDefaultUserConfig();
             }
         }
 

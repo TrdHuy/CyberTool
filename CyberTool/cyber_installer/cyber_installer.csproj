@@ -19,12 +19,19 @@
     <Content Include=".config\user_config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include=".data\user_data.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <Page Update="app_resources\ResourceThemes.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".design\class_diagrams\UserDataManagerDiagram.cd" />
   </ItemGroup>
 
 </Project>
