@@ -5,6 +5,7 @@ using cyber_installer.model;
 using cyber_installer.view.usercontrols.list_item.available_item.@base;
 using cyber_installer.view.usercontrols.tabs;
 using cyber_installer.view.usercontrols.tabs.@base;
+using cyber_installer.view_models.tabs.installed_tab;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

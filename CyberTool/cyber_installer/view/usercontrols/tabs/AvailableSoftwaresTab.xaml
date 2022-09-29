@@ -5,7 +5,7 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="clr-namespace:cyber_installer.view.usercontrols.tabs"
 			 xmlns:csv="clr-namespace:cyber_base.implement.views.cyber_scroll;assembly=cyber_base"
-			 xmlns:av="clr-namespace:cyber_installer.view.usercontrols.list_item.available_item"
+			 xmlns:iv="clr-namespace:cyber_installer.view.usercontrols.list_item"
 			 xmlns:vmm="clr-namespace:cyber_installer.implement.modules.view_model_manager"
 			 xmlns:vm="clr-namespace:cyber_installer.view_models.tabs.available_tab"
 			 mc:Ignorable="d"
@@ -56,7 +56,7 @@
 				<Setter Property="Template">
 					<Setter.Value>
 						<ControlTemplate TargetType="ListViewItem">
-							<av:AvailableItemViewHolder x:Name="ViewHolder" 
+							<iv:ItemViewHolder x:Name="ViewHolder" 
 														ItemStatus="{Binding ItemStatus}"/>
 						</ControlTemplate>
 					</Setter.Value>
