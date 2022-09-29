@@ -11,8 +11,15 @@ namespace cyber_base.implement.utils
     {
         public static T? DeserializeObject<T>(string json)
         {
-            T? items = JsonConvert.DeserializeObject<T>(json);
-            return items;
+            try
+            {
+                T? items = JsonConvert.DeserializeObject<T>(json);
+                return items;
+            }
+            catch
+            {
+                return (T?)Activator.CreateInstance(typeof(T));
+            }
         }
 
         public static string SerializeObject(object obj)
