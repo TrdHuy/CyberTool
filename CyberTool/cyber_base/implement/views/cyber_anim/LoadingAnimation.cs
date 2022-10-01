@@ -24,6 +24,20 @@ namespace cyber_base.implement.views.cyber_anim
     [TemplatePart(Name = "PART_RotaryIcon", Type = typeof(Path))]
     public class LoadingAnimation : Control
     {
+        public class IsBusyChangedEventArgs : RoutedEventArgs
+        {
+            public bool OldValue { get; private set; }
+            public bool NewValue { get; private set; }
+
+            public IsBusyChangedEventArgs(RoutedEvent id, bool oldValue, bool newValue)
+            {
+                OldValue = oldValue;
+                NewValue = newValue;
+                RoutedEvent = id;
+            }
+        }
+        public delegate void IsBusyChangedHandler(object sender, IsBusyChangedEventArgs args);
+
         private Viewbox? _foamyBox;
         private Viewbox? _rotaryBox;
         private Path? _rotaryIcon;
@@ -54,6 +68,23 @@ namespace cyber_base.implement.views.cyber_anim
             }
         }
 
+        #region IsBusyChangedEvent
+        public static readonly RoutedEvent IsBusyChangedEvent =
+            EventManager.RegisterRoutedEvent("IsBusyChanged", RoutingStrategy.Direct,
+                         typeof(IsBusyChangedHandler), typeof(LoadingAnimation));
+
+        public event IsBusyChangedHandler IsBusyChanged
+        {
+            add
+            {
+                AddHandler(IsBusyChangedEvent, value);
+            }
+            remove
+            {
+                RemoveHandler(IsBusyChangedEvent, value);
+            }
+        }
+        #endregion
 
         #region IsBusy
         public static readonly DependencyProperty IsBusyProperty =
@@ -68,7 +99,14 @@ namespace cyber_base.implement.views.cyber_anim
         private static void IsBusyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var s = d as LoadingAnimation;
-            s?.OnBusyChanged((bool)e.NewValue);
+            var args = new IsBusyChangedEventArgs(LoadingAnimation.IsBusyChangedEvent
+                , (bool)e.OldValue
+                , (bool)e.NewValue);
+            s?.RaiseEvent(args);
+            if (!args.Handled)
+            {
+                s?.OnBusyChanged((bool)e.NewValue);
+            }
         }
 
 
@@ -371,4 +409,5 @@ namespace cyber_base.implement.views.cyber_anim
             }
         }
     }
+
 }

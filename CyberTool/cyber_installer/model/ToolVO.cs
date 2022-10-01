@@ -10,7 +10,7 @@ namespace cyber_installer.model
     {
         public ToolVO()
         {
-            this.ToolVersions = new HashSet<ToolVersionVO>();
+            this.ToolVersions = new List<ToolVersionVO>();
         }
 
         public int ToolId { get; set; }
@@ -24,6 +24,6 @@ namespace cyber_installer.model
         public bool IsPreReleased { get; set; }
         public int Downloads { get; set; }
 
-        public virtual ICollection<ToolVersionVO> ToolVersions { get; set; }
+        public List<ToolVersionVO> ToolVersions { get; set; }
     }
 }

@@ -1,104 +1,108 @@
 ﻿<UserControl x:Class="cyber_installer.view.usercontrols.list_item.ItemViewHolder"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             FontFamily="Calibri"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:anim="clr-namespace:cyber_base.implement.views.cyber_anim;assembly=cyber_base"
+			 mc:Ignorable="d"
+			 FontFamily="Calibri"
 			 d:DesignHeight="113.28"
 			 d:DesignWidth="651.84">
-    <Grid Background="{StaticResource Background_Level3}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.64*" />
-            <ColumnDefinition Width="3.98*" />
-            <ColumnDefinition Width="2.18*" />
-        </Grid.ColumnDefinitions>
+	<Grid Background="{StaticResource Background_Level3}">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="0.64*" />
+			<ColumnDefinition Width="3.98*" />
+			<ColumnDefinition Width="2.18*" />
+		</Grid.ColumnDefinitions>
 
-        <Image Stretch="Uniform"
+		<Image Stretch="Uniform"
 			   Width="32.64"
 			   Height="32.64"
 			   Margin="0,15,0,0"
 			   VerticalAlignment="Top"
 			   Source="{Binding IconSource}" />
 
-        <StackPanel Grid.Column="1"
+		<StackPanel Grid.Column="1"
 					Margin="0,15,0,0">
-            <TextBlock Text="{Binding SoftwareName}"
+			<TextBlock Text="{Binding SoftwareName}"
 					   FontSize="21.3"
 					   Foreground="{DynamicResource Foreground_Level3}" />
-            <TextBlock Text="{Binding Version}"
+			<TextBlock Text="{Binding Version}"
 					   Margin="3,3,0,0"
 					   FontSize="13.3"
 					   Foreground="{DynamicResource Foreground_Level3}" />
-        </StackPanel>
+		</StackPanel>
 
-        <Button x:Name="PART_InstallSoftwareButton"
-				Visibility="Hidden"
-				Grid.Column="2"
-				Width="151.68"
-				Margin="0,15,0,0"
-				Background="Transparent"
-				VerticalAlignment="Top"
-				HorizontalAlignment="Center"
-				Padding="40,5,40,5"
-				FontSize="16"
-				Style="{StaticResource CyberRoundedButtonStyle}"
-				Foreground="{DynamicResource Foreground_Level3}"
-				BorderBrush="{DynamicResource Foreground_Level1}" />
-        <Button x:Name="PART_UpdateSoftwareButton"
-				Visibility="Hidden"
-				Grid.Column="2"
-				Width="151.68"
-				Content="Update"
-				Margin="0,15,0,0"
-				Background="Transparent"
-				VerticalAlignment="Top"
-				HorizontalAlignment="Center"
-				Padding="40,5,40,5"
-				FontSize="16"
-				Style="{StaticResource CyberRoundedButtonStyle}"
-				Foreground="{DynamicResource Foreground_Level3}"
-				BorderBrush="{DynamicResource Foreground_Level1}" />
-        <StackPanel x:Name="PART_SwHandlingProgressPanel"
-					Grid.Column="2"
+		<Grid x:Name="PART_ItemStatusPanel"
+			  Grid.Column="2">
+			<Button x:Name="PART_SingleSoftwareCommandButton"
 					Visibility="Hidden"
-					Margin="0,15,0,0">
-            <TextBlock x:Name="PART_HandlingTitleTextBlock"
-					   Foreground="{DynamicResource Foreground_Level3}"
+					Margin="0,15,0,0"
+					Background="Transparent"
+					VerticalAlignment="Top"
+					HorizontalAlignment="Center"
+					Padding="10,5,10,5"
+					FontSize="16"
+					Style="{StaticResource CyberRoundedButtonStyle}"
+					Foreground="{DynamicResource Foreground_Level3}"
+					BorderBrush="{DynamicResource Foreground_Level1}" />
+
+			<TextBlock x:Name="PART_OtherItemStatusContentTb"
+					   Visibility="Hidden"
 					   FontSize="16"
+					   Margin="0,15,0,0"
+					   Padding="40,5,40,5"
 					   HorizontalAlignment="Center"
-					   Text="Downloading" />
+					   Foreground="{DynamicResource Foreground_Level3}" />
 
-            <ProgressBar x:Name="PART_SwHandlingProgressBar"
-						 Value="{Binding SwHandlingProgress}"
-						 BorderThickness="0"
-						 Margin="0,5,0,0"
-						 Foreground="{DynamicResource ButtonBackground_Level1}"
-						 Background="{DynamicResource Foreground_Level3}"
-						 Width="134"
-						 Height="4.8"
-						 Maximum="100" />
+			<StackPanel x:Name="PART_SwHandlingProgressPanel"
+						Visibility="Hidden"
+						Margin="0,15,0,0">
+				<TextBlock x:Name="PART_HandlingTitleTextBlock"
+						   Foreground="{DynamicResource Foreground_Level3}"
+						   FontSize="16"
+						   HorizontalAlignment="Center"
+						   Text="Downloading" />
 
-            <StackPanel Margin="0,5,0,0"
-						HorizontalAlignment="Center"
-						Orientation="Horizontal">
-                <Button x:Name="PART_SwHandlingPauseButton"
-						Height="13.56"
-						Width="13.56"
-						Background="{DynamicResource ButtonBackground_Level1}"
-						Foreground="{DynamicResource Foreground_Level3}"
-						Content="{StaticResource PauseIconPathGeomerty}"
-						Template="{StaticResource IconBtnTmpl}" />
-                <Button x:Name="PART_SwHandlingStopButton"
-						Height="12.56"
-						Width="12.56"
-						Margin="5,0,0,0"
-						Background="{DynamicResource ButtonBackground_Level1}"
-						Foreground="{DynamicResource Foreground_Level3}"
-						Content="{StaticResource StopIconPathGeomerty}"
-						Template="{StaticResource IconBtnTmpl}" />
-            </StackPanel>
-        </StackPanel>
+				<ProgressBar x:Name="PART_SwHandlingProgressBar"
+							 Value="{Binding SwHandlingProgress}"
+							 BorderThickness="0"
+							 Margin="0,5,0,0"
+							 Foreground="{DynamicResource ButtonBackground_Level1}"
+							 Background="{DynamicResource Foreground_Level3}"
+							 Width="134"
+							 Height="4.8"
+							 Maximum="100" />
 
-    </Grid>
+				<StackPanel Margin="0,5,0,0"
+							HorizontalAlignment="Center"
+							Orientation="Horizontal">
+					<Button x:Name="PART_SwHandlingPauseButton"
+							Height="13.56"
+							Width="13.56"
+							Background="{DynamicResource ButtonBackground_Level1}"
+							Foreground="{DynamicResource Foreground_Level3}"
+							Content="{StaticResource PauseIconPathGeomerty}"
+							Template="{StaticResource IconBtnTmpl}" />
+					<Button x:Name="PART_SwHandlingStopButton"
+							Height="12.56"
+							Width="12.56"
+							Margin="5,0,0,0"
+							Background="{DynamicResource ButtonBackground_Level1}"
+							Foreground="{DynamicResource Foreground_Level3}"
+							Content="{StaticResource StopIconPathGeomerty}"
+							Template="{StaticResource IconBtnTmpl}" />
+				</StackPanel>
+			</StackPanel>
+		</Grid>
+		
+		<anim:LoadingAnimation x:Name="PART_ItemStatusLoadingAnimation"
+							   Grid.Column="2"
+							   IsBusy="{Binding IsLoadingItemStatus}"
+							   IsBusyChanged="HandleBusyStatusChanged"
+							   AnimationTime="2000"
+							   Width="30"
+							   ElipseFill="{DynamicResource Foreground_Level3}"
+							   AnimationMode="Rotatory"/>
+	</Grid>
 </UserControl>

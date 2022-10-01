@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static cyber_base.implement.views.cyber_anim.LoadingAnimation;
 
 namespace cyber_installer.view.usercontrols.list_item
 {
@@ -49,20 +50,22 @@ namespace cyber_installer.view.usercontrols.list_item
 
         private void OnItemStatusChanged(ItemStatus oldStatus, ItemStatus newStatus)
         {
-            PART_InstallSoftwareButton.Visibility = Visibility.Hidden;
-            PART_UpdateSoftwareButton.Visibility = Visibility.Hidden;
+            PART_SingleSoftwareCommandButton.Visibility = Visibility.Hidden;
             PART_SwHandlingProgressPanel.Visibility = Visibility.Hidden;
+            PART_OtherItemStatusContentTb.Visibility = Visibility.Hidden;
             switch (newStatus)
             {
                 case ItemStatus.Downloadable:
-                    PART_InstallSoftwareButton.Visibility = Visibility.Visible;
+                    PART_SingleSoftwareCommandButton.Visibility = Visibility.Visible;
+                    PART_SingleSoftwareCommandButton.Content = "Download & Install";
                     break;
                 case ItemStatus.Updateable:
-                    PART_UpdateSoftwareButton.Visibility = Visibility.Visible;
+                    PART_SingleSoftwareCommandButton.Visibility = Visibility.Visible;
+                    PART_SingleSoftwareCommandButton.Content = "Update";
                     break;
                 case ItemStatus.Installable:
-                    PART_InstallSoftwareButton.Visibility = Visibility.Visible;
-                    PART_InstallSoftwareButton.Content = "Install";
+                    PART_SingleSoftwareCommandButton.Visibility = Visibility.Visible;
+                    PART_SingleSoftwareCommandButton.Content = "Install";
                     break;
                 case ItemStatus.Downloading:
                     PART_SwHandlingProgressPanel.Visibility = Visibility.Visible;
@@ -73,13 +76,33 @@ namespace cyber_installer.view.usercontrols.list_item
                     PART_HandlingTitleTextBlock.Text = "Installing";
                     break;
                 case ItemStatus.Installed:
-                    PART_InstallSoftwareButton.Visibility = Visibility.Visible;
-                    PART_InstallSoftwareButton.Content = "Uninstall";
+                    PART_SingleSoftwareCommandButton.Visibility = Visibility.Visible;
+                    PART_SingleSoftwareCommandButton.Content = "Uninstall";
                     break;
                 case ItemStatus.Uninstalling:
                     PART_SwHandlingProgressPanel.Visibility = Visibility.Visible;
                     PART_HandlingTitleTextBlock.Text = "Uninstalling";
                     break;
+                case ItemStatus.UpToDate:
+                    PART_OtherItemStatusContentTb.Visibility = Visibility.Visible;
+                    PART_OtherItemStatusContentTb.Text = "Up to date";
+                    break;
+                case ItemStatus.InstallFailed:
+                    PART_SingleSoftwareCommandButton.Visibility = Visibility.Visible;
+                    PART_SingleSoftwareCommandButton.Content = "Re-install";
+                    break;
+            }
+        }
+
+        private void HandleBusyStatusChanged(object sender, IsBusyChangedEventArgs args)
+        {
+            if (args.NewValue)
+            {
+                PART_ItemStatusPanel.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                PART_ItemStatusPanel.Visibility = Visibility.Visible;
             }
         }
     }

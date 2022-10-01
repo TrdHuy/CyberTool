@@ -23,7 +23,7 @@ namespace cyber_installer.model
         public string CurrentInstalledVersion { get; set; } = "";
         public string InstallPath { get; set; } = "";
         public string ExecutePath { get; set; } = "";
-        public ToolStatus PluginStatus { get; set; }
+        public ToolStatus ToolStatus { get; set; }
     }
 
     internal class ToolVersionData
@@ -38,7 +38,7 @@ namespace cyber_installer.model
     {
         Downloaded = 0,
         Installed = 1,
-        InstalledFail = 3,
+        InstallFailed = 3,
         Removed = 2
     }
 

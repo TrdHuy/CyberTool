@@ -13,5 +13,6 @@ namespace cyber_installer.view.usercontrols.list_item.available_item.@base
         public string Version { get; set; }
         public string SoftwareName { get; set; }
         public double SwHandlingProgress { get; set; }
+        public bool IsLoadingItemStatus { get; set; }
     }
 }

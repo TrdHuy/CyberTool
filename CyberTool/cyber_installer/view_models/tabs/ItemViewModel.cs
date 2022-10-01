@@ -1,4 +1,5 @@
 ﻿using cyber_base.view_model;
+using cyber_installer.model;
 using cyber_installer.view.usercontrols.list_item.available_item.@base;
 using System;
 using System.Collections.Generic;
@@ -8,13 +9,15 @@ using System.Threading.Tasks;
 
 namespace cyber_installer.view_models.tabs
 {
-    internal class ItemViewModel : BaseViewModel, IItemContext
+    internal abstract class ItemViewModel : BaseViewModel, IItemContext
     {
         private Uri? _iconSource;
         private ItemStatus _itemStatus;
         private string _version = "";
         private string _softwareName = "";
         private double _swHandlingProgress = 0d;
+        private bool _isLoadingItemStatus = false;
+        protected ToolVO _toolVO;
 
         public ItemStatus ItemStatus
         {
@@ -35,6 +38,7 @@ namespace cyber_installer.view_models.tabs
                 InvalidateOwn();
             }
         }
+
         public string Version
         {
             get => _version;
@@ -64,6 +68,27 @@ namespace cyber_installer.view_models.tabs
                 InvalidateOwn();
             }
         }
+
+        public bool IsLoadingItemStatus
+        {
+            get => _isLoadingItemStatus;
+            set
+            {
+                _isLoadingItemStatus = value;
+                InvalidateOwn();
+            }
+        }
+
+        public ItemViewModel(ToolVO toolVO)
+        {
+            _toolVO = toolVO;
+            _softwareName = toolVO.Name;
+            _version = toolVO.ToolVersions.Last().Version;
+            _iconSource = new Uri(toolVO.IconSource);
+            InstantiateItemStatus();
+        }
+
+        protected abstract void InstantiateItemStatus();
     }
 }
 

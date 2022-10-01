@@ -89,16 +89,11 @@ namespace cyber_installer.view_models.tabs.available_tab
         {
             foreach (var tool in toolsSource)
             {
-                var availableItem = new AvailableItemViewModel()
-                {
-                    SoftwareName = tool.Name,
-                    Version = tool.ToolVersions.Last().Version,
-                    ItemStatus = GetItemStatus(tool),
-                    IconSource = new Uri(tool.IconSource)
-                };
+                var availableItem = new AvailableItemViewModel(tool);
                 ItemsSource.Add(availableItem);
             }
         }
+
         private ItemStatus GetItemStatus(ToolVO tool)
         {
             // TODO: Check item status here

@@ -16,6 +16,7 @@ namespace cyber_installer.implement.modules.user_data_manager
     {
         private readonly string _userDataFilePath = CyberInstallerDefinition.USER_DATA_FILE_PATH;
         private UserData _currentUserData;
+        private Task? _importUserDataFromFileTaskCache;
 
         public static UserDataManager Current
         {
@@ -24,7 +25,7 @@ namespace cyber_installer.implement.modules.user_data_manager
 
         public UserData CurrentUserData => _currentUserData;
 
-        public async void ExportUserDataToFile()
+        private async void ExportUserDataToFile()
         {
             if (!File.Exists(_userDataFilePath))
             {
@@ -34,15 +35,10 @@ namespace cyber_installer.implement.modules.user_data_manager
             await File.WriteAllTextAsync(_userDataFilePath, dataJson);
         }
 
-        public void ImportUserDataFromFile()
+        private async void ImportUserDataFromFile()
         {
-            if (!File.Exists(_userDataFilePath))
-            {
-                File.Create(_userDataFilePath).Dispose();
-            }
-
-            string json = File.ReadAllText(_userDataFilePath, Encoding.UTF8);
-            _currentUserData = JsonHelper.DeserializeObject<UserData>(json);
+            _importUserDataFromFileTaskCache = ImportUserDataFromFileTask();
+            await _importUserDataFromFileTaskCache;
         }
 
         public void OnModuleCreate()
@@ -62,6 +58,27 @@ namespace cyber_installer.implement.modules.user_data_manager
         public void UpdateUserData(UserData newData)
         {
             _currentUserData = newData;
+        }
+
+        private async Task ImportUserDataFromFileTask()
+        {
+            if (!File.Exists(_userDataFilePath))
+            {
+                File.Create(_userDataFilePath).Dispose();
+            }
+
+            string json = await File.ReadAllTextAsync(_userDataFilePath, Encoding.UTF8);
+            _currentUserData = JsonHelper.DeserializeObject<UserData>(json);
+        }
+
+        public async Task<bool> WaitForImportUserDataTask(int timeOutMilliseconds)
+        {
+            if (_importUserDataFromFileTaskCache != null)
+            {
+                await _importUserDataFromFileTaskCache.WaitAsync(TimeSpan.FromMilliseconds(timeOutMilliseconds));
+                return _importUserDataFromFileTaskCache.IsCompletedSuccessfully;
+            }
+            return false;
         }
     }
 }

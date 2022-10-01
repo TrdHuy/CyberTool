@@ -8,6 +8,7 @@
 				xmlns:tabs="clr-namespace:cyber_installer.view.usercontrols.tabs"
 				xmlns:cw="clr-namespace:cyber_base.implement.views.cyber_window;assembly=cyber_base"
 				mc:Ignorable="d"
+				FontFamily="Calibri"
 				Style="{StaticResource CyberInstallerWindowStyle}"
 				Height="407"
 				Width="677">

@@ -15,6 +15,8 @@ namespace cyber_installer.view.usercontrols.list_item.available_item.@base
         Downloading = 4,
         Installing = 5,
         Installed = 6,
-        Uninstalling = 7
+        Uninstalling = 7,
+        InstallFailed = 8,
+        UpToDate = 9,
     }
 }

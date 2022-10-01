@@ -10,8 +10,8 @@ namespace cyber_installer.@base.modules
     internal interface IUserDataManager
     {
         public UserData CurrentUserData { get; }
-        public void ExportUserDataToFile();
-        public void ImportUserDataFromFile();
         public void UpdateUserData(UserData newData);
+        public Task<bool> WaitForImportUserDataTask(int timeOut);
+
     }
 }
