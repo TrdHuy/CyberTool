@@ -1,4 +1,5 @@
 ﻿using cyber_installer.view.usercontrols.list_item.available_item.@base;
+using cyber_installer.view.window;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -105,5 +106,6 @@ namespace cyber_installer.view.usercontrols.list_item
                 PART_ItemStatusPanel.Visibility = Visibility.Visible;
             }
         }
+
     }
 }
