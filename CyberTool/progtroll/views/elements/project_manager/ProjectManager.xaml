@@ -183,25 +183,27 @@
                         Foreground="{DynamicResource Foreground_Level3}"
 						Background="{DynamicResource ButtonBackground_Level1}"
 						Template="{DynamicResource IconBtnTmpl}" >
-                    <Button.ContextMenu>
-                        <ContextMenu x:Name="PART_TaskIdItem"
-                                     Style="{StaticResource CyberScrollableContextMenu}">
-                            <MenuItem x:Name="PART_AllFilterTaskId"
+					<Button.ContextMenu>
+						<ContextMenu x:Name="PART_TaskIdItem"
+									 Style="{StaticResource CyberScrollableContextMenu}">
+							<MenuItem x:Name="PART_AllFilterTaskId"
 									  Header="All"
-                                      IsCheckable="True"
-                                      IsChecked="True"
-                                      StaysOpenOnClick="True" 
-                                      Checked="HandleAllFilterChecked" 
-                                      Unchecked="HandleAllFilterUnChecked" />
-                            <MenuItem x:Name="PART_NoneTaskIdFilter"
+									  IsCheckable="True"
+									  IsChecked="True"
+									  StaysOpenOnClick="True"
+									  Checked="HandleCheckedEvent"
+									  Unchecked="HandleUncheckedEvent" />
+							<MenuItem x:Name="PART_NoneTaskIdFilter"
 									  Header="None id"
-                                      IsCheckable="True"
-                                      IsChecked="True"
-                                      StaysOpenOnClick="True" />
-                            <Separator x:Name="PART_SeparatorTaskIdList"/>
-                        </ContextMenu>
-                    </Button.ContextMenu>
-                </Button>
+									  IsCheckable="True"
+									  IsChecked="True"
+									  StaysOpenOnClick="True"
+									  Checked="HandleCheckedEvent"
+									  Unchecked="HandleUncheckedEvent"/>
+							<Separator x:Name="PART_SeparatorTaskIdList" />
+						</ContextMenu>
+					</Button.ContextMenu>
+				</Button>
                 <vhl:VersionHistoryListView x:Name="PART_VersionHistoryListView"
 											Grid.Row="2"
 											Grid.ColumnSpan="3"

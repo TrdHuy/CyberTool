@@ -22,6 +22,7 @@ namespace progtroll.views.elements.project_manager
     public partial class ProjectManager : UserControl
     {
         private List<string>? _filterTaskIdList;
+        private CollectionView _viewCache;
 
         #region CommitTaskIdSource 
         public static readonly DependencyProperty CommitTaskIdSourceProperty
@@ -48,40 +49,25 @@ namespace progtroll.views.elements.project_manager
         }
         #endregion
 
-
         public ProjectManager()
         {
             InitializeComponent();
 
             _filterTaskIdList = new List<string>();
+
+            _viewCache = (CollectionView)CollectionViewSource.GetDefaultView(PART_VersionHistoryListView.ItemsSource);
+            _viewCache.Filter += DoFilter;
         }
 
         private void OnCommitTaskIdSourceChanged(List<string>? newSource)
         {
-            PART_TaskIdItem.Items.Clear();
+            if (!IsInitialized) return;
+            ClearOldMenuItem();
             _filterTaskIdList = newSource;
-            PART_VersionHistoryListView.Items.Filter = null;
 
             if (newSource != null)
             {
-                PART_TaskIdItem.Items.Add(PART_AllFilterTaskId);
-                PART_AllFilterTaskId.IsChecked = true;
-                if (newSource.Contains(""))
-                {
-                    PART_TaskIdItem.Items.Add(PART_NoneTaskIdFilter);
-                    PART_NoneTaskIdFilter.IsChecked = true;
-                    PART_NoneTaskIdFilter.Checked += (s, e) =>
-                    {
-                        _filterTaskIdList?.Add("");
-                        PART_VersionHistoryListView.Items.Filter = DoFilter;
-                    };
-                    PART_NoneTaskIdFilter.Unchecked += (s, e) =>
-                    {
-                        _filterTaskIdList?.Remove("");
-                        PART_VersionHistoryListView.Items.Filter = DoFilter;
-                    };
-                }
-                PART_TaskIdItem.Items.Add(PART_SeparatorTaskIdList);
+                PART_NoneTaskIdFilter.IsEnabled = newSource.Contains("");
 
                 foreach (var item in newSource)
                 {
@@ -98,13 +84,16 @@ namespace progtroll.views.elements.project_manager
                         menuItem.Unchecked += (s, e) =>
                         {
                             _filterTaskIdList?.Remove(item);
-                            PART_VersionHistoryListView.Items.Filter = DoFilter;
                         };
 
                         menuItem.Checked += (s, e) =>
                         {
                             _filterTaskIdList?.Add(item);
-                            PART_VersionHistoryListView.Items.Filter = DoFilter;
+                        };
+
+                        menuItem.Click += (s, e) =>
+                        {
+                            _viewCache.Refresh();
                         };
                         PART_TaskIdItem.Items.Add(menuItem);
                     }
@@ -112,10 +101,20 @@ namespace progtroll.views.elements.project_manager
             }
         }
 
+        private void ClearOldMenuItem()
+        {
+            for (int i = PART_TaskIdItem.Items.Count - 1; i > 2; i--)
+            {
+                PART_TaskIdItem.Items.RemoveAt(i);
+            }
+        }
+
         private bool DoFilter(object item)
         {
             var versionHistoryItem = item as VersionHistoryItemViewModel;
-            if (_filterTaskIdList != null && versionHistoryItem != null)
+            if (_filterTaskIdList != null
+                && versionHistoryItem != null
+                && _filterTaskIdList.Count > 0)
             {
                 return (_filterTaskIdList.Contains(versionHistoryItem.VersionCommitVO.TaskId));
             }
@@ -130,32 +129,77 @@ namespace progtroll.views.elements.project_manager
             }
         }
 
-        private void HandleAllFilterChecked(object sender, RoutedEventArgs e)
+        private void HandleCheckedEvent(object sender, RoutedEventArgs e)
         {
-            foreach (var item in PART_TaskIdItem.Items)
+            if (!IsInitialized) return;
+
+            var menuItem = sender as MenuItem;
+            if (menuItem != null)
             {
-                if (item != PART_AllFilterTaskId && item != PART_SeparatorTaskIdList)
+                switch (menuItem.Name)
                 {
-                    MenuItem? menuItem = item as MenuItem;
-                    if (menuItem != null)
-                    {
-                        menuItem.IsChecked = true;
-                    }
+                    case "PART_AllFilterTaskId":
+                        {
+                            foreach (var item in PART_TaskIdItem.Items)
+                            {
+                                if (item != PART_AllFilterTaskId
+                                    && item != PART_SeparatorTaskIdList
+                                    && item != PART_NoneTaskIdFilter)
+                                {
+                                    MenuItem? submenuItem = item as MenuItem;
+                                    if (submenuItem != null)
+                                    {
+                                        submenuItem.IsChecked = true;
+                                    }
+                                }
+                            }
+                            _viewCache?.Refresh();
+                            break;
+                        }
+                    case "PART_NoneTaskIdFilter":
+                        {
+                            _filterTaskIdList?.Add("");
+                            _viewCache?.Refresh();
+                            break;
+                        }
                 }
             }
+
         }
 
-        private void HandleAllFilterUnChecked(object sender, RoutedEventArgs e)
+        private void HandleUncheckedEvent(object sender, RoutedEventArgs e)
         {
-            foreach (var item in PART_TaskIdItem.Items)
+            if (!IsInitialized) return;
+
+            var menuItem = sender as MenuItem;
+            if (menuItem != null)
             {
-                if (item != PART_AllFilterTaskId && item != PART_SeparatorTaskIdList)
+                switch (menuItem.Name)
                 {
-                    MenuItem? menuItem = item as MenuItem;
-                    if (menuItem != null)
-                    {
-                        menuItem.IsChecked = false;
-                    }
+                    case "PART_AllFilterTaskId":
+                        {
+                            foreach (var item in PART_TaskIdItem.Items)
+                            {
+                                if (item != PART_AllFilterTaskId
+                                    && item != PART_SeparatorTaskIdList
+                                    && item != PART_NoneTaskIdFilter)
+                                {
+                                    MenuItem? subMenuItem = item as MenuItem;
+                                    if (subMenuItem != null)
+                                    {
+                                        subMenuItem.IsChecked = false;
+                                    }
+                                }
+                            }
+                            _viewCache?.Refresh();
+                            break;
+                        }
+                    case "PART_NoneTaskIdFilter":
+                        {
+                            _filterTaskIdList?.Remove("");
+                            _viewCache?.Refresh();
+                            break;
+                        }
                 }
             }
         }
