@@ -1,5 +1,6 @@
 ﻿using cyber_installer.@base;
 using cyber_installer.implement.modules.server_contact_manager;
+using cyber_installer.implement.modules.sw_installing_manager;
 using cyber_installer.implement.modules.user_config_manager;
 using cyber_installer.implement.modules.user_data_manager;
 using cyber_installer.implement.modules.view_model_manager;
@@ -20,6 +21,7 @@ namespace cyber_installer.implement.modules
         private static ICyberInstallerModule? _UCM_Instance;
         private static ICyberInstallerModule? _SCM_Instance;
         private static ICyberInstallerModule? _UDM_Instance;
+        private static ICyberInstallerModule? _SIM_Instance;
 
         public static void Init()
         {
@@ -28,6 +30,7 @@ namespace cyber_installer.implement.modules
             _CyberModules.Add(UCM_Instance);
             _CyberModules.Add(SCM_Instance);
             _CyberModules.Add(UDM_Instance);
+            _CyberModules.Add(SIM_Instance);
 
             foreach (var module in _CyberModules)
             {
@@ -48,7 +51,19 @@ namespace cyber_installer.implement.modules
             }
 
         }
+        public static SwInstallingManager SIM_Instance
+        {
+            get
+            {
+                if (_SIM_Instance == null)
+                {
+                    _SIM_Instance = Activator.CreateInstance(typeof(SwInstallingManager), true) as ICyberInstallerModule;
+                }
+                ArgumentNullException.ThrowIfNull(_SIM_Instance);
+                return (SwInstallingManager)_SIM_Instance;
+            }
 
+        }
         public static ViewModelManager VMM_Instance
         {
             get

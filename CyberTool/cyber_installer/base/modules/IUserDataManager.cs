@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace cyber_installer.@base.modules
 {
-    internal interface IUserDataManager
+    internal interface IUserDataManager: ICyberInstallerModule
     {
         public UserData CurrentUserData { get; }
         public void UpdateUserData(UserData newData);

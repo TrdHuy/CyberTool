@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace cyber_installer.implement.modules.user_data_manager
 {
-    internal class UserDataManager : ICyberInstallerModule, IUserDataManager
+    internal class UserDataManager : IUserDataManager
     {
         private readonly string _userDataFilePath = CyberInstallerDefinition.USER_DATA_FILE_PATH;
         private UserData _currentUserData;
