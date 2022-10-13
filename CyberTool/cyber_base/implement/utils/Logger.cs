@@ -72,17 +72,31 @@ namespace cyber_base.implement.utils
                 var attribs = Assembly.GetCallingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), true);
                 if (attribs.Length > 0)
                 {
-                    folderName = ((AssemblyCompanyAttribute)attribs[0]).Company + @"\" + Assembly.GetCallingAssembly().GetName().Name + @"\" + "log";
+                    folderName = ((AssemblyCompanyAttribute)attribs[0]).Company 
+                        + @"\"
+                        + (Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly())
+                            .GetName().Name
+                        + @"\" 
+                        + "log";
                 }
                 else
                 {
-                    folderName = TAG + @"\" + Assembly.GetCallingAssembly().GetName().Name + @"\" + "log";
+                    folderName = TAG 
+                        + @"\" 
+                        + (Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly())
+                            .GetName().Name 
+                        + @"\" 
+                        + "log";
                 }
 
                 fileName =
-                   Assembly.GetCallingAssembly().GetName().Name + "_" +
-                   Assembly.GetCallingAssembly().GetName().Version + "_" +
-                   dateTimeNow + ".txt";
+                    (Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly())
+                        .GetName().Name 
+                    + "_" +
+                    (Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly())
+                        .GetName().Version 
+                    + "_" +
+                    dateTimeNow + ".txt";
 
                 directory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                 directory = directory + @"\" + folderName;
