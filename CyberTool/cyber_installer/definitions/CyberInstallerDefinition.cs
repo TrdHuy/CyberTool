@@ -12,5 +12,7 @@ namespace cyber_installer.definitions
             + ".config/user_config.json";
         public static readonly string USER_DATA_FILE_PATH = AppDomain.CurrentDomain.BaseDirectory
             + ".data/user_data.json";
+        public const string CYBER_INSTALLER_INDENTIFER = "h2s_swi";
+
     }
 }

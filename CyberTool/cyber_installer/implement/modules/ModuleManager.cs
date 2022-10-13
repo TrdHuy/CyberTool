@@ -1,9 +1,11 @@
 ﻿using cyber_installer.@base;
 using cyber_installer.implement.modules.server_contact_manager;
 using cyber_installer.implement.modules.sw_installing_manager;
+using cyber_installer.implement.modules.ui_event_handler;
 using cyber_installer.implement.modules.user_config_manager;
 using cyber_installer.implement.modules.user_data_manager;
 using cyber_installer.implement.modules.view_model_manager;
+using extension_manager_service.implement.ui_event_handler;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,6 +24,8 @@ namespace cyber_installer.implement.modules
         private static ICyberInstallerModule? _SCM_Instance;
         private static ICyberInstallerModule? _UDM_Instance;
         private static ICyberInstallerModule? _SIM_Instance;
+        private static ICyberInstallerModule? _CEF_Instance;
+        private static ICyberInstallerModule? _KAL_Instance;
 
         public static void Init()
         {
@@ -31,6 +35,8 @@ namespace cyber_installer.implement.modules
             _CyberModules.Add(SCM_Instance);
             _CyberModules.Add(UDM_Instance);
             _CyberModules.Add(SIM_Instance);
+            _CyberModules.Add(CEF_Instance);
+            _CyberModules.Add(KAL_Instance);
 
             foreach (var module in _CyberModules)
             {
@@ -51,6 +57,34 @@ namespace cyber_installer.implement.modules
             }
 
         }
+
+        public static KeyActionListener KAL_Instance
+        {
+            get
+            {
+                if (_KAL_Instance == null)
+                {
+                    _KAL_Instance = Activator.CreateInstance(typeof(KeyActionListener), true) as ICyberInstallerModule;
+                }
+                ArgumentNullException.ThrowIfNull(_KAL_Instance);
+                return (KeyActionListener)_KAL_Instance;
+            }
+        }
+
+        public static CommandExecuterFactory CEF_Instance
+        {
+            get
+            {
+                if (_CEF_Instance == null)
+                {
+                    _CEF_Instance = Activator.CreateInstance(typeof(CommandExecuterFactory), true) as ICyberInstallerModule;
+                }
+                ArgumentNullException.ThrowIfNull(_CEF_Instance);
+                return (CommandExecuterFactory)_CEF_Instance;
+            }
+
+        }
+
         public static SwInstallingManager SIM_Instance
         {
             get
@@ -64,6 +98,7 @@ namespace cyber_installer.implement.modules
             }
 
         }
+
         public static ViewModelManager VMM_Instance
         {
             get
