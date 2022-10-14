@@ -16,8 +16,8 @@ namespace progtroll.implement.ui_event_handler.actions.notebook.context_menu
         private ReleasingProjectManager releasingProjectManager;
         private ViewModelManager viewModelManager;
 
-        public PRT_NB_DeleteProjectItemContextMenuAction(string actionID, string builderID, ILogger? logger)
-            : base(actionID, builderID, logger)
+        public PRT_NB_DeleteProjectItemContextMenuAction(string actionID, string builderID, object? dataTransfer, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, logger)
         {
             releasingProjectManager = ReleasingProjectManager.Current;
             viewModelManager = ViewModelManager.Current;

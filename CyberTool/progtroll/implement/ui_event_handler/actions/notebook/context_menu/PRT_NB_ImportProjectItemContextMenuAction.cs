@@ -18,8 +18,8 @@ namespace progtroll.implement.ui_event_handler.actions.notebook.context_menu
         private ViewModelManager viewModelManager;
         private ProgTroll progTrollInstance;
 
-        public PRT_NB_ImportProjectItemContextMenuAction(string actionID, string builderID, ILogger? logger)
-            : base(actionID, builderID, logger)
+        public PRT_NB_ImportProjectItemContextMenuAction(string actionID, string builderID, object? dataTransfer, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, logger)
         {
             releasingProjectManager = ReleasingProjectManager.Current;
             viewModelManager = ViewModelManager.Current;

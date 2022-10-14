@@ -20,8 +20,8 @@ namespace progtroll.implement.ui_event_handler.actions.version_manager
     {
         private VersionHistoryItemViewModel? _versionHistoryItemVM;
 
-        public PRT_VM_ShowCommitDataGridAction(string actionID, string builderID, ILogger? logger)
-            : base(actionID, builderID, logger)
+        public PRT_VM_ShowCommitDataGridAction(string actionID, string builderID, object? dataTransfer, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, logger)
         {
 
         }

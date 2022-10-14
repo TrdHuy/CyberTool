@@ -19,8 +19,8 @@ namespace progtroll.implement.ui_event_handler.actions.project_manager.button
 {
     internal class PRT_PM_FetchProjectButtonAction : PM_ViewModelCommandExecuter
     {
-        public PRT_PM_FetchProjectButtonAction(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger)
-           : base(actionID, builderID, viewModel, logger)
+        public PRT_PM_FetchProjectButtonAction(string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, viewModel, logger)
         {
         }
 

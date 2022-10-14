@@ -11,8 +11,8 @@ namespace progtroll.implement.ui_event_handler.actions
 {
     internal class PRT_LogMonitorSwitchButtonAction : BaseViewModelCommandExecuter
     {
-        public PRT_LogMonitorSwitchButtonAction(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger)
-            : base(actionID, builderID, viewModel, logger)
+        public PRT_LogMonitorSwitchButtonAction(string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, viewModel, logger)
         {
         }
 

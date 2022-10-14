@@ -20,8 +20,8 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
 {
     internal class PRT_MT_CheckMergeConflictButtonAction : BaseViewModelCommandExecuter
     {
-        public PRT_MT_CheckMergeConflictButtonAction(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger)
-            : base(actionID, builderID, viewModel, logger)
+        public PRT_MT_CheckMergeConflictButtonAction(string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, viewModel, logger)
         {
         }
 

@@ -22,8 +22,8 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
         private string _branchPath = "";
         private readonly string EMPTY_STRING = "";
 
-        public PRT_RT_CreateReleaseCommitAction(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger)
-            : base(actionID, builderID, viewModel, logger)
+        public PRT_RT_CreateReleaseCommitAction(string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, viewModel, logger)
         {
             PMViewModel = ViewModelManager.Current.PMViewModel;
         }

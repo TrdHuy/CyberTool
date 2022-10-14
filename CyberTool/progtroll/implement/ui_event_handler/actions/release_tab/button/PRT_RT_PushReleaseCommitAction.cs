@@ -20,7 +20,8 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
         private string _branchPathForPushing = "";
         private bool _isPushToGerrit = false;
 
-        public PRT_RT_PushReleaseCommitAction(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger) : base(actionID, builderID, viewModel, logger)
+        public PRT_RT_PushReleaseCommitAction(string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, viewModel, logger)
         {
             RTViewModel = ViewModelManager.Current.RTViewModel;
         }
@@ -67,14 +68,14 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab.button
                 _isPushToGerrit = true;
             }
 
-            return RTViewModel.ReleaseTabGitStatus == ProjectGitStatus.HavingCommit 
+            return RTViewModel.ReleaseTabGitStatus == ProjectGitStatus.HavingCommit
                 && confirmGerritPush == CyberContactMessage.Yes;
         }
 
         protected override void ExecuteCommand()
         {
             var pushTaskName = _isPushToGerrit ? "Pushing to Gerrit" : "Pushing to " + _branchPathForPushing;
-            var releaseTaskParam = new string[] { ReleasingProjectManager.Current.ProjectPath, _branchPathForPushing};
+            var releaseTaskParam = new string[] { ReleasingProjectManager.Current.ProjectPath, _branchPathForPushing };
             var pushResult = PushResult.None;
             var gerritLink = "";
             var errorMes = "";

@@ -38,6 +38,7 @@ namespace progtroll.implement.ui_event_handler
 
         protected override IAction? GetAction(string keyTag
             , string builderID
+            , object? dataTransfer
             , BaseViewModel? viewModel = null
             , ILogger? logger = null)
         {
@@ -55,7 +56,7 @@ namespace progtroll.implement.ui_event_handler
             {
                 action = SwPublisherCommandExecuterFactory
                     .Current
-                    .CreateAction(builderID, keyTag, viewModel, logger);
+                    .CreateAction(builderID, keyTag, dataTransfer, viewModel, logger);
             }
 
             return action;
@@ -63,12 +64,13 @@ namespace progtroll.implement.ui_event_handler
 
         protected override IAction? GetKeyActionAndLockFactory(string windowTag
             , string keytag
+            , object? dataTransfer
             , bool isLock = false
             , BuilderStatus status = BuilderStatus.Default
             , BaseViewModel? viewModel = null
             , ILogger? logger = null)
         {
-            var action = GetAction(keytag, windowTag, viewModel, logger);
+            var action = GetAction(keytag, windowTag, dataTransfer, viewModel, logger);
             SwPublisherCommandExecuterFactory
                     .Current
                     .LockBuilder(builderID: windowTag, isLock, status);

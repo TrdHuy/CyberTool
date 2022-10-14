@@ -7,8 +7,8 @@ namespace progtroll.implement.ui_event_handler.actions.notebook.context_menu
     internal class PRT_NB_RenameProjectItemContextMenuAction : BaseCommandExecuter
     {
 
-        public PRT_NB_RenameProjectItemContextMenuAction(string actionID, string builderID, ILogger? logger)
-            : base(actionID, builderID, logger)
+        public PRT_NB_RenameProjectItemContextMenuAction(string actionID, string builderID, object? dataTransfer, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, logger)
         {
 
         }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace progtroll.implement.ui_event_handler.actions.release_tab
 {
-    internal class RT_ViewModelCommandExecuter: BaseViewModelCommandExecuter
+    internal class RT_ViewModelCommandExecuter : BaseViewModelCommandExecuter
     {
         protected ReleaseTabViewModel RTViewModel
         {
@@ -19,7 +19,8 @@ namespace progtroll.implement.ui_event_handler.actions.release_tab
             }
         }
 
-        public RT_ViewModelCommandExecuter(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger) : base(actionID, builderID, viewModel, logger)
+        public RT_ViewModelCommandExecuter(string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, viewModel, logger)
         {
         }
     }

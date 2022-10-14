@@ -21,8 +21,8 @@ namespace progtroll.implement.ui_event_handler.actions.merge_tab.button
     {
         private string _branchPathForPushing = "";
         private bool _isPushToGerrit = false;
-        public PRT_MT_PushMergeCommitButtonAction(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger)
-            : base(actionID, builderID, viewModel, logger)
+        public PRT_MT_PushMergeCommitButtonAction(string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, viewModel, logger)
         {
         }
 

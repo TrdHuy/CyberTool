@@ -12,8 +12,8 @@ namespace progtroll.implement.ui_event_handler.actions.log_monitor.button
 {
     internal class PRT_LM_CopyLogToClipboardButtonAction : LM_ViewModelCommandExecuter
     {
-        public PRT_LM_CopyLogToClipboardButtonAction(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger)
-           : base(actionID, builderID, viewModel, logger)
+        public PRT_LM_CopyLogToClipboardButtonAction(string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, viewModel, logger)
         {
         }
 
