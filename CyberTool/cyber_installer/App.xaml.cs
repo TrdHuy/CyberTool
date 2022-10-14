@@ -29,6 +29,11 @@ namespace cyber_installer
                 return _instance;
             }
         }
+        
+        private App() : base()
+        {
+            _instance = this;
+        }
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -45,6 +50,12 @@ namespace cyber_installer
         {
             ModuleManager.Destroy();
             base.OnExit(e);
+        }
+
+        public string ShowDestinationFolderWindow()
+        {
+            var destinationFolderWindow = new DestinationFolderSelectionWindow();
+            return destinationFolderWindow.Show();
         }
     }
 }
