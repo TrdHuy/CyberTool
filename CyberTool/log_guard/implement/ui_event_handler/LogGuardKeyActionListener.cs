@@ -32,9 +32,13 @@ namespace log_guard.implement.ui_event_handler
         {
         }
 
-        protected override IAction GetAction(string keyTag, string builderID, BaseViewModel viewModel = null, ILogger logger = null)
+        protected override IAction? GetAction(string keyTag
+            , string builderID
+            , object? dataTransfer
+            , BaseViewModel? viewModel = null
+            , ILogger? logger = null)
         {
-            IAction action;
+            IAction? action;
             try
             {
                 action = _actionExecuteHelper.GetActionInCache(builderID, keyTag);
@@ -48,15 +52,21 @@ namespace log_guard.implement.ui_event_handler
             {
                 action = LogGuardCommandExecuterFactory
                     .Current
-                    .CreateAction(builderID, keyTag, viewModel, logger);
+                    .CreateAction(builderID, keyTag, dataTransfer, viewModel, logger);
             }
 
             return action;
         }
 
-        protected override IAction GetKeyActionAndLockFactory(string windowTag, string keytag, bool isLock = false, BuilderStatus status = BuilderStatus.Default, BaseViewModel viewModel = null, ILogger logger = null)
+        protected override IAction? GetKeyActionAndLockFactory(string windowTag
+            , string keytag
+            , object? dataTransfer
+            , bool isLock = false
+            , BuilderStatus status = BuilderStatus.Default
+            , BaseViewModel? viewModel = null
+            , ILogger? logger = null)
         {
-            var action = GetAction(keytag, windowTag, viewModel, logger);
+            var action = GetAction(keytag, windowTag, dataTransfer, viewModel, logger);
             LogGuardCommandExecuterFactory
                     .Current
                     .LockBuilder(builderID: windowTag, isLock, status);

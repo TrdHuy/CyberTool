@@ -11,7 +11,7 @@ namespace log_guard.implement.ui_event_handler.actions.log_manager
 {
     internal class LM_ViewModelCommandExecuter : BaseViewModelCommandExecuter
     {
-        protected LogManagerUCViewModel LMUCViewModel
+        protected LogManagerUCViewModel? LMUCViewModel
         {
             get
             {
@@ -19,8 +19,8 @@ namespace log_guard.implement.ui_event_handler.actions.log_manager
             }
         }
 
-        public LM_ViewModelCommandExecuter(string actionID, string builderID, BaseViewModel viewModel, ILogger logger)
-            : base(actionID, builderID, viewModel, logger)
+        public LM_ViewModelCommandExecuter(string actionID, string builderID, object? dataTransfer, BaseViewModel? viewModel, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, viewModel, logger)
         {
         }
     }

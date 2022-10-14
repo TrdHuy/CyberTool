@@ -18,8 +18,8 @@ namespace extension_manager_service.implement.ui_event_handler.actions.plugin_it
     {
         private PluginItemViewModel PIViewModel { get; set; }
 
-        public EMS_PI_UninstallPluginButtonAction(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger)
-            : base(actionID, builderID, viewModel, logger)
+        public EMS_PI_UninstallPluginButtonAction(string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, viewModel, logger)
         {
             PIViewModel = viewModel as PluginItemViewModel ?? throw new ArgumentNullException("view model must be type of PluginItemViewModel");
         }

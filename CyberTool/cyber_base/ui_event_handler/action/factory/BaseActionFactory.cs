@@ -11,7 +11,7 @@ namespace cyber_base.ui_event_handler.action.factory
 {
     public abstract class BaseActionFactory : AbstractActionFactory
     {
-        public override IAction? CreateAction(string builderID, string keyID, BaseViewModel? viewModel = null, ILogger? logger = null)
+        public override IAction? CreateAction(string builderID, string keyID, object? dataTransfer, BaseViewModel? viewModel = null, ILogger? logger = null)
         {
 
             //try to get the registered builder
@@ -28,11 +28,11 @@ namespace cyber_base.ui_event_handler.action.factory
             // Build the action
             if (!builder.Locker.IsLock)
             {
-                return builder.BuildMainAction(keyID);
+                return builder.BuildMainAction(keyID, dataTransfer);
             }
             else
             {
-                return builder.BuildAlternativeActionWhenFactoryIsLock(keyID);
+                return builder.BuildAlternativeActionWhenFactoryIsLock(keyID, dataTransfer);
             }
         }
     }

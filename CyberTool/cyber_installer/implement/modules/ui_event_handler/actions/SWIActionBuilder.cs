@@ -16,17 +16,17 @@ namespace cyber_installer.implement.modules.ui_event_handler.actions
     {
         private Logger logger = new Logger("SWIActionBuilder", CyberInstallerDefinition.CYBER_INSTALLER_INDENTIFER);
 
-        public override ICommandExecuter? BuildAlternativeCommandExecuterWhenBuilderIsLock(string keyTag, ILogger? logger = null)
+        public override ICommandExecuter? BuildAlternativeCommandExecuterWhenBuilderIsLock(string keyTag, object? dataTransfer, ILogger? logger = null)
         {
             return null;
         }
 
-        public override IViewModelCommandExecuter? BuildAlternativeViewModelCommandExecuterWhenBuilderIsLock(string keyTag, BaseViewModel viewModel, ILogger? logger = null)
+        public override IViewModelCommandExecuter? BuildAlternativeViewModelCommandExecuterWhenBuilderIsLock(string keyTag, object? dataTransfer, BaseViewModel viewModel, ILogger? logger = null)
         {
             return null;
         }
 
-        public override ICommandExecuter? BuildCommandExecuter(string keyTag, ILogger? logger = null)
+        public override ICommandExecuter? BuildCommandExecuter(string keyTag, object? dataTransfer, ILogger? logger = null)
         {
             ICommandExecuter? commandExecuter = null;
             switch (keyTag)
@@ -37,7 +37,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.actions
             return commandExecuter;
         }
 
-        public override IViewModelCommandExecuter? BuildViewModelCommandExecuter(string keyTag, BaseViewModel viewModel, ILogger? logger = null)
+        public override IViewModelCommandExecuter? BuildViewModelCommandExecuter(string keyTag, object? dataTransfer, BaseViewModel viewModel, ILogger? logger = null)
         {
             IViewModelCommandExecuter? viewModelCommandExecuter = null;
             return viewModelCommandExecuter;
@@ -45,4 +45,3 @@ namespace cyber_installer.implement.modules.ui_event_handler.actions
     }
 }
 
-              

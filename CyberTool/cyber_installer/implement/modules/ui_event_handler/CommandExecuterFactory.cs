@@ -39,9 +39,9 @@ namespace cyber_installer.implement.modules.ui_event_handler
         {
         }
 
-        public override IAction? CreateAction(string builderID, string keyID, BaseViewModel? viewModel = null, ILogger? logger = null)
+        public override IAction? CreateAction(string builderID, string keyID, object? dataTransfer, BaseViewModel? viewModel = null, ILogger? logger = null)
         {
-            IAction? action = base.CreateAction(builderID, keyID, viewModel, logger);
+            IAction? action = base.CreateAction(builderID, keyID, dataTransfer, viewModel, logger);
 
             return action;
         }

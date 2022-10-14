@@ -60,19 +60,25 @@ namespace cyber_base.ui_event_handler.action.executer
         public string BuilderID { get => _builderID; }
         public string ActionName { get => _actionName; }
 
-        public AbstractCommandExecuter(string actionID, string builderID, ILogger? logger)
+        public AbstractCommandExecuter(string actionID, string builderID, object? dataTransfer, ILogger? logger)
         {
             this.Logger = logger;
             _actionID = actionID;
             _builderID = builderID;
+
+            if (dataTransfer != null)
+                AssignDataTransfer(dataTransfer);
         }
 
-        public AbstractCommandExecuter(string actionName, string actionID, string builderID, ILogger? logger)
+        public AbstractCommandExecuter(string actionName, string actionID, string builderID, object? dataTransfer, ILogger? logger)
         {
             this.Logger = logger;
             _actionID = actionID;
             _builderID = builderID;
             _actionName = actionName;
+
+            if (dataTransfer != null)
+                AssignDataTransfer(dataTransfer);
         }
 
         public void OnDestroy()
@@ -93,8 +99,6 @@ namespace cyber_base.ui_event_handler.action.executer
         public bool Execute(object? dataTransfer)
         {
             bool isExecuteable = false;
-            if (dataTransfer != null)
-                AssignDataTransfer(dataTransfer);
 
             if (CanExecute(dataTransfer))
             {
@@ -131,8 +135,6 @@ namespace cyber_base.ui_event_handler.action.executer
 
         public bool AlterExecute(object? dataTransfer)
         {
-            if (dataTransfer != null)
-                AssignDataTransfer(dataTransfer);
             ExecuteAlternativeCommand();
             SetCompleteFlagAfterExecuteCommand();
             return true;

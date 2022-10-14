@@ -11,14 +11,16 @@ namespace log_guard.implement.ui_event_handler
 {
     public class BaseViewModelCommandExecuter : AbstractViewModelCommandExecuter
     {
-        public BaseViewModelCommandExecuter(string actionID, string builderID, BaseViewModel viewModel, ILogger logger) : base(actionID, builderID, viewModel, logger)
+        public BaseViewModelCommandExecuter(string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, viewModel, logger)
         {
         }
-        public BaseViewModelCommandExecuter(string actionName, string actionID, string builderID, BaseViewModel viewModel, ILogger logger) : base(actionName, actionID, builderID, viewModel, logger)
+        public BaseViewModelCommandExecuter(string actionName, string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionName, actionID, builderID, dataTransfer, viewModel, logger)
         {
         }
 
-        protected override bool CanExecute(object dataTransfer)
+        protected override bool CanExecute(object? dataTransfer)
         {
             return true;
         }

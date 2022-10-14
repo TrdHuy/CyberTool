@@ -11,11 +11,12 @@ namespace extension_manager_service.implement.ui_event_handler
 {
     internal class BaseViewModelCommandExecuter : AbstractViewModelCommandExecuter
     {
-        public BaseViewModelCommandExecuter(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger) 
-            : base(actionID, builderID, viewModel, logger)
+        public BaseViewModelCommandExecuter(string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, viewModel, logger)
         {
         }
-        public BaseViewModelCommandExecuter(string actionName, string actionID, string builderID, BaseViewModel viewModel, ILogger? logger) : base(actionName, actionID, builderID, viewModel, logger)
+        public BaseViewModelCommandExecuter(string actionName, string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionName, actionID, builderID, dataTransfer, viewModel, logger)
         {
         }
 

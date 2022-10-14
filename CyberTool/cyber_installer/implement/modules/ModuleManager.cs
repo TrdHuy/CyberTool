@@ -5,7 +5,6 @@ using cyber_installer.implement.modules.ui_event_handler;
 using cyber_installer.implement.modules.user_config_manager;
 using cyber_installer.implement.modules.user_data_manager;
 using cyber_installer.implement.modules.view_model_manager;
-using extension_manager_service.implement.ui_event_handler;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

@@ -11,9 +11,9 @@ namespace cyber_base.ui_event_handler.action.factory
 {
     public abstract class BaseCommandExecuterFactory : BaseActionFactory
     {
-        public override IAction? CreateAction(string builderID, string keyID, BaseViewModel? viewModel = null, ILogger? logger = null)
+        public override IAction? CreateAction(string builderID, string keyID, object? dataTransfer, BaseViewModel? viewModel = null, ILogger? logger = null)
         {
-            IAction? action = base.CreateAction(builderID, keyID, viewModel, logger);
+            IAction? action = base.CreateAction(builderID, keyID, dataTransfer, viewModel, logger);
 
             if (action == null)
             {
@@ -36,22 +36,22 @@ namespace cyber_base.ui_event_handler.action.factory
                     {
                         if (viewModel == null)
                         {
-                            action = commandExecuterBuilder?.BuildCommandExecuter(keyID, logger);
+                            action = commandExecuterBuilder?.BuildCommandExecuter(keyID, dataTransfer, logger);
                         }
                         else
                         {
-                            action = commandExecuterBuilder?.BuildViewModelCommandExecuter(keyID, viewModel, logger);
+                            action = commandExecuterBuilder?.BuildViewModelCommandExecuter(keyID, dataTransfer, viewModel, logger);
                         }
                     }
                     else
                     {
                         if (viewModel == null)
                         {
-                            action = commandExecuterBuilder?.BuildAlternativeCommandExecuterWhenBuilderIsLock(keyID, logger);
+                            action = commandExecuterBuilder?.BuildAlternativeCommandExecuterWhenBuilderIsLock(keyID, dataTransfer, logger);
                         }
                         else
                         {
-                            action = commandExecuterBuilder?.BuildAlternativeViewModelCommandExecuterWhenBuilderIsLock(keyID, viewModel, logger);
+                            action = commandExecuterBuilder?.BuildAlternativeViewModelCommandExecuterWhenBuilderIsLock(keyID, dataTransfer, viewModel, logger);
                         }
                     }
                 }

@@ -11,14 +11,14 @@ namespace cyber_base.ui_event_handler.action.builder
 {
     public interface ICommandExecuterBuilder : IActionBuilder
     {
-        ICommandExecuter? BuildCommandExecuter(string keyTag, ILogger? logger = null);
+        ICommandExecuter? BuildCommandExecuter(string keyTag, object? dataTransfer, ILogger? logger = null);
 
-        IViewModelCommandExecuter? BuildViewModelCommandExecuter(string keyTag, BaseViewModel viewModel, ILogger? logger = null);
+        IViewModelCommandExecuter? BuildViewModelCommandExecuter(string keyTag, object? dataTransfer, BaseViewModel viewModel, ILogger? logger = null);
 
 
-        ICommandExecuter? BuildAlternativeCommandExecuterWhenBuilderIsLock(string keyTag, ILogger? logger = null);
+        ICommandExecuter? BuildAlternativeCommandExecuterWhenBuilderIsLock(string keyTag, object? dataTransfer, ILogger? logger = null);
 
-        IViewModelCommandExecuter? BuildAlternativeViewModelCommandExecuterWhenBuilderIsLock(string keyTag, BaseViewModel viewModel, ILogger? logger = null);
+        IViewModelCommandExecuter? BuildAlternativeViewModelCommandExecuterWhenBuilderIsLock(string keyTag, object? dataTransfer, BaseViewModel viewModel, ILogger? logger = null);
 
     }
 }

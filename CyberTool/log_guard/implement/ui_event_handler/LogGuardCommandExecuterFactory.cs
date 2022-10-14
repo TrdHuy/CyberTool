@@ -17,7 +17,7 @@ namespace log_guard.implement.ui_event_handler
 {
     public class LogGuardCommandExecuterFactory : BaseCommandExecuterFactory, ILogGuardModule
     {
-        private static Logger logger = new Logger("LogGuardCommandExecuterFactory", "log_guard");
+        private Logger logger = new Logger("LogGuardCommandExecuterFactory", "log_guard");
 
         public static LogGuardCommandExecuterFactory Current
         {
@@ -38,10 +38,9 @@ namespace log_guard.implement.ui_event_handler
         {
         }
 
-        public override IAction CreateAction(string builderID, string keyID, BaseViewModel viewModel = null, ILogger logger = null)
+        public override IAction? CreateAction(string builderID, string keyID, object? dataTransfer, BaseViewModel? viewModel = null, ILogger? logger = null)
         {
-            IAction action = base.CreateAction(builderID, keyID, viewModel, logger);
-
+            IAction? action = base.CreateAction(builderID, keyID, dataTransfer, viewModel, logger);
             return action;
         }
 

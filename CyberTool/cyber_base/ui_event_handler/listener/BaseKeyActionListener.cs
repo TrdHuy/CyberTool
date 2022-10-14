@@ -23,25 +23,25 @@ namespace cyber_base.ui_event_handler.listener
         #region Onkey and execute action field
         public IAction? OnKey(string builderTag, string keyFeature, object dataTransfer)
         {
-            IAction? action = GetKeyActionType(builderTag, keyFeature);
+            IAction? action = GetKeyActionType(builderTag, keyFeature, dataTransfer);
             return action;
         }
 
         public IAction? OnKey(string builderTag, string keyFeature, object dataTransfer, BuilderLocker locker)
         {
-            IAction? action = GetKeyActionAndLockFactory(builderTag, keyFeature, locker.IsLock, locker.Status);
+            IAction? action = GetKeyActionAndLockFactory(builderTag, keyFeature, dataTransfer, locker.IsLock, locker.Status);
             return action;
         }
 
         public IAction? OnKey(BaseViewModel viewModel, ILogger logger, string builderTag, string keyFeature, object dataTransfer)
         {
-            IAction? action = GetKeyActionType(builderTag, keyFeature, viewModel, logger);
+            IAction? action = GetKeyActionType(builderTag, keyFeature, dataTransfer, viewModel, logger);
             return action;
         }
 
         public IAction? OnKey(BaseViewModel viewModel, ILogger logger, string builderTag, string keyFeature, object dataTransfer, BuilderLocker locker)
         {
-            IAction? action = GetKeyActionAndLockFactory(builderTag, keyFeature, locker.IsLock, locker.Status, viewModel, logger);
+            IAction? action = GetKeyActionAndLockFactory(builderTag, keyFeature, dataTransfer, locker.IsLock, locker.Status, viewModel, logger);
             return action;
         }
 
@@ -50,14 +50,16 @@ namespace cyber_base.ui_event_handler.listener
 
         private IAction? GetKeyActionType(string builderTag
             , string keytag
+            , object? dataTransfer
             , BaseViewModel? viewModel = null
             , ILogger? logger = null)
         {
-            return GetAction(keytag, builderTag, viewModel, logger);
+            return GetAction(keytag, builderTag, dataTransfer, viewModel, logger);
         }
 
         protected abstract IAction? GetKeyActionAndLockFactory(string builderTag
             , string keytag
+            , object? dataTransfer
             , bool isLock = false
             , BuilderStatus status = BuilderStatus.Default
             , BaseViewModel? viewModel = null
@@ -65,6 +67,7 @@ namespace cyber_base.ui_event_handler.listener
 
         protected abstract IAction? GetAction(string keyTag
             , string builderID
+            , object? dataTransfer
             , BaseViewModel? viewModel = null
             , ILogger? logger = null);
     }

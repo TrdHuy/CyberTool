@@ -19,8 +19,7 @@ namespace log_guard.implement.ui_event_handler.actions.log_watcher
             }
         }
 
-        public LG_ViewModelCommandExecuter(string actionID, string builderID, BaseViewModel viewModel, ILogger logger) : base(actionID, builderID, viewModel, logger)
-        {
-        }
+        public LG_ViewModelCommandExecuter(string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, viewModel, logger) { }
     }
 }

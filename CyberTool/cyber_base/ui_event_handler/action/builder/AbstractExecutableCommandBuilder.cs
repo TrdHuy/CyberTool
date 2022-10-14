@@ -11,21 +11,21 @@ namespace cyber_base.ui_event_handler.action.builder
 {
     public abstract class AbstractExecutableCommandBuilder : AbstractActionBuilder, ICommandExecuterBuilder
     {
-        public override IAction? BuildMainAction(string keyTag)
+        public override IAction? BuildMainAction(string keyTag, object? dataTransfer)
         {
-            return BuildCommandExecuter(keyTag);
+            return BuildCommandExecuter(keyTag, dataTransfer);
         }
 
-        public override IAction? BuildAlternativeActionWhenFactoryIsLock(string keyTag)
+        public override IAction? BuildAlternativeActionWhenFactoryIsLock(string keyTag, object? dataTransfer)
         {
-            return BuildAlternativeCommandExecuterWhenBuilderIsLock(keyTag);
+            return BuildAlternativeCommandExecuterWhenBuilderIsLock(keyTag, dataTransfer);
         }
 
-        public abstract ICommandExecuter? BuildAlternativeCommandExecuterWhenBuilderIsLock(string keyTag, ILogger? logger = null);
-        public abstract IViewModelCommandExecuter? BuildAlternativeViewModelCommandExecuterWhenBuilderIsLock(string keyTag, BaseViewModel viewModel, ILogger? logger = null);
+        public abstract ICommandExecuter? BuildAlternativeCommandExecuterWhenBuilderIsLock(string keyTag, object? dataTransfer, ILogger? logger = null);
+        public abstract IViewModelCommandExecuter? BuildAlternativeViewModelCommandExecuterWhenBuilderIsLock(string keyTag, object? dataTransfer, BaseViewModel viewModel, ILogger? logger = null);
 
-        public abstract ICommandExecuter? BuildCommandExecuter(string keyTag, ILogger? logger = null);
-        public abstract IViewModelCommandExecuter? BuildViewModelCommandExecuter(string keyTag, BaseViewModel viewModel, ILogger? logger = null);
+        public abstract ICommandExecuter? BuildCommandExecuter(string keyTag, object? dataTransfer, ILogger? logger = null);
+        public abstract IViewModelCommandExecuter? BuildViewModelCommandExecuter(string keyTag, object? dataTransfer, BaseViewModel viewModel, ILogger? logger = null);
 
 
     }

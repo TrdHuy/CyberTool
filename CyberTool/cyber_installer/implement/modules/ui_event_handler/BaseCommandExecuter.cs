@@ -10,11 +10,13 @@ namespace cyber_installer.implement.modules.ui_event_handler
 {
     internal class BaseCommandExecuter : AbstractCommandExecuter
     {
-        public BaseCommandExecuter(string actionID, string builderID, ILogger? logger) : base(actionID, builderID, logger)
+        public BaseCommandExecuter(string actionID, string builderID, object? dataTransfer, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, logger)
         {
         }
 
-        public BaseCommandExecuter(string actionName, string actionID, string builderID, ILogger? logger) : base(actionName, actionID, builderID, logger)
+        public BaseCommandExecuter(string actionName, string actionID, string builderID, object? dataTransfer, ILogger? logger)
+            : base(actionName, actionID, builderID, dataTransfer, logger)
         {
         }
 

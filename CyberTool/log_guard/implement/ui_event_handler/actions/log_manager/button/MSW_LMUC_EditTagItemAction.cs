@@ -13,8 +13,8 @@ namespace log_guard.implement.ui_event_handler.actions.log_manager.button
 {
     internal class MSW_LMUC_EditTagItemAction : LM_ViewModelCommandExecuter
     {
-        public MSW_LMUC_EditTagItemAction(string actionID, string builderID, BaseViewModel viewModel, ILogger logger)
-            : base(actionID, builderID, viewModel, logger) { }
+        public MSW_LMUC_EditTagItemAction(string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, viewModel, logger) { }
 
         string a = "";
         string oldText

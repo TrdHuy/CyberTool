@@ -12,14 +12,14 @@ namespace cyber_base.ui_event_handler.action.executer
     {
         public virtual BaseViewModel ViewModel { get; protected set; }
 
-        public AbstractViewModelCommandExecuter(string actionID, string builderID, BaseViewModel viewModel, ILogger? logger)
-            : base(actionID, builderID, logger)
+        public AbstractViewModelCommandExecuter(string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionID, builderID, dataTransfer, logger)
         {
             this.ViewModel = viewModel;
         }
 
-        public AbstractViewModelCommandExecuter(string actionName, string actionID, string builderID, BaseViewModel viewModel, ILogger? logger)
-            : base(actionName, actionID, builderID, logger)
+        public AbstractViewModelCommandExecuter(string actionName, string actionID, string builderID, object? dataTransfer, BaseViewModel viewModel, ILogger? logger)
+            : base(actionName, actionID, builderID, dataTransfer, logger)
         {
             this.ViewModel = viewModel;
         }
