@@ -99,6 +99,7 @@ namespace progtroll.views.elements.project_manager
                     }
                 }
             }
+            _viewCache.Refresh();
         }
 
         private void ClearOldMenuItem()
@@ -118,7 +119,7 @@ namespace progtroll.views.elements.project_manager
             {
                 return (_filterTaskIdList.Contains(versionHistoryItem.VersionCommitVO.TaskId));
             }
-            return true;
+            return false;
         }
 
         private void HandleButtonAndMenuItemClick(object sender, RoutedEventArgs e)
@@ -143,8 +144,7 @@ namespace progtroll.views.elements.project_manager
                             foreach (var item in PART_TaskIdItem.Items)
                             {
                                 if (item != PART_AllFilterTaskId
-                                    && item != PART_SeparatorTaskIdList
-                                    && item != PART_NoneTaskIdFilter)
+                                    && item != PART_SeparatorTaskIdList)
                                 {
                                     MenuItem? submenuItem = item as MenuItem;
                                     if (submenuItem != null)
@@ -181,8 +181,7 @@ namespace progtroll.views.elements.project_manager
                             foreach (var item in PART_TaskIdItem.Items)
                             {
                                 if (item != PART_AllFilterTaskId
-                                    && item != PART_SeparatorTaskIdList
-                                    && item != PART_NoneTaskIdFilter)
+                                    && item != PART_SeparatorTaskIdList)
                                 {
                                     MenuItem? subMenuItem = item as MenuItem;
                                     if (subMenuItem != null)
