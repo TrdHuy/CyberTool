@@ -15,4 +15,10 @@ namespace cyber_installer.definitions
         public const string CYBER_INSTALLER_INDENTIFER = "h2s_swi";
 
     }
+
+    internal class CyberInstallerKeyFeatureTag
+    {
+        public const string KEY_TAG_SWI_AT_DOWNLOAD_AND_INSTALL_FEATURE = "KEY_TAG_SWI_AT_DOWNLOAD_AND_INSTALL_FEATURE";
+    }
+
 }

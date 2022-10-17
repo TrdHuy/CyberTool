@@ -4,15 +4,7 @@ using cyber_base.ui_event_handler.action.factory;
 using cyber_base.utils;
 using cyber_base.view_model;
 using cyber_installer.@base;
-using cyber_installer.@base.modules;
 using cyber_installer.definitions;
-using cyber_installer.implement.modules;
-using cyber_installer.implement.modules.ui_event_handler.actions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace cyber_installer.implement.modules.ui_event_handler
 {

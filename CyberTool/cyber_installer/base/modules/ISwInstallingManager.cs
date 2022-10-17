@@ -10,7 +10,7 @@ namespace cyber_installer.@base.modules
     internal interface ISwInstallingManager : ICyberInstallerModule
     {
         public string GetInstallationPath();
-        public Task<bool> StartToolDownloadingTask(ToolVO toolVO);
-        public Task<bool> StartToolInstallingTask(ToolData toolData);
+        public Task<ToolData?> StartDownloadingLatestVersionToolTask(ToolVO toolVO);
+        public Task<ToolData?> StartToolInstallingTask(ToolData toolData, string installPath);
     }
 }

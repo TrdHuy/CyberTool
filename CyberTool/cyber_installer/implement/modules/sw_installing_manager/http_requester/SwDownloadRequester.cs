@@ -36,18 +36,23 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
             _requestDownloadToolSemaphore = new SemaphoreSlim(1, 1);
         }
 
-        public async Task RequestDownloadSoftware(HttpClient httpClient, ToolVO requestingTool)
+        public async Task<ToolData?> RequestDownloadSoftwareWithLatestVersion(HttpClient httpClient
+            , ToolVO requestingTool)
         {
             var isContinue = await _requestDownloadToolSemaphore.WaitAsync(TIME_OUT_FOR_REQUEST_OF_SEMAPHORE);
+            var downLoadResult = new ToolData()
+            {
+                ToolName = requestingTool.Name
+            };
             try
             {
                 if (!isContinue)
                 {
-                    return;
+                    return null;
                 }
 
                 var requestToolKey = requestingTool.StringId;
-                var requestToolVersion = requestingTool.ToolVersions[0].Version;
+                var requestToolVersion = requestingTool.ToolVersions.Last().Version.Trim();
 
                 httpClient.DefaultRequestHeaders.Add(REQUEST_DOWNLOAD_TOOL_HEADER_KEY, REQUEST_CHECK_TOOL_DOWNLOADABLE_HEADER_ID);
                 httpClient.DefaultRequestHeaders.Add(REQUEST_KEY_TO_CHECK_DOWNLOADABLE_HEADER_ID, requestToolKey);
@@ -66,7 +71,7 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
                     fileName = response.Headers.GetValues(RESPONSE_TOOL_FILE_NAME_HEADER_ID)
                         .FirstOrDefault();
                     executePath = response.Headers.GetValues(RESPONSE_TOOL_EXECUTE_PATH_HEADER_ID)
-                        .FirstOrDefault();
+                        .FirstOrDefault() ?? "";
                 }
                 catch
                 {
@@ -75,7 +80,7 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
 
                 if (!isDownloadable)
                 {
-                    return;
+                    downLoadResult = null;
                 }
                 else
                 {
@@ -104,7 +109,16 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
 
                     if (downloadTask.IsCompleted)
                     {
-
+                        downLoadResult.ToolKey = requestToolKey;
+                        var toolVersionData = new ToolVersionData()
+                        {
+                            Version = requestToolVersion,
+                            DownloadFilePath = downloadFilePath,
+                            ExecutePath = executePath,
+                            VersionStatus = ToolVersionStatus.VersionDownloadedButWithoutInstalled,
+                        };
+                        downLoadResult.ToolVersionSource.Add(toolVersionData);
+                        downLoadResult.ToolStatus = ToolStatus.Downloaded;
                     }
                 }
             }
@@ -116,6 +130,7 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
             {
                 _requestDownloadToolSemaphore.Release();
             }
+            return downLoadResult;
         }
 
     }

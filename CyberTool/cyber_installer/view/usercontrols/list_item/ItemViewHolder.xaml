@@ -43,6 +43,7 @@
 					HorizontalAlignment="Center"
 					Padding="10,5,10,5"
 					FontSize="16"
+					CommandParameter="{Binding .}"
 					Style="{StaticResource CyberRoundedButtonStyle}"
 					Foreground="{DynamicResource Foreground_Level3}"
 					BorderBrush="{DynamicResource Foreground_Level1}" />

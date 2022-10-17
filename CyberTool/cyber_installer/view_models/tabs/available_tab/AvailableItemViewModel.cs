@@ -1,4 +1,7 @@
-﻿using cyber_base.view_model;
+﻿using cyber_base.implement.command;
+using cyber_base.ui_event_handler.action.executer;
+using cyber_installer.definitions;
+using cyber_installer.implement.modules.ui_event_handler;
 using cyber_installer.implement.modules.user_data_manager;
 using cyber_installer.model;
 using cyber_installer.view.usercontrols.list_item.available_item.@base;
@@ -7,14 +10,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace cyber_installer.view_models.tabs.available_tab
 {
     internal class AvailableItemViewModel : ItemViewModel
     {
         private const int IMPORT_USER_DATA_TIME_OUT = 1000;
+        private ICommand _downloadAndInstallCommand;
+        public ICommand DownloadAndInstallCommand { get => _downloadAndInstallCommand; }
+
         public AvailableItemViewModel(ToolVO toolVO) : base(toolVO)
         {
+
+            _downloadAndInstallCommand = new CommandExecuterModel((paramaters) =>
+            {
+                var data = paramaters ?? this;
+                return KeyActionListener.Current.OnKey(CyberInstallerDefinition.CYBER_INSTALLER_INDENTIFER
+                    , CyberInstallerKeyFeatureTag.KEY_TAG_SWI_AT_DOWNLOAD_AND_INSTALL_FEATURE
+                    , data) as ICommandExecuter;
+            });
+
         }
 
         protected override async void InstantiateItemStatus()
@@ -58,12 +74,12 @@ namespace cyber_installer.view_models.tabs.available_tab
                                 if (_toolVO.ToolVersions.Count > 0)
                                 {
                                     if (System.Version.Parse(toolData.CurrentInstalledVersion)
-                                        == System.Version.Parse(_toolVO.ToolVersions[0].Version))
+                                        == System.Version.Parse(_toolVO.ToolVersions.Last().Version))
                                     {
                                         ItemStatus = ItemStatus.UpToDate;
                                     }
                                     else if (System.Version.Parse(toolData.CurrentInstalledVersion)
-                                        < System.Version.Parse(_toolVO.ToolVersions[0].Version))
+                                        < System.Version.Parse(_toolVO.ToolVersions.Last().Version))
                                     {
                                         ItemStatus = ItemStatus.Updateable;
                                     }

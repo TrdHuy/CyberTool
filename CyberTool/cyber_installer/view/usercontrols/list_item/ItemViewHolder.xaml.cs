@@ -44,6 +44,30 @@ namespace cyber_installer.view.usercontrols.list_item
         }
         #endregion
 
+        #region SingleButtonCommand
+        public static readonly DependencyProperty SingleButtonCommandProperty =
+            DependencyProperty.Register(
+                "SingleButtonCommand",
+                typeof(ICommand),
+                typeof(ItemViewHolder),
+                new PropertyMetadata(default(ICommand)
+                    , new PropertyChangedCallback(OnSingleButtonCommandChangedCallback)));
+
+        private static void OnSingleButtonCommandChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var ctrl = d as ItemViewHolder;
+            if (ctrl != null)
+            {
+                ctrl.PART_SingleSoftwareCommandButton.Command = e.NewValue as ICommand;
+            }
+        }
+
+        public ICommand SingleButtonCommand
+        {
+            get => (ICommand)GetValue(SingleButtonCommandProperty);
+            set => SetValue(SingleButtonCommandProperty, value);
+        }
+        #endregion
         public ItemViewHolder()
         {
             InitializeComponent();

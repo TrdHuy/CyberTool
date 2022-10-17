@@ -19,6 +19,11 @@ namespace cyber_installer.view_models.tabs
         private bool _isLoadingItemStatus = false;
         protected ToolVO _toolVO;
 
+        public ToolVO ToolInfo
+        {
+            get => _toolVO;
+        }
+
         public ItemStatus ItemStatus
         {
             get => _itemStatus;

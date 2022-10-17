@@ -4,13 +4,14 @@ using cyber_base.ui_event_handler.action.executer;
 using cyber_base.utils;
 using cyber_base.view_model;
 using cyber_installer.definitions;
+using cyber_installer.implement.modules.ui_event_handler.actions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cyber_installer.implement.modules.ui_event_handler.actions
+namespace cyber_installer.implement.modules.ui_event_handler
 {
     internal class SWIActionBuilder : AbstractExecutableCommandBuilder
     {
@@ -31,6 +32,12 @@ namespace cyber_installer.implement.modules.ui_event_handler.actions
             ICommandExecuter? commandExecuter = null;
             switch (keyTag)
             {
+                case CyberInstallerKeyFeatureTag.KEY_TAG_SWI_AT_DOWNLOAD_AND_INSTALL_FEATURE:
+                    commandExecuter = new SWI_AT_DownloadAndInstallButtonAction(keyTag
+                        , CyberInstallerDefinition.CYBER_INSTALLER_INDENTIFER
+                        , dataTransfer
+                        , logger);
+                    break;
                 default:
                     break;
             }

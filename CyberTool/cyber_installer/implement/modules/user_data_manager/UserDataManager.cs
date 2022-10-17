@@ -25,7 +25,7 @@ namespace cyber_installer.implement.modules.user_data_manager
 
         public UserData CurrentUserData => _currentUserData;
 
-        private async void ExportUserDataToFile()
+        public async Task ExportUserDataToFile()
         {
             if (!File.Exists(_userDataFilePath))
             {
@@ -46,9 +46,9 @@ namespace cyber_installer.implement.modules.user_data_manager
             ImportUserDataFromFile();
         }
 
-        public void OnModuleDestroy()
+        public async void OnModuleDestroy()
         {
-            ExportUserDataToFile();
+            await ExportUserDataToFile();
         }
 
         public void OnModuleStart()

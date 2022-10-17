@@ -1,12 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+	<PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Company>h2sw_solution</Company>
     <UseWindowsForms>True</UseWindowsForms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyName>Cyber Installer</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,5 +37,4 @@
   <ItemGroup>
     <None Include=".design\class_diagrams\UserDataManagerDiagram.cd" />
   </ItemGroup>
-
 </Project>

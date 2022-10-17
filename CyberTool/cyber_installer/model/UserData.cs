@@ -19,11 +19,17 @@ namespace cyber_installer.model
     internal class ToolData
     {
         public string ToolKey { get; set; } = "";
-        public ICollection<ToolVersionData>? ToolVersionSource { get; set; }
+        public string ToolName { get; set; } = "";
+        public List<ToolVersionData> ToolVersionSource { get; set; }
         public string CurrentInstalledVersion { get; set; } = "";
         public string InstallPath { get; set; } = "";
         public string ExecutePath { get; set; } = "";
         public ToolStatus ToolStatus { get; set; }
+
+        public ToolData()
+        {
+            ToolVersionSource = new List<ToolVersionData>();
+        }
     }
 
     internal class ToolVersionData
