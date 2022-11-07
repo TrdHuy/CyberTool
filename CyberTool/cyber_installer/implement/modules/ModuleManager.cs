@@ -5,12 +5,14 @@ using cyber_installer.implement.modules.ui_event_handler;
 using cyber_installer.implement.modules.user_config_manager;
 using cyber_installer.implement.modules.user_data_manager;
 using cyber_installer.implement.modules.view_model_manager;
+using cyber_installer.implement.modules.utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using cyber_installer.implement.modules.server_contact_manager.security;
 
 namespace cyber_installer.implement.modules
 {
@@ -25,6 +27,7 @@ namespace cyber_installer.implement.modules
         private static ICyberInstallerModule? _SIM_Instance;
         private static ICyberInstallerModule? _CEF_Instance;
         private static ICyberInstallerModule? _KAL_Instance;
+        private static ICyberInstallerModule? _CM_Instance;
 
         public static void Init()
         {
@@ -36,6 +39,7 @@ namespace cyber_installer.implement.modules
             _CyberModules.Add(SIM_Instance);
             _CyberModules.Add(CEF_Instance);
             _CyberModules.Add(KAL_Instance);
+            _CyberModules.Add(CM_Instance);
 
             foreach (var module in _CyberModules)
             {
@@ -56,7 +60,21 @@ namespace cyber_installer.implement.modules
             }
 
         }
+        public static CertificateManager CM_Instance
+        {
+            get
+            {
+                if (_CM_Instance == null)
+                {
+                    _CM_Instance = Activator.CreateInstance(typeof(CertificateManager), true) as ICyberInstallerModule;
+                }
+                ArgumentNullException.ThrowIfNull(_CM_Instance);
+                return (CertificateManager)_CM_Instance;
+            }
 
+
+        }
+        
         public static KeyActionListener KAL_Instance
         {
             get

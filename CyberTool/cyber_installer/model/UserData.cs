@@ -11,9 +11,25 @@ namespace cyber_installer.model
         public UserData()
         {
             ToolData = new List<ToolData>();
+            CertificateData = new CertificateData();
         }
 
         public ICollection<ToolData> ToolData { get; set; }
+        public CertificateData CertificateData { get; set; }
+    }
+
+    internal class CertificateData
+    {
+        public string TRCA_Thumbprint { get; set; } = "";
+        public string TRCA_CNName { get; set; } = "";
+        public string TRCA_Expriation { get; set; } = "";
+
+        public bool IsEmpty()
+        {
+            return (string.IsNullOrEmpty(TRCA_CNName)
+                && string.IsNullOrEmpty(TRCA_Expriation))
+                || string.IsNullOrEmpty(TRCA_Thumbprint);
+        }
     }
 
     internal class ToolData

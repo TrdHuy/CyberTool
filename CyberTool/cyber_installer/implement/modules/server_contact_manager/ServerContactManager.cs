@@ -1,5 +1,5 @@
 ﻿using cyber_installer.@base;
-using cyber_installer.implement.modules.server_contact_manager.contacts;
+using cyber_installer.implement.modules.server_contact_manager.http_requester;
 using cyber_installer.implement.modules.user_config_manager;
 using cyber_installer.model;
 using System;
@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,11 +16,9 @@ namespace cyber_installer.implement.modules.server_contact_manager
 {
     internal class ServerContactManager : ICyberInstallerModule
     {
-        private const string REQUEST_INFO_API_PATH = "/requestinfo";
-        private const string REQUEST_INFO_HEADER_KEY = "h2sw-request-info";
-        private RequestSoftwareDataContact _requestSoftwareDataContact;
-        private string _remoteAdress = "";
-
+        private SoftwareDataRequester? _softwareDataRequester;
+        private CertificateDownloadRequester? _certificateDownloaRequester;
+        private X509Certificate2? _certCache;
         public static ServerContactManager Current
         {
             get => ModuleManager.SCM_Instance;
@@ -27,12 +26,11 @@ namespace cyber_installer.implement.modules.server_contact_manager
 
         private ServerContactManager()
         {
-            _requestSoftwareDataContact = new RequestSoftwareDataContact();
         }
 
         public void OnModuleCreate()
         {
-            _requestSoftwareDataContact.Refresh();
+            _softwareDataRequester?.Refresh();
         }
 
         public void OnModuleDestroy()
@@ -41,7 +39,8 @@ namespace cyber_installer.implement.modules.server_contact_manager
 
         public void OnModuleStart()
         {
-            _remoteAdress = UserConfigManager.Current.CurrentConfig.RemoteAdress;
+            _certificateDownloaRequester = new CertificateDownloadRequester();
+            _softwareDataRequester = new SoftwareDataRequester();
         }
 
         public async Task RequestSoftwareInfoFromCyberServer(Action<ICollection<ToolVO>?> requestedCallback
@@ -50,20 +49,18 @@ namespace cyber_installer.implement.modules.server_contact_manager
         {
             if (isForce)
             {
-                _requestSoftwareDataContact.Refresh();
+                _softwareDataRequester?.Refresh();
             }
 
-            if (!string.IsNullOrEmpty(_remoteAdress) && !_requestSoftwareDataContact.IsFullOfDbSet)
+            if (_softwareDataRequester != null && !_softwareDataRequester.IsFullOfDbSet)
             {
                 using (HttpClient client = new HttpClient())
                 {
                     IEnumerable? listToolSource = null;
                     try
                     {
-                        listToolSource = await _requestSoftwareDataContact.RequestServerData(client
-                       , REQUEST_INFO_HEADER_KEY
-                       , _remoteAdress + REQUEST_INFO_API_PATH
-                       , cancellationToken);
+                        listToolSource = await _softwareDataRequester.Request(client
+                        , cancellationToken);
 
                         if (cancellationToken.IsCancellationRequested)
                         {
@@ -87,6 +84,41 @@ namespace cyber_installer.implement.modules.server_contact_manager
             else
             {
                 requestedCallback?.Invoke(null);
+            }
+
+        }
+
+        public async Task RequestDownloadCyberCertificate(Func<X509Certificate2?, Task> requestedCallback, bool force = false)
+        {
+            if (_certCache == null || force)
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    try
+                    {
+                        if (_certificateDownloaRequester != null)
+                        {
+                            _certCache = await _certificateDownloaRequester.Request(client);
+                        }
+
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        if (ex.Message.Contains("No connection could be made because the target machine actively refused it"))
+                        {
+                            // TODO: Show message box here
+                        }
+                    }
+                    catch { }
+                    finally
+                    {
+                        await requestedCallback.Invoke(_certCache);
+                    }
+                }
+            }
+            else
+            {
+                await requestedCallback.Invoke(_certCache);
             }
 
         }

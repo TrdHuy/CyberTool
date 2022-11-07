@@ -53,7 +53,7 @@ namespace cyber_installer.implement.modules.sw_installing_manager
             {
                 try
                 {
-                    return await _swDownloadRequester.RequestDownloadSoftwareWithLatestVersion(client
+                    return await _swDownloadRequester.Request(client
                     , toolVO);
                 }
                 catch (HttpRequestException ex)

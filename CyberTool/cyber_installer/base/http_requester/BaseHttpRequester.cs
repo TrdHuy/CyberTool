@@ -5,18 +5,19 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using cyber_installer.implement.modules.user_config_manager;
+using cyber_installer.implement.modules.server_contact_manager.security;
 
 namespace cyber_installer.@base.http_requester
 {
-    internal abstract class BaseHttpRequester
+    internal abstract class BaseHttpRequester<T>
     {
         private const string TAG = "h2sw_solution";
-        public const string REMOTE_ADDRESS = "http://107.127.131.89:8080";
         private const string USER_DATA_FOLDER_NAME = "data";
         private const string DOWNLOADED_SW_FOLDER_NAME = "tools";
-        private string _downloadedSwFolder = "";
+        private static string _downloadedSwFolder = "";
 
-        public BaseHttpRequester()
+        static BaseHttpRequester()
         {
             var assemblyDataPath = "";
             var attribs = Assembly.GetCallingAssembly()
@@ -35,9 +36,23 @@ namespace cyber_installer.@base.http_requester
             _downloadedSwFolder = userDataFolder + @"\" + DOWNLOADED_SW_FOLDER_NAME;
         }
 
+        protected string GetRemoteAddress()
+        {
+            if (CertificateManager.Current.IsCyberCertificateInstalled)
+            {
+                return UserConfigManager.Current.CurrentConfig.SSLRemoteAdress;
+            }
+            else
+            {
+                return UserConfigManager.Current.CurrentConfig.RemoteAdress;
+            }
+        }
+
         protected string GetToolDownloadFileFolder(string toolKey, string toolVersion)
         {
             return _downloadedSwFolder + "\\" + toolKey + "\\" + toolVersion;
         }
+
+        public abstract Task<T> Request(params object[] param);
     }
 }

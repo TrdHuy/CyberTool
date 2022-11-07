@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
 {
-    internal class SwDownloadRequester : BaseHttpRequester
+    internal class SwDownloadRequester : BaseHttpRequester<ToolData?>
     {
         public const string DOWNLOAD_TOOL_API_PATH = "/downloadtool";
         public const string REQUEST_DOWNLOAD_TOOL_HEADER_KEY = "h2sw-download-tool";
@@ -36,7 +36,7 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
             _requestDownloadToolSemaphore = new SemaphoreSlim(1, 1);
         }
 
-        public async Task<ToolData?> RequestDownloadSoftwareWithLatestVersion(HttpClient httpClient
+        private async Task<ToolData?> RequestDownloadSoftwareWithLatestVersion(HttpClient httpClient
             , ToolVO requestingTool)
         {
             var isContinue = await _requestDownloadToolSemaphore.WaitAsync(TIME_OUT_FOR_REQUEST_OF_SEMAPHORE);
@@ -58,7 +58,7 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
                 httpClient.DefaultRequestHeaders.Add(REQUEST_KEY_TO_CHECK_DOWNLOADABLE_HEADER_ID, requestToolKey);
                 httpClient.DefaultRequestHeaders.Add(REQUEST_VERSION_TO_CHECK_DOWNLOADABLE_HEADER_ID, requestToolVersion);
 
-                var response = await httpClient.GetAsync(REMOTE_ADDRESS + DOWNLOAD_TOOL_API_PATH);
+                var response = await httpClient.GetAsync(GetRemoteAddress() + DOWNLOAD_TOOL_API_PATH);
                 var responseContent = await response.Content.ReadAsStringAsync();
 
                 var isDownloadable = false;
@@ -98,7 +98,7 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
                         , requestToolKey);
                     requestHeaderContentMap.Add(REQUEST_DOWNLOAD_TOOL_VERSION_HEADER_ID
                         , requestToolVersion);
-                    var param = new object[] { REMOTE_ADDRESS + DOWNLOAD_TOOL_API_PATH
+                    var param = new object[] { GetRemoteAddress() + DOWNLOAD_TOOL_API_PATH
                                     , downloadFilePath
                                     , requestHeaderContentMap};
                     var downloadTask = new DownloadSoftwareTask(param);
@@ -133,5 +133,18 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
             return downLoadResult;
         }
 
+        public override async Task<ToolData?> Request(params object[] param)
+        {
+            try
+            {
+                var httpClient = param[0] as HttpClient ?? throw new ArgumentNullException();
+                var requestingTool = param[1] as ToolVO ?? throw new ArgumentNullException();
+                return await RequestDownloadSoftwareWithLatestVersion(httpClient, requestingTool);
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

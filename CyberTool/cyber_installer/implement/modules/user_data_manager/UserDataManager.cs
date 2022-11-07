@@ -14,6 +14,7 @@ namespace cyber_installer.implement.modules.user_data_manager
 {
     internal class UserDataManager : IUserDataManager
     {
+        private readonly bool IS_IMPORT_DATA_ASYNC = false;
         private readonly string _userDataFilePath = CyberInstallerDefinition.USER_DATA_FILE_PATH;
         private UserData _currentUserData;
         private Task? _importUserDataFromFileTaskCache;
@@ -34,16 +35,9 @@ namespace cyber_installer.implement.modules.user_data_manager
             string dataJson = JsonHelper.SerializeObject(_currentUserData);
             await File.WriteAllTextAsync(_userDataFilePath, dataJson);
         }
-
-        private async void ImportUserDataFromFile()
-        {
-            _importUserDataFromFileTaskCache = ImportUserDataFromFileTask();
-            await _importUserDataFromFileTaskCache;
-        }
-
         public void OnModuleCreate()
         {
-            ImportUserDataFromFile();
+            ImportUserDataFromFile(IS_IMPORT_DATA_ASYNC);
         }
 
         public async void OnModuleDestroy()
@@ -60,7 +54,32 @@ namespace cyber_installer.implement.modules.user_data_manager
             _currentUserData = newData;
         }
 
-        private async Task ImportUserDataFromFileTask()
+        private async void ImportUserDataFromFile(bool isAsync = false)
+        {
+            if (isAsync)
+            {
+                _importUserDataFromFileTaskCache = ImportUserDataFromFileTaskAsync();
+                await _importUserDataFromFileTaskCache;
+            }
+            else
+            {
+                ImportUserDataFromFileTask();
+            }
+
+        }
+
+        private void ImportUserDataFromFileTask()
+        {
+            if (!File.Exists(_userDataFilePath))
+            {
+                File.Create(_userDataFilePath).Dispose();
+            }
+
+            string json = File.ReadAllText(_userDataFilePath, Encoding.UTF8);
+            _currentUserData = JsonHelper.DeserializeObject<UserData>(json);
+        }
+
+        private async Task ImportUserDataFromFileTaskAsync()
         {
             if (!File.Exists(_userDataFilePath))
             {
@@ -73,11 +92,17 @@ namespace cyber_installer.implement.modules.user_data_manager
 
         public async Task<bool> WaitForImportUserDataTask(int timeOutMilliseconds)
         {
+
             if (_importUserDataFromFileTaskCache != null)
             {
                 await _importUserDataFromFileTaskCache.WaitAsync(TimeSpan.FromMilliseconds(timeOutMilliseconds));
                 return _importUserDataFromFileTaskCache.IsCompletedSuccessfully;
             }
+            else if (!IS_IMPORT_DATA_ASYNC)
+            {
+                return true;
+            }
+
             return false;
         }
     }
