@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -35,13 +36,23 @@ namespace cyber_base.implement.utils
         public static extern IntPtr MonitorFromWindow(IntPtr handle, int flags);
 
         [DllImport("User32")]
-        public static extern bool ClientToScreen(IntPtr hWnd,out POINT flags);
+        public static extern bool ClientToScreen(IntPtr hWnd, out POINT flags);
 
         [DllImport("user32.dll")]
         public static extern bool GetWindowRect(IntPtr hwnd, ref RECT rectangle);
 
         [DllImport("user32")]
         public static extern bool GetCursorPos(out POINT lpPoint);
+
+        [DllImport("Kernel32", SetLastError = true, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool GetDiskFreeSpaceEx
+        (
+            string lpszPath,                    // Must name a folder, must end with '\'.
+            ref long lpFreeBytesAvailable,
+            ref long lpTotalNumberOfBytes,
+            ref long lpTotalNumberOfFreeBytes
+        );
 
         public static Point GetCursorPosition()
         {
@@ -61,6 +72,40 @@ namespace cyber_base.implement.utils
             var dpiX = GetDeviceCaps(hdc, LOGPIXELSX);
             var dpiY = GetDeviceCaps(hdc, LOGPIXELSY);
             return new Point(dpiX, dpiX);
+        }
+
+        /// <summary>
+        /// Returns free space for drive containing the specified folder, or returns -1 on failure.
+        /// </summary>
+        /// <param name="folderName">A folder on the drive in question.</param>
+        /// <returns>Space free on the volume containing 'folder_name' or -1 on error.</returns>
+        public static long GetFreeSpace(string folderName)
+        {
+            if (string.IsNullOrEmpty(folderName))
+            {
+                throw new ArgumentNullException("folderName");
+            }
+
+            if (!Directory.Exists(folderName))
+            {
+                throw new ArgumentNullException(folderName + " not exist!");
+            }
+
+            if (!folderName.EndsWith("\\"))
+            {
+                folderName += '\\';
+            }
+
+            long free = 0, dummy1 = 0, dummy2 = 0;
+
+            if (GetDiskFreeSpaceEx(folderName, ref free, ref dummy1, ref dummy2))
+            {
+                return free;
+            }
+            else
+            {
+                return -1;
+            }
         }
     }
 
