@@ -187,14 +187,22 @@
 
         <Grid Grid.Row="4"
               VerticalAlignment="Top">
-            <TextBlock Text="{Binding SpaceRequire, StringFormat='Space require: {0}'}"
+            <TextBlock Text="Space require: "
                        FontSize="16"
-                       Margin="30,10,0,0"
+                       Margin="30,0,0,0"
                        Foreground="{DynamicResource Foreground_Level3}" />
-            <TextBlock Text="{Binding SpaceAvailable, StringFormat='Space available: {0}'}"
+            <TextBlock x:Name="PART_SpaceRequireTextBlock"
+                       Text="10MB"
+                       FontSize="16"
+                       Margin="150,0,0,0"
+                       Foreground="{DynamicResource Foreground_Level3}" />
+            <TextBlock Text="Space available: "
                        FontSize="16"
                        Margin="30,40,0,0"
                        Foreground="{DynamicResource Foreground_Level3}" />
+            <TextBlock x:Name="PART_SpaceAvailableTextBlock"
+                       FontSize="16"
+                       Margin="150,40,0,0" />
         </Grid>
 
         <Grid Grid.Row="5">

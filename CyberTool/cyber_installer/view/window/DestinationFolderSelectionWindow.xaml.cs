@@ -1,7 +1,9 @@
 ﻿using cyber_base.implement.utils;
 using cyber_base.implement.views.cyber_window;
+using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace cyber_installer.view.window
 {
@@ -10,6 +12,12 @@ namespace cyber_installer.view.window
     /// </summary>
     public partial class DestinationFolderSelectionWindow : CyberWindow
     {
+        private static readonly double SIZE_CONVERT_TO_GB = Math.Pow(2, 30);
+        private static readonly double SIZE_CONVERT_TO_MB = Math.Pow(2, 20);
+        private static readonly double SIZE_CONVERT_TO_KB = Math.Pow(2, 10);
+
+        private long _spaceRequired = 10000000;
+
         public DestinationFolderSelectionWindow()
         {
             InitializeComponent();
@@ -53,6 +61,7 @@ namespace cyber_installer.view.window
                             if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                             {
                                 PART_DestinationFolderTextBox.Text = fbd.SelectedPath;
+                                SetAvailableSpaceTextBlock();
                             }
                         }
                         break;
@@ -65,15 +74,52 @@ namespace cyber_installer.view.window
                 case "PART_CancelButton":
                     {
                         PART_DestinationFolderTextBox.Text = "";
+                        PART_SpaceAvailableTextBlock.Text = "";
                         this.Close();
                         break;
                     }
                 case "CloseButton":
                     {
                         PART_DestinationFolderTextBox.Text = "";
+                        PART_SpaceAvailableTextBlock.Text = "";
                         this.Close();
                         break;
                     }
+            }
+        }
+
+        private void SetAvailableSpaceTextBlock()
+        {
+            long freeSpace = NativeMethods.GetFreeSpace(PART_DestinationFolderTextBox.Text);
+            SetSpaceTextBlock(freeSpace, PART_SpaceAvailableTextBlock);
+
+            if (freeSpace > _spaceRequired)
+            {
+                PART_SpaceAvailableTextBlock.Foreground = Application.Current.Resources["Foreground_Level3"] as SolidColorBrush;
+            }
+            else
+            {
+                PART_SpaceAvailableTextBlock.Foreground = Application.Current.Resources["Foreground_Level4"] as SolidColorBrush;
+            }
+        }
+
+        private void SetSpaceTextBlock(long space, TextBlock spaceTextBlock)
+        {
+            double spaceConvertResult;
+            if (space > SIZE_CONVERT_TO_GB)
+            {
+                spaceConvertResult = Math.Round(space / SIZE_CONVERT_TO_GB, 2);
+                spaceTextBlock.Text = spaceConvertResult.ToString() + "GB";
+            }
+            else if (space > SIZE_CONVERT_TO_MB && space < SIZE_CONVERT_TO_GB)
+            {
+                spaceConvertResult = Math.Round(space / SIZE_CONVERT_TO_MB, 2);
+                spaceTextBlock.Text = spaceConvertResult.ToString() + "MB";
+            }
+            else
+            {
+                spaceConvertResult = Math.Round(space / SIZE_CONVERT_TO_KB, 2);
+                spaceTextBlock.Text = spaceConvertResult.ToString() + "KB";
             }
         }
 
