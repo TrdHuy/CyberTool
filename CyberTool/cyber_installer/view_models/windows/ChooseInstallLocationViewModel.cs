@@ -20,15 +20,6 @@ namespace cyber_installer.view_models.windows
         }
 
         [Bindable(true)]
-        public string SpaceAvailable
-        {
-            get
-            {
-                return "";
-            }
-        }
-
-        [Bindable(true)]
         public string SoftwareName
         {
             get
