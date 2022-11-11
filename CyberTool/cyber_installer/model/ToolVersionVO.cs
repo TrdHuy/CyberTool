@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace cyber_installer.model
 {
-    internal class ToolVersionVO
+    public class ToolVersionVO
     {
         public int VersionId { get; set; }
         public string Version { get; set; } = "";
@@ -16,5 +16,7 @@ namespace cyber_installer.model
         public string FolderPath { get; set; } = "";
         public string FileName { get; set; } = "";
         public string ExecutePath { get; set; } = "";
+        public long CompressLength { get; set; }
+        public long RawLength { get; set; }
     }
 }

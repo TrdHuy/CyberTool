@@ -27,7 +27,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.actions
 
         protected override bool CanExecute(object? dataTransfer)
         {
-            _installPath = App.Current.ShowDestinationFolderWindow();
+            _installPath = App.Current.ShowDestinationFolderWindow(_availableItemViewModel.ToolInfo);
             return !String.IsNullOrEmpty(_installPath)
                 && _availableItemViewModel != null;
         }
