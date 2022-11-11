@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace cyber_installer.model
 {
-    internal class ToolVO
+    public class ToolVO
     {
         public ToolVO()
         {

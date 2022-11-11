@@ -1,5 +1,6 @@
 ﻿using cyber_base.implement.utils;
 using cyber_installer.implement.modules;
+using cyber_installer.model;
 using cyber_installer.view.window;
 using System;
 using System.Collections.Generic;
@@ -61,9 +62,9 @@ namespace cyber_installer
             base.OnExit(e);
         }
 
-        public string ShowDestinationFolderWindow()
+        public string ShowDestinationFolderWindow(ToolVO toolVO)
         {
-            var destinationFolderWindow = new DestinationFolderSelectionWindow();
+            var destinationFolderWindow = new DestinationFolderSelectionWindow(toolVO);
             return destinationFolderWindow.Show();
         }
     }
