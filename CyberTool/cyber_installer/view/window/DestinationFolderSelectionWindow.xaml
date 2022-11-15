@@ -7,17 +7,11 @@
                 xmlns:sys="clr-namespace:System;assembly=mscorlib"
                 xmlns:cw="clr-namespace:cyber_base.implement.views.cyber_window;assembly=cyber_base"
                 xmlns:vmm="clr-namespace:cyber_installer.implement.modules.view_model_manager"
-                xmlns:vm="clr-namespace:cyber_installer.view_models.windows"
                 FontFamily="Calibri"
                 mc:Ignorable="d"
                 Style="{StaticResource CyberInstallerWindowStyle}"
                 Height="407"
                 Width="677">
-    <Window.DataContext>
-        <vmm:ViewModelManager DataContextType="{x:Type vm:ChooseInstallLocationViewModel}"
-                              ParentDataContextType="{x:Null}"
-                              GeneratorType="CreateNew" />
-    </Window.DataContext>
     <Window.Resources>
         <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
         <sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
@@ -104,18 +98,17 @@
                 <TextBlock Text="Choose install location"
                            FontSize="18.7"
                            Foreground="{DynamicResource Foreground_Level3}" />
-                <TextBlock Text="{Binding SoftwareName,
-                       StringFormat='Choose the folder in which to install {0}'}"
+                <TextBlock x:Name="PART_ToolNameTextBlock"
                            Margin="20,5,0,0"
                            FontSize="16"
                            Foreground="{DynamicResource Foreground_Level3}" />
             </StackPanel>
-            <Image Grid.Column="1"
+            <Image x:Name="PART_ToolImage"
+                   Grid.Column="1"
                    Stretch="Uniform"
                    Width="34.64"
                    Height="34.64"
                    VerticalAlignment="Bottom"
-                   Source="{Binding ImageSource}"
                    Margin="0,0,0,12" />
         </Grid>
 
@@ -187,14 +180,21 @@
 
         <Grid Grid.Row="4"
               VerticalAlignment="Top">
-            <TextBlock Text="{Binding SpaceRequire, StringFormat='Space require: {0}'}"
+            <TextBlock Text="Space require: "
                        FontSize="16"
-                       Margin="30,10,0,0"
+                       Margin="30,0,0,0"
                        Foreground="{DynamicResource Foreground_Level3}" />
-            <TextBlock Text="{Binding SpaceAvailable, StringFormat='Space available: {0}'}"
+            <TextBlock x:Name="PART_SpaceRequireTextBlock"
+                       FontSize="14"
+                       Margin="150,2,0,0"
+                       Foreground="{DynamicResource Foreground_Level3}" />
+            <TextBlock Text="Space available: "
                        FontSize="16"
                        Margin="30,40,0,0"
                        Foreground="{DynamicResource Foreground_Level3}" />
+            <TextBlock x:Name="PART_SpaceAvailableTextBlock"
+                       FontSize="14"
+                       Margin="150,42,0,0" />
         </Grid>
 
         <Grid Grid.Row="5">
