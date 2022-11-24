@@ -9,9 +9,9 @@
     <ApplicationIcon>cyber_tool_app_icon.ico</ApplicationIcon>
     <Company>h2sw_solution</Company>
     <AssemblyName>CyberTool</AssemblyName>
-    <Version>2.1.0.1</Version>
-    <AssemblyVersion>2.1.0.1</AssemblyVersion>
-    <FileVersion>2.1.0.1</FileVersion>
+    <Version>2.1.0.2</Version>
+    <AssemblyVersion>2.1.0.2</AssemblyVersion>
+    <FileVersion>2.1.0.2</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
