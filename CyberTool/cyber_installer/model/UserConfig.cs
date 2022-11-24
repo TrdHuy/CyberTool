@@ -9,6 +9,10 @@ namespace cyber_installer.model
 {
     internal struct UserConfig
     {
+        public UserConfig()
+        {
+        }
+
         public string RemoteAdress { get; set; } = "";
         public string SSLRemoteAdress { get; set; } = "";
     }
