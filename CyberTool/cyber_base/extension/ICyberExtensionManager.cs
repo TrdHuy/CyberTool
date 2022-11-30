@@ -15,6 +15,6 @@ namespace cyber_base.extension
         /// </summary>
         void SyncAllPluginDllFromUserData();
 
-        string GetPluginInstallLocationPath(string pluginKey, string pluginVersion);
+        string GetPluginInstallLocationPath(string pluginKey, string pluginVersion, string executeFilePath);
     }
 }

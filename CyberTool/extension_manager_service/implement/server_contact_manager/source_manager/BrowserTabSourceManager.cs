@@ -145,7 +145,7 @@ namespace extension_manager_service.implement.server_contact_manager.source_mana
         private async void InitVersionItemForPluginAsync(PluginItemViewModel item, ICollection<PluginVersionVO> pluginVersions)
         {
             item.VersionHistorySource = await GetVersionHistorySource(pluginVersions);
-            item.Version = item.VersionHistorySource.First().Version;
+            item.Version = item.VersionHistorySource.First?.Version ?? "";
         }
 
         private async Task<FirstLastObservableCollection<IVersionHistoryItemViewHolderContext>> GetVersionHistorySource(ICollection<PluginVersionVO> pluginVersions)

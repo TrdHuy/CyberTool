@@ -71,13 +71,13 @@ namespace extension_manager_service.implement.plugin_manager
             return false;
         }
 
-        public string GetPluginInstallLocationPath(string pluginKey, string pluginVersion)
+        public string GetPluginInstallLocationPath(string pluginKey, string pluginVersion, string executeFilePath)
         {
             return (ExtensionManagerService
                     .Current
                     .ServiceManager?
                     .GetPluginsBaseFolderLocation() ?? "plugins")
-                    + "\\" + pluginKey + "\\" + pluginVersion;
+                    + "\\" + pluginKey + "\\" + pluginVersion + "\\" + executeFilePath;
         }
 
         public async Task<bool> DownloadPluginFromCyberServer(string pluginKey, string pluginVersion)
@@ -170,7 +170,7 @@ namespace extension_manager_service.implement.plugin_manager
                         File.Delete(zipFilePath);
                         pluginVersionUD.VersionStatus = PluginVersionStatus.VersionInstalled;
                         pluginUD.CurrentInstalledVersion = pluginVersionUD.Version;
-                        pluginUD.CurrentInstalledVersionPath = pluginVersionUD.ExecutePath;
+                        pluginUD.CurrentInstalledVersionPath = GetPluginInstallLocationPath(pluginKey, pluginVersion, pluginVersionUD.ExecutePath);
                         pluginUD.CurrentInstalledVersionMainClassName = pluginVersionUD.MainClassName;
                         pluginUD.PluginStatus = PluginStatus.Installed;
                         var pluginDLL = LoadAssemblyFromPluginData(pluginUD);
@@ -204,7 +204,7 @@ namespace extension_manager_service.implement.plugin_manager
                         && pluginUD.PluginStatus == PluginStatus.NeedToRemove)
                     {
                         pluginUD.CurrentInstalledVersion = pluginVersionUD.Version;
-                        pluginUD.CurrentInstalledVersionPath = pluginVersionUD.ExecutePath;
+                        pluginUD.CurrentInstalledVersionPath = GetPluginInstallLocationPath(pluginKey, pluginVersion, pluginVersionUD.ExecutePath);
                         pluginUD.CurrentInstalledVersionMainClassName = pluginVersionUD.MainClassName;
                         pluginUD.PluginStatus = PluginStatus.Installed;
                         var pluginDLL = LoadAssemblyFromPluginData(pluginUD);
