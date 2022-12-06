@@ -17,7 +17,7 @@ namespace extension_manager_service.implement.server_contact_manager
 {
     internal class ServerContactManager : BaseExtensionManagerModule
     {
-        private const string END_POINT = "http://107.127.131.89:8080";
+        private const string END_POINT = "http://107.98.32.108:8080";
         private const string REQUEST_INFO_API_PATH = "/requestinfo";
         private const string DOWNLOAD_PLUGIN_API_PATH = "/downloadplugin";
         private const string REQUEST_INFO_HEADER_KEY = "h2sw-request-info";
