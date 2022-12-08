@@ -22,6 +22,7 @@ namespace cyber_installer.model
         public string IconSource { get; set; } = "";
         public bool IsAuthenticated { get; set; }
         public bool IsPreReleased { get; set; }
+        public bool IsRequireLatestVersionToRun { get; set; }
         public int Downloads { get; set; }
 
         public List<ToolVersionVO> ToolVersions { get; set; }
