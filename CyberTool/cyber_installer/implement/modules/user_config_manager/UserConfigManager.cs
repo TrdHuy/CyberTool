@@ -7,7 +7,7 @@ using System.Text;
 
 namespace cyber_installer.implement.modules.user_config_manager
 {
-    internal class UserConfigManager : ICyberInstallerModule
+    internal class UserConfigManager : BaseCyberInstallerModule
     {
         private readonly string _configFolderPath = CyberInstallerDefinition.CONFIG_FOLDER_PATH;
         private readonly string _userConfigFilePath = CyberInstallerDefinition.USER_CONFIG_FILE_PATH;
@@ -29,7 +29,7 @@ namespace cyber_installer.implement.modules.user_config_manager
             }
         }
 
-        public void OnModuleCreate()
+        public override void OnModuleCreate()
         {
             if (!File.Exists(_userConfigFilePath))
             {
@@ -48,14 +48,6 @@ namespace cyber_installer.implement.modules.user_config_manager
             {
                 _currentUserConfig = GetDefaultUserConfig();
             }
-        }
-
-        public void OnModuleDestroy()
-        {
-        }
-
-        public void OnModuleStart()
-        {
         }
 
         private UserConfig GetDefaultUserConfig()

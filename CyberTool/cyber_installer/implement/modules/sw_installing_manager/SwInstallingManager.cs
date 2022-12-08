@@ -1,5 +1,6 @@
 ﻿using cyber_base.async_task;
 using cyber_base.implement.utils;
+using cyber_installer.@base;
 using cyber_installer.@base.modules;
 using cyber_installer.implement.modules.sw_installing_manager.http_requester;
 using cyber_installer.implement.modules.ui_event_handler.async_task;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace cyber_installer.implement.modules.sw_installing_manager
 {
-    internal class SwInstallingManager : ISwInstallingManager
+    internal class SwInstallingManager : BaseCyberInstallerModule, ISwInstallingManager
     {
         private Logger _logger = new Logger("SwInstallingManager", "cyber_installer");
         private SwDownloadRequester _swDownloadRequester;
@@ -33,19 +34,6 @@ namespace cyber_installer.implement.modules.sw_installing_manager
         {
             throw new NotImplementedException();
         }
-
-        public void OnModuleCreate()
-        {
-        }
-
-        public void OnModuleDestroy()
-        {
-        }
-
-        public void OnModuleStart()
-        {
-        }
-
 
         public async Task<ToolData?> StartDownloadingLatestVersionToolTask(ToolVO toolVO)
         {

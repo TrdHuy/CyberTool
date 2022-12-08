@@ -46,5 +46,9 @@ namespace cyber_installer.implement.modules.ui_event_handler
         public void OnModuleCreate()
         {
         }
+
+        public void OnMainWindowShowed()
+        {
+        }
     }
 }

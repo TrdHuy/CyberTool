@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "progtroll", "progtroll\prog
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cyber_core", "cyber_core\cyber_core.csproj", "{04222107-F712-498B-A7C3-DA20A3F0F732}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cyber_installer", "cyber_installer\cyber_installer.csproj", "{EE8D6D88-5FF3-4755-A2BA-2BEF16395476}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cyber_installer", "cyber_installer\cyber_installer.csproj", "{EE8D6D88-5FF3-4755-A2BA-2BEF16395476}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cyber_installer_background_service", "cyber_installer_background_service\cyber_installer_background_service.csproj", "{FAAC4131-50D5-4AEC-B3CC-1168E81F820D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{EE8D6D88-5FF3-4755-A2BA-2BEF16395476}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE8D6D88-5FF3-4755-A2BA-2BEF16395476}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE8D6D88-5FF3-4755-A2BA-2BEF16395476}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAAC4131-50D5-4AEC-B3CC-1168E81F820D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAAC4131-50D5-4AEC-B3CC-1168E81F820D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAAC4131-50D5-4AEC-B3CC-1168E81F820D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAAC4131-50D5-4AEC-B3CC-1168E81F820D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

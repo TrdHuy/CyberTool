@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace cyber_installer.implement.modules.user_data_manager
 {
-    internal class UserDataManager : IUserDataManager
+    internal class UserDataManager : BaseCyberInstallerModule, IUserDataManager
     {
         private readonly bool IS_IMPORT_DATA_ASYNC = false;
         private readonly string _userDataFilePath = CyberInstallerDefinition.USER_DATA_FILE_PATH;
@@ -42,19 +42,16 @@ namespace cyber_installer.implement.modules.user_data_manager
             string dataJson = JsonHelper.SerializeObject(_currentUserData);
             await File.WriteAllTextAsync(_userDataFilePath, dataJson);
         }
-        public void OnModuleCreate()
+        public override void OnModuleCreate()
         {
             ImportUserDataFromFile(IS_IMPORT_DATA_ASYNC);
         }
 
-        public async void OnModuleDestroy()
+        public override async void OnModuleDestroy()
         {
             await ExportUserDataToFile();
         }
 
-        public void OnModuleStart()
-        {
-        }
 
         public void UpdateUserData(UserData newData)
         {

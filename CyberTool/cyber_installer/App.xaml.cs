@@ -54,6 +54,7 @@ namespace cyber_installer
                 _mainWindow = new CyberInstallerWindow();
             }
             _mainWindow.Show();
+            ModuleManager.OnMainWindowShowed();
         }
 
         protected override void OnExit(ExitEventArgs e)

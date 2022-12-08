@@ -416,7 +416,7 @@ namespace cyber_base.implement.views.cyber_window
         private const string SmallmizeButtonName = "SmallmizeButton";
         private const string CloseButtonName = "CloseButton";
         private const string MaximizeButtonName = "MaximizeButton";
-        private const string WindowControlPanelName = "WindowControlPanel";
+        protected const string WindowControlPanelName = "WindowControlPanel";
         private const string BotShadowRowDefName = "BotShadowRowDef";
         private const string RightShadowColDefName = "RightShadowColumnDef";
         private const string LeftShadowColDefName = "LeftShadowColumnDef";

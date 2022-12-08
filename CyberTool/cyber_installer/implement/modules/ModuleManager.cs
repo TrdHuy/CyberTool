@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using cyber_installer.implement.modules.server_contact_manager.security;
+using cyber_installer.implement.modules.update_manager;
 
 namespace cyber_installer.implement.modules
 {
@@ -28,6 +29,7 @@ namespace cyber_installer.implement.modules
         private static ICyberInstallerModule? _CEF_Instance;
         private static ICyberInstallerModule? _KAL_Instance;
         private static ICyberInstallerModule? _CM_Instance;
+        private static ICyberInstallerModule? _CIUM_Instance;
 
         public static void Init()
         {
@@ -40,6 +42,7 @@ namespace cyber_installer.implement.modules
             _CyberModules.Add(CEF_Instance);
             _CyberModules.Add(KAL_Instance);
             _CyberModules.Add(CM_Instance);
+            _CyberModules.Add(CIUM_Instance);
 
             foreach (var module in _CyberModules)
             {
@@ -52,14 +55,36 @@ namespace cyber_installer.implement.modules
             }
         }
 
+        public static void OnMainWindowShowed()
+        {
+            foreach (var module in _CyberModules)
+            {
+                module.OnMainWindowShowed();
+            }
+        }
+
         public static void Destroy()
         {
             foreach (var module in _CyberModules)
             {
                 module.OnModuleDestroy();
             }
-
+            _CyberModules.Clear();
         }
+
+        public static CyberInstallerUpdateManager CIUM_Instance
+        {
+            get
+            {
+                if (_CIUM_Instance == null)
+                {
+                    _CIUM_Instance = Activator.CreateInstance(typeof(CyberInstallerUpdateManager), true) as ICyberInstallerModule;
+                }
+                ArgumentNullException.ThrowIfNull(_CIUM_Instance);
+                return (CyberInstallerUpdateManager)_CIUM_Instance;
+            }
+        }
+
         public static CertificateManager CM_Instance
         {
             get
@@ -71,8 +96,6 @@ namespace cyber_installer.implement.modules
                 ArgumentNullException.ThrowIfNull(_CM_Instance);
                 return (CertificateManager)_CM_Instance;
             }
-
-
         }
         
         public static KeyActionListener KAL_Instance

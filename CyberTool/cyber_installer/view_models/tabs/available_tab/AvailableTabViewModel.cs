@@ -40,7 +40,7 @@ namespace cyber_installer.view_models.tabs.available_tab
             ItemsSource.Clear();
             IsLoading = true;
             _requestDataTaskCancellationTokenSource = new CancellationTokenSource();
-            _requestDataTask = ServerContactManager.Current.RequestSoftwareInfoFromCyberServer(isForce: true
+            _requestDataTask = ServerContactManager.Current.RequestMultipleSoftwareInfoFromCyberServer(isForce: true
                 , requestedCallback: (toolsSource) =>
                 {
                     if (toolsSource != null)
@@ -61,7 +61,7 @@ namespace cyber_installer.view_models.tabs.available_tab
             {
                 IsLoading = true;
                 _requestDataTaskCancellationTokenSource = new CancellationTokenSource();
-                _requestDataTask = ServerContactManager.Current.RequestSoftwareInfoFromCyberServer(
+                _requestDataTask = ServerContactManager.Current.RequestMultipleSoftwareInfoFromCyberServer(
                     requestedCallback: (toolsSource) =>
                     {
                         if (toolsSource != null)

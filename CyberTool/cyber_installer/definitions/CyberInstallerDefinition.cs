@@ -15,7 +15,7 @@ namespace cyber_installer.definitions
         public static readonly string USER_DATA_FILE_PATH = AppDomain.CurrentDomain.BaseDirectory
             + ".data/user_data.json";
         public const string CYBER_INSTALLER_INDENTIFER = "h2s_swi";
-
+        public const string CYBER_INSTALLER_SW_ID = "cyberinstaller";
     }
 
     internal class CyberInstallerKeyFeatureTag

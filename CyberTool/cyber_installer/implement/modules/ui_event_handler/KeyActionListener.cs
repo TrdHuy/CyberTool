@@ -88,6 +88,8 @@ namespace cyber_installer.implement.modules.ui_event_handler
             return action;
         }
 
-
+        public void OnMainWindowShowed()
+        {
+        }
     }
 }

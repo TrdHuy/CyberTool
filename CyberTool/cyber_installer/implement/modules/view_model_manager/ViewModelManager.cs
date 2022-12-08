@@ -60,5 +60,9 @@ namespace cyber_installer.implement.modules.view_model_manager
         {
             DataContextCache.Clear();
         }
+
+        public void OnMainWindowShowed()
+        {
+        }
     }
 }

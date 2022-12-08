@@ -19,6 +19,11 @@ namespace cyber_installer.@base
         void OnModuleStart();
 
         /// <summary>
+        /// Sự kiện xảy ra sau khi main window hiển thị
+        /// </summary>
+        void OnMainWindowShowed();
+
+        /// <summary>
         /// Sự kiện xảy ra khi module bị phá bỏ
         /// </summary>
         void OnModuleDestroy();

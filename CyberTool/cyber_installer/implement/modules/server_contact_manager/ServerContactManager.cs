@@ -14,9 +14,10 @@ using System.Threading.Tasks;
 
 namespace cyber_installer.implement.modules.server_contact_manager
 {
-    internal class ServerContactManager : ICyberInstallerModule
+    internal class ServerContactManager : BaseCyberInstallerModule
     {
-        private SoftwareDataRequester? _softwareDataRequester;
+        private MultipleSoftwareDataRequester? _multipleSoftwareDataRequester;
+        private SingleSoftwareDataRequester? _singleSoftwareDataRequester;
         private CertificateDownloadRequester? _certificateDownloaRequester;
         private X509Certificate2? _certCache;
         public static ServerContactManager Current
@@ -28,38 +29,35 @@ namespace cyber_installer.implement.modules.server_contact_manager
         {
         }
 
-        public void OnModuleCreate()
-        {
-            _softwareDataRequester?.Refresh();
-        }
-
-        public void OnModuleDestroy()
-        {
-        }
-
-        public void OnModuleStart()
+        public override void OnModuleCreate()
         {
             _certificateDownloaRequester = new CertificateDownloadRequester();
-            _softwareDataRequester = new SoftwareDataRequester();
+            _multipleSoftwareDataRequester = new MultipleSoftwareDataRequester();
+            _singleSoftwareDataRequester = new SingleSoftwareDataRequester();
         }
 
-        public async Task RequestSoftwareInfoFromCyberServer(Action<ICollection<ToolVO>?> requestedCallback
+        public override void OnModuleStart()
+        {
+            _multipleSoftwareDataRequester?.Refresh();
+        }
+
+        public async Task RequestMultipleSoftwareInfoFromCyberServer(Action<ICollection<ToolVO>?> requestedCallback
             , CancellationToken cancellationToken
             , bool isForce = false)
         {
             if (isForce)
             {
-                _softwareDataRequester?.Refresh();
+                _multipleSoftwareDataRequester?.Refresh();
             }
 
-            if (_softwareDataRequester != null && !_softwareDataRequester.IsFullOfDbSet)
+            if (_multipleSoftwareDataRequester != null && !_multipleSoftwareDataRequester.IsFullOfDbSet)
             {
                 using (HttpClient client = new HttpClient())
                 {
                     IEnumerable? listToolSource = null;
                     try
                     {
-                        listToolSource = await _softwareDataRequester.Request(client
+                        listToolSource = await _multipleSoftwareDataRequester.Request(client
                         , cancellationToken);
 
                         if (cancellationToken.IsCancellationRequested)
@@ -86,6 +84,46 @@ namespace cyber_installer.implement.modules.server_contact_manager
                 requestedCallback?.Invoke(null);
             }
 
+        }
+
+        public async Task RequestSoftwareInfoFromCyberServer(Action<ToolVO?> requestedCallback
+            , CancellationToken cancellationToken
+            , string swKey)
+        {
+            ToolVO? swInfo = null;
+            if (_singleSoftwareDataRequester != null)
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    try
+                    {
+                        swInfo = await _singleSoftwareDataRequester.Request(client
+                        , cancellationToken
+                        , swKey);
+
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            throw new TaskCanceledException("Request software info task was canceled!");
+                        }
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        if (ex.Message.Contains("No connection could be made because the target machine actively refused it"))
+                        {
+                            // TODO: Show message box here
+                        }
+                    }
+                    catch { }
+                    finally
+                    {
+                        requestedCallback?.Invoke(swInfo);
+                    }
+                }
+            }
+            else
+            {
+                requestedCallback?.Invoke(swInfo);
+            }
         }
 
         public async Task RequestDownloadCyberCertificate(Func<X509Certificate2?, Task> requestedCallback, bool force = false)
@@ -122,5 +160,7 @@ namespace cyber_installer.implement.modules.server_contact_manager
             }
 
         }
+
+        
     }
 }

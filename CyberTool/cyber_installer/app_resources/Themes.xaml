@@ -14,7 +14,7 @@
                   Margin="{TemplateBinding Padding}"
                   Fill="{TemplateBinding Foreground}" />
             <Path x:Name="FeedbackPath"
-                  Visibility="Hidden"
+				  Visibility="Hidden"
                   Data="{TemplateBinding Content, Converter={StaticResource GeoPathConverter}}"
                   Stretch="Uniform"
                   Margin="{TemplateBinding Padding}"

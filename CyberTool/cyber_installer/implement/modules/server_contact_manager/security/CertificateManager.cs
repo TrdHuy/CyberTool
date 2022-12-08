@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace cyber_installer.implement.modules.server_contact_manager.security
 {
-    internal class CertificateManager : ICyberInstallerModule
+    internal class CertificateManager : BaseCyberInstallerModule
     {
         public bool IsCyberCertificateInstalled { get; private set; } = false;
 
@@ -26,15 +26,7 @@ namespace cyber_installer.implement.modules.server_contact_manager.security
         {
         }
 
-        public void OnModuleCreate()
-        {
-        }
-
-        public void OnModuleDestroy()
-        {
-        }
-
-        public void OnModuleStart()
+        public override void OnModuleStart()
         {
             InstallNewwestCyberCertificate();
         }

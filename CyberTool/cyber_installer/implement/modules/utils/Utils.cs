@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
+using System.Reflection;
 
 namespace cyber_installer.implement.modules.utils
 {
@@ -86,6 +87,13 @@ namespace cyber_installer.implement.modules.utils
                 .Select(x => x.Split('='))
                 .ToDictionary(x => x[0], x => x[1]);
             return certProps;
+        }
+
+        public static Version GetAppVersion()
+        {
+            var version = Assembly.GetExecutingAssembly().GetName()?.Version ?? new Version(0,0,0,0);
+            return version;
+            //return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
         }
     }
 }
