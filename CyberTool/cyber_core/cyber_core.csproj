@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <PackageIcon>cyber_tool_app_icon.ico</PackageIcon>
+    <ApplicationIcon>cyber_tool_app_icon.ico</ApplicationIcon>
+    <Company>h2sw_solution</Company>
+    <AssemblyName>CyberTool</AssemblyName>
+    <Version>2.1.0.2</Version>
+    <AssemblyVersion>2.1.0.2</AssemblyVersion>
+    <FileVersion>2.1.0.2</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="app_resources\attached_properties\**" />
+    <Compile Remove="windows\cyber_iface\views\others\**" />
+    <EmbeddedResource Remove="app_resources\attached_properties\**" />
+    <EmbeddedResource Remove="windows\cyber_iface\views\others\**" />
+    <None Remove="app_resources\attached_properties\**" />
+    <None Remove="windows\cyber_iface\views\others\**" />
+    <Page Remove="app_resources\attached_properties\**" />
+    <Page Remove="windows\cyber_iface\views\others\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="cyber_tool_app_icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\dashboard_service\dashboard_service.csproj" />
+    <ProjectReference Include="..\extension_manager_service\extension_manager_service.csproj" />
+    <ProjectReference Include="..\faq_service\faq_service.csproj" />
+    <ProjectReference Include="..\issue_tracker_service\issue_tracker_service.csproj" />
+    <ProjectReference Include="..\log_guard\log_guard.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LogGuard_v0.1\cyber_tool_app_icon.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="HPSolutionCCDevPackage.netFramework">
+      <HintPath>..\exterior\HPSolutionCCDevPackage.netFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Windows.Forms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="app_resources\controls\cyber_scroll\CyberScrollView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="app_resources\MenuThemes.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>

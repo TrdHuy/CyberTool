@@ -1,0 +1,848 @@
+﻿<UserControl x:Class="extension_manager_service.views.elements.plugin_browser.PluginBrowserTab"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:itm="clr-namespace:extension_manager_service.views.elements.plugin_browser.items"
+			 xmlns:cb="clr-namespace:cyber_base.implement.views.clipping_border;assembly=cyber_base"
+			 xmlns:anim="clr-namespace:cyber_base.implement.views.cyber_anim;assembly=cyber_base"
+			 mc:Ignorable="d"
+			 xmlns:local="clr-namespace:extension_manager_service.views.elements.plugin_browser"
+			 xmlns:csv="clr-namespace:cyber_base.implement.views.cyber_scroll;assembly=cyber_base"
+			 xmlns:vm="clr-namespace:extension_manager_service.view_models.tabs.plugin_browser"
+			 xmlns:vmm="clr-namespace:extension_manager_service.implement.view_model"
+			 xmlns:vmp="clr-namespace:extension_manager_service.view_models"
+			 Background="{DynamicResource Background_Level2}"
+			 FontFamily="Calibri"
+			 d:DesignHeight="573.12"
+			 d:DesignWidth="781.44">
+	<UserControl.Resources>
+		<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
+		<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
+
+		<Style TargetType="{x:Type csv:CyberScrollView}"
+			   x:Key="EMS_PluginListScrollViewStyle">
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type csv:CyberScrollView}">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="Auto" />
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="*" />
+								<RowDefinition Height="Auto" />
+							</Grid.RowDefinitions>
+
+							<Border Background="{TemplateBinding Background}"
+									Margin="{TemplateBinding Padding}">
+								<Grid>
+									<Grid.RowDefinitions>
+										<RowDefinition Height="*" />
+										<RowDefinition Height="30" />
+									</Grid.RowDefinitions>
+									<ScrollContentPresenter Name="PART_ScrollContentPresenter"
+															KeyboardNavigation.DirectionalNavigation="Local"
+															CanContentScroll="{TemplateBinding CanContentScroll}"
+															CanHorizontallyScroll="False"
+															CanVerticallyScroll="False" />
+									<anim:LoadingAnimation Grid.Row="1"
+														   ElipNumber="5"
+														   IsBusy="{Binding IsLoadingPluginsInfoFromServer}"
+														   ElipseFill="{DynamicResource Foreground_Level3}" />
+								</Grid>
+							</Border>
+
+							<ScrollBar Name="PART_HorizontalScrollBar"
+									   Orientation="Horizontal"
+									   Grid.Row="1"
+									   BorderThickness="0"
+									   Maximum="{TemplateBinding ScrollableWidth}"
+									   ViewportSize="{TemplateBinding ViewportWidth}"
+									   Value="{TemplateBinding HorizontalOffset}"
+									   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+									   Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type csv:CyberScrollView}, Mode=FindAncestor}, Path=ScrollBarBackground}">
+								<ScrollBar.Template>
+									<ControlTemplate TargetType="{x:Type ScrollBar}">
+										<Grid x:Name="Bg"
+											  SnapsToDevicePixels="True">
+											<Border BorderBrush="{TemplateBinding BorderBrush}"
+													BorderThickness="{TemplateBinding BorderThickness}"
+													Background="{TemplateBinding Background}"
+													Grid.Column="1" />
+											<Track x:Name="PART_Track"
+												   Grid.Column="1"
+												   IsEnabled="{TemplateBinding IsMouseOver}">
+												<Track.DecreaseRepeatButton>
+													<RepeatButton Command="ScrollBar.PageLeftCommand">
+														<RepeatButton.Style>
+															<Style TargetType="{x:Type RepeatButton}">
+																<Setter Property="OverridesDefaultStyle"
+																		Value="True" />
+																<Setter Property="Background"
+																		Value="Transparent" />
+																<Setter Property="Focusable"
+																		Value="False" />
+																<Setter Property="IsTabStop"
+																		Value="False" />
+																<Setter Property="Template">
+																	<Setter.Value>
+																		<ControlTemplate TargetType="{x:Type RepeatButton}">
+																			<Rectangle Fill="{TemplateBinding Background}"
+																					   Height="{TemplateBinding Height}"
+																					   Width="{TemplateBinding Width}" />
+																		</ControlTemplate>
+																	</Setter.Value>
+																</Setter>
+															</Style>
+														</RepeatButton.Style>
+													</RepeatButton>
+												</Track.DecreaseRepeatButton>
+												<Track.IncreaseRepeatButton>
+													<RepeatButton Command="ScrollBar.PageRightCommand">
+														<RepeatButton.Style>
+															<Style TargetType="{x:Type RepeatButton}">
+																<Setter Property="OverridesDefaultStyle"
+																		Value="True" />
+																<Setter Property="Background"
+																		Value="Transparent" />
+																<Setter Property="Focusable"
+																		Value="False" />
+																<Setter Property="IsTabStop"
+																		Value="False" />
+																<Setter Property="Template">
+																	<Setter.Value>
+																		<ControlTemplate TargetType="{x:Type RepeatButton}">
+																			<Rectangle Fill="{TemplateBinding Background}"
+																					   Height="{TemplateBinding Height}"
+																					   Width="{TemplateBinding Width}" />
+																		</ControlTemplate>
+																	</Setter.Value>
+																</Setter>
+															</Style>
+														</RepeatButton.Style>
+													</RepeatButton>
+												</Track.IncreaseRepeatButton>
+												<Track.Thumb>
+													<Thumb>
+														<Thumb.Style>
+															<Style TargetType="{x:Type Thumb}">
+																<Setter Property="OverridesDefaultStyle"
+																		Value="True" />
+																<Setter Property="IsTabStop"
+																		Value="False" />
+																<Setter Property="Template">
+																	<Setter.Value>
+																		<ControlTemplate TargetType="{x:Type Thumb}">
+																			<Rectangle x:Name="rectangle"
+																					   Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type csv:CyberScrollView},Mode=FindAncestor},Path=ThumbBackground}"
+																					   Height="{TemplateBinding Height}"
+																					   SnapsToDevicePixels="True"
+																					   Width="{TemplateBinding Width}" />
+																		</ControlTemplate>
+																	</Setter.Value>
+																</Setter>
+															</Style>
+														</Thumb.Style>
+													</Thumb>
+												</Track.Thumb>
+											</Track>
+										</Grid>
+									</ControlTemplate>
+								</ScrollBar.Template>
+							</ScrollBar>
+
+							<ScrollBar Name="PART_VerticalScrollBar"
+									   Grid.Column="1"
+									   Grid.RowSpan="2"
+									   Maximum="{TemplateBinding ScrollableHeight}"
+									   ViewportSize="{TemplateBinding ViewportHeight}"
+									   Value="{TemplateBinding VerticalOffset}"
+									   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+									   Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type csv:CyberScrollView}, Mode=FindAncestor}, Path=ScrollBarBackground}">
+								<ScrollBar.Template>
+									<ControlTemplate TargetType="{x:Type ScrollBar}">
+										<Grid x:Name="Bg"
+											  SnapsToDevicePixels="True">
+											<Border x:Name="border"
+													BorderBrush="{TemplateBinding BorderBrush}"
+													BorderThickness="0"
+													Background="{TemplateBinding Background}"
+													Grid.Row="1" />
+											<Track x:Name="PART_Track"
+												   IsDirectionReversed="True"
+												   IsEnabled="True"
+												   Grid.Row="1">
+												<Track.DecreaseRepeatButton>
+													<RepeatButton Command="ScrollBar.PageUpCommand">
+														<RepeatButton.Style>
+															<Style TargetType="{x:Type RepeatButton}">
+																<Setter Property="OverridesDefaultStyle"
+																		Value="True" />
+																<Setter Property="Background"
+																		Value="Transparent" />
+																<Setter Property="Focusable"
+																		Value="False" />
+																<Setter Property="IsTabStop"
+																		Value="False" />
+																<Setter Property="Template">
+																	<Setter.Value>
+																		<ControlTemplate TargetType="{x:Type RepeatButton}">
+																			<Rectangle Fill="{TemplateBinding Background}"
+																					   Height="{TemplateBinding Height}"
+																					   Width="{TemplateBinding Width}" />
+																		</ControlTemplate>
+																	</Setter.Value>
+																</Setter>
+															</Style>
+														</RepeatButton.Style>
+													</RepeatButton>
+												</Track.DecreaseRepeatButton>
+												<Track.IncreaseRepeatButton>
+													<RepeatButton Command="ScrollBar.PageDownCommand">
+														<RepeatButton.Style>
+															<Style TargetType="{x:Type RepeatButton}">
+																<Setter Property="OverridesDefaultStyle"
+																		Value="True" />
+																<Setter Property="Background"
+																		Value="Transparent" />
+																<Setter Property="Focusable"
+																		Value="False" />
+																<Setter Property="IsTabStop"
+																		Value="False" />
+																<Setter Property="Template">
+																	<Setter.Value>
+																		<ControlTemplate TargetType="{x:Type RepeatButton}">
+																			<Rectangle Fill="{TemplateBinding Background}"
+																					   Height="{TemplateBinding Height}"
+																					   Width="{TemplateBinding Width}" />
+																		</ControlTemplate>
+																	</Setter.Value>
+																</Setter>
+															</Style>
+														</RepeatButton.Style>
+													</RepeatButton>
+												</Track.IncreaseRepeatButton>
+												<Track.Thumb>
+													<Thumb>
+														<Thumb.Style>
+															<Style TargetType="{x:Type Thumb}">
+																<Setter Property="OverridesDefaultStyle"
+																		Value="True" />
+																<Setter Property="IsTabStop"
+																		Value="False" />
+																<Setter Property="Template">
+																	<Setter.Value>
+																		<ControlTemplate TargetType="{x:Type Thumb}">
+																			<Rectangle x:Name="rectangle"
+																					   Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type csv:CyberScrollView},Mode=FindAncestor},Path=ThumbBackground}"
+																					   Height="{TemplateBinding Height}"
+																					   SnapsToDevicePixels="True"
+																					   Width="{TemplateBinding Width}" />
+																			<ControlTemplate.Triggers>
+																				<Trigger Property="IsEnabled"
+																						 Value="False">
+																					<Setter Property="Width"
+																							TargetName="rectangle"
+																							Value="2" />
+																					<Setter Property="HorizontalAlignment"
+																							TargetName="rectangle"
+																							Value="Right" />
+																				</Trigger>
+																			</ControlTemplate.Triggers>
+																		</ControlTemplate>
+																	</Setter.Value>
+																</Setter>
+															</Style>
+														</Thumb.Style>
+													</Thumb>
+												</Track.Thumb>
+											</Track>
+										</Grid>
+										<ControlTemplate.Triggers>
+											<MultiDataTrigger>
+												<MultiDataTrigger.Conditions>
+													<Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=csv:CyberScrollView, Mode=FindAncestor}, Path=IsMouseOverExpandScrollbar}"
+															   Value="True" />
+													<Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}"
+															   Value="False" />
+												</MultiDataTrigger.Conditions>
+												<Setter TargetName="border"
+														Property="Background"
+														Value="Transparent" />
+												<Setter TargetName="PART_Track"
+														Property="IsEnabled"
+														Value="False" />
+											</MultiDataTrigger>
+
+
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</ScrollBar.Template>
+							</ScrollBar>
+
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</UserControl.Resources>
+	<UserControl.DataContext>
+		<vmm:ViewModelManager DataContextType="{x:Type vm:PluginBrowserTabViewModel}"
+							  ParentDataContextType="{x:Type vmp:ExtensionManagerViewModel}"
+							  GeneratorType="CreateNew" />
+	</UserControl.DataContext>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="35.52" />
+			<RowDefinition Height="0.22*" />
+			<RowDefinition Height="5.37*" />
+		</Grid.RowDefinitions>
+
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="3.29*" />
+				<ColumnDefinition Width="1.23*" />
+				<ColumnDefinition Width="0.77*" />
+				<ColumnDefinition Width="2.07*" />
+			</Grid.ColumnDefinitions>
+			<cb:ClippingBorder Background="{DynamicResource Background_Level2_2}"
+							   CornerRadius="5">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="14.976" />
+						<ColumnDefinition Width="12.48" />
+					</Grid.ColumnDefinitions>
+
+					<TextBox x:Name="PART_SearchTextBox"
+							 BorderThickness="0"
+							 Tag="Enter some things to search"
+							 Background="Transparent"
+							 CaretBrush="{DynamicResource BorderbrushEffect_Level1}"
+							 SelectionBrush="White"
+							 SelectionOpacity="0.3"
+							 Margin="11.52,0,0,0"
+							 FontSize="10.66"
+							 VerticalAlignment="Center"
+							 Foreground="{DynamicResource Foreground_Level3}">
+						<TextBox.Template>
+							<ControlTemplate TargetType="{x:Type TextBox}">
+								<Grid>
+									<ScrollViewer VerticalContentAlignment="Center"
+												  VerticalAlignment="Top"
+												  FontFamily="{TemplateBinding FontFamily}"
+												  VerticalScrollBarVisibility="Disabled"
+												  HorizontalScrollBarVisibility="Disabled"
+												  x:Name="PART_ContentHost" />
+
+									<TextBlock x:Name="TagTextBox"
+											   Margin="2,0,0,0"
+											   Text="{TemplateBinding Tag}"
+											   FontFamily="{TemplateBinding FontFamily}"
+											   Background="Transparent"
+											   VerticalAlignment="Top"
+											   IsHitTestVisible="False"
+											   Foreground="{StaticResource Foreground_Level1}"
+											   FontSize="{TemplateBinding FontSize}">
+										<TextBlock.Style>
+											<Style TargetType="{x:Type TextBlock}">
+												<Setter Property="Visibility"
+														Value="Collapsed" />
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
+																 Value="">
+														<Setter Property="Visibility"
+																Value="Visible" />
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+								</Grid>
+
+
+							</ControlTemplate>
+						</TextBox.Template>
+					</TextBox>
+
+					<Button x:Name="PART_SearchButton"
+							Grid.Column="1"
+							Foreground="{StaticResource Foreground_Level1}"
+							Background="{StaticResource Foreground_Level3}"
+							Content="{StaticResource SearchPathGeomerty}"
+							Template="{StaticResource IconBtnTmpl}" />
+				</Grid>
+			</cb:ClippingBorder>
+
+			<TextBlock Grid.Column="2"
+					   FontSize="10.66"
+					   FontWeight="Bold"
+					   Foreground="{DynamicResource Foreground_Level3}"
+					   VerticalAlignment="Center"
+					   Text="Package source" />
+
+			<ComboBox x:Name="PART_PluginSourceCbx"
+					  Grid.Column="3"
+					  Background="Transparent"
+					  Foreground="{DynamicResource Foreground_Level3}"
+					  BorderThickness="1.4"
+					  Height="26.88"
+					  FontSize="10.66"
+					  BorderBrush="{DynamicResource Background_Level2_2}"
+					  Style="{StaticResource CyberNoEditComboboxRimStyle}">
+				<ComboBoxItem Content="All" />
+				<ComboBoxItem Content="H2sw solution server"
+							  IsSelected="True" />
+			</ComboBox>
+		</Grid>
+
+		<Grid Grid.Row="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="3.79*" />
+				<ColumnDefinition Width="0.14*" />
+				<ColumnDefinition Width="3.79*" />
+			</Grid.ColumnDefinitions>
+
+			<ListView x:Name="PART_PluginListView"
+					  Background="Transparent"
+					  BorderThickness="0"
+					  Grid.ColumnSpan="3"
+					  SelectionMode="Single"
+					  SelectedItem="{Binding CurrentSelectedPlugin}"
+					  ItemsSource="{Binding PluginItemSource}"
+					  VirtualizingPanel.CacheLength="1"
+					  VirtualizingPanel.CacheLengthUnit="Pixel"
+					  VirtualizingPanel.IsContainerVirtualizable="True"
+					  VirtualizingPanel.IsVirtualizing="True"
+					  VirtualizingPanel.VirtualizationMode="Recycling"
+					  VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+					  local:PluginBrowserTab.ViewMode="{Binding CurrentListViewMode}">
+				<ListView.Template>
+					<ControlTemplate TargetType="ListView">
+						<csv:CyberScrollView x:Name="PluginScroller"
+											 ThumbBackground="{StaticResource ButtonBackground_Level1}"
+											 CanContentScroll="True"
+											 ScrollChanged="HandleScrollChangeEvent"
+											 IsMouseOverExpandScrollbar="True"
+											 VerticalAlignment="Top"
+											 Padding="0,0,5,0"
+											 VerticalContentAlignment="Center"
+											 Style="{StaticResource EMS_PluginListScrollViewStyle}">
+							<ItemsPresenter />
+						</csv:CyberScrollView>
+					</ControlTemplate>
+				</ListView.Template>
+
+				<ListView.ItemContainerStyle>
+					<Style TargetType="ListViewItem">
+						<Setter Property="Margin"
+								Value="0,0,0,20" />
+						<Setter Property="Height"
+								Value="63.36" />
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="ListViewItem">
+									<itm:StretchPluginItemViewHolder x:Name="ViewHolder"
+																	 ViewMode="{Binding RelativeSource={RelativeSource AncestorType=ListView, Mode=FindAncestor}, Path=(local:PluginBrowserTab.ViewMode)}"
+																	 ItemBackground="{DynamicResource Background_Level2}"
+																	 Rates="{Binding Rates}"
+																	 ItemBorder="{DynamicResource Background_Level2_2}" />
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsMouseOver"
+												 Value="True">
+											<Setter Property="itm:StretchPluginItemViewHolder.ItemBorder"
+													TargetName="ViewHolder"
+													Value="{DynamicResource ButtonBackground_Level1}" />
+										</Trigger>
+
+										<Trigger Property="IsSelected"
+												 Value="True">
+											<Setter Property="itm:StretchPluginItemViewHolder.ItemBackground"
+													TargetName="ViewHolder">
+												<Setter.Value>
+													<LinearGradientBrush EndPoint="0.5,1"
+																		 StartPoint="0.5,0"
+																		 Opacity="0.7">
+														<LinearGradientBrush.RelativeTransform>
+															<TransformGroup>
+																<ScaleTransform CenterY="0.5"
+																				CenterX="0.5" />
+																<SkewTransform CenterX="0.5"
+																			   CenterY="0.5" />
+																<RotateTransform Angle="-90.3"
+																				 CenterX="0.5"
+																				 CenterY="0.5" />
+																<TranslateTransform />
+															</TransformGroup>
+														</LinearGradientBrush.RelativeTransform>
+														<GradientStop Color="#A2009A76" />
+														<GradientStop Color="#00009A76"
+																	  Offset="1" />
+													</LinearGradientBrush>
+												</Setter.Value>
+											</Setter>
+											<Setter Property="itm:StretchPluginItemViewHolder.ItemBorder"
+													TargetName="ViewHolder"
+													Value="{DynamicResource ButtonBackground_Level1}" />
+
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</ListView.ItemContainerStyle>
+			</ListView>
+
+			<cb:ClippingBorder x:Name="PART_PluginDetailBorder"
+							   Grid.Column="2"
+							   BorderThickness="2"
+							   BorderBrush="{DynamicResource Background_Level2_2}"
+							   CornerRadius="10">
+				<cb:ClippingBorder.Style>
+					<Style TargetType="cb:ClippingBorder">
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding CurrentListViewMode}"
+										 Value="Full">
+								<Setter Property="Visibility"
+										Value="Collapsed" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</cb:ClippingBorder.Style>
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="0.76*" />
+						<RowDefinition Height="25.42" />
+						<RowDefinition Height="0.09*" />
+						<RowDefinition Height="25.42" />
+						<RowDefinition Height="0.17*" />
+						<RowDefinition Height="2" />
+						<RowDefinition Height="3.73*" />
+					</Grid.RowDefinitions>
+
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="0.17*" />
+							<ColumnDefinition Width="45.12" />
+							<ColumnDefinition Width="0.1*" />
+							<ColumnDefinition Width="1.95*" />
+							<ColumnDefinition Width="16" />
+							<ColumnDefinition Width="0.05*" />
+							<ColumnDefinition Width="auto"
+											  MinWidth="80" />
+							<ColumnDefinition Width="5" />
+						</Grid.ColumnDefinitions>
+						<Image Stretch="Uniform"
+							   Grid.Column="1"
+							   VerticalAlignment="Center"
+							   Source="{Binding CurrentSelectedPlugin.IconSource}" />
+						<TextBlock Grid.Column="3"
+								   VerticalAlignment="Center"
+								   Foreground="{DynamicResource Foreground_Level3}">
+							<Run Text="{Binding CurrentSelectedPlugin.PluginName}"
+								 FontSize="24"
+								 FontWeight="Bold" />
+							<InlineUIContainer>
+								<Path Margin="3,0,0,2"
+									  Visibility="{Binding CurrentSelectedPlugin.IsAuthenticated, Converter={StaticResource VisibilityConverter}}"
+									  Fill="{DynamicResource ObjectFill_Type2}"
+									  Width="11.52"
+									  Height="11.52"
+									  Stretch="Uniform"
+									  Data="m 55.565374,103.08583 a 20.486208,20.486208 0 0 0 -20.486087,20.48609 20.486208,20.486208 0 0 0 20.486087,20.48609 20.486208,20.486208 0 0 0 20.486089,-20.48609 20.486208,20.486208 0 0 0 -20.486089,-20.48609 z m 10.333219,9.98079 c 0.421601,0 0.843288,0.16167 1.166337,0.48472 l 2.277898,2.2779 c 0.646099,0.64609 0.646099,1.68607 0,2.33216 l -13.334587,13.33458 -1.541507,1.54203 -0.368454,0.36793 c -0.646096,0.64611 -1.68606,0.64611 -2.332156,0 l -0.368454,-0.36793 -1.909445,-1.90996 -5.863725,-5.86321 c -0.850037,-0.85004 -0.850037,-2.21903 0,-3.06906 l 1.542026,-1.54151 c 0.850038,-0.85003 2.218508,-0.85003 3.068545,0 l 4.696873,4.69739 11.800313,-11.80032 c 0.323049,-0.32305 0.744747,-0.48472 1.166336,-0.48472 z" />
+							</InlineUIContainer>
+						</TextBlock>
+
+						<Path Grid.Column="4"
+							  Stretch="Uniform"
+							  Fill="{DynamicResource Foreground_Level3}"
+							  Data="m 189.89353,-180.30737 a 25.000032,25.000027 0 0 0 -5.30881,0.61158 c -0.96994,3.29799 -1.7566,7.31153 -2.27995,11.79005 2.4763,-0.0848 5.00962,-0.12886 7.58876,-0.12886 2.57894,0 5.11171,0.044 7.58769,0.12886 -0.52587,-4.49562 -1.317,-8.52246 -2.2921,-11.82755 a 25.000032,25.000027 0 0 0 -5.29559,-0.57408 z m 11.87244,3.01142 c 0.66066,2.9606 1.18614,6.20882 1.55694,9.67488 3.02929,0.19038 5.94825,0.44531 8.73691,0.75787 a 25.000032,25.000027 0 0 0 -10.29385,-10.43275 z m -23.77711,0.14101 a 25.000032,25.000027 0 0 0 -10.12116,10.2759 c 2.74645,-0.30533 5.61785,-0.55487 8.59643,-0.74203 0.36491,-3.41086 0.87901,-6.61136 1.52473,-9.53387 z m 11.90467,14.88492 c -2.76249,0 -5.46608,0.0571 -8.09788,0.16055 -0.13216,2.20037 -0.20386,4.47408 -0.20386,6.80236 0,3.29026 0.14231,6.47222 0.3998,9.48792 2.57,0.0986 5.20819,0.15264 7.90194,0.15264 2.69361,0 5.33116,-0.0541 7.90087,-0.15264 0.25778,-3.0157 0.40086,-6.19766 0.40086,-9.48792 0,-2.32827 -0.072,-4.60199 -0.20439,-6.80236 -2.63168,-0.10342 -5.33479,-0.16055 -8.09734,-0.16055 z m -13.89257,0.4732 c -3.71304,0.25802 -7.2213,0.61519 -10.45757,1.0531 a 25.000032,25.000027 0 0 0 -0.65013,5.43609 25.000032,25.000027 0 0 0 1.49567,8.22462 c 3.05026,0.39378 6.32952,0.71668 9.78473,0.95381 -0.22703,-2.94114 -0.34698,-6.01272 -0.34698,-9.17791 0,-2.21411 0.0616,-4.37956 0.17428,-6.48971 z m 27.78459,0 c 0.11269,2.11015 0.17429,4.2756 0.17429,6.48971 0,3.16519 -0.11995,6.23677 -0.34699,9.17791 3.45516,-0.23717 6.73447,-0.56048 9.78474,-0.95434 a 25.000032,25.000027 0 0 0 1.49567,-8.22409 25.000032,25.000027 0 0 0 -0.60682,-5.43028 c -3.24811,-0.44065 -6.77157,-0.79972 -10.50089,-1.05891 z m -34.23627,20.9178 a 25.000032,25.000027 0 0 0 8.44328,7.42133 c -0.47291,-2.14037 -0.87783,-4.42486 -1.20309,-6.83669 -2.49096,-0.15236 -4.90701,-0.34919 -7.24019,-0.58464 z m 40.68796,0 c -2.333,0.23542 -4.74884,0.43172 -7.23967,0.58411 -0.32526,2.41195 -0.73056,4.69675 -1.20361,6.83722 a 25.000032,25.000027 0 0 0 8.44328,-7.42133 z m -27.58073,0.85875 c 0.49989,3.40508 1.15812,6.47724 1.93033,9.10185 a 25.000032,25.000027 0 0 0 5.30669,0.61105 25.000032,25.000027 0 0 0 5.30457,-0.61052 c 0.77228,-2.62472 1.43053,-5.69709 1.93086,-9.10238 -2.36453,0.0771 -4.77791,0.11829 -7.23543,0.11829 -2.45789,0 -4.87203,-0.0412 -7.23702,-0.11829 z" />
+
+						<TextBlock Text="{Binding ElementName=PART_PluginSourceCbx, Path=SelectedItem.Content}"
+								   FontSize="10.6"
+								   Grid.Column="6"
+								   VerticalAlignment="Center"
+								   Foreground="{DynamicResource ObjectFill_Type2}" />
+
+						<Button Grid.Column="6"
+								Height="10"
+								Width="10"
+								Margin="5"
+								Command="{Binding CloseDetailPanelButtonCmd}"
+								VerticalAlignment="Top"
+								HorizontalAlignment="Right"
+								Foreground="{DynamicResource Foreground_Level3}"
+								Background="{StaticResource Foreground_Level1}"
+								Content="{StaticResource CloseButton}"
+								Template="{StaticResource IconBtnTmpl}" />
+					</Grid>
+
+					<Grid Grid.Row="1"
+						  Visibility="{Binding CurrentSelectedPlugin.IsInstalled, Converter={StaticResource VisibilityConverter}}">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="0.17*" />
+							<ColumnDefinition Width="0.67*" />
+							<ColumnDefinition Width="1.85*" />
+							<ColumnDefinition Width="0.07*" />
+							<ColumnDefinition Width="0.86*" />
+							<ColumnDefinition Width="0.17*" />
+						</Grid.ColumnDefinitions>
+
+						<TextBlock Grid.Column="1"
+								   FontSize="13.3"
+								   FontWeight="Bold"
+								   VerticalAlignment="Center"
+								   Foreground="{DynamicResource Foreground_Level3}"
+								   Text="Installed:" />
+
+						<Border Grid.Column="2"
+								CornerRadius="5"
+								BorderBrush="{DynamicResource Background_Level2_2}"
+								BorderThickness="1.33">
+							<TextBlock Text="{Binding CurrentSelectedPlugin.Version}"
+									   Margin="6,0,0,0"
+									   VerticalAlignment="Center"
+									   FontSize="10.6"
+									   Foreground="{DynamicResource Foreground_Level3}" />
+						</Border>
+
+						<Button Grid.Column="4"
+								Style="{StaticResource CyberRoundedButtonStyle}"
+								BorderBrush="{DynamicResource Background_Level2_2}"
+								Background="Transparent"
+								Content="Uninstall"
+								BorderThickness="1.33" />
+					</Grid>
+
+					<Grid Grid.Row="3">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="0.17*" />
+							<ColumnDefinition Width="0.67*" />
+							<ColumnDefinition Width="1.85*" />
+							<ColumnDefinition Width="0.07*" />
+							<ColumnDefinition Width="0.86*" />
+							<ColumnDefinition Width="0.17*" />
+						</Grid.ColumnDefinitions>
+
+						<TextBlock Grid.Column="1"
+								   FontSize="13.3"
+								   FontWeight="Bold"
+								   VerticalAlignment="Center"
+								   Foreground="{DynamicResource Foreground_Level3}"
+								   Text="Version:" />
+
+						<ComboBox Grid.Column="2"
+								  Background="Transparent"
+								  Foreground="{DynamicResource Foreground_Level3}"
+								  BorderThickness="1.4"
+								  FontSize="10.6"
+								  MaxDropDownHeight="140"
+								  ItemsSource="{Binding CurrentSelectedPlugin.VersionHistorySource}"
+								  BorderBrush="{DynamicResource Background_Level2_2}"
+								  Style="{StaticResource CyberNoEditComboboxRimStyle}">
+							<ComboBox.ItemTemplate>
+								<ItemContainerTemplate>
+									<TextBlock Text="{Binding Path=Version}"
+											   Foreground="{StaticResource Foreground_Level3}" />
+								</ItemContainerTemplate>
+							</ComboBox.ItemTemplate>
+
+						</ComboBox>
+
+						<Button Grid.Column="4"
+								Style="{StaticResource CyberRoundedButtonStyle}"
+								BorderBrush="{DynamicResource Background_Level2_2}"
+								Background="Transparent"
+								Content="Update"
+								BorderThickness="1.33" />
+					</Grid>
+
+					<Rectangle Fill="{DynamicResource Background_Level2_2}"
+							   Grid.Row="5"
+							   Margin="10,0" />
+
+					<csv:CyberScrollView Grid.Row="6"
+										 VerticalScrollBarVisibility="Hidden"
+										 CanContentScroll="True"
+										 VerticalAlignment="Top"
+										 VerticalContentAlignment="Center">
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="9.6" />
+								<RowDefinition Height="23.04" />
+								<RowDefinition Height="auto" />
+								<RowDefinition Height="23.04" />
+								<RowDefinition Height="23.04" />
+								<RowDefinition Height="23.04" />
+								<RowDefinition Height="23.04" />
+								<RowDefinition Height="23.04" />
+								<RowDefinition Height="9.6" />
+								<RowDefinition Height="23.04" />
+								<RowDefinition Height="10" />
+								<RowDefinition Height="auto"
+											   MinHeight="162.24" />
+								<RowDefinition Height="10" />
+							</Grid.RowDefinitions>
+
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="0.17*" />
+								<ColumnDefinition Width="1.19*" />
+								<ColumnDefinition Width="2.26*" />
+								<ColumnDefinition Width="0.17*" />
+							</Grid.ColumnDefinitions>
+
+							<TextBlock Text="Description:"
+									   Grid.Row="1"
+									   VerticalAlignment="Center"
+									   Foreground="{DynamicResource Foreground_Level3}"
+									   FontWeight="Bold"
+									   FontSize="13.33"
+									   Grid.Column="1" />
+
+
+							<TextBlock Text="{Binding CurrentSelectedPlugin.PluginDescription, FallbackValue=NA}"
+									   Grid.Row="2"
+									   Grid.ColumnSpan="2"
+									   Foreground="{DynamicResource Foreground_Level3}"
+									   Grid.Column="1"
+									   FontSize="10.66" />
+
+							<TextBlock Text="Version:"
+									   Grid.Row="4"
+									   VerticalAlignment="Center"
+									   Foreground="{DynamicResource Foreground_Level3}"
+									   FontWeight="Bold"
+									   FontSize="13.33"
+									   Grid.Column="1" />
+							<TextBlock Text="{Binding CurrentSelectedPlugin.Version, FallbackValue=NA}"
+									   Grid.Row="4"
+									   VerticalAlignment="Center"
+									   Foreground="{DynamicResource Foreground_Level3}"
+									   FontSize="10.66"
+									   Grid.Column="2" />
+
+							<TextBlock Text="Author(s):"
+									   Grid.Row="5"
+									   VerticalAlignment="Center"
+									   Foreground="{DynamicResource Foreground_Level3}"
+									   FontWeight="Bold"
+									   FontSize="13.33"
+									   Grid.Column="1" />
+							<TextBlock Text="{Binding CurrentSelectedPlugin.PluginAuthor, FallbackValue=NA}"
+									   Grid.Row="5"
+									   VerticalAlignment="Center"
+									   Foreground="{DynamicResource Foreground_Level3}"
+									   FontSize="10.66"
+									   Grid.Column="2" />
+
+							<TextBlock Text="Date published:"
+									   Grid.Row="6"
+									   VerticalAlignment="Center"
+									   Foreground="{DynamicResource Foreground_Level3}"
+									   FontWeight="Bold"
+									   FontSize="13.33"
+									   Grid.Column="1" />
+							<TextBlock Text="{Binding CurrentSelectedPlugin.DatePublished, FallbackValue=NA}"
+									   Grid.Row="6"
+									   VerticalAlignment="Center"
+									   Foreground="{DynamicResource Foreground_Level3}"
+									   FontSize="10.66"
+									   Grid.Column="2" />
+							<TextBlock Text="Project URL:"
+									   Grid.Row="7"
+									   VerticalAlignment="Center"
+									   Foreground="{DynamicResource Foreground_Level3}"
+									   FontWeight="Bold"
+									   FontSize="13.33"
+									   Grid.Column="1" />
+							<TextBlock Text="{Binding CurrentSelectedPlugin.ProjectURL, FallbackValue=NA}"
+									   Grid.Row="7"
+									   VerticalAlignment="Center"
+									   Foreground="{DynamicResource Foreground_Level3}"
+									   FontSize="10.66"
+									   Grid.Column="2" />
+							<TextBlock Text="Tag(s):"
+									   Grid.Row="9"
+									   VerticalAlignment="Bottom"
+									   Foreground="{DynamicResource Foreground_Level3}"
+									   FontWeight="Bold"
+									   FontSize="13.33"
+									   Grid.Column="1" />
+
+							<itm:TagsPanel Grid.Row="9"
+										   VerticalAlignment="Bottom"
+										   Tags="{Binding CurrentSelectedPlugin.Tags}"
+										   Grid.Column="2" />
+
+							<TextBlock Text="History:"
+									   Grid.Row="11"
+									   VerticalAlignment="Top"
+									   Foreground="{DynamicResource Foreground_Level3}"
+									   FontWeight="Bold"
+									   FontSize="13.33"
+									   Grid.Column="1" />
+
+							<ListView Grid.Row="11"
+									  Grid.Column="2"
+									  MaxHeight="153.6"
+									  SelectionMode="Single"
+									  ItemsSource="{Binding CurrentSelectedPlugin.VersionHistorySource}"
+									  VirtualizingPanel.CacheLength="1"
+									  VirtualizingPanel.CacheLengthUnit="Pixel"
+									  VirtualizingPanel.IsContainerVirtualizable="True"
+									  VirtualizingPanel.IsVirtualizing="True"
+									  VirtualizingPanel.VirtualizationMode="Recycling"
+									  VirtualizingPanel.IsVirtualizingWhenGrouping="True">
+								<ListView.Template>
+									<ControlTemplate TargetType="ListView">
+										<ControlTemplate.Resources>
+											<sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</sys:Double>
+											<sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">6</sys:Double>
+										</ControlTemplate.Resources>
+										<cb:ClippingBorder Name="Border"
+														   Background="Transparent"
+														   BorderBrush="{DynamicResource Background_Level2_2}"
+														   BorderThickness="2"
+														   CornerRadius="10">
+											<csv:CyberScrollView ThumbBackground="{StaticResource ButtonBackground_Level1}"
+																 CanContentScroll="true"
+																 IsMouseOverExpandScrollbar="True"
+																 Margin="10"
+																 VerticalAlignment="Top"
+																 VerticalContentAlignment="Center">
+												<ItemsPresenter />
+											</csv:CyberScrollView>
+										</cb:ClippingBorder>
+									</ControlTemplate>
+								</ListView.Template>
+								<ListView.ItemContainerStyle>
+									<Style TargetType="{x:Type ListViewItem}">
+										<Setter Property="Height"
+												Value="33.6" />
+										<Setter Property="Focusable"
+												Value="False" />
+										<Setter Property="Template">
+											<Setter.Value>
+												<ControlTemplate TargetType="ListViewItem">
+													<itm:VersionHistoryItemViewHolder />
+												</ControlTemplate>
+											</Setter.Value>
+										</Setter>
+									</Style>
+								</ListView.ItemContainerStyle>
+							</ListView>
+						</Grid>
+					</csv:CyberScrollView>
+
+
+				</Grid>
+			</cb:ClippingBorder>
+		</Grid>
+
+	</Grid>
+
+</UserControl>

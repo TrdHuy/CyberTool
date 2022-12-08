@@ -1,0 +1,87 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <Company>h2sw_solution</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="base\android_log\**" />
+    <Compile Remove="views\others\animations\**" />
+    <EmbeddedResource Remove="base\android_log\**" />
+    <EmbeddedResource Remove="views\others\animations\**" />
+    <None Remove="base\android_log\**" />
+    <None Remove="views\others\animations\**" />
+    <Page Remove="base\android_log\**" />
+    <Page Remove="views\others\animations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="_config\BoolSecFloatingFeature.mk" />
+    <None Remove="_config\IntSecFloatingFeature.mk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    <PackageReference Include="System.IO.Ports" Version="6.0.0" />
+    <PackageReference Include="System.Management" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\cyber_base\cyber_base.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="HPSolutionCCDevPackage.netFramework">
+      <HintPath>..\exterior\HPSolutionCCDevPackage.netFramework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="views\others\header_label\HeaderLabel.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="views\others\loading_list\LoadingListView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="views\others\log_watcher\_item\HanzaTreeViewItem.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="views\others\log_watcher\_radial_bar\RadialProgressBar.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="views\others\log_watcher\_tree_viewer\HanzaTreeViewer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="views\others\tripple_toggle\TrippleToggle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="views\usercontrols\elements\control_panel\CaptureControlPanel.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="views\usercontrols\elements\filter\LevelFilter.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="views\usercontrols\elements\log_manager\LogManager.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<PropertyGroup>
+			<SolutionDir>$([System.IO.Path]::GetDirectoryName($(MSBuildProjectDirectory)))</SolutionDir>
+		</PropertyGroup>
+
+		<Exec Command="echo SolutionDir: $(SolutionDir)" />
+		<Exec Command="echo output: $(ProjectDir)$(OutDir)" />
+		<Exec Command="echo Configuration: $(Configuration)&#xD;&#xA;echo DevEnvDir: $(DevEnvDir)&#xD;&#xA;echo OutDir: $(OutDir)&#xD;&#xA;echo ProjectDir: $(ProjectDir)&#xD;&#xA;echo VisualStudioVersion: $(VisualStudioVersion)&#xD;&#xA;echo AssemblySearchPaths: $(AssemblySearchPaths)&#xD;&#xA;echo AssemblyName: $(AssemblyName)&#xD;&#xA;echo BaseIntermediateOutputPath: $(BaseIntermediateOutputPath)&#xD;&#xA;echo CscToolPath: $(CscToolPath)" />
+		<MSBuild Projects="$(SolutionDir)\cyber_installer_background_service\cyber_installer_background_service.csproj" Properties="OutDir=$(ProjectDir)$(OutDir)\cibs\;&#xD;&#xA; &#xD;&#xA;				Configuration=$(Configuration);&#xD;&#xA;                             &#xD;&#xA;				DeployOnBuild=true;&#xD;&#xA;                             &#xD;&#xA;				DeployTarget=Package" Targets="Build" />
+	</Target>
+
+	<Target Name="Zip" BeforeTargets="AfterBuild">
+		<ZipDirectory Overwrite="true" Condition="'$(Configuration)' == 'Release'" SourceDirectory="$(ProjectDir)$(OutDir)" DestinationFile="$(ProjectDir)\$(AssemblyVersion)_build.zip" />
+	</Target>
+	
+	<PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <Company>h2sw_solution</Company>
+    <UseWindowsForms>True</UseWindowsForms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyName>Cyber Installer</AssemblyName>
+    <Version>1.0.0.2</Version>
+	<AssemblyVersion>1.0.0.2</AssemblyVersion>
+	<FileVersion>1.0.0.2</FileVersion>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+  </PropertyGroup>
+	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DebugType>embedded</DebugType>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DebugType>embedded</DebugType>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <None Remove=".config\user_config.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\cyber_base\cyber_base.csproj">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>True</Private>
+      <CopyLocalSatelliteAssemblies>True</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include=".config\user_config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".data\user_data.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="app_resources\ResourceThemes.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".design\class_diagrams\UserDataManagerDiagram.cd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Costura.Fody" Version="5.7.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>

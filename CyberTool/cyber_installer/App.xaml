@@ -1,0 +1,14 @@
+﻿<Application x:Class="cyber_installer.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="app_resources/ResourceThemes.xaml" />
+				<ResourceDictionary Source="app_resources/Themes.xaml" />
+
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+
+	</Application.Resources>
+</Application>
