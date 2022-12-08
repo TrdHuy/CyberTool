@@ -32,6 +32,13 @@ namespace cyber_installer.implement.modules.user_data_manager
             {
                 File.Create(_userDataFilePath).Dispose();
             }
+
+            if (Directory.Exists(_userDataFilePath))
+            {
+                DirectoryInfo di = new DirectoryInfo(_userDataFilePath);
+                di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+            }
+
             string dataJson = JsonHelper.SerializeObject(_currentUserData);
             await File.WriteAllTextAsync(_userDataFilePath, dataJson);
         }

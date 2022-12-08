@@ -8,6 +8,8 @@ namespace cyber_installer.definitions
 {
     internal class CyberInstallerDefinition
     {
+        public static readonly string CONFIG_FOLDER_PATH = AppDomain.CurrentDomain.BaseDirectory
+            + ".config/";
         public static readonly string USER_CONFIG_FILE_PATH = AppDomain.CurrentDomain.BaseDirectory
             + ".config/user_config.json";
         public static readonly string USER_DATA_FILE_PATH = AppDomain.CurrentDomain.BaseDirectory
