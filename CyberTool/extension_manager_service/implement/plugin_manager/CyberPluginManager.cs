@@ -21,6 +21,8 @@ namespace extension_manager_service.implement.plugin_manager
 {
     internal class CyberPluginManager : ICyberExtensionManager, ICyberGlobalModule
     {
+        private Logger logger = new Logger("CyberPluginManager", ExtensionManagerDefinition.EXTENSION_MANAGER_INDENTIFER);
+
         private SemaphoreSlim _instantiatedUserDataSemaphore = new SemaphoreSlim(1, 1);
         private const bool IS_USE_ROAMING_FOLDER = false;
         private const string TAG = "h2sw_solution";
@@ -491,11 +493,23 @@ namespace extension_manager_service.implement.plugin_manager
 
                     if (instance != null)
                     {
+                        logger.I("Successfully load main class '" + mainClassType + "' from assembly "+ Path.GetFileName(fileInfo.FullName));
                         _pluginDllSource.Add(pluginData.PluginKey, instance);
                         return instance;
                     }
+                    else
+                    {
+                        logger.E("Fail to load assembly, main class '" + mainClassType + "' not inherit: ICyberExtension");
+                        return null;
+                    }
+                }
+                else
+                {
+                    logger.E("Fail to load assembly, main class name: " + mainClassType + " not found");
+                    return null;
                 }
             }
+            logger.E("Fail to load assembly, file '" + pluginData.CurrentInstalledVersionPath + "' is not exist");
             return null;
         }
 
