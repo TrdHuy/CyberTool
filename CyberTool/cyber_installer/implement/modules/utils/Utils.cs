@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
 using System.Reflection;
+using System.IO;
 
 namespace cyber_installer.implement.modules.utils
 {
@@ -91,9 +92,30 @@ namespace cyber_installer.implement.modules.utils
 
         public static Version GetAppVersion()
         {
-            var version = Assembly.GetExecutingAssembly().GetName()?.Version ?? new Version(0,0,0,0);
+            var version = Assembly.GetExecutingAssembly().GetName()?.Version ?? new Version(0, 0, 0, 0);
             return version;
             //return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+        }
+
+        public static void CreateIsNotExistFile(string filePath
+            , FileAttributes parentFolderAttr = FileAttributes.Directory
+            , FileAttributes fileAttr = FileAttributes.Normal)
+        {
+            if (!File.Exists(filePath))
+            {
+                var folderPath = Path.GetDirectoryName(filePath);
+                if (!string.IsNullOrEmpty(folderPath)
+                    && !Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                    DirectoryInfo di = new DirectoryInfo(folderPath);
+                    di.Attributes = parentFolderAttr;
+                }
+
+                File.Create(filePath).Dispose();
+                FileInfo fi = new FileInfo(filePath);
+                fi.Attributes = fileAttr;
+            }
         }
     }
 }

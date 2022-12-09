@@ -2,6 +2,7 @@
 using cyber_installer.@base;
 using cyber_installer.@base.modules;
 using cyber_installer.definitions;
+using cyber_installer.implement.modules.utils;
 using cyber_installer.model;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace cyber_installer.implement.modules.user_data_manager
     internal class UserDataManager : BaseCyberInstallerModule, IUserDataManager
     {
         private readonly bool IS_IMPORT_DATA_ASYNC = false;
+        private readonly string _userDataFolderPath = CyberInstallerDefinition.DATA_FOLDER_PATH;
         private readonly string _userDataFilePath = CyberInstallerDefinition.USER_DATA_FILE_PATH;
         private UserData _currentUserData;
         private Task? _importUserDataFromFileTaskCache;
@@ -31,12 +33,6 @@ namespace cyber_installer.implement.modules.user_data_manager
             if (!File.Exists(_userDataFilePath))
             {
                 File.Create(_userDataFilePath).Dispose();
-            }
-
-            if (Directory.Exists(_userDataFilePath))
-            {
-                DirectoryInfo di = new DirectoryInfo(_userDataFilePath);
-                di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
             }
 
             string dataJson = JsonHelper.SerializeObject(_currentUserData);
@@ -74,10 +70,8 @@ namespace cyber_installer.implement.modules.user_data_manager
 
         private void ImportUserDataFromFileTask()
         {
-            if (!File.Exists(_userDataFilePath))
-            {
-                File.Create(_userDataFilePath).Dispose();
-            }
+             Utils.CreateIsNotExistFile(_userDataFilePath
+                , parentFolderAttr: FileAttributes.Directory | FileAttributes.Hidden);
 
             string json = File.ReadAllText(_userDataFilePath, Encoding.UTF8);
             _currentUserData = JsonHelper.DeserializeObject<UserData>(json);
@@ -88,6 +82,11 @@ namespace cyber_installer.implement.modules.user_data_manager
             if (!File.Exists(_userDataFilePath))
             {
                 File.Create(_userDataFilePath).Dispose();
+                if (Directory.Exists(_userDataFolderPath))
+                {
+                    DirectoryInfo di = new DirectoryInfo(_userDataFolderPath);
+                    di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+                }
             }
 
             string json = await File.ReadAllTextAsync(_userDataFilePath, Encoding.UTF8);

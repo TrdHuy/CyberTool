@@ -11,7 +11,7 @@
 	</Target>
 
 	<Target Name="Zip" BeforeTargets="AfterBuild">
-		<ZipDirectory Overwrite="true" Condition="'$(Configuration)' == 'Release'" SourceDirectory="$(ProjectDir)$(OutDir)" DestinationFile="$(ProjectDir)\$(AssemblyVersion)_build.zip" />
+		<ZipDirectory Overwrite="true" Condition="'$(Configuration)' == 'Release'" SourceDirectory="$(ProjectDir)$(OutDir)" DestinationFile="$(ProjectDir)\bin\$(AssemblyVersion)_build.zip" />
 	</Target>
 	
 	<PropertyGroup>
@@ -52,10 +52,10 @@
 
   <ItemGroup>
     <Content Include=".config\user_config.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <Content Include=".data\user_data.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

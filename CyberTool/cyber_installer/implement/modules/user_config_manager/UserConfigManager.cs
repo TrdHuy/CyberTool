@@ -1,6 +1,7 @@
 ﻿using cyber_base.implement.utils;
 using cyber_installer.@base;
 using cyber_installer.definitions;
+using cyber_installer.implement.modules.utils;
 using cyber_installer.model;
 using System.IO;
 using System.Text;
@@ -31,16 +32,8 @@ namespace cyber_installer.implement.modules.user_config_manager
 
         public override void OnModuleCreate()
         {
-            if (!File.Exists(_userConfigFilePath))
-            {
-                File.Create(_userConfigFilePath).Dispose();
-            }
-
-            if (Directory.Exists(_configFolderPath))
-            {
-                DirectoryInfo di = new DirectoryInfo(_configFolderPath);
-                di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
-            }
+            Utils.CreateIsNotExistFile(_userConfigFilePath
+                , parentFolderAttr: FileAttributes.Directory | FileAttributes.Hidden);
 
             string json = File.ReadAllText(_userConfigFilePath, Encoding.UTF8);
             _currentUserConfig = JsonHelper.DeserializeObject<UserConfig>(json);
@@ -54,7 +47,8 @@ namespace cyber_installer.implement.modules.user_config_manager
         {
             return new UserConfig()
             {
-                RemoteAdress = "http://107.127.131.89:8080"
+                RemoteAdress = "http://107.98.32.108:8080",
+                SSLRemoteAdress = "https://107.98.32.108:8088"
             };
         }
     }
