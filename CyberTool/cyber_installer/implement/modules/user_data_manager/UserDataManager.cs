@@ -30,10 +30,8 @@ namespace cyber_installer.implement.modules.user_data_manager
 
         public async Task ExportUserDataToFile()
         {
-            if (!File.Exists(_userDataFilePath))
-            {
-                File.Create(_userDataFilePath).Dispose();
-            }
+            Utils.CreateIsNotExistFile(_userDataFilePath
+                , parentFolderAttr: FileAttributes.Directory | FileAttributes.Hidden);
 
             string dataJson = JsonHelper.SerializeObject(_currentUserData);
             await File.WriteAllTextAsync(_userDataFilePath, dataJson);
@@ -70,8 +68,8 @@ namespace cyber_installer.implement.modules.user_data_manager
 
         private void ImportUserDataFromFileTask()
         {
-             Utils.CreateIsNotExistFile(_userDataFilePath
-                , parentFolderAttr: FileAttributes.Directory | FileAttributes.Hidden);
+            Utils.CreateIsNotExistFile(_userDataFilePath
+               , parentFolderAttr: FileAttributes.Directory | FileAttributes.Hidden);
 
             string json = File.ReadAllText(_userDataFilePath, Encoding.UTF8);
             _currentUserData = JsonHelper.DeserializeObject<UserData>(json);
@@ -79,15 +77,8 @@ namespace cyber_installer.implement.modules.user_data_manager
 
         private async Task ImportUserDataFromFileTaskAsync()
         {
-            if (!File.Exists(_userDataFilePath))
-            {
-                File.Create(_userDataFilePath).Dispose();
-                if (Directory.Exists(_userDataFolderPath))
-                {
-                    DirectoryInfo di = new DirectoryInfo(_userDataFolderPath);
-                    di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
-                }
-            }
+            Utils.CreateIsNotExistFile(_userDataFilePath
+                , parentFolderAttr: FileAttributes.Directory | FileAttributes.Hidden);
 
             string json = await File.ReadAllTextAsync(_userDataFilePath, Encoding.UTF8);
             _currentUserData = JsonHelper.DeserializeObject<UserData>(json);
