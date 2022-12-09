@@ -11,7 +11,7 @@
 	</Target>
 
 	<Target Name="Zip" BeforeTargets="AfterBuild">
-		<ZipDirectory Overwrite="true" Condition="'$(Configuration)' == 'Release'" SourceDirectory="$(ProjectDir)$(OutDir)" DestinationFile="$(ProjectDir)\bin\$(AssemblyVersion)_build.zip" />
+		<ZipDirectory Overwrite="true" Condition="'$(Configuration)' == 'Release'" SourceDirectory="$(ProjectDir)$(OutDir)" DestinationFile="$(ProjectDir)\bin\$(AssemblyName)_$(AssemblyVersion)_$(Configuration)Build.zip" />
 	</Target>
 	
 	<PropertyGroup>

@@ -5,6 +5,7 @@ using cyber_installer.implement.modules.utils;
 using cyber_installer.model;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace cyber_installer.implement.modules.user_config_manager
 {
@@ -40,7 +41,14 @@ namespace cyber_installer.implement.modules.user_config_manager
             if (string.IsNullOrEmpty(_currentUserConfig.RemoteAdress))
             {
                 _currentUserConfig = GetDefaultUserConfig();
+                ExportConfigToFile();
             }
+        }
+
+        private async void ExportConfigToFile()
+        {
+            string configJson = JsonHelper.SerializeObject(_currentUserConfig);
+            await File.WriteAllTextAsync(_userConfigFilePath, configJson);
         }
 
         private UserConfig GetDefaultUserConfig()
