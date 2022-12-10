@@ -1,5 +1,4 @@
 ﻿using cyber_base.implement.views.cyber_window;
-using cyber_core.definitions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +13,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace cyber_core.windows.cyber_imes.views
+namespace cyber_base.implement.views.cyber_window.cyber_imes
 {
+    public enum CyberIMesBoxResult
+    {
+        None = 0,
+        Yes = 1,
+        No = 2,
+        Cancel = 3,
+        Continue = 4,
+    }
+
     /// <summary>
     /// Interaction logic for CyberIMesWindow.xaml
     /// </summary>

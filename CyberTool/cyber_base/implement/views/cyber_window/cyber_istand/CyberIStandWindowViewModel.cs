@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cyber_core.windows.cyber_istand.view_models
+namespace cyber_base.implement.views.cyber_window.cyber_istand
 {
     internal class CyberIStandWindowViewModel : BaseViewModel
     {

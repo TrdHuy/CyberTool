@@ -10,11 +10,14 @@ using WinInterop = System.Windows.Interop;
 using System.Windows.Media;
 using System.Runtime.InteropServices;
 using cyber_base.implement.utils;
+using cyber_base.definition;
 
 namespace cyber_base.implement.views.cyber_window
 {
     public class CyberWindow : Window
     {
+        private static Style? DefaultCyberWindowStyle;
+
         private class WindowSizeManager
         {
             /// <summary>
@@ -432,11 +435,31 @@ namespace cyber_base.implement.views.cyber_window
 
         private WindowSizeManager _windowSizeManager;
 
+        static CyberWindow()
+        {
+            var app = Application.Current;
+            if (app != null)
+            {
+                var controlStyle = app.TryFindResource(CyberBaseDefinition.DEFAULT_CYBER_WINDOW_STYLE_KEY);
+                if (controlStyle == null)
+                {
+                    var resource = new ResourceDictionary
+                    {
+                        Source = new Uri("/cyber_base;component/implement/views/cyber_window/CyberWindow.xaml", UriKind.Relative),
+                    };
+                    app.Resources.MergedDictionaries.Add(resource);
+                }
+                DefaultCyberWindowStyle = app.TryFindResource(CyberBaseDefinition.DEFAULT_CYBER_WINDOW_STYLE_KEY) as Style;
+            }
+        }
+
         public CyberWindow()
         {
             _windowSizeManager = new WindowSizeManager(this);
 
             DefaultStyleKey = typeof(CyberWindow);
+            Style = DefaultCyberWindowStyle;
+
             SourceInitialized += new EventHandler((s, e) =>
             {
                 System.IntPtr handle = (new WinInterop.WindowInteropHelper(this)).Handle;

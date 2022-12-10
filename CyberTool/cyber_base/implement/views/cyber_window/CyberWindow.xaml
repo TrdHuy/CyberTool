@@ -1,9 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-					xmlns:local="clr-namespace:cyber_base.implement.views.cyber_window;assembly=cyber_base"
-					xmlns:cbdef="clr-namespace:cyber_base.definition;assembly=cyber_base">
+					xmlns:local="clr-namespace:cyber_base.implement.views.cyber_window"
+					xmlns:def="clr-namespace:cyber_base.definition">
 	<Style TargetType="{x:Type local:CyberWindow}"
-		   x:Key="{x:Static cbdef:CyberBaseDefinition.DEFAULT_CYBER_WINDOW_STYLE_KEY}">
+		   x:Key="{x:Static def:CyberBaseDefinition.DEFAULT_CYBER_WINDOW_STYLE_KEY}">
 		<Setter Property="ChromeBackground"
 				Value="#FF333438" />
 		<Setter Property="AllowsTransparency"
@@ -125,34 +125,6 @@
 														TargetName="MainBorder"
 														Value="#4C989898" />
 											</Trigger>
-											<!--<MultiDataTrigger>
-													<MultiDataTrigger.Conditions>
-														<Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}, Path=IsMouseOver}"
-																   Value="True" />
-														<Condition Value="Normal"
-																   Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=WindowState}" />
-													</MultiDataTrigger.Conditions>
-													<Setter Property="Data"
-															TargetName="ContentPath"
-															Value="{Binding Source={StaticResource MaximizeMouseOverButton}}" />
-												</MultiDataTrigger>
-												<MultiDataTrigger>
-													<MultiDataTrigger.Conditions>
-														<Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}, Path=IsMouseOver}"
-																   Value="True" />
-														<Condition Value="Maximized"
-																   Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=WindowState}" />
-													</MultiDataTrigger.Conditions>
-													<Setter Property="Data"
-															TargetName="ContentPath"
-															Value="{Binding Source={StaticResource SmallmizeMouseOverButton}}" />
-												</MultiDataTrigger>
-												<DataTrigger Value="Maximized"
-															 Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=WindowState}">
-													<Setter Property="Data"
-															TargetName="ContentPath"
-															Value="{Binding Source={StaticResource SmallmizeButton}}" />
-												</DataTrigger>-->
 										</ControlTemplate.Triggers>
 									</ControlTemplate>
 								</Setter.Value>

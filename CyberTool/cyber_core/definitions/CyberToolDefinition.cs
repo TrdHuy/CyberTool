@@ -16,19 +16,4 @@ namespace cyber_core.definitions
         CyberIFace = 1,
 
     }
-    public enum CyberIMesBoxResult
-    {
-        None = 0,
-        Yes = 1,
-        No = 2,
-        Cancel = 3,
-        Continue = 4,
-    }
-
-    public enum CyberIStandBoxResult
-    {
-        None = 0,
-        Done = 1,
-        Cancel = 2,
-    }
 }

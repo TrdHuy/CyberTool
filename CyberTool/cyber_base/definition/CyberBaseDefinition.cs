@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace cyber_base.definition
 {
-    public class CyberBaseDefinition
+    public static class CyberBaseDefinition
     {
+        public static string DEFAULT_CYBER_WINDOW_STYLE_KEY = "DefaultCyberWindowStyle";
     }
 
     public enum CyberOwner

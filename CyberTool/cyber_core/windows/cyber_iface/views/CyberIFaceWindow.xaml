@@ -15,7 +15,6 @@
 				 MinHeight="810"
 				 MinWidth="1080"
 				 Background="{StaticResource Background_Level1}"
-				 Style="{StaticResource DefaultCyberStyle}"
 				 FontFamily="Calibri">
 	<Window.DataContext>
 		<vm:CyberIFaceWindowViewModel />
@@ -32,7 +31,7 @@
 			  Background="{StaticResource Background_Level2}">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*" />
-				<RowDefinition Height="7*"/>
+				<RowDefinition Height="7*" />
 				<RowDefinition Height="3*" />
 			</Grid.RowDefinitions>
 			<ListView BorderThickness="0"

@@ -1,7 +1,10 @@
-﻿using System;
+﻿using cyber_base.async_task;
+using cyber_base.implement.async_task;
+using cyber_base.view.window;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using cyber_core.definitions;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,14 +16,16 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using cyber_base.view.window;
-using cyber_base.async_task;
-using cyber_base.implement.async_task;
-using cyber_core.windows.cyber_istand.view_models;
-using cyber_base.implement.views.cyber_window;
 
-namespace cyber_core.windows.cyber_istand.views
+namespace cyber_base.implement.views.cyber_window.cyber_istand
 {
+    public enum CyberIStandBoxResult
+    {
+        None = 0,
+        Done = 1,
+        Cancel = 2,
+    }
+
     /// <summary>
     /// Interaction logic for CyberIStandWindow.xaml
     /// </summary>
@@ -221,7 +226,7 @@ namespace cyber_core.windows.cyber_istand.views
                 _multiTaskDoneCallback?.Invoke(this);
                 if (!IsWindowButtonEnabled)
                 {
-                    Close();
+                    //Close();
                 }
             }
         }

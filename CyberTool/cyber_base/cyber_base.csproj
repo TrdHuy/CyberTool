@@ -15,6 +15,12 @@
     <Page Update="implement\views\cyber_anim\LoadingAnimation.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
+    <Page Update="implement\views\cyber_window\CyberWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="implement\views\cyber_window\cyber_imes\CyberIMesWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
   </ItemGroup>
 
 </Project>

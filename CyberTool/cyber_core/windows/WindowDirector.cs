@@ -1,11 +1,11 @@
 ﻿using cyber_base.async_task;
 using cyber_base.definition;
 using cyber_base.implement.async_task;
+using cyber_base.implement.views.cyber_window.cyber_imes;
+using cyber_base.implement.views.cyber_window.cyber_istand;
 using cyber_core.definitions;
 using cyber_core.windows.cyber_iface.views;
-using cyber_core.windows.cyber_imes.views;
 using cyber_core.windows.cyber_ipop.views;
-using cyber_core.windows.cyber_istand.views;
 using cyber_core.windows.cyber_itext.views;
 using Microsoft.Win32;
 using System;

@@ -1,0 +1,139 @@
+﻿<cyw:CyberWindow x:Class="cyber_base.implement.views.cyber_window.cyber_imes.CyberIMesWindow"
+				 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				 xmlns:cyw="clr-namespace:cyber_base.implement.views.cyber_window"
+				 mc:Ignorable="d"
+				 Background="{DynamicResource Background_Level2}"
+				 ResizeMode="NoResize"
+				 Title="MessageBox"
+				 Padding="0"
+				 SizeToContent="WidthAndHeight"
+				 FontFamily="Calibri"
+				 ChromeBackground="Transparent">
+	<Window.Resources>
+		<ControlTemplate TargetType="{x:Type Button}"
+						 x:Key="RecBtnTmpl">
+			<Grid>
+				<Rectangle Fill="{TemplateBinding Background}"
+						   StrokeThickness="0"
+						   Stroke="{TemplateBinding BorderBrush}"
+						   x:Name="ClipRec" />
+				<Rectangle StrokeThickness="1"
+						   Fill="#19B8E7F9"
+						   Stroke="#FFB8EAF9"
+						   x:Name="FeedBackRec"
+						   Visibility="Hidden" />
+				<ContentPresenter Margin="{TemplateBinding Padding}"
+								  Content="{TemplateBinding Content}"
+								  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+								  VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+					<ContentPresenter.OpacityMask>
+						<VisualBrush Visual="{Binding ElementName=ClipRec}" />
+					</ContentPresenter.OpacityMask>
+				</ContentPresenter>
+			</Grid>
+			<ControlTemplate.Triggers>
+				<Trigger Property="IsMouseOver"
+						 Value="True">
+					<Setter Property="Visibility"
+							TargetName="FeedBackRec"
+							Value="Visible" />
+				</Trigger>
+
+				<Trigger Property="IsPressed"
+						 Value="True">
+					<Setter Property="Visibility"
+							TargetName="FeedBackRec"
+							Value="Visible" />
+					<Setter Property="Fill"
+							TargetName="FeedBackRec"
+							Value="#AAB8E7F9" />
+				</Trigger>
+
+				<Trigger Property="IsEnabled"
+						 Value="False">
+					<Setter Property="Visibility"
+							TargetName="FeedBackRec"
+							Value="Visible" />
+					<Setter Property="Fill"
+							TargetName="FeedBackRec"
+							Value="#AA9B9B9B" />
+					<Setter Property="StrokeThickness"
+							TargetName="FeedBackRec"
+							Value="0" />
+				</Trigger>
+			</ControlTemplate.Triggers>
+		</ControlTemplate>
+	</Window.Resources>
+	<Grid Background="{DynamicResource Background_Level3}"
+		  Width="auto"
+		  Margin="1,0,1,1"
+		  x:Name="MainGrid"
+		  Height="auto">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="30" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="40" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<StackPanel Orientation="Horizontal"
+					Grid.Row="1"
+					Margin="0,0,5,0">
+			<Path x:Name="IconPath"
+				  Fill="{DynamicResource Foreground_Level2}"
+				  Data="m 79.772359,94.630602 c -1.14879,-0.14297 -2.098848,-0.96766 -2.430549,-2.10983 l -0.06591,-0.22696 -0.0076,-4.92922 -0.0076,-4.92922 h 0.439721 0.43972 l 0.0077,4.82993 c 0.0072,4.50877 0.011,4.84124 0.0575,5.00014 0.192405,0.65759 0.67538,1.17136 1.311689,1.39534 l 0.226958,0.0799 h 7.673989 c 7.34859,0 7.68026,-0.002 7.82208,-0.0516 0.18452,-0.0644 0.40992,-0.26316 0.47996,-0.42333 0.049,-0.11204 0.0538,-0.24301 0.067,-1.80878 l 0.0142,-1.688 1.1846,-0.007 c 1.33569,-0.008 1.3503,-0.007 1.42804,0.17954 0.0533,0.12753 0.0319,0.23857 -0.0631,0.32787 l -0.0717,0.0674 -0.94105,0.0142 -0.94104,0.0142 -0.0142,1.43266 c -0.0151,1.52673 -0.0135,1.50886 -0.16002,1.79438 -0.022,0.0429 -0.0301,0.078 -0.0179,0.078 0.0321,0 2.59228,-2.57414 2.69729,-2.71204 0.13903,-0.18255 0.28346,-0.48968 0.35306,-0.75075 l 0.0638,-0.23944 v -4.35474 -4.35474 l -11.0296,-0.007 -11.029595,-0.007 0.0085,-2.44685 0.0085,-2.44684 0.06545,-0.22696 c 0.269637,-0.93507 0.939817,-1.6543 1.836475,-1.97088 0.438049,-0.15466 0.640619,-0.17067 2.16103,-0.17086 l 1.368835,-1.7e-4 v 0.69492 0.69491 l -0.143838,0.17745 c -0.908491,1.12081 -0.370489,2.78168 1.023297,3.15904 0.244529,0.0662 0.715466,0.0676 0.964567,0.003 0.618965,-0.16096 1.161115,-0.65361 1.378566,-1.25268 0.230535,-0.63511 0.09054,-1.41128 -0.34418,-1.90823 l -0.126557,-0.14468 v -0.71175 -0.71176 h 3.20577 3.20577 v 0.71217 0.71216 l -0.12395,0.13786 c -0.15277,0.16992 -0.33677,0.51836 -0.40351,0.76412 -0.0608,0.22387 -0.0685,0.71044 -0.0148,0.9362 0.0204,0.0858 0.0949,0.27669 0.16544,0.42416 0.10829,0.22625 0.16658,0.30637 0.37316,0.5129 0.3997,0.3996 0.83527,0.58013 1.39379,0.57766 0.19098,-8.4e-4 0.36325,-0.0191 0.48002,-0.0508 0.64452,-0.17513 1.15998,-0.66313 1.3815,-1.30788 0.0684,-0.19898 0.0781,-0.27068 0.0792,-0.58158 0.002,-0.51217 -0.11605,-0.86009 -0.41796,-1.23408 l -0.16032,-0.19859 -3.6e-4,-0.70388 -3.6e-4,-0.70389 1.56743,0.0101 1.56742,0.0101 0.28369,0.0768 c 1.03701,0.2807 1.79093,1.02602 2.078583,2.05489 l 0.0775,0.27724 v 7.90094 7.90094 l -0.0646,0.25363 c -0.299663,1.17684 -1.264153,2.02306 -2.474483,2.17105 -0.29959,0.0366 -17.592001,0.034 -17.887082,-0.003 z m 0.09929,-4.02478 v -1.02131 h 1.248264 1.248264 v 1.02131 1.02131 h -1.248264 -1.248264 z m 3.8299,0 v -1.02131 h 1.23408 1.234079 v 1.02131 1.02131 h -1.234079 -1.23408 z m 3.801528,0 v -1.02131 h 1.23408 1.23408 v 1.02131 1.02131 h -1.23408 -1.23408 z m 3.80154,0 v -1.02131 h 1.23408 1.23407 v 1.02131 1.02131 h -1.23407 -1.23408 z m -11.420045,-2.3903 c -0.0075,-0.0196 -0.01031,-0.48238 -0.0062,-1.0284 l 0.0075,-0.99278 1.241171,-0.007 1.241172,-0.007 v 1.03579 1.03579 h -1.23497 c -0.964788,0 -1.23796,-0.008 -1.248639,-0.0356 z m 3.816981,-1.00017 v -1.0358 l 1.226987,0.007 1.226987,0.007 0.0074,1.0284 0.0074,1.0284 h -1.234433 -1.234433 z m 3.801534,0 v -1.0358 l 1.22698,0.007 1.22699,0.007 0.007,1.0284 0.007,1.0284 h -1.23443 -1.23444 z m 3.80153,3e-4 v -1.03549 h 1.23408 1.23407 v 1.03549 1.03549 h -1.23407 -1.23408 z m 3.80153,0 v -1.03549 h 1.23408 1.23408 v 1.03549 1.03549 h -1.23408 -1.23408 z m -11.404594,-3.39017 v -1.02131 h 1.23408 1.234079 v 1.02131 1.0213 h -1.234079 -1.23408 z m 3.801534,0 v -1.02131 h 1.23408 1.23407 v 1.02131 1.0213 h -1.23407 -1.23408 z m 3.80153,0 v -1.02131 h 1.23408 1.23407 v 1.02131 1.0213 h -1.23407 -1.23408 z m 3.80153,0 v -1.02131 h 1.23408 1.23408 v 1.02131 1.0213 h -1.23408 -1.23408 z m -11.190596,-6.42626 c -0.170757,-0.044 -0.363311,-0.23161 -0.409898,-0.3994 -0.04219,-0.15197 -0.04279,-4.12419 -6.42e-4,-4.27597 0.01656,-0.0596 0.07474,-0.15781 0.129309,-0.21821 0.275538,-0.304985 0.776523,-0.247303 0.965791,0.1112 l 0.06601,0.12503 v 2.10999 c 0,1.84029 -0.0056,2.12342 -0.04391,2.21508 -0.114852,0.27488 -0.403181,0.41045 -0.70666,0.33228 z m 9.233086,0.0139 c -0.19468,-0.0342 -0.34338,-0.14702 -0.43641,-0.33115 -0.0411,-0.0812 -0.0458,-0.31521 -0.0454,-2.22701 l 4.6e-4,-2.13623 0.0636,-0.1123 c 0.25779,-0.455145 0.96861,-0.363861 1.09566,0.14071 0.0214,0.0849 0.0313,0.75855 0.0313,2.12091 0,2.27113 0.006,2.19897 -0.21217,2.40043 -0.0698,0.0644 -0.13685,0.11761 -0.14891,0.11829 -0.012,6.8e-4 -0.073,0.0108 -0.13539,0.0225 -0.0624,0.0117 -0.15816,0.0134 -0.21277,0.004 z"
+				  Height="30"
+				  Width="30"
+				  Margin="20,0,20,0"
+				  Stretch="Uniform" />
+			<Label x:Name="MainContent"
+				   Foreground="White"
+				   MinWidth="200"
+				   MinHeight="50"
+				   VerticalContentAlignment="Center"
+				   Content="Resource not available!" />
+		</StackPanel>
+		<StackPanel Orientation="Horizontal"
+					HorizontalAlignment="Right"
+					Margin="0,0,5,10"
+					Grid.Row="3">
+			<Button x:Name="YesBtn"
+					Height="24"
+					Content="Yes"
+					Foreground="{DynamicResource Foreground_Level3}"
+					Background="{DynamicResource ButtonBackground_Level1}"
+					Template="{StaticResource RecBtnTmpl}"
+					Margin="0,0,0,0"
+					Padding="10,0,10,0" />
+			<Button x:Name="NoBtn"
+					Height="24"
+					Content="No"
+					Foreground="{DynamicResource Foreground_Level3}"
+					Background="{DynamicResource ButtonBackground_Level2}"
+					Template="{StaticResource RecBtnTmpl}"
+					Margin="5,0,0,0"
+					Padding="10,0,10,0" />
+			<Button x:Name="ContinueBtn"
+					Height="24"
+					Foreground="{DynamicResource Foreground_Level3}"
+					Template="{StaticResource RecBtnTmpl}"
+					Background="{DynamicResource ButtonBackground_Level1}"
+					Content="Continue"
+					Margin="5,0,0,0"
+					Padding="10,0,10,0" />
+			<Button x:Name="cancelBtn"
+					Height="24"
+					Content="cancel"
+					Foreground="{DynamicResource Foreground_Level3}"
+					Template="{StaticResource RecBtnTmpl}"
+					Background="{DynamicResource ButtonBackground_Level1}"
+					Margin="5,0,0,0"
+					Padding="10,0,10,0" />
+		</StackPanel>
+
+
+	</Grid>
+
+</cyw:CyberWindow>
