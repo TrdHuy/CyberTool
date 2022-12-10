@@ -45,7 +45,7 @@ namespace cyber_base.implement.views.cyber_window.cyber_imes
             , string noBtnContent
             , string continueBtnContent
             , string cancelBtnContent
-            , Window owner)
+            , Window? owner)
         {
             Init();
             if (owner != null)

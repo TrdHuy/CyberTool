@@ -19,6 +19,7 @@ namespace cyber_installer.implement.modules.update_manager
     class CyberInstallerUpdateManager : BaseCyberInstallerModule
     {
         private const int CHECK_UPDATE_INTERVAL_TIME = 50000;
+        private const int CHECK_UPDATE_DELAY_AFTER_MAIN_WINDOW_SHOWED = 2000;
         private CancellationTokenSource? _requestDataTaskCancellationTokenSource;
         private bool _isUpdateable;
         private System.Timers.Timer _checkUpdateTimer = new System.Timers.Timer(CHECK_UPDATE_INTERVAL_TIME);
@@ -57,7 +58,7 @@ namespace cyber_installer.implement.modules.update_manager
 
         public override async void OnMainWindowShowed()
         {
-            await Task.Delay(2000);
+            await Task.Delay(CHECK_UPDATE_DELAY_AFTER_MAIN_WINDOW_SHOWED);
             CheckCyberInstallerUpdateAvailable();
         }
 

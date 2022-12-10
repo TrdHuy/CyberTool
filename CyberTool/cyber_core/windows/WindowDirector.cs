@@ -383,6 +383,4 @@ namespace cyber_core.windows
             return CyberContactMessage.None;
         }
     }
-
-
 }

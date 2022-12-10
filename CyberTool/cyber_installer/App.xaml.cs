@@ -1,4 +1,7 @@
-﻿using cyber_base.implement.utils;
+﻿using cyber_base.definition;
+using cyber_base.implement.async_task;
+using cyber_base.implement.utils;
+using cyber_installer.implement.app_support_modules;
 using cyber_installer.implement.modules;
 using cyber_installer.model;
 using cyber_installer.view.window;
@@ -21,9 +24,8 @@ namespace cyber_installer
     public partial class App : Application
     {
         private static App? _instance;
-        private CyberInstallerWindow? _mainWindow;
         private Logger _appLogger = new Logger("App", "cyber_installer");
-
+        private WindowDirector _windowDirector;
         public static new App Current
         {
             get
@@ -35,25 +37,23 @@ namespace cyber_installer
                 return _instance;
             }
         }
-        
+
         private App() : base()
         {
-           _instance = this;
+            ModuleManager.Init();
+            _instance = this;
+            _windowDirector = new WindowDirector();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            ModuleManager.Init();
             base.OnStartup(e);
             var arg = Environment.GetCommandLineArgs();
             _appLogger.I("StartupEventArgs: " + String.Join(',', e.Args));
             _appLogger.I("Environment command line args: " + String.Join(',', e.Args));
-
-            if (_mainWindow == null)
-            {
-                _mainWindow = new CyberInstallerWindow();
-            }
-            _mainWindow.Show();
+            
+            _windowDirector.Init();
+            _windowDirector.ShowMainWindow();
             ModuleManager.OnMainWindowShowed();
         }
 
@@ -65,8 +65,41 @@ namespace cyber_installer
 
         public string ShowDestinationFolderWindow(ToolVO toolVO)
         {
-            var destinationFolderWindow = new DestinationFolderSelectionWindow(toolVO);
-            return destinationFolderWindow.Show();
+            return _windowDirector.ShowDestinationFolderWindow(toolVO);
+        }
+
+        public CyberContactMessage OpenMultiTaskBox(string title
+            , MultiAsyncTask tasks
+            , bool isCancelable = true
+            , Action<object>? multiTaskDoneCallback = null
+            , bool isUseMultiTaskReport = true)
+        {
+            var message = CyberContactMessage.None;
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                message = _windowDirector.OpenMultiTaskBox(title, tasks, isCancelable, multiTaskDoneCallback, isUseMultiTaskReport);
+            });
+            return message;
+        }
+
+        public CyberContactMessage ShowWaringBox(string warning, bool isDialog = true)
+        {
+            var message = CyberContactMessage.None;
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                message = _windowDirector.ShowWarningBox(warning, isDialog);
+            });
+            return message;
+        }
+
+        public CyberContactMessage ShowYesNoQuestionBox(string question, bool isDialog = true)
+        {
+            var message = CyberContactMessage.None;
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                message = _windowDirector.ShowYesNoQuestionBox(question, isDialog);
+            });
+            return message;
         }
     }
 }
