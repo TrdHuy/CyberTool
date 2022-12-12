@@ -28,6 +28,7 @@
 	<FileVersion>1.0.0.2</FileVersion>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+	<ApplicationIcon>cyber_installer.ico</ApplicationIcon>
   </PropertyGroup>
 	
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -57,6 +58,7 @@
     <Content Include=".data\user_data.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
+    <Content Include="cyber_installer.ico" />
   </ItemGroup>
 
   <ItemGroup>
