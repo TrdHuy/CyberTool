@@ -8,9 +8,12 @@ namespace cyber_installer_background_service
         private const string CYBER_INSTALLER_REQUESTER_ID = "CyberInstallerWindow{0367E847-B5C3-4CDD-9C34-B78A769AF73C}";
         private const string UPDATE_CYBER_INSTALLER_CMD = "UpdateCyberInstaller";
         private const string CIBS_FOLDER_ZIP_PATH = "cibs";
+        private const string CYBER_INSTALLER_EXE_ZIP_PATH = "Cyber Installer.exe";
 
         static void Main(string[] args)
         {
+            Console.ReadKey();
+
             var requesterID = "";
             var requesterProcessId = -1;
             var cmdID = "";
@@ -38,16 +41,31 @@ namespace cyber_installer_background_service
                                             requesterProcess?.WaitForExit();
                                         }
 
+                                        var cyberInstallerExePath = "";
                                         using (ZipArchive archive = ZipFile.OpenRead(zipFilePath))
                                         {
                                             foreach (ZipArchiveEntry entry in archive.Entries)
                                             {
                                                 if (Path.GetDirectoryName(entry.FullName) != CIBS_FOLDER_ZIP_PATH)
                                                 {
-                                                    entry.ExtractToFile(installFolderLocation
-                                                        + "\\" + Path.GetFileName(entry.FullName)
+                                                    var extractLocation = installFolderLocation
+                                                        + "\\" + Path.GetFileName(entry.FullName);
+                                                    entry.ExtractToFile(extractLocation
                                                         , overwrite: true);
+
+                                                    if(Path.GetFileName(entry.FullName) == CYBER_INSTALLER_EXE_ZIP_PATH)
+                                                    {
+                                                        cyberInstallerExePath = extractLocation;
+                                                    }
                                                 }
+                                            }
+
+                                            // Re-open Cyber Installer
+                                            if (File.Exists(cyberInstallerExePath))
+                                            {
+                                                Process p = new Process();
+                                                p.StartInfo.FileName = cyberInstallerExePath;
+                                                p.Start();
                                             }
                                         }
                                     }
