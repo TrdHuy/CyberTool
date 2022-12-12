@@ -83,9 +83,6 @@ namespace cyber_installer_background_service
                             break;
                         }
                 }
-
-                Console.WriteLine("Press any key to close the program!");
-                Console.ReadKey();
             }
         }
 
