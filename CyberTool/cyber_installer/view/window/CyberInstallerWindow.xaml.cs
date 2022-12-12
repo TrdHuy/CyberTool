@@ -91,21 +91,9 @@ namespace cyber_installer.view.window
             PART_UpdateButton.Visibility = Visibility.Collapsed;
         }
 
-        private void HandleUpdateButtonClick(object sender, RoutedEventArgs e)
+        private async void HandleUpdateButtonClick(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(CIBS_PATH))
-            {
-                Process p = new Process();
-                p.StartInfo.FileName = CIBS_PATH;
-                var callerID = CIBS_CALLER_ID;
-                var updateCmd = CIBS_UPDATE_CYBER_INSTALLER_CMD;
-                var currentCIProcessID = Process.GetCurrentProcess().Id;
-                var args = callerID + " " + updateCmd + " " + currentCIProcessID;
-                p.StartInfo.Arguments = args;
-                p.Start();
-                Process.GetCurrentProcess().CloseMainWindow();
-            }
-            
+            await CyberInstallerUpdateManager.Current.UpdateLatestCyberInstallerVersion();
         }
     }
 }

@@ -37,7 +37,8 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
         }
 
         private async Task<ToolData?> RequestDownloadSoftwareWithLatestVersion(HttpClient httpClient
-            , ToolVO requestingTool)
+            , ToolVO requestingTool
+            , Action<object, double> downloadProgressChangedCallback)
         {
             var isContinue = await _requestDownloadToolSemaphore.WaitAsync(TIME_OUT_FOR_REQUEST_OF_SEMAPHORE);
             var downLoadResult = new ToolData()
@@ -104,6 +105,7 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
                     var downloadTask = new DownloadSoftwareTask(param);
                     downloadTask.ProgressChanged += (s, e2) =>
                     {
+                        downloadProgressChangedCallback.Invoke(s, e2);
                     };
                     await downloadTask.Execute();
 
@@ -139,7 +141,8 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
             {
                 var httpClient = param[0] as HttpClient ?? throw new ArgumentNullException();
                 var requestingTool = param[1] as ToolVO ?? throw new ArgumentNullException();
-                return await RequestDownloadSoftwareWithLatestVersion(httpClient, requestingTool);
+                var downloadProgressChangedCallback = param[2] as Action<object, double> ?? throw new ArgumentNullException();
+                return await RequestDownloadSoftwareWithLatestVersion(httpClient, requestingTool, downloadProgressChangedCallback);
             }
             catch
             {

@@ -226,7 +226,7 @@ namespace cyber_base.implement.views.cyber_window.cyber_istand
                 _multiTaskDoneCallback?.Invoke(this);
                 if (!IsWindowButtonEnabled)
                 {
-                    //Close();
+                    Close();
                 }
             }
         }

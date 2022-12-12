@@ -44,7 +44,7 @@ namespace cyber_installer.implement.app_support_modules
         }
 
 
-        public CyberIMesBoxResult ShowErrorBox(string error)
+        public CyberContactMessage ShowErrorBox(string error)
         {
             CyberIMesWindow mesBox = new CyberIMesWindow(
                 "Error",
@@ -56,7 +56,7 @@ namespace cyber_installer.implement.app_support_modules
                 "",
                 _cyberInstallerWindow
                 );
-            return mesBox.ShowDialog();
+            return ConvertToContactMessage(mesBox.ShowDialog());
         }
 
         public CyberContactMessage ShowYesNoQuestionBox(string question, bool isDialog)

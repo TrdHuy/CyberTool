@@ -1,12 +1,20 @@
-﻿using cyber_installer.@base;
+﻿using cyber_base.async_task;
+using cyber_base.definition;
+using cyber_base.implement.async_task;
+using cyber_installer.@base;
 using cyber_installer.definitions;
 using cyber_installer.implement.modules.server_contact_manager;
+using cyber_installer.implement.modules.sw_installing_manager;
 using cyber_installer.implement.modules.user_data_manager;
 using cyber_installer.implement.modules.utils;
 using cyber_installer.model;
 using cyber_installer.view.usercontrols.list_item.available_item.@base;
+using cyber_installer.view_models.tabs.available_tab;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -18,10 +26,23 @@ namespace cyber_installer.implement.modules.update_manager
 {
     class CyberInstallerUpdateManager : BaseCyberInstallerModule
     {
-        private const int CHECK_UPDATE_INTERVAL_TIME = 50000;
-        private const int CHECK_UPDATE_DELAY_AFTER_MAIN_WINDOW_SHOWED = 2000;
+        private readonly string CIBS_FOLDER_ZIP_PATH
+            = CyberInstallerDefinition.CIBS_FOLDER_ZIP_PATH;
+        private readonly string CIBS_FOLDER_BASE_PATH
+            = CyberInstallerDefinition.CIBS_FOLDER_BASE_PATH;
+        private readonly string CIBS_BASE_PATH
+            = CyberInstallerDefinition.CIBS_BASE_PATH;
+
+        private const int CHECK_UPDATE_INTERVAL_TIME
+            = CyberInstallerDefinition.CHECK_UPDATE_CYBER_INSTALLER_INTERVAL_TIME;
+        private const int CHECK_UPDATE_DELAY_AFTER_MAIN_WINDOW_SHOWED
+            = CyberInstallerDefinition.CHECK_UPDATE_CYBER_INSTALLER_DELAY_AFTER_MAIN_WINDOW_SHOWED;
+        private const int REQUEST_CIBS_UPDATE_CYBER_INSTALLER_DELAY_TIME
+            = CyberInstallerDefinition.REQUEST_CIBS_UPDATE_CYBER_INSTALLER_DELAY_TIME;
+
         private CancellationTokenSource? _requestDataTaskCancellationTokenSource;
         private bool _isUpdateable;
+        private ToolVO? _cyberInstallerVOCache;
         private System.Timers.Timer _checkUpdateTimer = new System.Timers.Timer(CHECK_UPDATE_INTERVAL_TIME);
 
         public delegate void IsUpdateableChangedHandler(object sender, bool isUpdateable);
@@ -54,6 +75,12 @@ namespace cyber_installer.implement.modules.update_manager
             _checkUpdateTimer.Elapsed += CheckCyberInstallerUpdateAvailable;
             _checkUpdateTimer.AutoReset = false;
             _checkUpdateTimer.Enabled = true;
+            App.Current.RegisterManageableTask(
+                CyberInstallerDefinition.UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY
+                , CyberInstallerDefinition.UPDATE_CYBER_INSTALLER_TASK_NAME
+                , maxCore: 1
+                , initCore: 1);
+
         }
 
         public override async void OnMainWindowShowed()
@@ -67,6 +94,109 @@ namespace cyber_installer.implement.modules.update_manager
             _checkUpdateTimer.Close();
         }
 
+        public async Task UpdateLatestCyberInstallerVersion()
+        {
+            if (IsUpdateable
+                && _cyberInstallerVOCache != null
+                && App.Current.IsTaskAvailable(CyberInstallerDefinition.UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY))
+            {
+                ToolData? downloadedCIToolData = null;
+                var cancellationTokenSource = new CancellationTokenSource();
+                var downloadTask = new CancelableAsyncTask(async (cts, atr) =>
+                    {
+                        downloadedCIToolData = await SwInstallingManager
+                            .Current
+                            .StartDownloadingLatestVersionToolTask(_cyberInstallerVOCache
+                       , downloadProgressChangedCallback: (s, e) =>
+                       {
+
+                       });
+                        return atr;
+                    }
+                   , cancellationTokenSource: cancellationTokenSource
+                   , name: "Downloading!");
+
+                var installTask = new CancelableAsyncTask(async (cts, atr) =>
+                    {
+                        if (downloadedCIToolData != null)
+                        {
+                            var latestVersionTool = downloadedCIToolData.ToolVersionSource[0];
+                            var folderLocation = CIBS_FOLDER_BASE_PATH;
+                            var zipFilePath = latestVersionTool.DownloadFilePath;
+
+                            // Install new cibs version
+                            using (ZipArchive archive = ZipFile.OpenRead(zipFilePath))
+                            {
+                                foreach (ZipArchiveEntry entry in archive.Entries)
+                                {
+                                    if (Path.GetDirectoryName(entry.FullName) == CIBS_FOLDER_ZIP_PATH)
+                                    {
+                                        await Utils.ExtractZipArchiveEntry(entry, folderLocation);
+                                    }
+                                }
+                            }
+                            await Task.Delay(REQUEST_CIBS_UPDATE_CYBER_INSTALLER_DELAY_TIME);
+                        }
+
+                        return atr;
+                    }
+                   , cancellationTokenSource: cancellationTokenSource
+                   , name: "Installing cibs!");
+
+
+                List<BaseAsyncTask> tasks = new List<BaseAsyncTask>();
+                tasks.Add(downloadTask);
+                //tasks.Add(installTask);
+
+                MultiAsyncTask multiTask = new MultiAsyncTask(tasks
+                    , new CancellationTokenSource()
+                    , null
+                    , name: "Update Cyber Installer "
+                    , delayTime: 6000
+                    , reportDelay: 100);
+
+                var message = await App.Current.ExecuteManageableMultipleTasks(
+                    CyberInstallerDefinition.UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY
+                    , multiTask
+                    , isBybassIfSemaphoreNotAvaild: true
+                    , semaphoreTimeOut: 0
+                    , isCancelable: false
+                    , isUseMultiTaskReport: false);
+                if (message == CyberContactMessage.Done)
+                {
+                    if (downloadedCIToolData != null)
+                    {
+                        var latestVersionTool = downloadedCIToolData.ToolVersionSource[0];
+                        var rawFolderLocation = AppDomain.CurrentDomain.BaseDirectory;
+                        // Must cut 2 last '\' charecters for passing through process argument
+                        var folderLocation = rawFolderLocation.Substring(0, rawFolderLocation.Length - 1);
+                        var zipFilePath = latestVersionTool.DownloadFilePath;
+
+                        if (File.Exists(CIBS_BASE_PATH))
+                        {
+                            await Task.Delay(REQUEST_CIBS_UPDATE_CYBER_INSTALLER_DELAY_TIME);
+                            Process p = new Process();
+                            p.StartInfo.FileName = CIBS_BASE_PATH;
+                            var callerID = CyberInstallerDefinition.CIBS_CALLER_ID;
+                            var updateCmd = CyberInstallerDefinition.CIBS_UPDATE_CYBER_INSTALLER_CMD;
+                            var currentCIProcessID = Process.GetCurrentProcess().Id;
+                            var args = Utils.BuildProcessArgs(callerID
+                                , updateCmd
+                                , currentCIProcessID + ""
+                                , zipFilePath
+                                , folderLocation);
+                            p.StartInfo.Arguments = args;
+                            p.Start();
+                            Process.GetCurrentProcess().CloseMainWindow();
+                        }
+                    }
+
+
+                }
+
+            }
+        }
+
         private async void CheckCyberInstallerUpdateAvailable(object? sender = null, ElapsedEventArgs? e = null)
         {
             _requestDataTaskCancellationTokenSource = new CancellationTokenSource();
@@ -75,6 +205,7 @@ namespace cyber_installer.implement.modules.update_manager
                , cancellationToken: _requestDataTaskCancellationTokenSource.Token
                , requestedCallback: (result) =>
                {
+                   _cyberInstallerVOCache = result;
                    if (result != null)
                    {
                        var currentPackageVersion = Utils.GetAppVersion();
@@ -85,5 +216,6 @@ namespace cyber_installer.implement.modules.update_manager
                    }
                });
         }
+
     }
 }

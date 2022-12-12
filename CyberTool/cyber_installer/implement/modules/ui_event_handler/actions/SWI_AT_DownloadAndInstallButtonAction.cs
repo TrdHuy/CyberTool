@@ -35,7 +35,11 @@ namespace cyber_installer.implement.modules.ui_event_handler.actions
         protected async override void ExecuteCommand()
         {
             _availableItemViewModel.ItemStatus = ItemStatus.Downloading;
-            var toolData = await SwInstallingManager.Current.StartDownloadingLatestVersionToolTask(_availableItemViewModel.ToolInfo);
+            var toolData = await SwInstallingManager.Current.StartDownloadingLatestVersionToolTask(_availableItemViewModel.ToolInfo
+                , downloadProgressChangedCallback: (s, e) =>
+                {
+
+                });
 
             if (toolData != null)
             {
@@ -45,7 +49,6 @@ namespace cyber_installer.implement.modules.ui_event_handler.actions
                 toolData = await SwInstallingManager.Current.StartToolInstallingTask(toolData, _installPath);
                 await UserDataManager.Current.ExportUserDataToFile();
                 _availableItemViewModel.ItemStatus = ItemStatus.Installed;
-
             }
 
         }

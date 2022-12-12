@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
 using System.Reflection;
 using System.IO;
+using System.IO.Compression;
 
 namespace cyber_installer.implement.modules.utils
 {
@@ -97,6 +98,21 @@ namespace cyber_installer.implement.modules.utils
             //return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
         }
 
+        public static string BuildProcessArgs(params string[] args)
+        {
+            string result = "";
+            int i = 0;
+            foreach (string arg in args)
+            {
+                result += "\"" + arg + "\"";
+                if (i < args.Length)
+                {
+                    result += " ";
+                }
+                i++;
+            }
+            return result;
+        }
         public static void CreateIsNotExistFile(string filePath
             , FileAttributes parentFolderAttr = FileAttributes.Directory
             , FileAttributes fileAttr = FileAttributes.Normal)
@@ -115,6 +131,18 @@ namespace cyber_installer.implement.modules.utils
                 File.Create(filePath).Dispose();
                 FileInfo fi = new FileInfo(filePath);
                 fi.Attributes = fileAttr;
+            }
+        }
+
+        public static async Task ExtractZipArchiveEntry(ZipArchiveEntry entry, string folderLocation)
+        {
+            if (Directory.Exists(folderLocation))
+            {
+                using (Stream stream = entry.Open())
+                {
+                    using (FileStream fileStream = File.Create(folderLocation + "\\" + entry.Name))
+                        await stream.CopyToAsync(fileStream);
+                }
             }
         }
     }

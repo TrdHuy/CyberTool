@@ -16,8 +16,8 @@ namespace cyber_installer.implement.modules.user_data_manager
     internal class UserDataManager : BaseCyberInstallerModule, IUserDataManager
     {
         private readonly bool IS_IMPORT_DATA_ASYNC = false;
-        private readonly string _userDataFolderPath = CyberInstallerDefinition.DATA_FOLDER_PATH;
-        private readonly string _userDataFilePath = CyberInstallerDefinition.USER_DATA_FILE_PATH;
+        private readonly string _userDataFolderPath = CyberInstallerDefinition.DATA_FOLDER_BASE_PATH;
+        private readonly string _userDataFilePath = CyberInstallerDefinition.USER_DATA_FILE_BASE_PATH;
         private UserData _currentUserData;
         private Task? _importUserDataFromFileTaskCache;
 

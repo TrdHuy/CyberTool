@@ -35,29 +35,36 @@ namespace cyber_installer.implement.modules.sw_installing_manager
             throw new NotImplementedException();
         }
 
-        public async Task<ToolData?> StartDownloadingLatestVersionToolTask(ToolVO toolVO)
+        public async Task<ToolData?> StartDownloadingLatestVersionToolTask(ToolVO toolVO
+            , Action<object, double> downloadProgressChangedCallback)
         {
             using (HttpClient client = new HttpClient())
             {
                 try
                 {
-                    return await _swDownloadRequester.Request(client
-                    , toolVO);
+                    var data = await _swDownloadRequester.Request(client
+                    , toolVO
+                    , downloadProgressChangedCallback);
+                    _logger.I("Sucessfully to request download latest version of " + toolVO.Name);
+                    return data;
                 }
                 catch (HttpRequestException ex)
                 {
                     if (ex.Message.Contains("No connection could be made because the target machine actively refused it"))
                     {
+                        App.Current.ShowErrorBox("Can not connect to server!\n" + ex.Message);
                     }
+                    _logger.E("Fail to request download latest version of " + toolVO.Name);
+                    _logger.E(ex.Message);
                 }
-                catch
+                catch (Exception ex)
                 {
-
+                    App.Current.ShowErrorBox("Fail to request download latest version of " + toolVO.Name + "!\n" + ex.Message);
+                    _logger.E("Fail to request download latest version of " + toolVO.Name);
+                    _logger.E(ex.Message);
                 }
                 return null;
-
             }
-
         }
 
         public async Task<ToolData?> StartToolInstallingTask(ToolData toolData, string installPath)

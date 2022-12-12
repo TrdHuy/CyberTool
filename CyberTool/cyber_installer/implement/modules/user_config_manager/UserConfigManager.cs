@@ -11,8 +11,8 @@ namespace cyber_installer.implement.modules.user_config_manager
 {
     internal class UserConfigManager : BaseCyberInstallerModule
     {
-        private readonly string _configFolderPath = CyberInstallerDefinition.CONFIG_FOLDER_PATH;
-        private readonly string _userConfigFilePath = CyberInstallerDefinition.USER_CONFIG_FILE_PATH;
+        private readonly string _configFolderPath = CyberInstallerDefinition.CONFIG_FOLDER_BASE_PATH;
+        private readonly string _userConfigFilePath = CyberInstallerDefinition.USER_CONFIG_FILE_BASE_PATH;
         private UserConfig _currentUserConfig;
 
         public UserConfig CurrentConfig
