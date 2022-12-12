@@ -12,28 +12,27 @@ namespace cyber_installer_background_service
 
         static void Main(string[] args)
         {
-            Console.ReadKey();
-
             var requesterID = "";
             var requesterProcessId = -1;
             var cmdID = "";
-            if (args.Length >= 3)
+            try
             {
-                requesterID = args[0];
-                cmdID = args[1];
-                requesterProcessId = Convert.ToInt32(args[2]);
-                switch (requesterID)
+                if (args.Length >= 3)
                 {
-                    case CYBER_INSTALLER_REQUESTER_ID:
-                        {
-                            if (cmdID == UPDATE_CYBER_INSTALLER_CMD && args.Length == 5)
+                    requesterID = args[0];
+                    cmdID = args[1];
+                    requesterProcessId = Convert.ToInt32(args[2]);
+                    switch (requesterID)
+                    {
+                        case CYBER_INSTALLER_REQUESTER_ID:
                             {
-                                var zipFilePath = args[3].ToString();
-                                var installFolderLocation = args[4].ToString();
-                                if (File.Exists(zipFilePath) && Directory.Exists(installFolderLocation))
+                                if (cmdID == UPDATE_CYBER_INSTALLER_CMD && args.Length == 5)
                                 {
-                                    try
+                                    var zipFilePath = args[3].ToString();
+                                    var installFolderLocation = args[4].ToString();
+                                    if (File.Exists(zipFilePath) && Directory.Exists(installFolderLocation))
                                     {
+
                                         var requesterProcess = Process.GetProcessById(requesterProcessId);
                                         if (!requesterProcess.HasExited && requesterProcess?.ProcessName == "Cyber Installer")
                                         {
@@ -53,7 +52,7 @@ namespace cyber_installer_background_service
                                                     entry.ExtractToFile(extractLocation
                                                         , overwrite: true);
 
-                                                    if(Path.GetFileName(entry.FullName) == CYBER_INSTALLER_EXE_ZIP_PATH)
+                                                    if (Path.GetFileName(entry.FullName) == CYBER_INSTALLER_EXE_ZIP_PATH)
                                                     {
                                                         cyberInstallerExePath = extractLocation;
                                                     }
@@ -69,21 +68,24 @@ namespace cyber_installer_background_service
                                             }
                                         }
                                     }
-                                    catch
+                                    else
                                     {
-
+                                        Console.WriteLine("Install file not found, please retry!!");
                                     }
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Install file not found, please retry!!");
-                                }
 
+                                }
+                                break;
                             }
-                            break;
-                        }
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                Console.ReadKey();
+            }
+            Environment.Exit(0);
         }
 
 

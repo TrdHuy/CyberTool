@@ -187,7 +187,6 @@ namespace cyber_installer.implement.modules.update_manager
                                 , folderLocation);
                             p.StartInfo.Arguments = args;
                             p.Start();
-                            Process.GetCurrentProcess().CloseMainWindow();
                         }
                     }
 
