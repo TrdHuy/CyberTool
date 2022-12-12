@@ -146,7 +146,7 @@ namespace cyber_installer.implement.modules.update_manager
 
                 List<BaseAsyncTask> tasks = new List<BaseAsyncTask>();
                 tasks.Add(downloadTask);
-                //tasks.Add(installTask);
+                tasks.Add(installTask);
 
                 MultiAsyncTask multiTask = new MultiAsyncTask(tasks
                     , new CancellationTokenSource()
