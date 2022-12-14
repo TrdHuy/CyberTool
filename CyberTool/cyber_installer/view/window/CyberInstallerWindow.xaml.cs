@@ -58,7 +58,7 @@ namespace cyber_installer.view.window
                     {
                         if (PART_TabControl.SelectedItem == PART_AvailableSoftwaresTabItem)
                         {
-                            var context = PART_AvailableSoftwaresTab.DataContext as IAvailableTabContext;
+                            var context = PART_AvailableSoftwaresTab.DataContext as ISoftwareStatusTabContext;
                             context?.OnTabOpened(PART_AvailableSoftwaresTab);
                         }
                         break;
@@ -73,7 +73,7 @@ namespace cyber_installer.view.window
             {
                 case "PART_AvailableSoftwaresTab":
                     {
-                        var context = PART_AvailableSoftwaresTab.DataContext as IAvailableTabContext;
+                        var context = PART_AvailableSoftwaresTab.DataContext as ISoftwareStatusTabContext;
                         context?.OnTabClosed(PART_AvailableSoftwaresTab);
                         break;
                     }
@@ -89,11 +89,39 @@ namespace cyber_installer.view.window
             parentOfUpdateButton?.Children.Remove(PART_UpdateButton);
             _controlButtonPanel?.Children.Insert(0, PART_UpdateButton);
             PART_UpdateButton.Visibility = Visibility.Collapsed;
+            PART_UpdateButton.ToolTipOpening += HandleToolTipOpeningEvent;
         }
 
-        private async void HandleUpdateButtonClick(object sender, RoutedEventArgs e)
+        private void HandleToolTipOpeningEvent(object sender, ToolTipEventArgs e)
         {
-            await CyberInstallerUpdateManager.Current.UpdateLatestCyberInstallerVersion();
+            var btn = sender as FrameworkElement;
+            switch (btn?.Name)
+            {
+                case "PART_UpdateButton":
+                    {
+                        PART_AvailableUpdatePopup.IsOpen = true;
+                        e.Handled = true;
+                        break;
+                    }
+            }
+        }
+
+        private async void HandleButtonClickEvent(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as FrameworkElement;
+            switch (btn?.Name)
+            {
+                case "PART_CloseUpdatePopupButton":
+                    {
+                        PART_AvailableUpdatePopup.IsOpen = false;
+                        break;
+                    }
+                case "PART_UpdateButton":
+                    {
+                        await CyberInstallerUpdateManager.Current.UpdateLatestCyberInstallerVersion();
+                        break;
+                    }
+            }
         }
     }
 }
