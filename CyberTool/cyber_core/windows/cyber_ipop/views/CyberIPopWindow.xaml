@@ -13,7 +13,6 @@
 				 Height="450"
 				 Width="800"
 				 Padding="10"
-				 FontFamily="Calibri"
-				 Style="{DynamicResource DefaultCyberStyle}">
+				 FontFamily="Calibri">
 
 </cyw:CyberWindow>
