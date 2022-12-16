@@ -261,19 +261,19 @@ namespace log_guard.views.others.calendar
         #region DoneButtonCommand
         public static readonly DependencyProperty DoneButtonCommandProperty =
             DependencyProperty.Register("DoneButtonCommand",
-                typeof(BaseCommandImpl),
+                typeof(ICommand),
                 typeof(DateTimeSeker),
-                new PropertyMetadata(default(BaseCommandImpl), new PropertyChangedCallback(DoneButtonCommandPropertyChangedCallback)));
+                new PropertyMetadata(default(ICommand), new PropertyChangedCallback(DoneButtonCommandPropertyChangedCallback)));
 
         private static void DoneButtonCommandPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
         }
 
-        public BaseCommandImpl DoneButtonCommand
+        public ICommand DoneButtonCommand
         {
             get
             {
-                return (BaseCommandImpl)GetValue(DoneButtonCommandProperty);
+                return (ICommand)GetValue(DoneButtonCommandProperty);
             }
             set
             {
@@ -330,18 +330,6 @@ namespace log_guard.views.others.calendar
             TodayButton.Click += TodayButton_Click;
             ContinueButton.Click += ContinueButton_Click;
             NowButton.Click += NowButton_Click;
-            DoneButton.Click += DoneButton_Click;
-        }
-
-        private void DoneButton_Click(object sender, RoutedEventArgs e)
-        {
-            if(DoneButtonCommand != null)
-            {
-                if (DoneButtonCommand.CanExecute(this))
-                {
-                    DoneButtonCommand?.Execute(this);
-                }
-            }
         }
 
         private void NowButton_Click(object sender, RoutedEventArgs e)

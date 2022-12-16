@@ -21,10 +21,10 @@ namespace log_guard.view_models.advance_filter
         public IFilterEngine CurrentEngine { get; protected set; }
 
         [Bindable(true)]
-        public CommandExecuterModel FilterLeftClickCommand { get; set; }
+        public CommandExecuterImpl FilterLeftClickCommand { get; set; }
 
         [Bindable(true)]
-        public CommandExecuterModel FilterRightClickCommand { get; set; }
+        public CommandExecuterImpl FilterRightClickCommand { get; set; }
 
         [Bindable(true)]
         public SearchBehavior Search
@@ -173,7 +173,7 @@ namespace log_guard.view_models.advance_filter
                 Search = SearchBehavior.NormalSearch;
             }
 
-            FilterRightClickCommand = new CommandExecuterModel((paramaters) =>
+            FilterRightClickCommand = new CommandExecuterImpl((paramaters) =>
             {
                 IsFilterEnable = !IsFilterEnable;
                 return null;

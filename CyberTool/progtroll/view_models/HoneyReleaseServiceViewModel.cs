@@ -21,10 +21,10 @@ namespace progtroll.view_models
         private BaseSwPublisherCommandVM _commandVM;
 
         [Bindable(true)]
-        public CommandExecuterModel CalendarButtonCommand { get; set; }
+        public CommandExecuterImpl CalendarButtonCommand { get; set; }
 
         [Bindable(true)]
-        public CommandExecuterModel LogMonitorButtonCommand { get; set; }
+        public CommandExecuterImpl LogMonitorButtonCommand { get; set; }
 
         [Bindable(true)]
         public Visibility LogMonitorVisibility
@@ -59,13 +59,13 @@ namespace progtroll.view_models
             _calendarNoteBookVisibility = Visibility.Visible;
             _logMonitorVisibility= Visibility.Hidden;
             _commandVM = new BaseSwPublisherCommandVM(this);
-            CalendarButtonCommand = new CommandExecuterModel((paramaters) =>
+            CalendarButtonCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return _commandVM.GetCommandExecuter(PublisherKeyFeatureTag.KEY_TAG_PRT_SWITCH_CALENDAR_FEATURE
                     , paramaters);
             });
 
-            LogMonitorButtonCommand = new CommandExecuterModel((paramaters) =>
+            LogMonitorButtonCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return _commandVM.GetCommandExecuter(PublisherKeyFeatureTag.KEY_TAG_PRT_SWITCH_LOG_MONITOR_FEATURE
                     , paramaters);

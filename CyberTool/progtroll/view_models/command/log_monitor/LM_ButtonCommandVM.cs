@@ -11,18 +11,18 @@ namespace progtroll.view_models.command.log_monitor
 {
     internal class LM_ButtonCommandVM : BaseSwPublisherCommandVM
     {
-        public CommandExecuterModel ClearLogButtonCommand { get; set; }
-        public CommandExecuterModel ClipboardButtonCommand { get; set; }
+        public CommandExecuterImpl ClearLogButtonCommand { get; set; }
+        public CommandExecuterImpl ClipboardButtonCommand { get; set; }
         
         public LM_ButtonCommandVM(BaseViewModel parentsModel, string commandVMTag = "LM_ButtonCommandVM")
             : base(parentsModel, commandVMTag)
         {
-            ClearLogButtonCommand = new CommandExecuterModel((paramaters) =>
+            ClearLogButtonCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(PublisherKeyFeatureTag.KEY_TAG_PRT_LM_CLEAR_LOG_CONTENT_FEATURE
                     , paramaters);
             });
-            ClipboardButtonCommand = new CommandExecuterModel((paramaters) =>
+            ClipboardButtonCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(PublisherKeyFeatureTag.KEY_TAG_PRT_LM_CLIPBOARD_LOG_CONTENT_FEATURE
                     , paramaters);

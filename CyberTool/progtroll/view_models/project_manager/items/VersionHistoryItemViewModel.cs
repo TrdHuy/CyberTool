@@ -30,7 +30,7 @@ namespace progtroll.view_models.project_manager.items
         private BaseAsyncTask? _loadingTaskCache;
 
         [Bindable(true)]
-        public CommandExecuterModel ShowCommitDataGridCommand { get; set; }
+        public CommandExecuterImpl ShowCommitDataGridCommand { get; set; }
 
         [Bindable(true)]
         public BaseDotNetCommandImpl SyncVersionCommand { get; set; }
@@ -181,7 +181,7 @@ namespace progtroll.view_models.project_manager.items
                 }
             });
 
-            ShowCommitDataGridCommand = new CommandExecuterModel((paramaters) =>
+            ShowCommitDataGridCommand = new CommandExecuterImpl((paramaters) =>
             {
                 if (paramaters != null)
                 {

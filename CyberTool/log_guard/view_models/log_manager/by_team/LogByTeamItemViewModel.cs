@@ -14,8 +14,8 @@ namespace log_guard.view_models.log_manager.by_team
 {
     public class LogByTeamItemViewModel : BaseViewModel, IHanzaTreeViewItem
     {
-        private BaseCommandImpl addCmd;
-        private BaseCommandImpl rmCmd;
+        private ICommand addCmd;
+        private ICommand rmCmd;
         private object parent;
 
         public LogByTeamItemViewModel(LogByTeamItemViewModel par, string title)
@@ -36,14 +36,12 @@ namespace log_guard.view_models.log_manager.by_team
 
         private void InitCmd()
         {
-            addCmd = new BaseCommandImpl((s, e) =>
+            addCmd = new BaseDotNetCommandImpl((s) =>
             {
-                int a = 1;
             });
 
-            rmCmd = new BaseCommandImpl((s, e) =>
+            rmCmd = new BaseDotNetCommandImpl((s) =>
             {
-                int a = 1;
                 var hzItem = s as HanzaTreeViewItem;
                 if (parent != null && hzItem != null)
                 {
@@ -63,8 +61,8 @@ namespace log_guard.view_models.log_manager.by_team
 
         public string Title { get; set; }
         public ObservableCollection<LogByTeamItemViewModel> Items { get; set; }
-        public BaseCommandImpl AddBtnCommand { get => addCmd; }
-        public BaseCommandImpl RemoveBtnCommand { get => rmCmd; }
+        public ICommand AddBtnCommand { get => addCmd; }
+        public ICommand RemoveBtnCommand { get => rmCmd; }
         
         public void AddItem(LogByTeamItemViewModel item)
         {

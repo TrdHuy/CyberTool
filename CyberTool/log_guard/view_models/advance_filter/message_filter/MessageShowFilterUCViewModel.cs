@@ -18,7 +18,7 @@ namespace log_guard.view_models.advance_filter.message_filter
         public MessageShowFilterUCViewModel(BaseViewModel parent) : base(parent)
         {
 
-            FilterLeftClickCommand = new CommandExecuterModel((paramaters) =>
+            FilterLeftClickCommand = new CommandExecuterImpl((paramaters) =>
             {
                 switch (CurrentFilterMode)
                 {

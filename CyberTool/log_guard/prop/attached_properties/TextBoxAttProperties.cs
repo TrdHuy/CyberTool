@@ -303,11 +303,11 @@ namespace log_guard.prop.attached_properties
                 {
                     popUp.Child = new DateTimeSeker()
                     {
-                        DoneButtonCommand = new BaseCommandImpl((sender, parmam) =>
+                        DoneButtonCommand = new BaseDotNetCommandImpl((sender) =>
                         {
-                            if (sender != null)
+                            var seker = sender as DateTimeSeker;
+                            if (seker != null)
                             {
-                                var seker = sender as DateTimeSeker;
                                 popUp.IsOpen = false;
                                 textBox.Text = seker?.SelectedDateTime.ToString("dd-MM-yyyy HH:mm:ss:ffffff");
                             }

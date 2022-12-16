@@ -11,52 +11,52 @@ namespace log_guard.view_models.command
 {
     internal class LG_ButtonCommandVM : BaseLogGuardCommandVM
     {
-        public CommandExecuterModel PlayButtonCommand { get; set; }
-        public CommandExecuterModel StopButtonCommand { get; set; }
-        public CommandExecuterModel ClearButtonCommand { get; set; }
-        public CommandExecuterModel LWCtrlAGestureCommand { get; set; }
-        public CommandExecuterModel LWDeleteGestureCommand { get; set; }
-        public CommandExecuterModel ZoomButtonCommand { get; set; }
-        public CommandExecuterModel ImportLogFileButtonCommand { get; set; }
+        public CommandExecuterImpl PlayButtonCommand { get; set; }
+        public CommandExecuterImpl StopButtonCommand { get; set; }
+        public CommandExecuterImpl ClearButtonCommand { get; set; }
+        public CommandExecuterImpl LWCtrlAGestureCommand { get; set; }
+        public CommandExecuterImpl LWDeleteGestureCommand { get; set; }
+        public CommandExecuterImpl ZoomButtonCommand { get; set; }
+        public CommandExecuterImpl ImportLogFileButtonCommand { get; set; }
 
         public LG_ButtonCommandVM(BaseViewModel parentsModel) : base(parentsModel)
         {
-            PlayButtonCommand = new CommandExecuterModel((paramaters) =>
+            PlayButtonCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(LogGuardKeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_PLAY_FEATURE
                     , paramaters);
             });
-            StopButtonCommand = new CommandExecuterModel((paramaters) =>
+            StopButtonCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(LogGuardKeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_STOP_FEATURE
                     , paramaters);
             });
 
-            ClearButtonCommand = new CommandExecuterModel((paramaters) =>
+            ClearButtonCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(LogGuardKeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_CLEAR_FEATURE
                     , paramaters);
             });
 
-            LWCtrlAGestureCommand = new CommandExecuterModel((paramaters) =>
+            LWCtrlAGestureCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(LogGuardKeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_CTRLA_GESTURE_FEATURE
                    , paramaters);
             });
 
-            LWDeleteGestureCommand = new CommandExecuterModel((paramaters) =>
+            LWDeleteGestureCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(LogGuardKeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_DELETE_GESTURE_FEATURE
                    , paramaters);
             });
 
-            ZoomButtonCommand = new CommandExecuterModel((paramaters) =>
+            ZoomButtonCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(LogGuardKeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_ZOOM_FEATURE
                     , paramaters);
             });
 
-            ImportLogFileButtonCommand = new CommandExecuterModel((paramaters) =>
+            ImportLogFileButtonCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(LogGuardKeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_IMPORT_LOG_FILE_FEATURE
                     , paramaters);

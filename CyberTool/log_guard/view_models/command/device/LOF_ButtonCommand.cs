@@ -11,12 +11,12 @@ namespace log_guard.view_models.command.device
 {
     internal class LOF_ButtonCommand : BaseLogGuardCommandVM
     {
-        public CommandExecuterModel RefreshDeviceButtonCommand { get; set; }
+        public CommandExecuterImpl RefreshDeviceButtonCommand { get; set; }
 
 
         public LOF_ButtonCommand(BaseViewModel parentsModel) : base(parentsModel)
         {
-            RefreshDeviceButtonCommand = new CommandExecuterModel((paramaters) =>
+            RefreshDeviceButtonCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(LogGuardKeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_REFRESH_DEVICE_FEATURE
                     , paramaters);

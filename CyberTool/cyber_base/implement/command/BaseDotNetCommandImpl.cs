@@ -11,6 +11,7 @@ namespace cyber_base.implement.command
         {
             _act = act;
         }
+
         public bool CanExecute(object? parameter)
         {
             return true;

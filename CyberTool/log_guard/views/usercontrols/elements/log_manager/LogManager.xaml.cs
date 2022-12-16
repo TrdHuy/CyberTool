@@ -49,7 +49,7 @@ namespace log_guard.views.usercontrols.elements.log_manager
             source.Add(item1);
             source.Add(perForItem);
             TeamTreeView.ItemsSource = source;
-            lbtHeader.MouseDoubleClickCommand = new BaseCommandImpl((param, e) =>
+            lbtHeader.MouseDoubleClickCommand = new BaseDotNetCommandImpl((param) =>
             {
                 LogGuardService
                 .Current?
@@ -59,7 +59,6 @@ namespace log_guard.views.usercontrols.elements.log_manager
             });
 
         }
-
 
     }
 }

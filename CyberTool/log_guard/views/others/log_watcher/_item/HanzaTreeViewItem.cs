@@ -149,9 +149,9 @@ namespace log_guard.views.others.log_watcher._item
 
     public interface IHanzaTreeViewItem
     {
-        BaseCommandImpl AddBtnCommand { get; }
+        ICommand AddBtnCommand { get; }
 
-        BaseCommandImpl RemoveBtnCommand { get; }
+        ICommand RemoveBtnCommand { get; }
     }
 
 }

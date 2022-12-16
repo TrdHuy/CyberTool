@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace cyber_base.implement.command
 {
-    public class CommandExecuterModel : ICommand, IDestroyable
+    public class CommandExecuterImpl : ICommand, IDestroyable
     {
         public event EventHandler? CanExecuteChanged;
         public event NotifyIsCompletedChangedHandler? CompletedChanged;
@@ -49,7 +49,7 @@ namespace cyber_base.implement.command
             }
         }
 
-        public CommandExecuterModel(Func<object?, ICommandExecuter?> hpssAction)
+        public CommandExecuterImpl(Func<object?, ICommandExecuter?> hpssAction)
         {
             _action = hpssAction;
             ActionExecuteHelper = ActionExecuteHelper.Current;

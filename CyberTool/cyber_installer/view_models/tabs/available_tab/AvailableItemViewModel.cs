@@ -23,7 +23,7 @@ namespace cyber_installer.view_models.tabs.available_tab
         public AvailableItemViewModel(ToolVO toolVO) : base(toolVO)
         {
 
-            _downloadAndInstallCommand = new CommandExecuterModel((paramaters) =>
+            _downloadAndInstallCommand = new CommandExecuterImpl((paramaters) =>
             {
                 var data = paramaters ?? this;
                 return KeyActionListener.Current.OnKey(CyberInstallerDefinition.CYBER_INSTALLER_INDENTIFER

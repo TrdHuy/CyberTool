@@ -34,15 +34,15 @@ namespace log_guard.views.others.header_label
         #region MouseDoubleClickCommand
         public static readonly DependencyProperty MouseDoubleClickCommandProperty =
             DependencyProperty.Register("MouseDoubleClickCommand",
-                typeof(BaseCommandImpl),
+                typeof(ICommand),
                 typeof(HeaderLabel),
-                new PropertyMetadata(default(BaseCommandImpl)));
+                new PropertyMetadata(default(ICommand)));
 
-        public BaseCommandImpl MouseDoubleClickCommand
+        public ICommand MouseDoubleClickCommand
         {
             get
             {
-                return (BaseCommandImpl)GetValue(MouseDoubleClickCommandProperty);
+                return (ICommand)GetValue(MouseDoubleClickCommandProperty);
             }
             set
             {

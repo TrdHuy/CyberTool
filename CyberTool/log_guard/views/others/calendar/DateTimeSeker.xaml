@@ -1605,7 +1605,7 @@
 
 								<Button x:Name="SEKER_DnBt"
 										BorderThickness="0"
-										Command="{Binding DoneButtonCommand}"
+										Command="{Binding DoneButtonCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 										Grid.Column="1"
 										Cursor="Hand"
 										Background="{StaticResource ButtonBackground_Level1}">

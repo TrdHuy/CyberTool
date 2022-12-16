@@ -30,7 +30,7 @@ namespace log_guard.view_models.advance_filter.time_filter
         protected DateTime CurrentFilterTime { get; set; }
         public TimeFilterUCViewModel(BaseViewModel parent) : base(parent)
         {
-            FilterLeftClickCommand = new CommandExecuterModel((paramaters) =>
+            FilterLeftClickCommand = new CommandExecuterImpl((paramaters) =>
             {
                 IsCalendarOpen = !IsCalendarOpen;
                 return null;

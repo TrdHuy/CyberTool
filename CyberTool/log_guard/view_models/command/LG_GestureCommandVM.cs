@@ -11,25 +11,25 @@ namespace log_guard.view_models.command
 {
     internal class LG_GestureCommandVM : BaseLogGuardCommandVM
     {
-        public CommandExecuterModel LogTagDoubleClickCommand { get; set; }
-        public CommandExecuterModel LogMessageDoubleClickCommand { get; set; }
-        public CommandExecuterModel ParserFormatSelectedCommand { get; set; }
+        public CommandExecuterImpl LogTagDoubleClickCommand { get; set; }
+        public CommandExecuterImpl LogMessageDoubleClickCommand { get; set; }
+        public CommandExecuterImpl ParserFormatSelectedCommand { get; set; }
 
         public LG_GestureCommandVM(BaseViewModel parentsModel) : base(parentsModel)
         {
-            LogTagDoubleClickCommand = new CommandExecuterModel((paramaters) =>
+            LogTagDoubleClickCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(LogGuardKeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_TAG_DOUBLE_CLICK_GESTURE_FEATURE
                     , paramaters);
             });
 
-            LogMessageDoubleClickCommand = new CommandExecuterModel((paramaters) =>
+            LogMessageDoubleClickCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(LogGuardKeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_MESSAGE_DOUBLE_CLICK_GESTURE_FEATURE
                     , paramaters);
             });
 
-            ParserFormatSelectedCommand = new CommandExecuterModel((paramaters) =>
+            ParserFormatSelectedCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(LogGuardKeyFeatureTag.KEY_TAG_MSW_LOGWATCHER_PARSER_ITEM_SELECTED_GESTURE_FEATURE
                     , paramaters);

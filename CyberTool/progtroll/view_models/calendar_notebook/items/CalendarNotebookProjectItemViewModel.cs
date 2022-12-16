@@ -85,7 +85,7 @@ namespace progtroll.view_models.calendar_notebook.items
             _commitSource = new CalendarNotebookItemCollection<ICalendarNotebookCommitItemContext>();
             _projectVO = vo;
 
-            _renameProjectCommand = new CommandExecuterModel((paramaters) =>
+            _renameProjectCommand = new CommandExecuterImpl((paramaters) =>
             {
                 if (paramaters != null)
                 {
@@ -96,7 +96,7 @@ namespace progtroll.view_models.calendar_notebook.items
                 return null;
             });
 
-            _deleteProjectCommand = new CommandExecuterModel((paramaters) =>
+            _deleteProjectCommand = new CommandExecuterImpl((paramaters) =>
             {
                 if (paramaters != null)
                 {
@@ -108,7 +108,7 @@ namespace progtroll.view_models.calendar_notebook.items
                 return null;
             });
 
-            _importProjectCommand = new CommandExecuterModel((paramaters) =>
+            _importProjectCommand = new CommandExecuterImpl((paramaters) =>
             {
                 if (paramaters != null)
                 {

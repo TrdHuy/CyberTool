@@ -13,7 +13,7 @@ namespace log_guard.view_models.advance_filter.finder
 
         public LogFinderUCViewModel(BaseViewModel parent) : base(parent)
         {
-            FilterLeftClickCommand = new CommandExecuterModel((paramaters) =>
+            FilterLeftClickCommand = new CommandExecuterImpl((paramaters) =>
             {
                 switch (CurrentFilterMode)
                 {

@@ -6,40 +6,40 @@ namespace progtroll.view_models.command.tab_items.release_tab
 {
     internal class RT_ButtonCommandVM : BaseSwPublisherCommandVM
     {
-        public CommandExecuterModel RestoreLatestReleaseCLButtonCommand { get; set; }
-        public CommandExecuterModel QuickReleaseButtonCommand { get; set; }
-        public CommandExecuterModel CreateReleaseCLButtonCommand { get; set; }
-        public CommandExecuterModel PushReleaseCLButtonCommand { get; set; }
-        public CommandExecuterModel SaveReleaseTemplateButtonCommand { get; set; }
+        public CommandExecuterImpl RestoreLatestReleaseCLButtonCommand { get; set; }
+        public CommandExecuterImpl QuickReleaseButtonCommand { get; set; }
+        public CommandExecuterImpl CreateReleaseCLButtonCommand { get; set; }
+        public CommandExecuterImpl PushReleaseCLButtonCommand { get; set; }
+        public CommandExecuterImpl SaveReleaseTemplateButtonCommand { get; set; }
 
         public RT_ButtonCommandVM(BaseViewModel parentsModel, string commandVMTag = "RT_ButtonCommandVM")
             : base(parentsModel, commandVMTag)
         {
-            QuickReleaseButtonCommand = new CommandExecuterModel((paramaters) =>
+            QuickReleaseButtonCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(PublisherKeyFeatureTag.KEY_TAG_PRT_QUICK_RELEASE_FEATURE
                     , paramaters);
             });
 
-            RestoreLatestReleaseCLButtonCommand = new CommandExecuterModel((paramaters) =>
+            RestoreLatestReleaseCLButtonCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(PublisherKeyFeatureTag.KEY_TAG_PRT_RESTORE_LATEST_RELEASE_FEATURE
                         , paramaters);
             });
 
-            CreateReleaseCLButtonCommand = new CommandExecuterModel((paramaters) =>
+            CreateReleaseCLButtonCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(PublisherKeyFeatureTag.KEY_TAG_PRT_CREATE_RELEASE_CL_AND_COMMIT_FEATURE
                     , paramaters);
             });
 
-            PushReleaseCLButtonCommand = new CommandExecuterModel((paramaters) =>
+            PushReleaseCLButtonCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(PublisherKeyFeatureTag.KEY_TAG_PRT_PUSH_RELEASE_COMMIT_FEATURE
                     , paramaters);
             });
 
-            SaveReleaseTemplateButtonCommand = new CommandExecuterModel((paramaters) =>
+            SaveReleaseTemplateButtonCommand = new CommandExecuterImpl((paramaters) =>
             {
                 return OnKey(PublisherKeyFeatureTag.KEY_TAG_PRT_SAVE_RELEASE_TEMPLATE_FEATURE
                     , paramaters);
