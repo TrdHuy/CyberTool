@@ -80,7 +80,7 @@ namespace cyber_installer.implement.modules.sw_installing_manager
                     }
                     else
                     {
-                        _logger.I("Install " + toolData.ToolKey + " successfully at " + installPath);
+                        _logger.I("Install " + toolData.StringId + " successfully at " + installPath);
                     }
                 });
             installTask.ProgressChanged += (s, e2) =>

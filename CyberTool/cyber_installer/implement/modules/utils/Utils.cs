@@ -8,10 +8,12 @@ using System.Security.Cryptography.X509Certificates;
 using System.Reflection;
 using System.IO;
 using System.IO.Compression;
+using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace cyber_installer.implement.modules.utils
 {
-    internal class Utils
+    internal static class Utils
     {
         public static bool CheckCertificateExist(string cnName
             , StoreName storeName
@@ -143,6 +145,21 @@ namespace cyber_installer.implement.modules.utils
                     using (FileStream fileStream = File.Create(folderLocation + "\\" + entry.Name))
                         await stream.CopyToAsync(fileStream);
                 }
+            }
+        }
+
+        public static async IAsyncEnumerable<T> WithEnforcedCancellation<T>(this IAsyncEnumerable<T> source
+            , [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            await foreach (var item in source)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                yield return item;
             }
         }
     }

@@ -16,26 +16,9 @@ using System.Threading.Tasks;
 
 namespace cyber_installer.view_models.tabs.available_tab
 {
-    internal class AvailableTabViewModel : BaseViewModel, IAvailableTabContext
+    internal class AvailableTabViewModel : BaseSoftwareStatusTabViewModel
     {
-        private Task? _requestDataTask;
-        private CancellationTokenSource? _requestDataTaskCancellationTokenSource;
-        private bool _isLoading;
-
-        [Bindable(true)]
-        public RangeObservableCollection<AvailableItemViewModel> ItemsSource { get; set; } = new RangeObservableCollection<AvailableItemViewModel>();
-
-        [Bindable(true)]
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                InvalidateOwn();
-            }
-        }
-        public async void OnTabOpened(AvailableSoftwaresTab sender)
+        public async override void OnTabOpened(BaseSoftwaresStatusTab sender)
         {
             ItemsSource.Clear();
             IsLoading = true;
@@ -54,7 +37,7 @@ namespace cyber_installer.view_models.tabs.available_tab
         }
 
 
-        public async void OnScrollDownToBottom(object sender)
+        public async override void OnScrollDownToBottom(object sender)
         {
             if (_requestDataTask != null && _requestDataTask.IsCompleted
                 || _requestDataTask == null)
@@ -75,7 +58,7 @@ namespace cyber_installer.view_models.tabs.available_tab
             }
         }
 
-        public void OnTabClosed(AvailableSoftwaresTab sender)
+        public override void OnTabClosed(BaseSoftwaresStatusTab sender)
         {
             if (_requestDataTask != null
                 && !_requestDataTask.IsCompleted

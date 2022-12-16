@@ -1,4 +1,5 @@
-﻿using System;
+﻿using cyber_installer.@base.model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace cyber_installer.model
 {
-    public class ToolVO
+    public class ToolVO : IToolInfo
     {
         public ToolVO()
         {
@@ -24,6 +25,7 @@ namespace cyber_installer.model
         public bool IsPreReleased { get; set; }
         public bool IsRequireLatestVersionToRun { get; set; }
         public int Downloads { get; set; }
+        public string LatestVersion { get => ToolVersions?.Last().Version ?? ""; }
 
         public List<ToolVersionVO> ToolVersions { get; set; }
     }

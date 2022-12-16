@@ -20,31 +20,14 @@ namespace cyber_installer.view.usercontrols.tabs
     /// <summary>
     /// Interaction logic for AvailableSoftwaresTab.xaml
     /// </summary>
-    public partial class AvailableSoftwaresTab : UserControl
+    public partial class AvailableSoftwaresTab : BaseSoftwaresStatusTab
     {
+        protected override ListView SoftwareListView => PART_AvailableSwListView;
         public AvailableSoftwaresTab()
         {
             InitializeComponent();
+
         }
 
-        private void HandleScrollChangeEvent(object sender, ScrollChangedEventArgs e)
-        {
-            var scrollView = sender as CyberScrollView;
-            if (scrollView != null)
-            {
-                switch (scrollView.Name)
-                {
-                    case "ToolsScroller":
-                        if (e.VerticalChange > 0)
-                        {
-                            if (e.VerticalOffset + e.ViewportHeight == e.ExtentHeight)
-                            {
-                                (DataContext as IAvailableTabContext)?.OnScrollDownToBottom(scrollView);
-                            }
-                        }
-                        break;
-                }
-            }
-        }
     }
 }

@@ -8,7 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace cyber_installer.implement.modules.user_data_manager
@@ -84,8 +86,47 @@ namespace cyber_installer.implement.modules.user_data_manager
             _currentUserData = JsonHelper.DeserializeObject<UserData>(json);
         }
 
-        public async Task<bool> WaitForImportUserDataTask(int timeOutMilliseconds)
+        public async Task<bool> WaitForImportUserDataTask(int timeOutMilliseconds, bool force = false)
         {
+            return await WaitImportUserDataFromFileTaskCache(timeOutMilliseconds, force);
+        }
+
+        public async Task GetAllInstalledToolFromUserData(Action<ToolData> toolDataExtractingEvent
+            , CancellationToken cancellationToken)
+        {
+            try
+            {
+                await foreach(var data in ExtracteInstalledToolFromUserData()
+                    .WithEnforcedCancellation(cancellationToken))
+                {
+                    toolDataExtractingEvent?.Invoke(data);
+                }
+            }
+            catch (OperationCanceledException ex) { 
+            }
+        }
+
+        private async IAsyncEnumerable<ToolData> ExtracteInstalledToolFromUserData()
+        {
+            if (await WaitImportUserDataFromFileTaskCache(0, true))
+            {
+                foreach (ToolData toolData in _currentUserData.ToolData)
+                {
+                    if (toolData.ToolStatus == ToolStatus.Installed)
+                    {
+                        yield return toolData;
+                    }
+                }
+            }
+        }
+
+        private async Task<bool> WaitImportUserDataFromFileTaskCache(int timeOutMilliseconds, bool forceToWait)
+        {
+            if (forceToWait && _importUserDataFromFileTaskCache != null)
+            {
+                await _importUserDataFromFileTaskCache.WaitAsync(new CancellationTokenSource().Token);
+                return _importUserDataFromFileTaskCache.IsCompletedSuccessfully;
+            }
 
             if (_importUserDataFromFileTaskCache != null)
             {

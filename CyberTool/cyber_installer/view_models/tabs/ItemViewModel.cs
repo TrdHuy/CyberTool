@@ -1,4 +1,5 @@
 ﻿using cyber_base.view_model;
+using cyber_installer.@base.model;
 using cyber_installer.model;
 using cyber_installer.view.usercontrols.list_item.available_item.@base;
 using System;
@@ -17,9 +18,9 @@ namespace cyber_installer.view_models.tabs
         private string _softwareName = "";
         private double _swHandlingProgress = 0d;
         private bool _isLoadingItemStatus = false;
-        protected ToolVO _toolVO;
+        protected IToolInfo _toolVO;
 
-        public ToolVO ToolInfo
+        public IToolInfo ToolInfo
         {
             get => _toolVO;
         }
@@ -84,12 +85,19 @@ namespace cyber_installer.view_models.tabs
             }
         }
 
-        public ItemViewModel(ToolVO toolVO)
+        public ItemViewModel(IToolInfo toolVO)
         {
             _toolVO = toolVO;
             _softwareName = toolVO.Name;
-            _version = toolVO.ToolVersions.Last().Version;
-            _iconSource = new Uri(toolVO.IconSource);
+            _version = toolVO.LatestVersion;
+            try
+            {
+                _iconSource = new Uri(toolVO.IconSource);
+            }
+            catch
+            {
+
+            }
             InstantiateItemStatus();
         }
 

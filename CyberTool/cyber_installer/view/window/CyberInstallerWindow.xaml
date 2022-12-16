@@ -264,13 +264,12 @@
 
 			<TabItem Header="Installed"
 					 Style="{StaticResource WindowInstallerTabItemStyle}">
+				<tabs:InstalledSofwaresTab x:Name="PART_InstalledSoftwaresTab" />
 			</TabItem>
 			<TabItem x:Name="PART_AvailableSoftwaresTabItem"
 					 Header="Available"
 					 Style="{StaticResource WindowInstallerTabItemStyle}">
-				<tabs:AvailableSoftwaresTab x:Name="PART_AvailableSoftwaresTab"
-											Loaded="HandleLoadedEvent"
-											Unloaded="HandleUnloadedEvent" />
+				<tabs:AvailableSoftwaresTab x:Name="PART_AvailableSoftwaresTab" />
 			</TabItem>
 
 		</TabControl>

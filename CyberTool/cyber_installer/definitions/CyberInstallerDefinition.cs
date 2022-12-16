@@ -28,6 +28,7 @@ namespace cyber_installer.definitions
         public const int CHECK_UPDATE_CYBER_INSTALLER_INTERVAL_TIME = 50000;
         public const int CHECK_UPDATE_CYBER_INSTALLER_DELAY_AFTER_MAIN_WINDOW_SHOWED = 2000;
         public const int REQUEST_CIBS_UPDATE_CYBER_INSTALLER_DELAY_TIME = 2000;
+        public const int IMPORT_USER_DATA_TIME_OUT = 1000;
 
         public const string UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY = "UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY";
         public const string UPDATE_CYBER_INSTALLER_TASK_NAME = "Updating cyber installer";

@@ -17,17 +17,20 @@ namespace cyber_installer.implement.modules.ui_event_handler.actions
 
         private string _installPath = "";
         private AvailableItemViewModel _availableItemViewModel;
-
+        private ToolVO _toolInfo;
         public SWI_AT_DownloadAndInstallButtonAction(string actionID, string builderID, object? dataTransfer, ILogger? logger)
             : base(actionID, builderID, dataTransfer, logger)
         {
             _availableItemViewModel = DataTransfer?[0] as AvailableItemViewModel
                 ?? throw new ArgumentNullException();
+            _toolInfo = _availableItemViewModel?.ToolInfo as ToolVO
+                ?? throw new ArgumentNullException();
         }
+
 
         protected override bool CanExecute(object? dataTransfer)
         {
-            _installPath = App.Current.ShowDestinationFolderWindow(_availableItemViewModel.ToolInfo);
+            _installPath = App.Current.ShowDestinationFolderWindow(_toolInfo);
             return !String.IsNullOrEmpty(_installPath)
                 && _availableItemViewModel != null;
         }
@@ -35,7 +38,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.actions
         protected async override void ExecuteCommand()
         {
             _availableItemViewModel.ItemStatus = ItemStatus.Downloading;
-            var toolData = await SwInstallingManager.Current.StartDownloadingLatestVersionToolTask(_availableItemViewModel.ToolInfo
+            var toolData = await SwInstallingManager.Current.StartDownloadingLatestVersionToolTask(_toolInfo
                 , downloadProgressChangedCallback: (s, e) =>
                 {
 

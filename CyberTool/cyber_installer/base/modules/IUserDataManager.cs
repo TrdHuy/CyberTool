@@ -11,7 +11,7 @@ namespace cyber_installer.@base.modules
     {
         public UserData CurrentUserData { get; }
         public void UpdateUserData(UserData newData);
-        public Task<bool> WaitForImportUserDataTask(int timeOut);
+        public Task<bool> WaitForImportUserDataTask(int timeOut, bool force);
 
     }
 }

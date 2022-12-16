@@ -43,7 +43,7 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
             var isContinue = await _requestDownloadToolSemaphore.WaitAsync(TIME_OUT_FOR_REQUEST_OF_SEMAPHORE);
             var downLoadResult = new ToolData()
             {
-                ToolName = requestingTool.Name
+                Name = requestingTool.Name
             };
             try
             {
@@ -101,7 +101,12 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
                         , requestToolVersion);
                     var param = new object[] { GetRemoteAddress() + DOWNLOAD_TOOL_API_PATH
                                     , downloadFilePath
-                                    , requestHeaderContentMap};
+                                    , requestHeaderContentMap
+                                    , requestingTool.IconSource
+                                    , new Action<string>((iconPath) =>
+                                    {
+                                        downLoadResult.IconSource = iconPath;
+                                    })};
                     var downloadTask = new DownloadSoftwareTask(param);
                     downloadTask.ProgressChanged += (s, e2) =>
                     {
@@ -111,7 +116,7 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
 
                     if (downloadTask.IsCompleted)
                     {
-                        downLoadResult.ToolKey = requestToolKey;
+                        downLoadResult.StringId = requestToolKey;
                         var toolVersionData = new ToolVersionData()
                         {
                             Version = requestToolVersion,
@@ -119,6 +124,7 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
                             ExecutePath = executePath,
                             VersionStatus = ToolVersionStatus.VersionDownloadedButWithoutInstalled,
                         };
+
                         downLoadResult.ToolVersionSource.Add(toolVersionData);
                         downLoadResult.ToolStatus = ToolStatus.Downloaded;
                     }

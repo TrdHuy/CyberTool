@@ -114,7 +114,11 @@ namespace cyber_installer.implement.app_support_modules
 
         public string ShowDestinationFolderWindow(ToolVO toolVO)
         {
-            var destinationFolderWindow = new DestinationFolderSelectionWindow(toolVO);
+            var destinationFolderWindow = new DestinationFolderSelectionWindow(toolVO)
+            {
+                Owner = _cyberInstallerWindow,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner 
+            };
             return destinationFolderWindow.Show();
         }
 

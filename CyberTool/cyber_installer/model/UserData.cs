@@ -1,4 +1,5 @@
-﻿using System;
+﻿using cyber_installer.@base.model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,15 +33,19 @@ namespace cyber_installer.model
         }
     }
 
-    internal class ToolData
+    internal class ToolData : IToolInfo
     {
-        public string ToolKey { get; set; } = "";
-        public string ToolName { get; set; } = "";
+        public string StringId { get; set; } = "";
+        public string Name { get; set; } = "";
         public List<ToolVersionData> ToolVersionSource { get; set; }
         public string CurrentInstalledVersion { get; set; } = "";
         public string InstallPath { get; set; } = "";
         public string ExecutePath { get; set; } = "";
         public ToolStatus ToolStatus { get; set; }
+
+        public string LatestVersion => ToolVersionSource?.Last().Version ?? "";
+
+        public string IconSource { get; set; } = "";
 
         public ToolData()
         {
@@ -61,7 +66,8 @@ namespace cyber_installer.model
         Downloaded = 0,
         Installed = 1,
         InstallFailed = 3,
-        Removed = 2
+        Removed = 2,
+        Updateable = 4,
     }
 
     internal enum ToolVersionStatus

@@ -1,12 +1,15 @@
 ﻿using cyber_base.implement.views.cyber_window;
 using cyber_installer.implement.modules.update_manager;
+using cyber_installer.implement.modules.utils;
 using cyber_installer.view.usercontrols.tabs.@base;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,9 +28,6 @@ namespace cyber_installer.view.window
     public partial class CyberInstallerWindow : CyberWindow
     {
         private StackPanel? _controlButtonPanel;
-        private const string CIBS_PATH = "cibs/cibs.exe";
-        private const string CIBS_CALLER_ID = "CyberInstallerWindow{0367E847-B5C3-4CDD-9C34-B78A769AF73C}";
-        private const string CIBS_UPDATE_CYBER_INSTALLER_CMD = "UpdateCyberInstaller";
 
         public CyberInstallerWindow()
         {
@@ -49,42 +49,11 @@ namespace cyber_installer.view.window
             PART_AvailableUpdatePopup.HorizontalOffset = offset;
         }
 
-        private void HandleLoadedEvent(object sender, RoutedEventArgs e)
-        {
-            var item = sender as FrameworkElement;
-            switch (item?.Name)
-            {
-                case "PART_AvailableSoftwaresTab":
-                    {
-                        if (PART_TabControl.SelectedItem == PART_AvailableSoftwaresTabItem)
-                        {
-                            var context = PART_AvailableSoftwaresTab.DataContext as ISoftwareStatusTabContext;
-                            context?.OnTabOpened(PART_AvailableSoftwaresTab);
-                        }
-                        break;
-                    }
-            }
-        }
-
-        private void HandleUnloadedEvent(object sender, RoutedEventArgs e)
-        {
-            var item = sender as FrameworkElement;
-            switch (item?.Name)
-            {
-                case "PART_AvailableSoftwaresTab":
-                    {
-                        var context = PART_AvailableSoftwaresTab.DataContext as ISoftwareStatusTabContext;
-                        context?.OnTabClosed(PART_AvailableSoftwaresTab);
-                        break;
-                    }
-            }
-        }
-
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
             _controlButtonPanel = this.GetTemplateChild(WindowControlPanelName) as StackPanel;
-           
+
             var parentOfUpdateButton = PART_UpdateButton.Parent as Panel;
             parentOfUpdateButton?.Children.Remove(PART_UpdateButton);
             _controlButtonPanel?.Children.Insert(0, PART_UpdateButton);

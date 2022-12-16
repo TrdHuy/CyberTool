@@ -20,31 +20,13 @@ namespace cyber_installer.view.usercontrols.tabs
     /// <summary>
     /// Interaction logic for InstalledSofwaresTab.xaml
     /// </summary>
-    public partial class InstalledSofwaresTab : UserControl
+    public partial class InstalledSofwaresTab : BaseSoftwaresStatusTab
     {
+        protected override ListView SoftwareListView => PART_InstalledSwListView;
         public InstalledSofwaresTab()
         {
             InitializeComponent();
         }
 
-        private void HandleScrollChangeEvent(object sender, ScrollChangedEventArgs e)
-        {
-            var scrollView = sender as CyberScrollView;
-            if (scrollView != null)
-            {
-                switch (scrollView.Name)
-                {
-                    case "ToolsScroller":
-                        if (e.VerticalChange > 0)
-                        {
-                            if (e.VerticalOffset + e.ViewportHeight == e.ExtentHeight)
-                            {
-                                (DataContext as IInstalledTabContext)?.OnScrollDownToBottom(scrollView);
-                            }
-                        }
-                        break;
-                }
-            }
-        }
     }
 }

@@ -1,17 +1,17 @@
-﻿<UserControl x:Class="cyber_installer.view.usercontrols.tabs.AvailableSoftwaresTab"
-			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:local="clr-namespace:cyber_installer.view.usercontrols.tabs"
-			 xmlns:csv="clr-namespace:cyber_base.implement.views.cyber_scroll;assembly=cyber_base"
-			 xmlns:iv="clr-namespace:cyber_installer.view.usercontrols.list_item"
-			 xmlns:vmm="clr-namespace:cyber_installer.implement.modules.view_model_manager"
-			 xmlns:vm="clr-namespace:cyber_installer.view_models.tabs.available_tab"
-			 mc:Ignorable="d"
-			 Background="{DynamicResource Background_Level2}"
-			 d:DesignHeight="269.76"
-			 d:DesignWidth="677.76">
+﻿<local:BaseSoftwaresStatusTab x:Class="cyber_installer.view.usercontrols.tabs.AvailableSoftwaresTab"
+							  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+							  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+							  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+							  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+							  xmlns:local="clr-namespace:cyber_installer.view.usercontrols.tabs"
+							  xmlns:csv="clr-namespace:cyber_base.implement.views.cyber_scroll;assembly=cyber_base"
+							  xmlns:iv="clr-namespace:cyber_installer.view.usercontrols.list_item"
+							  xmlns:vmm="clr-namespace:cyber_installer.implement.modules.view_model_manager"
+							  xmlns:vm="clr-namespace:cyber_installer.view_models.tabs.available_tab"
+							  mc:Ignorable="d"
+							  Background="{DynamicResource Background_Level2}"
+							  d:DesignHeight="269.76"
+							  d:DesignWidth="677.76">
 	<UserControl.DataContext>
 		<vmm:ViewModelManager DataContextType="{x:Type vm:AvailableTabViewModel}"
 							  ParentDataContextType="{x:Null}"
@@ -38,7 +38,6 @@
 									 VerticalAlignment="Top"
 									 Padding="0,0,5,0"
 									 VerticalScrollBarVisibility="Visible"
-									 ScrollChanged="HandleScrollChangeEvent"
 									 VerticalContentAlignment="Center"
 									 Style="{StaticResource ListScrollViewStyle}">
 					<ItemsPresenter />
@@ -72,4 +71,4 @@
 			</Style>
 		</ListView.ItemContainerStyle>
 	</ListView>
-</UserControl>
+</local:BaseSoftwaresStatusTab>

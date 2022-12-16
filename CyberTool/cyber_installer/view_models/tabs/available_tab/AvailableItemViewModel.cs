@@ -16,7 +16,7 @@ namespace cyber_installer.view_models.tabs.available_tab
 {
     internal class AvailableItemViewModel : ItemViewModel
     {
-        private const int IMPORT_USER_DATA_TIME_OUT = 1000;
+        private const int IMPORT_USER_DATA_TIME_OUT = CyberInstallerDefinition.IMPORT_USER_DATA_TIME_OUT;
         private ICommand _downloadAndInstallCommand;
         public ICommand DownloadAndInstallCommand { get => _downloadAndInstallCommand; }
 
@@ -45,7 +45,7 @@ namespace cyber_installer.view_models.tabs.available_tab
                 var userData = UserDataManager.Current.CurrentUserData;
                 var toolData = userData
                     .ToolData
-                    .Where(td => td.ToolKey == _toolVO.StringId)
+                    .Where(td => td.StringId == _toolVO.StringId)
                     .FirstOrDefault();
 
                 // Kiểm tra dữ liệu tool trên server đã có trong
@@ -71,15 +71,16 @@ namespace cyber_installer.view_models.tabs.available_tab
                             }
                         case ToolStatus.Installed:
                             {
-                                if (_toolVO.ToolVersions.Count > 0)
+                                var versionSource = (_toolVO as ToolVO)?.ToolVersions;
+                                if (versionSource != null && versionSource.Count > 0)
                                 {
                                     if (System.Version.Parse(toolData.CurrentInstalledVersion)
-                                        == System.Version.Parse(_toolVO.ToolVersions.Last().Version))
+                                        == System.Version.Parse(versionSource.Last().Version))
                                     {
                                         ItemStatus = ItemStatus.UpToDate;
                                     }
                                     else if (System.Version.Parse(toolData.CurrentInstalledVersion)
-                                        < System.Version.Parse(_toolVO.ToolVersions.Last().Version))
+                                        < System.Version.Parse(versionSource.Last().Version))
                                     {
                                         ItemStatus = ItemStatus.Updateable;
                                     }

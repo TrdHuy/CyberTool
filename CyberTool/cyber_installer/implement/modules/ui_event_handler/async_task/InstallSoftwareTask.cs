@@ -66,11 +66,22 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                 _installingToolData.ExecutePath = _installPath + "\\" + latestVersionTool.ExecutePath;
                 _installingToolData.InstallPath = _installPath;
                 _installingToolData.ToolStatus = ToolStatus.Installed;
-
                 var installationInfo = await ExportInstallationInfo();
                 CreateUninstaller(installationInfo);
-
+                ExtractIconToInstallaInfoFolder();
             }
+        }
+
+        private void ExtractIconToInstallaInfoFolder()
+        {
+            var installationInfoFolderPath = _installPath + "\\" + INSTALLATION_INFO_FOLDER_NAME;
+            var oldIconPath = _installingToolData.IconSource;
+            var newFilePath = installationInfoFolderPath + "\\" + Path.GetFileName(oldIconPath);
+            if (File.Exists(oldIconPath))
+            {
+                File.Move(oldIconPath, newFilePath);
+            }
+            _installingToolData.IconSource = newFilePath;
         }
 
         private async Task<InstallationData> ExportInstallationInfo()
@@ -78,9 +89,9 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
             var installationInfoFilePath = CreateCyberInfoFileForInstalledSoftware();
             var installationInfo = new InstallationData()
             {
-                ToolName = _installingToolData.ToolName,
+                ToolName = _installingToolData.Name,
                 Guid = Guid.NewGuid().ToString("B"),
-                ToolKey = _installingToolData.ToolKey,
+                ToolKey = _installingToolData.StringId,
                 CurrentInstalledVersion = _installingToolData.CurrentInstalledVersion,
                 ExecutePath = _installingToolData.ExecutePath,
                 InstallPath = _installingToolData.InstallPath,
@@ -89,6 +100,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
             await File.WriteAllTextAsync(installationInfoFilePath, installationInfoJson);
             return installationInfo;
         }
+
         private string CreateCyberInfoFileForInstalledSoftware()
         {
             var installationInfoFolderPath = _installPath + "\\" + INSTALLATION_INFO_FOLDER_NAME;
