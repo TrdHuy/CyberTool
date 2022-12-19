@@ -7,6 +7,8 @@ using cyber_core.utils;
 using cyber_core.windows;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -51,13 +53,23 @@ namespace cyber_core
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            CyberToolModuleManager.Init();
+            var isRunable = IsCurrentProcessNameChanged();
+            if (isRunable)
+            {
+                CyberToolModuleManager.Init();
 
-            base.OnStartup(e);
+                base.OnStartup(e);
 
-            _WindowDirector.ShowCyberIFace();
+                _WindowDirector.ShowCyberIFace();
 
-            CyberToolModuleManager.OnIFaceShowed();
+                CyberToolModuleManager.OnIFaceShowed();
+            }
+            else
+            {
+                _WindowDirector.ShowWarningBox("Can not run application because executable file name has been changed!\n" +
+                    "Please maintain its name is  " + GetCurrentAssemblyName(), false);
+            }
+
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -117,8 +129,6 @@ namespace cyber_core
             });
             return message;
         }
-
-
 
         public void ShowUserControlWindow(UserControl uc
             , CyberOwner ownerType = CyberOwner.Default
@@ -215,6 +225,19 @@ namespace cyber_core
                 _globalModules.Add(globalModule);
                 globalModule.OnGlobalModuleStart();
             }
+        }
+
+        private bool IsCurrentProcessNameChanged()
+        {
+            var name = Assembly.GetExecutingAssembly().GetName().Name;
+            var pName = Process.GetCurrentProcess().ProcessName;
+
+            return name == pName;
+        }
+
+        private string GetCurrentAssemblyName()
+        {
+            return Assembly.GetExecutingAssembly().GetName().Name ?? "CyberTool";
         }
     }
 }

@@ -104,7 +104,7 @@ namespace cyber_core.windows
                 "",
                 "Continue",
                 "",
-                IFaceWindow
+                _IFaceWindow
                 );
             CyberIMesBoxResult res = CyberIMesBoxResult.Continue;
             if (isDialog)
