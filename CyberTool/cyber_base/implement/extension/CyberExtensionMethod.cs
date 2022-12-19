@@ -10,14 +10,14 @@ namespace cyber_base.implement.extension
 {
     public static class CyberExtensionMethod
     {
-        public static T FindChild<T>(this DependencyObject dO, string childName) where T : DependencyObject
+        public static T? FindChild<T>(this DependencyObject dO, string childName) where T : DependencyObject
         {
             if (dO == null)
             {
                 return null;
             }
 
-            T val = null;
+            T? val = null;
             int childrenCount = VisualTreeHelper.GetChildrenCount(dO);
             for (int i = 0; i < childrenCount; i++)
             {
@@ -35,7 +35,7 @@ namespace cyber_base.implement.extension
 
                 if (!string.IsNullOrEmpty(childName))
                 {
-                    FrameworkElement frameworkElement = child as FrameworkElement;
+                    FrameworkElement? frameworkElement = child as FrameworkElement;
                     if (frameworkElement != null && frameworkElement.Name == childName)
                     {
                         val = (T)child;
@@ -64,7 +64,7 @@ namespace cyber_base.implement.extension
 
             if (parentDO != null && !string.IsNullOrEmpty(parentsName))
             {
-                FrameworkElement frameworkElement = parentDO as FrameworkElement;
+                FrameworkElement? frameworkElement = parentDO as FrameworkElement;
                 if (frameworkElement != null && frameworkElement.Name == parentsName)
                 {
                     val = (T)parentDO;
@@ -85,7 +85,7 @@ namespace cyber_base.implement.extension
 
             if (parentObject == null) return null;
 
-            T parent = parentObject as T;
+            T? parent = parentObject as T;
             if (parent != null)
                 return parent;
             else
