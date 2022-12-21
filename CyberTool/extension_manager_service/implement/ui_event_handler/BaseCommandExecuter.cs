@@ -33,6 +33,11 @@ namespace extension_manager_service.implement.ui_event_handler
         {
         }
 
+        protected override Task ExecuteCommandAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void ExecuteOnCancel()
         {
         }

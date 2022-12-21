@@ -10,14 +10,13 @@ using System.Windows.Input;
 
 namespace cyber_base.implement.command
 {
-    public class CommandExecuterImpl : ICommand, IDestroyable
+    public class CommandExecuterImpl : ICommand
     {
         public event EventHandler? CanExecuteChanged;
-        public event NotifyIsCompletedChangedHandler? CompletedChanged;
-        public event NotifyIsCanceledChangedHandler? CanceledChanged;
 
         private Func<object?, ICommandExecuter?> _action;
         private ICommandExecuter? _commandExecuterCache;
+        private bool _isAsync;
 
         protected ActionExecuteHelper ActionExecuteHelper { get; set; }
 
@@ -49,8 +48,9 @@ namespace cyber_base.implement.command
             }
         }
 
-        public CommandExecuterImpl(Func<object?, ICommandExecuter?> hpssAction)
+        public CommandExecuterImpl(Func<object?, ICommandExecuter?> hpssAction, bool isAsync = false)
         {
+            _isAsync = isAsync;
             _action = hpssAction;
             ActionExecuteHelper = ActionExecuteHelper.Current;
         }
@@ -60,44 +60,21 @@ namespace cyber_base.implement.command
             return true;
         }
 
-        public void Execute(object? parameter)
+        public async void Execute(object? parameter)
         {
-            if (CommandExecuterCache != null)
-            {
-                CommandExecuterCache.IsCompletedChanged -= OnCommandExecuterCompletedChanged;
-                CommandExecuterCache.IsCanceledChanged -= OnCommandExecuterCanceledChanged;
-            }
-
             CommandExecuterCache = _action?.Invoke(parameter);
 
-            if (CommandExecuterCache != null)
+            if (_isAsync)
             {
-                CommandExecuterCache.IsCompletedChanged += OnCommandExecuterCompletedChanged;
-                CommandExecuterCache.IsCanceledChanged += OnCommandExecuterCanceledChanged;
+                await ExetcuteActionAsync(parameter);
             }
-
-            ExetcuteAction(parameter);
-        }
-
-        private void OnCommandExecuterCompletedChanged(object sender, ExecuterStatusArgs arg)
-        {
-            CompletedChanged?.Invoke(sender, arg);
-        }
-
-        private void OnCommandExecuterCanceledChanged(object sender, ExecuterStatusArgs arg)
-        {
-            CanceledChanged?.Invoke(sender, arg);
-        }
-
-        public void OnDestroy()
-        {
-            if (CommandExecuterCache != null)
+            else
             {
-                CommandExecuterCache.OnDestroy();
+                ExetcuteAction(parameter);
             }
         }
 
-        public void OnCancel()
+        public void Cancel()
         {
             if (CommandExecuterCache != null)
             {
@@ -112,6 +89,15 @@ namespace cyber_base.implement.command
                 return;
             }
             ActionExecuteHelper.ExecuteAction(CommandExecuterCache, dataTransfer);
+        }
+
+        protected virtual async Task ExetcuteActionAsync(object? dataTransfer)
+        {
+            if (CommandExecuterCache == null)
+            {
+                return;
+            }
+            await ActionExecuteHelper.ExecuteActionAsync(CommandExecuterCache, dataTransfer);
         }
     }
 }

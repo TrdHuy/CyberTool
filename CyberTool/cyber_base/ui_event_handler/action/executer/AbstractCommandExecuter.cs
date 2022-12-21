@@ -33,7 +33,7 @@ namespace cyber_base.ui_event_handler.action.executer
                     ClearCache();
                 }
                 if (oldValue != value)
-                    IsCompletedChanged?.Invoke(this, new ExecuterStatusArgs(value, oldValue));
+                    IsCompletedChanged?.Invoke(this, new ActionStatusArgs(value, oldValue));
             }
         }
 
@@ -49,7 +49,7 @@ namespace cyber_base.ui_event_handler.action.executer
                     ClearCache();
                 }
                 if (oldValue != value)
-                    IsCanceledChanged?.Invoke(this, new ExecuterStatusArgs(value, oldValue));
+                    IsCanceledChanged?.Invoke(this, new ActionStatusArgs(value, oldValue));
 
             }
         }
@@ -94,6 +94,25 @@ namespace cyber_base.ui_event_handler.action.executer
                 IsCanceled = true;
                 ExecuteOnCancel();
             }
+        }
+
+        public async Task<bool> ExecuteAsync(object? dataTransfer)
+        {
+            bool isExecuteable = false;
+
+            if (CanExecute(dataTransfer))
+            {
+                isExecuteable = true;
+                //Execute the command
+                await ExecuteCommandAsync();
+            }
+            else
+            {
+                isExecuteable = false;
+            }
+
+            SetCompleteFlagAfterExecuteCommand();
+            return isExecuteable;
         }
 
         public bool Execute(object? dataTransfer)
@@ -168,6 +187,10 @@ namespace cyber_base.ui_event_handler.action.executer
         /// </summary>
         protected abstract void ExecuteCommand();
 
+        /// <summary>
+        /// The main method for executer, everything need to be executed will happen here async
+        /// </summary>
+        protected abstract Task ExecuteCommandAsync();
 
         /// <summary>
         /// Check posibility of command with transfered data
@@ -193,5 +216,6 @@ namespace cyber_base.ui_event_handler.action.executer
         /// Cancel a command executer while it is running 
         /// </summary>
         protected abstract void ExecuteOnCancel();
+
     }
 }

@@ -29,23 +29,6 @@ namespace cyber_base.ui_event_handler.action.executer
         /// </summary>
         /// <returns></returns>
         bool AlterExecute(object? dataTransfer);
-
-        event NotifyIsCompletedChangedHandler? IsCompletedChanged;
-        event NotifyIsCanceledChangedHandler? IsCanceledChanged;
     }
 
-    public delegate void NotifyIsCompletedChangedHandler(object sender, ExecuterStatusArgs arg);
-    public delegate void NotifyIsCanceledChangedHandler(object sender, ExecuterStatusArgs arg);
-
-    public class ExecuterStatusArgs
-    {
-        public bool OldValue { get; set; }
-        public bool NewValue { get; set; }
-
-        public ExecuterStatusArgs(bool newVal, bool oldVal)
-        {
-            OldValue = oldVal;
-            NewValue = newVal;
-        }
-    }
 }

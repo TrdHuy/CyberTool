@@ -51,12 +51,12 @@ namespace cyber_base.ui_event_handler.listener
         }
 
 
-        private void ActionIsCompletedChanged(object sender, ExecuterStatusArgs arg)
+        private void ActionIsCompletedChanged(object sender, ActionStatusArgs arg)
         {
             HelperUpdate(sender as IAction);
         }
 
-        private void ActionIsCanceledChanged(object sender, ExecuterStatusArgs arg)
+        private void ActionIsCanceledChanged(object sender, ActionStatusArgs arg)
         {
             HelperUpdate(sender as IAction);
         }
@@ -134,6 +134,49 @@ namespace cyber_base.ui_event_handler.listener
                 else
                 {
                     provider?.AlterExecute(dataTransfer);
+                    return ExecuteStatus.ExistedExecuter;
+                }
+            }
+
+            return ExecuteStatus.None;
+        }
+
+        public async Task<ExecuteStatus> ExecuteActionAsync(IAction action, object? dataTransfer)
+        {
+            var provider = action as ICommandExecuter;
+
+            if (provider != null)
+            {
+                if (ExecutingActionsCache.Count > MAX_BUILDER_CAPACITY)
+                {
+                    throw new InvalidOperationException("Capacity of builder now is maximum!");
+                }
+
+                if (!ExecutingActionsCache.ContainsKey(action.BuilderID))
+                {
+                    var actionCache = new Dictionary<string, IAction>(MAX_ACTION_CAPACITY_EACH_BUILDER);
+                    ExecutingActionsCache.Add(action.BuilderID, actionCache);
+                }
+
+                if (!ExecutingActionsCache[action.BuilderID].ContainsKey(action.ActionID))
+                {
+                    if (ExecutingActionsCache[action.BuilderID].Count > MAX_ACTION_CAPACITY_EACH_BUILDER)
+                    {
+                        throw new InvalidOperationException("Capacity of action now is maximum!");
+                    }
+
+                    RegisterActionToCache(provider);
+
+                    provider.IsCompletedChanged += ActionIsCompletedChanged;
+                    provider.IsCanceledChanged += ActionIsCanceledChanged;
+
+                    await provider.ExecuteAsync(dataTransfer);
+
+                    return ExecuteStatus.OK;
+                }
+                else
+                {
+                    provider.AlterExecute(dataTransfer);
                     return ExecuteStatus.ExistedExecuter;
                 }
             }
