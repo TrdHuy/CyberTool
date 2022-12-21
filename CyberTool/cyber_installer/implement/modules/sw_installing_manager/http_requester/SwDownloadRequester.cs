@@ -1,4 +1,5 @@
-﻿using cyber_installer.@base.http_requester;
+﻿using cyber_base.implement.utils;
+using cyber_installer.@base.http_requester;
 using cyber_installer.implement.modules.ui_event_handler.async_task;
 using cyber_installer.model;
 using System;
@@ -63,35 +64,31 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
                 var responseContent = await response.Content.ReadAsStringAsync();
 
                 var isDownloadable = false;
-                var fileName = "";
-                var executePath = "";
+                ToolVersionVO? responseToolVersionVO = null;
                 try
                 {
                     isDownloadable = response.Headers.GetValues(RESPONSE_IS_TOOL_DOWNLOADABLE_HEADER_ID)
                         .FirstOrDefault() == "1";
-                    fileName = response.Headers.GetValues(RESPONSE_TOOL_FILE_NAME_HEADER_ID)
-                        .FirstOrDefault();
-                    executePath = response.Headers.GetValues(RESPONSE_TOOL_EXECUTE_PATH_HEADER_ID)
-                        .FirstOrDefault() ?? "";
+                    responseToolVersionVO = JsonHelper.DeserializeObject<ToolVersionVO>(responseContent);
                 }
                 catch
                 {
                     isDownloadable = false;
                 }
 
-                if (!isDownloadable)
+                if (!isDownloadable ||  responseToolVersionVO == null)
                 {
                     downLoadResult = null;
                 }
                 else
                 {
                     var downloadFileFolder = GetToolDownloadFileFolder(requestToolKey, requestToolVersion);
-                    var versionExecutePath = downloadFileFolder + "\\" + executePath;
+                    var versionExecutePath = downloadFileFolder + "\\" + responseToolVersionVO.ExecutePath;
                     if (!Directory.Exists(downloadFileFolder))
                     {
                         Directory.CreateDirectory(downloadFileFolder);
                     }
-                    var downloadFilePath = downloadFileFolder + "\\" + fileName;
+                    var downloadFilePath = downloadFileFolder + "\\" + responseToolVersionVO.FileName;
                     var requestHeaderContentMap = new Dictionary<string, string>();
                     requestHeaderContentMap.Add(REQUEST_DOWNLOAD_TOOL_HEADER_KEY
                         , REQUEST_DOWNLOAD_TOOL_HEADER_ID);
@@ -121,7 +118,8 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
                         {
                             Version = requestToolVersion,
                             DownloadFilePath = downloadFilePath,
-                            ExecutePath = executePath,
+                            ExecutePath = responseToolVersionVO.ExecutePath,
+                            AssemblyName = responseToolVersionVO.AssemblyName,
                             VersionStatus = ToolVersionStatus.VersionDownloadedButWithoutInstalled,
                         };
 

@@ -23,7 +23,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.actions
         {
             _availableItemViewModel = DataTransfer?[0] as AvailableItemViewModel
                 ?? throw new ArgumentNullException();
-            _toolInfo = _availableItemViewModel?.ToolInfo as ToolVO
+            _toolInfo = _availableItemViewModel.ToolInfo as ToolVO
                 ?? throw new ArgumentNullException();
         }
 

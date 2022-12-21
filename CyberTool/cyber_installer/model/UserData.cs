@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace cyber_installer.model
 {
+    /// <summary>
+    /// Dữ liệu của người dùng, được lưu trữ dưới dạng text (json)
+    /// Bao gồm các dữ liệu của việc cài đặt phần mềm,
+    /// cài đặt chứng chỉ
+    /// </summary>
     internal struct UserData
     {
         public UserData()
@@ -58,6 +63,7 @@ namespace cyber_installer.model
         public string Version { get; set; } = "";
         public string DownloadFilePath { get; set; } = "";
         public string ExecutePath { get; set; } = "";
+        public string AssemblyName { get; set; } = "";
         public ToolVersionStatus VersionStatus { get; set; } = ToolVersionStatus.None;
     }
 
