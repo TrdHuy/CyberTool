@@ -1,6 +1,7 @@
 ﻿using cyber_base.async_task;
 using cyber_base.implement.utils;
 using cyber_installer.@base.async_task;
+using cyber_installer.definitions;
 using cyber_installer.model;
 using Microsoft.Win32;
 using System;
@@ -17,12 +18,11 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
 {
     internal class InstallSoftwareTask : AbsParamAsyncTask
     {
-        private const string INSTALLATION_INFO_FILE_NAME = "ci.json";
-        private const string INSTALLATION_INFO_FOLDER_NAME = ".h2sw";
+        private const string INSTALLATION_INFO_FILE_NAME = CyberInstallerDefinition.INSTALLATION_INFO_FILE_NAME;
+        private const string INSTALLATION_INFO_FOLDER_NAME = CyberInstallerDefinition.INSTALLATION_INFO_FOLDER_NAME;
 
         private ToolData _installingToolData;
         private string _installPath;
-
 
         public InstallSoftwareTask(ToolData toolData
             , string installPath
@@ -66,7 +66,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                 _installingToolData.ExecutePath = _installPath + "\\" + latestVersionTool.ExecutePath;
                 _installingToolData.InstallPath = _installPath;
                 _installingToolData.ToolStatus = ToolStatus.Installed;
-                var installationInfo = await ExportInstallationInfo();
+                var installationInfo = await ExportInstallationInfo(latestVersionTool.AssemblyName);
                 CreateUninstaller(installationInfo);
                 ExtractIconToInstallaInfoFolder();
             }
@@ -84,13 +84,14 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
             _installingToolData.IconSource = newFilePath;
         }
 
-        private async Task<InstallationData> ExportInstallationInfo()
+        private async Task<InstallationData> ExportInstallationInfo(string assemblyName)
         {
             var installationInfoFilePath = CreateCyberInfoFileForInstalledSoftware();
             var installationInfo = new InstallationData()
             {
                 ToolName = _installingToolData.Name,
                 Guid = Guid.NewGuid().ToString("B"),
+                AssemblyName = assemblyName,
                 ToolKey = _installingToolData.StringId,
                 CurrentInstalledVersion = _installingToolData.CurrentInstalledVersion,
                 ExecutePath = _installingToolData.ExecutePath,
@@ -132,10 +133,8 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                 try
                 {
                     RegistryKey? key = null;
-
                     try
                     {
-
                         string guidText = installationInfo.Guid;
                         key = parent.OpenSubKey(guidText, true) ??
                               parent.CreateSubKey(guidText);

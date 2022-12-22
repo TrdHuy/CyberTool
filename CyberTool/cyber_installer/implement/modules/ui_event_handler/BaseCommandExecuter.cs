@@ -33,6 +33,11 @@ namespace cyber_installer.implement.modules.ui_event_handler
         {
         }
 
+        protected override async Task ExecuteCommandAsync()
+        {
+            await Task.Delay(100);
+        }
+
         protected override void ExecuteOnCancel()
         {
         }

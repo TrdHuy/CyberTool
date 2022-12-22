@@ -22,19 +22,24 @@ namespace cyber_installer.view_models.tabs.available_tab
 
         public AvailableItemViewModel(ToolVO toolVO) : base(toolVO)
         {
-
             _downloadAndInstallCommand = new CommandExecuterImpl((paramaters) =>
             {
                 var data = paramaters ?? this;
                 return KeyActionListener.Current.OnKey(CyberInstallerDefinition.CYBER_INSTALLER_INDENTIFER
                     , CyberInstallerKeyFeatureTag.KEY_TAG_SWI_AT_DOWNLOAD_AND_INSTALL_FEATURE
                     , data) as ICommandExecuter;
-            });
+            }, isAsync: true);
 
         }
 
         protected override async void InstantiateItemStatus()
         {
+            try
+            {
+                _iconSource = new Uri(_toolVO.IconSource);
+            }
+            catch { }
+
             IsLoadingItemStatus = true;
             if (await UserDataManager
                 .Current

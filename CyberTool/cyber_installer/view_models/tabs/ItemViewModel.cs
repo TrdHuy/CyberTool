@@ -12,7 +12,7 @@ namespace cyber_installer.view_models.tabs
 {
     internal abstract class ItemViewModel : BaseViewModel, IItemContext
     {
-        private Uri? _iconSource;
+        protected Uri? _iconSource;
         private ItemStatus _itemStatus;
         private string _version = "";
         private string _softwareName = "";
@@ -90,14 +90,6 @@ namespace cyber_installer.view_models.tabs
             _toolVO = toolVO;
             _softwareName = toolVO.Name;
             _version = toolVO.LatestVersion;
-            try
-            {
-                _iconSource = new Uri(toolVO.IconSource);
-            }
-            catch
-            {
-
-            }
             InstantiateItemStatus();
         }
 

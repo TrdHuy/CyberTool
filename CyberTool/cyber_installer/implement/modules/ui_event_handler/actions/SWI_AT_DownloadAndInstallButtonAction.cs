@@ -35,7 +35,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.actions
                 && _availableItemViewModel != null;
         }
 
-        protected async override void ExecuteCommand()
+        protected async override Task ExecuteCommandAsync()
         {
             _availableItemViewModel.ItemStatus = ItemStatus.Downloading;
             var toolData = await SwInstallingManager.Current.StartDownloadingLatestVersionToolTask(_toolInfo

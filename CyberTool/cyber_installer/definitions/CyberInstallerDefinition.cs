@@ -33,11 +33,14 @@ namespace cyber_installer.definitions
         public const string UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY = "UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY";
         public const string UPDATE_CYBER_INSTALLER_TASK_NAME = "Updating cyber installer";
 
+        public const string INSTALLATION_INFO_FILE_NAME = "ci.json";
+        public const string INSTALLATION_INFO_FOLDER_NAME = ".h2sw";
     }
 
     internal class CyberInstallerKeyFeatureTag
     {
         public const string KEY_TAG_SWI_AT_DOWNLOAD_AND_INSTALL_FEATURE = "KEY_TAG_SWI_AT_DOWNLOAD_AND_INSTALL_FEATURE";
+        public const string KEY_TAG_SWI_AT_UNISTALL_FEATURE = "KEY_TAG_SWI_AT_UNISTALL_FEATURE";
     }
 
 }

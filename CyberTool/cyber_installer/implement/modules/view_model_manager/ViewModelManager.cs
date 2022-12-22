@@ -1,10 +1,9 @@
 ﻿using cyber_base.view_model;
 using cyber_installer.@base;
+using cyber_installer.view_models.tabs.available_tab;
+using cyber_installer.view_models.tabs.installed_tab;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace cyber_installer.implement.modules.view_model_manager
 {
@@ -17,6 +16,22 @@ namespace cyber_installer.implement.modules.view_model_manager
             get
             {
                 return ModuleManager.VMM_Instance;
+            }
+        }
+
+        public AvailableTabViewModel AvailableTabViewModel
+        {
+            get
+            {
+                return (AvailableTabViewModel)DataContextCache[typeof(AvailableTabViewModel)];
+            }
+        }
+
+        public InstalledTabViewModel InstalledTabViewModel
+        {
+            get
+            {
+                return (InstalledTabViewModel)DataContextCache[typeof(InstalledTabViewModel)];
             }
         }
 

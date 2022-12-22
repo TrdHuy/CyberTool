@@ -4,6 +4,7 @@ using cyber_installer.@base;
 using cyber_installer.@base.modules;
 using cyber_installer.implement.modules.sw_installing_manager.http_requester;
 using cyber_installer.implement.modules.ui_event_handler.async_task;
+using cyber_installer.implement.modules.utils;
 using cyber_installer.model;
 using System;
 using System.Collections.Generic;
@@ -88,9 +89,29 @@ namespace cyber_installer.implement.modules.sw_installing_manager
             };
             await installTask.Execute();
 
-
             return toolData;
         }
 
+        public async Task StartUninstallToolTask(ToolData toolData, Action<object, double>? progressChangedCallback = null)
+        {
+            var installTask = new UninstallSoftwareTask(toolData
+                 , callback: (res) =>
+                 {
+                     if (res.MesResult == MessageAsyncTaskResult.Aborted
+                         || res.MesResult == MessageAsyncTaskResult.Faulted)
+                     {
+                         _logger.E(res.Messsage);
+                     }
+                     else
+                     {
+                         toolData.ToolStatus = ToolStatus.Removed;
+                     }
+                 });
+            installTask.ProgressChanged += (s, e2) =>
+            {
+                progressChangedCallback?.Invoke(s, e2);
+            };
+            await installTask.Execute();
+        }
     }
 }

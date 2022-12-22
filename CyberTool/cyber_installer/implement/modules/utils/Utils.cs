@@ -1,8 +1,6 @@
 ﻿using System;
-using cyber_installer.@base;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
 using System.Reflection;
@@ -10,6 +8,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using cyber_installer.definitions;
+using System.Windows.Media.Imaging;
 
 namespace cyber_installer.implement.modules.utils
 {
@@ -136,7 +136,7 @@ namespace cyber_installer.implement.modules.utils
             }
         }
 
-        public static async Task ExtractZipArchiveEntry(ZipArchiveEntry entry, string folderLocation)
+        public static async Task ExtractToFileAsync(this ZipArchiveEntry entry, string folderLocation)
         {
             if (Directory.Exists(folderLocation))
             {
@@ -162,5 +162,114 @@ namespace cyber_installer.implement.modules.utils
                 yield return item;
             }
         }
+
+        public static string GetInstalledSoftwareInfoFilePath(string intallFolderPath)
+        {
+            return intallFolderPath
+                + "\\" + CyberInstallerDefinition.INSTALLATION_INFO_FOLDER_NAME
+                + "\\" + CyberInstallerDefinition.INSTALLATION_INFO_FILE_NAME;
+        }
+
+        public static async Task<BitmapImage?> CreateBitmapImageFromFile(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                using (var ms = new MemoryStream(await File.ReadAllBytesAsync(filePath)))
+                {
+                    var result = new BitmapImage();
+                    result.BeginInit();
+                    result.CacheOption = BitmapCacheOption.OnLoad;
+                    result.StreamSource = ms;
+                    result.EndInit();
+                    return result;
+                }
+            }
+            return null;
+        }
+
+        public static async Task ExtractZipToFolder(string zipFilePath
+            , string folderLocation
+            , Func<ZipArchiveEntry, bool>? shouldExtractEntry = null
+            , EntryExtractedCallbackHandler? entryExtractedCallback = null)
+        {
+            using (ZipArchive archive = ZipFile.OpenRead(zipFilePath))
+            {
+                var totalFiles = archive.Entries.Count;
+                var extractedFileCount = 0;
+                foreach (ZipArchiveEntry entry in archive.Entries)
+                {
+                    if (shouldExtractEntry?.Invoke(entry) ?? true)
+                    {
+                        await entry.ExtractToFileAsync(folderLocation);
+                        extractedFileCount++;
+                        entryExtractedCallback?.Invoke(extractedFileCount, totalFiles, entry);
+                    }
+                }
+            }
+        }
+
+        public static async Task DeleteAllFileInFolder(string folderLocation
+            , int fileDeletingDelay = 0
+            , Func<FileInfo, bool>? shouldDeleteFile = null
+            , FileDeletedCallbackHandler? fileDeletedCallback = null)
+        {
+            DirectoryInfo di = new DirectoryInfo(folderLocation);
+            int deletedFileCount = 0;
+            int totalFile = 0;
+
+            async Task DeleteFileAsync(FileInfo file)
+            {
+                await Task.Run(() =>
+                {
+                    if (File.Exists(file.FullName))
+                    {
+                        File.Delete(file.FullName);
+                    }
+                });
+            }
+
+            async Task<int> CountFilesInFolder(DirectoryInfo di)
+            {
+                int count = di.GetFiles().Length;
+                await Task.Run(async () =>
+                {
+                    foreach (DirectoryInfo dir in di.GetDirectories())
+                    {
+                        count += await CountFilesInFolder(dir);
+                    }
+                });
+                return count;
+            }
+
+            async Task DeleteFileInFolder(DirectoryInfo di)
+            {
+                foreach (FileInfo file in di.GetFiles())
+                {
+                    if (shouldDeleteFile?.Invoke(file) ?? true)
+                    {
+                        await DeleteFileAsync(file);
+                        deletedFileCount++;
+                        fileDeletedCallback?.Invoke(deletedFileCount, totalFile, file);
+                        await Task.Delay(fileDeletingDelay);
+                    }
+                }
+                foreach (DirectoryInfo dir in di.GetDirectories())
+                {
+                    await DeleteFileInFolder(dir);
+                    dir.Delete();
+                }
+            }
+
+            totalFile = await CountFilesInFolder(di);
+            await DeleteFileInFolder(di);
+        }
+
+        public delegate void FileDeletedCallbackHandler(int deletedFileCount
+            , int totalFile
+            , FileInfo deletedFileInfo);
+
+        public delegate void EntryExtractedCallbackHandler(int extractedFileCount
+            , int totalFile
+            , ZipArchiveEntry deletedFileInfo);
     }
 }

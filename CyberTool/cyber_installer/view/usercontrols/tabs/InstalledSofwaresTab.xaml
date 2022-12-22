@@ -57,6 +57,14 @@
 						<ControlTemplate TargetType="ListViewItem">
 							<iv:ItemViewHolder x:Name="ViewHolder"
 											   ItemStatus="{Binding ItemStatus}" />
+							<ControlTemplate.Triggers>
+								<DataTrigger Binding="{Binding ItemStatus}"
+											 Value="Installed">
+									<Setter TargetName="ViewHolder"
+											Property="SingleButtonCommand"
+											Value="{Binding UninstallCommand}" />
+								</DataTrigger>
+							</ControlTemplate.Triggers>
 						</ControlTemplate>
 					</Setter.Value>
 				</Setter>

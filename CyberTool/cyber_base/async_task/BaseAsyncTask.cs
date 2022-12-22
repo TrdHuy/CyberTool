@@ -20,6 +20,8 @@ namespace cyber_base.async_task
         private bool _isCompletedCallback;
         private bool _isCanceled;
         private bool _isExecuting;
+        protected bool _isDelayBeforeExecutingTask = false;
+
         protected AsyncTaskResult _result { get; set; }
         protected string _name { get; set; }
         protected ulong _delayTime { get; set; } = 0;
@@ -160,6 +162,14 @@ namespace cyber_base.async_task
                 }
                 try
                 {
+                    if (_isDelayBeforeExecutingTask)
+                    {
+                        if (_delayTime > 0)
+                        {
+                            await DoWaitRestDelay((long)_delayTime);
+                        }
+                    }
+
                     // do main task
                     await Task.Run(DoMainFunc)
                     .ContinueWith((t) =>
@@ -172,11 +182,15 @@ namespace cyber_base.async_task
                         // exception will be thrown here
                         HandleMainTaskException(t);
                     });
-                    long restLoadingTime = (long)DelayTime - asynTaskExecuteWatcher.ElapsedMilliseconds;
-                    if (restLoadingTime > 0)
+
+                    if (!_isDelayBeforeExecutingTask)
                     {
-                        // delay the task if its execution duration smaller than inited delay time
-                        await DoWaitRestDelay(restLoadingTime);
+                        long restLoadingTime = (long)DelayTime - asynTaskExecuteWatcher.ElapsedMilliseconds;
+                        if (restLoadingTime > 0)
+                        {
+                            // delay the task if its execution duration smaller than inited delay time
+                            await DoWaitRestDelay(restLoadingTime);
+                        }
                     }
 
                     // set completed flag

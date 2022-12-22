@@ -5,6 +5,7 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:anim="clr-namespace:cyber_base.implement.views.cyber_anim;assembly=cyber_base"
 			 mc:Ignorable="d"
+			 xmlns:cbeha="clr-namespace:cyber_base.implement.views.cyber_behavior;assembly=cyber_base"
 			 FontFamily="Calibri"
 			 d:DesignHeight="113.28"
 			 d:DesignWidth="651.84">
@@ -66,7 +67,7 @@
 						   Text="Downloading" />
 
 				<ProgressBar x:Name="PART_SwHandlingProgressBar"
-							 Value="{Binding SwHandlingProgress}"
+							 cbeha:CyberElementBehavior.SmoothValue="{Binding SwHandlingProgress}"
 							 BorderThickness="0"
 							 Margin="0,5,0,0"
 							 Foreground="{DynamicResource ButtonBackground_Level1}"

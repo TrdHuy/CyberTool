@@ -38,6 +38,12 @@ namespace cyber_installer.implement.modules.ui_event_handler
                         , dataTransfer
                         , logger);
                     break;
+                case CyberInstallerKeyFeatureTag.KEY_TAG_SWI_AT_UNISTALL_FEATURE:
+                    commandExecuter = new SWI_IT_UninstallButtonAction(keyTag
+                        , CyberInstallerDefinition.CYBER_INSTALLER_INDENTIFER
+                        , dataTransfer
+                        , logger);
+                    break;
                 default:
                     break;
             }
