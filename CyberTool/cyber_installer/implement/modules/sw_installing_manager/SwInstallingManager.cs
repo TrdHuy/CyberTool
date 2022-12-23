@@ -68,7 +68,9 @@ namespace cyber_installer.implement.modules.sw_installing_manager
             }
         }
 
-        public async Task<ToolData?> StartToolInstallingTask(ToolData toolData, string installPath)
+        public async Task<ToolData?> StartToolInstallingTask(ToolData toolData
+            , string installPath
+            , Action<double>? installProgressChangedCallback = null)
         {
             var installTask = new InstallSoftwareTask(toolData
                 , installPath
@@ -86,6 +88,7 @@ namespace cyber_installer.implement.modules.sw_installing_manager
                 });
             installTask.ProgressChanged += (s, e2) =>
             {
+                installProgressChangedCallback?.Invoke(e2);
             };
             await installTask.Execute();
 

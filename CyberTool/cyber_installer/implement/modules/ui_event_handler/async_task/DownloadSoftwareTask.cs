@@ -4,9 +4,11 @@ using cyber_installer.@base.async_task;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -57,24 +59,47 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
         {
             if (_sourceUri != null && _filePathDestination != null && _requestHeaderContentMap != null)
             {
-#pragma warning disable SYSLIB0014
-                using (WebClient myWebClient = new WebClient())
-#pragma warning restore SYSLIB0014
+                // Download software from server and write it in a specific folder
+#pragma warning disable SYSLIB0014 // Type or member is obsolete
+                using (WebClient client = new WebClient())
+#pragma warning restore SYSLIB0014 // Type or member is obsolete
                 {
+                    CurrentProgress = 0;
+
+                    //Setup request header
                     foreach (var kv in _requestHeaderContentMap)
                     {
-                        myWebClient.Headers.Add(kv.Key, kv.Value);
+                        client.Headers.Add(kv.Key, kv.Value);
                     }
 
-                    myWebClient.DownloadProgressChanged += (s, e) =>
+                    using (var stream = await client.OpenReadTaskAsync(_sourceUri))
                     {
-                        var rate = e.BytesReceived / e.TotalBytesToReceive * 100;
-                        CurrentProgress = rate;
-                    };
-                    await myWebClient.DownloadFileTaskAsync(_sourceUri, _filePathDestination);
+                        var totalBytes = Int32.Parse(client.ResponseHeaders?[HttpResponseHeader.ContentLength] ?? "0");
+                        var buffer = new byte[totalBytes];
+                        int read = 0;
+                        int total = 0;
+                        int received = 0;
+                        float percentage = 0;
+                        var receivedBytes = 0;
+                        using (var fileStream = File.Create(_filePathDestination))
+                        {
+                            while ((read = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                            {
+                                await fileStream.WriteAsync(buffer, 0, read);
+                                receivedBytes += read;
+                                received = unchecked((int)receivedBytes);
+                                total = unchecked((int)totalBytes);
+                                percentage = ((float)received) / total;
+                                CurrentProgress = percentage * 80;
+                                await Task.Delay(100);
+                            }
+                        }
+
+                        stream.Close();
+                    }
                 }
 
-
+                // Download icon of software from server and write it in a specific folder
                 using (HttpClient client = new HttpClient())
                 {
                     var response = await client.GetAsync(_iconSourceUri);
@@ -87,8 +112,8 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                     }
 
                 }
-
-
+                CurrentProgress = 100;
+                await Task.Delay(300);
             }
 
         }

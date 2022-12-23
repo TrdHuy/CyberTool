@@ -78,7 +78,7 @@ namespace cyber_installer
             return _taskHandleManager.IsTaskAvailable(taskTypeKey);
         }
 
-        public string ShowDestinationFolderWindow(ToolVO toolVO)
+        public DestinationFolderSelectionWindow ShowDestinationFolderWindow(ToolVO toolVO)
         {
             return _windowDirector.ShowDestinationFolderWindow(toolVO);
         }

@@ -51,6 +51,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                     var isShouldUninstallSoftware = false;
                     var installedSoftwareInfoContent = await File.ReadAllTextAsync(installedSoftwareInfoFilePath);
                     var installedSoftwareInfo = JsonHelper.DeserializeObject<InstallationData>(installedSoftwareInfoContent ?? "");
+
                     if (installedSoftwareInfo != null && !string.IsNullOrEmpty(installedSoftwareInfo.AssemblyName))
                     {
                         await KillProcessIfExist(installedSoftwareInfo.AssemblyName, _installingToolData.ExecutePath);
@@ -70,10 +71,17 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                             , fileDeletingDelay: 300
                             , fileDeletedCallback: (deletedCount, total, deletedFile) =>
                             {
-                                double progress = 1/(double)total * 80;
-                                CurrentProgress += progress; 
+                                double progress = 1 / (double)total * 80;
+                                CurrentProgress += progress;
                             });
+
+                        if (!string.IsNullOrEmpty(_installingToolData.ShortcutPath)
+                            && File.Exists(_installingToolData.ShortcutPath))
+                        {
+                            File.Delete(_installingToolData.ShortcutPath);
+                        }
                     }
+
                     CurrentProgress = 100;
                 }
             }

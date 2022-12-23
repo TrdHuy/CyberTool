@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Linq;
 using System.Windows.Media.Imaging;
+using System.Windows.Input;
 
 namespace cyber_installer.view.window
 {
@@ -25,7 +26,7 @@ namespace cyber_installer.view.window
         {
             InitializeComponent();
             PART_ToolNameTextBlock.Text = "Choose the folder in which to install " + toolVO.Name;
-            PART_ToolImage.Source = new BitmapImage(new Uri(toolVO.IconSource)); 
+            PART_ToolImage.Source = new BitmapImage(new Uri(toolVO.IconSource));
             _spaceRequire = toolVO.ToolVersions.Last().CompressLength + toolVO.ToolVersions.Last().RawLength;
             SetSpaceTextBlock(_spaceRequire, PART_SpaceRequireTextBlock);
         }
@@ -50,6 +51,16 @@ namespace cyber_installer.view.window
         public new string ShowDialog()
         {
             base.ShowDialog();
+            return PART_DestinationFolderTextBox.Text;
+        }
+
+        public bool IsCreateDesktopShortcut()
+        {
+            return PART_CreateShortcutCheckbox.IsChecked ?? false;
+        }
+
+        public string GetDestinationFolderPath()
+        {
             return PART_DestinationFolderTextBox.Text;
         }
 
@@ -130,5 +141,54 @@ namespace cyber_installer.view.window
             }
         }
 
+        private void HandleMouseDownEvent(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var ele = sender as FrameworkElement;
+            if (ele != null)
+            {
+                switch (ele.Name)
+                {
+                    case "PART_CreateDesktopShortcutDesTb":
+                        {
+                            PART_CreateShortcutCheckbox.IsChecked = !PART_CreateShortcutCheckbox.IsChecked;
+                            break;
+                        }
+                }
+            }
+        }
+
+        private void HandleMouseEnterEvent(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var ele = sender as FrameworkElement;
+            if (ele != null)
+            {
+                switch (ele.Name)
+                {
+                    case "PART_CreateDesktopShortcutDesTb":
+                        {
+                            PART_CreateDesktopShortcutDesTb.TextDecorations = TextDecorations.Underline;
+                            PART_CreateDesktopShortcutDesTb.Cursor = Cursors.Hand;
+                            break;
+                        }
+                }
+            }
+        }
+
+        private void HandleMouseLeaveEvent(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var ele = sender as FrameworkElement;
+            if (ele != null)
+            {
+                switch (ele.Name)
+                {
+                    case "PART_CreateDesktopShortcutDesTb":
+                        {
+                            PART_CreateDesktopShortcutDesTb.TextDecorations = null;
+                            PART_CreateDesktopShortcutDesTb.Cursor = Cursors.None;
+                            break;
+                        }
+                }
+            }
+        }
     }
 }

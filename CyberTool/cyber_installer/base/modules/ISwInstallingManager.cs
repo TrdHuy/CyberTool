@@ -11,6 +11,6 @@ namespace cyber_installer.@base.modules
     {
         public string GetInstallationPath();
         public Task<ToolData?> StartDownloadingLatestVersionToolTask(ToolVO toolVO, Action<object, double> downloadProgressChangedCallback);
-        public Task<ToolData?> StartToolInstallingTask(ToolData toolData, string installPath);
+        public Task<ToolData?> StartToolInstallingTask(ToolData toolData, string installPath, Action<double>? installProgressChangedCallback = null);
     }
 }

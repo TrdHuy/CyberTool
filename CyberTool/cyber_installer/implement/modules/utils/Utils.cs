@@ -142,8 +142,15 @@ namespace cyber_installer.implement.modules.utils
             {
                 using (Stream stream = entry.Open())
                 {
-                    using (FileStream fileStream = File.Create(folderLocation + "\\" + entry.Name))
-                        await stream.CopyToAsync(fileStream);
+                    if (entry.FullName.EndsWith('/'))
+                    {
+                        Directory.CreateDirectory(folderLocation + "\\" + entry.FullName.Replace("/", "\\"));
+                    }
+                    else
+                    {
+                        using (FileStream fileStream = File.Create(folderLocation + "\\" + entry.Name))
+                            await stream.CopyToAsync(fileStream);
+                    }
                 }
             }
         }
@@ -189,13 +196,16 @@ namespace cyber_installer.implement.modules.utils
 
         public static async Task ExtractZipToFolder(string zipFilePath
             , string folderLocation
+            , int entryExtratedDelay = 0
             , Func<ZipArchiveEntry, bool>? shouldExtractEntry = null
             , EntryExtractedCallbackHandler? entryExtractedCallback = null)
         {
+            var totalFiles = 0;
+            var extractedFileCount = 0;
             using (ZipArchive archive = ZipFile.OpenRead(zipFilePath))
             {
-                var totalFiles = archive.Entries.Count;
-                var extractedFileCount = 0;
+                totalFiles = archive.Entries.Count;
+                extractedFileCount = 0;
                 foreach (ZipArchiveEntry entry in archive.Entries)
                 {
                     if (shouldExtractEntry?.Invoke(entry) ?? true)
@@ -203,6 +213,7 @@ namespace cyber_installer.implement.modules.utils
                         await entry.ExtractToFileAsync(folderLocation);
                         extractedFileCount++;
                         entryExtractedCallback?.Invoke(extractedFileCount, totalFiles, entry);
+                        await Task.Delay(entryExtratedDelay);
                     }
                 }
             }
@@ -262,6 +273,18 @@ namespace cyber_installer.implement.modules.utils
 
             totalFile = await CountFilesInFolder(di);
             await DeleteFileInFolder(di);
+        }
+
+        public static string CreateDesktopShortCutToFile(string sourceFilePath)
+        {
+            object shDesktop = (object)"Desktop";
+            IWshRuntimeLibrary.WshShell shell = new IWshRuntimeLibrary.WshShell();
+            string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\" + Path.GetFileNameWithoutExtension(sourceFilePath) + ".lnk";
+            IWshRuntimeLibrary.IWshShortcut shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(shortcutAddress);
+            shortcut.Hotkey = "Ctrl+Shift+C";
+            shortcut.TargetPath = sourceFilePath;
+            shortcut.Save();
+            return shortcutAddress;
         }
 
         public delegate void FileDeletedCallbackHandler(int deletedFileCount

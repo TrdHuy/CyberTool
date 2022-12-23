@@ -47,7 +47,7 @@ namespace cyber_installer.model
         public string InstallPath { get; set; } = "";
         public string ExecutePath { get; set; } = "";
         public ToolStatus ToolStatus { get; set; }
-
+        public string ShortcutPath { get; set; } = "";
         public string LatestVersion => ToolVersionSource?.Last().Version ?? "";
 
         public string IconSource { get; set; } = "";

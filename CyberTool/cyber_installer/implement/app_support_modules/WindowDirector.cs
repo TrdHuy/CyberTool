@@ -112,14 +112,15 @@ namespace cyber_installer.implement.app_support_modules
             _cyberInstallerWindow?.Show();
         }
 
-        public string ShowDestinationFolderWindow(ToolVO toolVO)
+        public DestinationFolderSelectionWindow ShowDestinationFolderWindow(ToolVO toolVO)
         {
             var destinationFolderWindow = new DestinationFolderSelectionWindow(toolVO)
             {
                 Owner = _cyberInstallerWindow,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner 
             };
-            return destinationFolderWindow.Show();
+            var res = destinationFolderWindow.Show();
+            return destinationFolderWindow;
         }
 
         public CyberContactMessage OpenWaitingTaskBox(string content

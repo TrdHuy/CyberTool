@@ -2,6 +2,7 @@
 using cyber_base.implement.utils;
 using cyber_installer.@base.async_task;
 using cyber_installer.definitions;
+using cyber_installer.implement.modules.utils;
 using cyber_installer.model;
 using Microsoft.Win32;
 using System;
@@ -45,8 +46,6 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
 
         protected override async Task DoAsyncMainTask(object param, AsyncTaskResult result, CancellationTokenSource token)
         {
-            await Task.Delay(1000);
-
             // Trường hợp version đang ở trạng thái chưa được cài đặt
             if (_installingToolData.ToolStatus != ToolStatus.Installed
                 && _installingToolData.ToolVersionSource.Count > 0)
@@ -55,10 +54,13 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                 var folderLocation = _installPath;
                 var zipFilePath = latestVersionTool.DownloadFilePath;
 
-                ZipFile.ExtractToDirectory(
-                    sourceArchiveFileName: zipFilePath
-                    , destinationDirectoryName: folderLocation
-                    , overwriteFiles: true);
+                await Utils.ExtractZipToFolder(zipFilePath
+                    , folderLocation
+                    , entryExtratedDelay: 0
+                    , entryExtractedCallback: (extractedCount, total, zipEntry) =>
+                    {
+                        CurrentProgress = (double)extractedCount / (double)total * 70;
+                    });
 
                 File.Delete(zipFilePath);
                 latestVersionTool.VersionStatus = ToolVersionStatus.VersionInstalled;
@@ -66,9 +68,17 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                 _installingToolData.ExecutePath = _installPath + "\\" + latestVersionTool.ExecutePath;
                 _installingToolData.InstallPath = _installPath;
                 _installingToolData.ToolStatus = ToolStatus.Installed;
+
+                await Task.Delay(300);
                 var installationInfo = await ExportInstallationInfo(latestVersionTool.AssemblyName);
+                CurrentProgress = 80;
+                await Task.Delay(300);
                 CreateUninstaller(installationInfo);
+                CurrentProgress = 90;
+                await Task.Delay(300);
                 ExtractIconToInstallaInfoFolder();
+                CurrentProgress = 100;
+
             }
         }
 
