@@ -244,7 +244,15 @@ namespace cyber_base.async_task
                     IsCompleted = false;
                     IsFaulted = true;
                     IsCanceled = false;
-                    IsCompletedCallback = false;
+                    if (isAsyncCallback)
+                    {
+                        await Task.Run(DoCallback);
+                    }
+                    else
+                    {
+                        await DoCallback();
+                    }
+                    IsCompletedCallback = true;
                 }
                 finally
                 {
