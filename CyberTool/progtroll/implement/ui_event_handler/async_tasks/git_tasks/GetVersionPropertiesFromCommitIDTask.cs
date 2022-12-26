@@ -41,7 +41,7 @@ namespace progtroll.implement.ui_event_handler.async_tasks.git_tasks
                     throw new InvalidDataException("Param must be an array of string has 3 elements");
             }
 
-            _isEnableReport = false;
+            _isEnableAutomaticallyReport = false;
         }
 
         protected override void DoMainTask(object param, AsyncTaskResult result, CancellationTokenSource token)

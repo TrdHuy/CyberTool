@@ -14,6 +14,7 @@ namespace cyber_base.implement.async_task
     {
         EstimatedTime = 0,
         SubTasks = 1,
+        Manual = 2,
     }
 
     public class MultiAsyncTask : BaseAsyncTask
@@ -56,16 +57,23 @@ namespace cyber_base.implement.async_task
             , MultiAsyncTaskReportType reportType = MultiAsyncTaskReportType.EstimatedTime)
             : base(name, 0, delayTime, reportDelay)
         {
-            _estimatedTime = 0;
-            foreach (var ele in mainFunc)
-            {
-                _estimatedTime += ele.EstimatedTime;
-            }
             _mainFuncs = mainFunc;
             _cancellationTokenSource = cancellationTokenSource;
             _results = new List<AsyncTaskResult>();
             _callback = callback;
             _rpType = reportType;
+            if (_rpType == MultiAsyncTaskReportType.Manual)
+            {
+                _isEnableAutomaticallyReport = false;
+            }
+            else
+            {
+                _estimatedTime = 0;
+                foreach (var ele in mainFunc)
+                {
+                    _estimatedTime += ele.EstimatedTime;
+                }
+            }
         }
 
         public int TaskCount => _mainFuncs.Count;

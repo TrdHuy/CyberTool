@@ -28,7 +28,7 @@ namespace cyber_base.async_task
         protected ulong _estimatedTime { get; set; } = 0;
         protected double _progress { get; set; } = 0d;
         protected int _reportDelay { get; set; } = 0;
-        protected bool _isEnableReport { get; set; } = true;
+        protected bool _isEnableAutomaticallyReport { get; set; } = true;
 
         public ulong DelayTime => _delayTime;
         public AsyncTaskResult Result => _result;
@@ -156,7 +156,7 @@ namespace cyber_base.async_task
                 IsExecuting = true;
 
                 // Thực hiện report tiến độ nếu cần thiết
-                if (_isEnableReport)
+                if (_isEnableAutomaticallyReport)
                 {
                     DoReportTask();
                 }

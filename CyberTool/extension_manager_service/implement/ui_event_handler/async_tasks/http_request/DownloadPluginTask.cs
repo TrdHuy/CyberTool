@@ -40,7 +40,7 @@ namespace extension_manager_service.implement.ui_event_handler.async_tasks.http_
                 default:
                     throw new InvalidDataException("Param must be an array with 3 elements");
             }
-            _isEnableReport = false;
+            _isEnableAutomaticallyReport = false;
         }
 
         protected override async Task DoAsyncMainTask(object param, AsyncTaskResult result, CancellationTokenSource token)
