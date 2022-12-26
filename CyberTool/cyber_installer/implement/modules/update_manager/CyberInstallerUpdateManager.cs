@@ -100,23 +100,28 @@ namespace cyber_installer.implement.modules.update_manager
                 && _cyberInstallerVOCache != null
                 && App.Current.IsTaskAvailable(CyberInstallerDefinition.UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY))
             {
+
                 ToolData? downloadedCIToolData = null;
                 var cancellationTokenSource = new CancellationTokenSource();
-                var downloadTask = new CancelableAsyncTask(async (cts, atr) =>
+
+                var downloadTask = new SelfReferenceCancelableAsyncTask(async (task, cts, atr) =>
                     {
                         downloadedCIToolData = await SwInstallingManager
                             .Current
                             .StartDownloadingLatestVersionToolTask(_cyberInstallerVOCache
                        , downloadProgressChangedCallback: (s, e) =>
                        {
-
+                           task.SetCurrentProgress(e);
                        });
                         return atr;
                     }
                    , cancellationTokenSource: cancellationTokenSource
-                   , name: "Downloading!");
+                   , name: "Downloading!"
+                   , isEnableAutomaticallyReport: false
+                   , reportDelay: 0);
 
-                var installTask = new CancelableAsyncTask(async (cts, atr) =>
+
+                var installTask = new SelfReferenceCancelableAsyncTask(async (task, cts, atr) =>
                     {
                         if (downloadedCIToolData != null)
                         {
@@ -125,23 +130,40 @@ namespace cyber_installer.implement.modules.update_manager
                             var zipFilePath = latestVersionTool.DownloadFilePath;
 
                             // Install new cibs version
-                            using (ZipArchive archive = ZipFile.OpenRead(zipFilePath))
-                            {
-                                foreach (ZipArchiveEntry entry in archive.Entries)
-                                {
-                                    if (Path.GetDirectoryName(entry.FullName) == CIBS_FOLDER_ZIP_PATH)
-                                    {
-                                        await Utils.ExtractZipArchiveEntry(entry, folderLocation);
-                                    }
-                                }
-                            }
+                            await Utils.ExtractZipToFolder(zipFilePath
+                               , folderLocation
+                               , entryExtractedDelay: 300
+                               , countTotalFileToExtract: (zA) =>
+                               {
+                                   var totalFile = 0;
+                                   foreach (ZipArchiveEntry entry in zA.Entries)
+                                   {
+                                       if (Path.GetDirectoryName(entry.FullName) == CIBS_FOLDER_ZIP_PATH)
+                                       {
+                                           totalFile++;
+                                       }
+                                   }
+                                   return totalFile;
+                               }
+                               , shouldExtractEntry: (entry) =>
+                               {
+                                   // Extract new cibs version
+                                   return Path.GetDirectoryName(entry.FullName) == CIBS_FOLDER_ZIP_PATH;
+                               }
+                               , entryExtractedCallback: (eFC, tF, fI) =>
+                               {
+                                   task.SetCurrentProgress((double)eFC / (double)tF * 100);
+                               });
+
                             await Task.Delay(REQUEST_CIBS_UPDATE_CYBER_INSTALLER_DELAY_TIME);
                         }
 
                         return atr;
                     }
                    , cancellationTokenSource: cancellationTokenSource
-                   , name: "Installing cibs!");
+                   , name: "Installing cibs!"
+                   , isEnableAutomaticallyReport: false
+                   , reportDelay: 0);
 
 
                 List<BaseAsyncTask> tasks = new List<BaseAsyncTask>();
@@ -151,9 +173,8 @@ namespace cyber_installer.implement.modules.update_manager
                 MultiAsyncTask multiTask = new MultiAsyncTask(tasks
                     , new CancellationTokenSource()
                     , null
-                    , name: "Update Cyber Installer "
-                    , delayTime: 6000
-                    , reportDelay: 100);
+                    , name: "Update Cyber Installer"
+                    , reportType: MultiAsyncTaskReportType.Manual);
 
                 var message = await App.Current.ExecuteManageableMultipleTasks(
                     CyberInstallerDefinition.UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY

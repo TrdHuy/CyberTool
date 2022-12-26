@@ -196,7 +196,8 @@ namespace cyber_installer.implement.modules.utils
 
         public static async Task ExtractZipToFolder(string zipFilePath
             , string folderLocation
-            , int entryExtratedDelay = 0
+            , int entryExtractedDelay = 0
+            , Func<ZipArchive, int>? countTotalFileToExtract = null
             , Func<ZipArchiveEntry, bool>? shouldExtractEntry = null
             , EntryExtractedCallbackHandler? entryExtractedCallback = null)
         {
@@ -204,7 +205,7 @@ namespace cyber_installer.implement.modules.utils
             var extractedFileCount = 0;
             using (ZipArchive archive = ZipFile.OpenRead(zipFilePath))
             {
-                totalFiles = archive.Entries.Count;
+                totalFiles = countTotalFileToExtract?.Invoke(archive) ?? archive.Entries.Count;
                 extractedFileCount = 0;
                 foreach (ZipArchiveEntry entry in archive.Entries)
                 {
@@ -213,7 +214,7 @@ namespace cyber_installer.implement.modules.utils
                         await entry.ExtractToFileAsync(folderLocation);
                         extractedFileCount++;
                         entryExtractedCallback?.Invoke(extractedFileCount, totalFiles, entry);
-                        await Task.Delay(entryExtratedDelay);
+                        await Task.Delay(entryExtractedDelay);
                     }
                 }
             }

@@ -32,6 +32,7 @@ namespace cyber_installer.view.window
         public CyberInstallerWindow()
         {
             InitializeComponent();
+            Title = "v" + Utils.GetAppVersion().ToString();
             CyberInstallerUpdateManager.Current.IsUpdateableChanged += HandleUpdateableEventChanged;
         }
 
@@ -87,7 +88,11 @@ namespace cyber_installer.view.window
                     }
                 case "PART_UpdateButton":
                     {
-                        await CyberInstallerUpdateManager.Current.UpdateLatestCyberInstallerVersion();
+                        var confirm = App.Current.ShowYesNoQuestionBox("Do you want to update latest version of Cyber Installer?");
+                        if (confirm == cyber_base.definition.CyberContactMessage.Yes)
+                        {
+                            await CyberInstallerUpdateManager.Current.UpdateLatestCyberInstallerVersion();
+                        }
                         break;
                     }
             }
