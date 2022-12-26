@@ -42,7 +42,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
             this._password = password;
             this._storeName = storeName;
             this._storeLocation = storeLocation;
-            this._isEnableReport = false;
+            this._isEnableAutomaticallyReport = false;
         }
 
         public InstallRootCATask(X509Certificate2 cert
@@ -58,7 +58,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
             this._certToInstall = cert;
             this._storeName = storeName;
             this._storeLocation = storeLocation;
-            this._isEnableReport = false;
+            this._isEnableAutomaticallyReport = false;
         }
 
         protected override bool IsTaskPossible(object param)

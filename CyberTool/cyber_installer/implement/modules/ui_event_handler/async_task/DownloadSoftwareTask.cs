@@ -20,10 +20,10 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
         private Logger _logger = new Logger("DownloadSoftwareTask", "cyber_installer");
 
         private string _sourceToDownload;
-        private string _iconSource;
+        private string? _iconSource;
         private string _filePathDestination;
         private Uri _sourceUri;
-        private Uri _iconSourceUri;
+        private Uri? _iconSourceUri = null;
         private Dictionary<string, string> _requestHeaderContentMap;
         private Action<string>? _iconSourceDownloadedCallback;
 
@@ -44,15 +44,14 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                             ?? throw new ArgumentNullException("File path destination not found in params!");
                         _requestHeaderContentMap = data[2] as Dictionary<string, string>
                             ?? throw new ArgumentNullException("Request header content map not found in params!");
-                        _iconSource = data[3].ToString()
-                            ?? throw new ArgumentNullException("Icon source not found in params!");
+                        _iconSource = data[3]?.ToString();
                         _iconSourceDownloadedCallback = data[4] as Action<string>;
                     }
                     break;
                 default:
                     throw new InvalidDataException("Param must be an array with 3 elements");
             }
-            _isEnableReport = false;
+            _isEnableAutomaticallyReport = false;
         }
 
         protected override async Task DoAsyncMainTask(object param, AsyncTaskResult result, CancellationTokenSource token)
@@ -100,20 +99,24 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                 }
 
                 // Download icon of software from server and write it in a specific folder
-                using (HttpClient client = new HttpClient())
+                if(_iconSourceUri != null)
                 {
-                    var response = await client.GetAsync(_iconSourceUri);
-                    var responseContent = await response.Content.ReadAsByteArrayAsync();
-                    var iconPath = Path.GetDirectoryName(_filePathDestination) + "\\" + "iconres";
-                    await File.WriteAllBytesAsync(iconPath, responseContent);
-                    if (_iconSourceDownloadedCallback != null)
+                    using (HttpClient client = new HttpClient())
                     {
-                        _iconSourceDownloadedCallback.Invoke(iconPath);
-                    }
+                        var response = await client.GetAsync(_iconSourceUri);
+                        var responseContent = await response.Content.ReadAsByteArrayAsync();
+                        var iconPath = Path.GetDirectoryName(_filePathDestination) + "\\" + "iconres";
+                        await File.WriteAllBytesAsync(iconPath, responseContent);
+                        if (_iconSourceDownloadedCallback != null)
+                        {
+                            _iconSourceDownloadedCallback.Invoke(iconPath);
+                        }
 
+                    }
+                    CurrentProgress = 100;
+                    await Task.Delay(300);
                 }
-                CurrentProgress = 100;
-                await Task.Delay(300);
+                
             }
 
         }
@@ -127,7 +130,10 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
             try
             {
                 _sourceUri = new Uri(_sourceToDownload);
-                _iconSourceUri = new Uri(_iconSource);
+                if (!string.IsNullOrEmpty(_iconSource))
+                {
+                    _iconSourceUri = new Uri(_iconSource);
+                }
             }
             catch (Exception ex)
             {

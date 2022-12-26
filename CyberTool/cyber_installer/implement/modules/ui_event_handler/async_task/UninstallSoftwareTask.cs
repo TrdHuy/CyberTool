@@ -32,7 +32,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                 , reportDelay: 100)
         {
             _installingToolData = toolData;
-            _isEnableReport = false;
+            _isEnableAutomaticallyReport = false;
             _isDelayBeforeExecutingTask = true;
         }
 

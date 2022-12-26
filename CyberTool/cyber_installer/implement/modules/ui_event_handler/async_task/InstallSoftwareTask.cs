@@ -36,7 +36,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
         {
             _installingToolData = toolData;
             _installPath = installPath;
-            _isEnableReport = false;
+            _isEnableAutomaticallyReport = false;
         }
 
         protected override bool IsTaskPossible(object param)
@@ -56,7 +56,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
 
                 await Utils.ExtractZipToFolder(zipFilePath
                     , folderLocation
-                    , entryExtratedDelay: 0
+                    , entryExtractedDelay: 0
                     , entryExtractedCallback: (extractedCount, total, zipEntry) =>
                     {
                         CurrentProgress = (double)extractedCount / (double)total * 70;
