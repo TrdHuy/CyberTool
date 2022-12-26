@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO.Compression;
+using System.Reflection;
 
 namespace cyber_installer_background_service
 {
@@ -12,6 +13,8 @@ namespace cyber_installer_background_service
 
         static void Main(string[] args)
         {
+            Console.WriteLine("Assembly name: " + Assembly.GetExecutingAssembly().GetName().Name);
+            Console.WriteLine("Version: " + Assembly.GetExecutingAssembly().GetName().Version);
             var requesterID = "";
             var requesterProcessId = -1;
             var cmdID = "";
