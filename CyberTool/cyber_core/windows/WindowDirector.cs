@@ -59,7 +59,7 @@ namespace cyber_core.windows
         {
             CyberIMesWindow mesBox = new CyberIMesWindow(
                 "Error",
-                Application.Current.Resources["QuestionPathGeomerty"] as string ?? "",
+                Application.Current.Resources[CyberBaseDefinition.QUESTION_ICON_GEOMETRY_RESOURCE_KEY] as string ?? "",
                 error,
                 "",
                 "",
@@ -74,7 +74,7 @@ namespace cyber_core.windows
         {
             CyberIMesWindow mesBox = new CyberIMesWindow(
                 title: "Question",
-                pathIcon: Application.Current.Resources["QuestionPathGeomerty"] as string ?? "",
+                pathIcon: Application.Current.Resources[CyberBaseDefinition.QUESTION_ICON_GEOMETRY_RESOURCE_KEY] as string ?? "",
                 content: question,
                 yesBtnContent: "Yes",
                 noBtnContent: "No",
@@ -98,7 +98,7 @@ namespace cyber_core.windows
         {
             CyberIMesWindow mesBox = new CyberIMesWindow(
                 "Warning",
-                Application.Current.Resources["QuestionPathGeomerty"] as string ?? "",
+                Application.Current.Resources[CyberBaseDefinition.QUESTION_ICON_GEOMETRY_RESOURCE_KEY] as string ?? "",
                 warning,
                 "",
                 "",

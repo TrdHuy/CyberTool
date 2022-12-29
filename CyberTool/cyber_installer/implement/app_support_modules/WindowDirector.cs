@@ -48,7 +48,7 @@ namespace cyber_installer.implement.app_support_modules
         {
             CyberIMesWindow mesBox = new CyberIMesWindow(
                 "Error",
-                Application.Current.Resources["QuestionPathGeomerty"] as string ?? "",
+                Application.Current.Resources[CyberBaseDefinition.QUESTION_ICON_GEOMETRY_RESOURCE_KEY] as string ?? "",
                 error,
                 "",
                 "",
@@ -63,7 +63,7 @@ namespace cyber_installer.implement.app_support_modules
         {
             CyberIMesWindow mesBox = new CyberIMesWindow(
                 title: "Question",
-                pathIcon: Application.Current.Resources["QuestionPathGeomerty"] as string ?? "",
+                pathIcon: Application.Current.Resources[CyberBaseDefinition.QUESTION_ICON_GEOMETRY_RESOURCE_KEY] as string ?? "",
                 content: question,
                 yesBtnContent: "Yes",
                 noBtnContent: "No",
@@ -87,7 +87,7 @@ namespace cyber_installer.implement.app_support_modules
         {
             CyberIMesWindow mesBox = new CyberIMesWindow(
                 "Warning",
-                Application.Current.Resources["QuestionPathGeomerty"] as string ?? "",
+                Application.Current.Resources[CyberBaseDefinition.QUESTION_ICON_GEOMETRY_RESOURCE_KEY] as string ?? "",
                 warning,
                 "",
                 "",
@@ -95,6 +95,29 @@ namespace cyber_installer.implement.app_support_modules
                 "",
                 _cyberInstallerWindow
                 );
+            CyberIMesBoxResult res = CyberIMesBoxResult.Continue;
+            if (isDialog)
+            {
+                res = mesBox.ShowDialog();
+            }
+            else
+            {
+                mesBox.Show();
+            }
+            return ConvertToContactMessage(res);
+        }
+
+        public CyberContactMessage ShowSuccessBox(string message, bool isDialog)
+        {
+            CyberIMesWindow mesBox = new CyberIMesWindow(
+                title: "Info",
+                pathIcon: Application.Current.Resources[CyberBaseDefinition.SUCCESS_ICON_GEOMETRY_RESOURCE_KEY] as string ?? "",
+                content: message,
+                yesBtnContent: "",
+                noBtnContent: "",
+                continueBtnContent: "Continue",
+                cancelBtnContent: "",
+                owner: _cyberInstallerWindow);
             CyberIMesBoxResult res = CyberIMesBoxResult.Continue;
             if (isDialog)
             {
@@ -117,7 +140,7 @@ namespace cyber_installer.implement.app_support_modules
             var destinationFolderWindow = new DestinationFolderSelectionWindow(toolVO)
             {
                 Owner = _cyberInstallerWindow,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner 
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
             var res = destinationFolderWindow.Show();
             return destinationFolderWindow;

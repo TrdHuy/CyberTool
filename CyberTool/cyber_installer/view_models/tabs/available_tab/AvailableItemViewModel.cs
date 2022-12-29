@@ -17,8 +17,15 @@ namespace cyber_installer.view_models.tabs.available_tab
     internal class AvailableItemViewModel : ItemViewModel
     {
         private const int IMPORT_USER_DATA_TIME_OUT = CyberInstallerDefinition.IMPORT_USER_DATA_TIME_OUT;
+
+        /// <summary>
+        /// Dữ liệu cài đặt của phần mềm sau khi load từ user data
+        /// </summary>
+        private ToolData? _toolDataCache;
         private ICommand _downloadAndInstallCommand;
+        private ICommand _updateSoftwareCommand;
         public ICommand DownloadAndInstallCommand { get => _downloadAndInstallCommand; }
+        public ICommand UpdateSoftwareCommand { get => _updateSoftwareCommand; }
 
         public AvailableItemViewModel(ToolVO toolVO) : base(toolVO)
         {
@@ -30,6 +37,23 @@ namespace cyber_installer.view_models.tabs.available_tab
                     , data) as ICommandExecuter;
             }, isAsync: true);
 
+            _updateSoftwareCommand = new CommandExecuterImpl((paramaters) =>
+            {
+                var data = paramaters ?? this;
+                return KeyActionListener.Current.OnKey(CyberInstallerDefinition.CYBER_INSTALLER_INDENTIFER
+                    , CyberInstallerKeyFeatureTag.KEY_TAG_SWI_AT_UPDATE_SOFTWARE_FEATURE
+                    , data) as ICommandExecuter;
+            }, isAsync: true);
+
+        }
+
+        /// <summary>
+        /// Lấy dữ liệu cài đặt của phần mềm sau khi nạp từ user data
+        /// </summary>
+        /// <returns></returns>
+        public ToolData? GetToolDataCache()
+        {
+            return _toolDataCache;
         }
 
         protected override async void InstantiateItemStatus()
@@ -48,21 +72,21 @@ namespace cyber_installer.view_models.tabs.available_tab
                 await Task.Delay(2000);
 
                 var userData = UserDataManager.Current.CurrentUserData;
-                var toolData = userData
-                    .ToolData
-                    .Where(td => td.StringId == _toolVO.StringId)
-                    .FirstOrDefault();
+                _toolDataCache = userData
+                   .ToolData
+                   .Where(td => td.StringId == _toolVO.StringId)
+                   .FirstOrDefault();
 
                 // Kiểm tra dữ liệu tool trên server đã có trong
                 // dữ liệu ở local hay chưa
-                if (toolData != null)
+                if (_toolDataCache != null)
                 {
-                    if (toolData.ToolStatus == ToolStatus.Downloaded)
+                    if (_toolDataCache.ToolStatus == ToolStatus.Downloaded)
                     {
                         ItemStatus = ItemStatus.Installable;
                     }
 
-                    switch (toolData.ToolStatus)
+                    switch (_toolDataCache.ToolStatus)
                     {
                         case ToolStatus.Downloaded:
                             {
@@ -79,12 +103,12 @@ namespace cyber_installer.view_models.tabs.available_tab
                                 var versionSource = (_toolVO as ToolVO)?.ToolVersions;
                                 if (versionSource != null && versionSource.Count > 0)
                                 {
-                                    if (System.Version.Parse(toolData.CurrentInstalledVersion)
+                                    if (System.Version.Parse(_toolDataCache.CurrentInstalledVersion)
                                         == System.Version.Parse(versionSource.Last().Version))
                                     {
                                         ItemStatus = ItemStatus.UpToDate;
                                     }
-                                    else if (System.Version.Parse(toolData.CurrentInstalledVersion)
+                                    else if (System.Version.Parse(_toolDataCache.CurrentInstalledVersion)
                                         < System.Version.Parse(versionSource.Last().Version))
                                     {
                                         ItemStatus = ItemStatus.Updateable;

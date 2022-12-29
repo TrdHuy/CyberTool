@@ -24,6 +24,10 @@ namespace cyber_installer.model
         public CertificateData CertificateData { get; set; }
     }
 
+    /// <summary>
+    /// Dữ liệu cài đặt chứng chỉ của người dùng
+    /// được lưu ở phía trình cài đặt Cyber Installer
+    /// </summary>
     internal class CertificateData
     {
         public string TRCA_Thumbprint { get; set; } = "";
@@ -38,6 +42,10 @@ namespace cyber_installer.model
         }
     }
 
+    /// <summary>
+    /// Dữ liệu cài đặt phần mềm của người dùng
+    /// được lưu ở phía trình cài đặt Cyber Installer
+    /// </summary>
     internal class ToolData : IToolInfo
     {
         public string StringId { get; set; } = "";
@@ -48,7 +56,7 @@ namespace cyber_installer.model
         public string ExecutePath { get; set; } = "";
         public ToolStatus ToolStatus { get; set; }
         public string ShortcutPath { get; set; } = "";
-        public string LatestVersion => ToolVersionSource?.Last().Version ?? "";
+        public string LatestVersion => ToolVersionSource?.Last().Version.Trim() ?? "";
 
         public string IconSource { get; set; } = "";
 

@@ -37,7 +37,7 @@ namespace cyber_installer.view_models.tabs.installed_tab
             }
         }
 
-        public InstalledItemViewModel(IToolInfo toolVO) : base(toolVO)
+        public InstalledItemViewModel(IToolInfo toolInfo) : base(toolInfo)
         {
             _uninstallCommand = new CommandExecuterImpl((paramaters) =>
             {
@@ -46,7 +46,11 @@ namespace cyber_installer.view_models.tabs.installed_tab
                     , CyberInstallerKeyFeatureTag.KEY_TAG_SWI_AT_UNISTALL_FEATURE
                     , data) as ICommandExecuter;
             }, isAsync: true);
-
+            var toolData = toolInfo as ToolData;
+            if (toolData != null)
+            {
+                _version = toolData.CurrentInstalledVersion;
+            }
         }
 
         protected async override void InstantiateItemStatus()
@@ -57,7 +61,7 @@ namespace cyber_installer.view_models.tabs.installed_tab
             // sẽ không thể xóa file icon đó vì nó đang được sử dụng
             // Thay vào đó ta sẽ load nó vào trong memory và stream để hiển thị trực tiếp
             _iconCache = await Utils.CreateBitmapImageFromFile(_toolVO.IconSource);
-            
+
             ItemStatus = ItemStatus.Installed;
 
             Invalidate("IconSource");

@@ -139,6 +139,11 @@ namespace cyber_installer.implement.modules.sw_installing_manager.http_requester
             return downLoadResult;
         }
 
+        /// <summary>
+        /// Request download latest software version
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         public override async Task<ToolData?> Request(params object[] param)
         {
             try

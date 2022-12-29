@@ -9,6 +9,10 @@ namespace cyber_base.definition
     public static class CyberBaseDefinition
     {
         public static string DEFAULT_CYBER_WINDOW_STYLE_KEY = "DefaultCyberWindowStyle";
+
+        public static string QUESTION_ICON_GEOMETRY_RESOURCE_KEY = "QUESTION_ICON_GEOMETRY_RESOURCE";
+        public static string SUCCESS_ICON_GEOMETRY_RESOURCE_KEY = "SUCCESS_ICON_GEOMETRY_RESOURCE";
+
     }
 
     public enum CyberOwner

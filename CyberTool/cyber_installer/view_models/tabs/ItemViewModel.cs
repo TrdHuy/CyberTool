@@ -14,7 +14,7 @@ namespace cyber_installer.view_models.tabs
     {
         protected Uri? _iconSource;
         private ItemStatus _itemStatus;
-        private string _version = "";
+        protected string _version = "";
         private string _softwareName = "";
         private double _swHandlingProgress = 0d;
         private bool _isLoadingItemStatus = false;

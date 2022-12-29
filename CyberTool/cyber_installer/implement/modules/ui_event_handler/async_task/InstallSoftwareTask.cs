@@ -7,6 +7,7 @@ using cyber_installer.model;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -46,40 +47,134 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
 
         protected override async Task DoAsyncMainTask(object param, AsyncTaskResult result, CancellationTokenSource token)
         {
-            // Trường hợp version đang ở trạng thái chưa được cài đặt
+            // Trường hợp latest version và tool đang ở trạng thái chưa được cài đăt
             if (_installingToolData.ToolStatus != ToolStatus.Installed
-                && _installingToolData.ToolVersionSource.Count > 0)
+                && _installingToolData.ToolVersionSource.Count > 0
+                && _installingToolData.ToolVersionSource.Last().VersionStatus != ToolVersionStatus.VersionInstalled)
             {
-                var latestVersionTool = _installingToolData.ToolVersionSource[0];
-                var folderLocation = _installPath;
-                var zipFilePath = latestVersionTool.DownloadFilePath;
-
-                await Utils.ExtractZipToFolder(zipFilePath
-                    , folderLocation
-                    , entryExtractedDelay: 0
-                    , entryExtractedCallback: (extractedCount, total, zipEntry) =>
-                    {
-                        CurrentProgress = (double)extractedCount / (double)total * 70;
-                    });
-
-                File.Delete(zipFilePath);
-                latestVersionTool.VersionStatus = ToolVersionStatus.VersionInstalled;
-                _installingToolData.CurrentInstalledVersion = latestVersionTool.Version;
-                _installingToolData.ExecutePath = _installPath + "\\" + latestVersionTool.ExecutePath;
-                _installingToolData.InstallPath = _installPath;
-                _installingToolData.ToolStatus = ToolStatus.Installed;
-
+                // Tiến hành giải nén và cập nhật thông tin cài đặt
+                var latestVersionTool = await ExtractZipAndUpdateInstallationData(this
+                    , _installingToolData
+                    , _installPath
+                    , percentageOfTask: 70);
                 await Task.Delay(300);
                 var installationInfo = await ExportInstallationInfo(latestVersionTool.AssemblyName);
                 CurrentProgress = 80;
-                await Task.Delay(300);
-                CreateUninstaller(installationInfo);
-                CurrentProgress = 90;
-                await Task.Delay(300);
-                ExtractIconToInstallaInfoFolder();
+
+                if (_installingToolData.ToolStatus == ToolStatus.Installed)
+                {
+                    await Task.Delay(300);
+                    CreateUninstaller(installationInfo);
+                    CurrentProgress = 90;
+
+                    await Task.Delay(300);
+                    ExtractIconToInstallaInfoFolder();
+                }
                 CurrentProgress = 100;
+            }
+            // Trường hợp latest version chưa được cài đặt  và tool đang ở trạng thái đã cài đăt
+            else if (_installingToolData.ToolStatus == ToolStatus.Installed
+                && _installingToolData.ToolVersionSource.Count > 0
+                && _installingToolData.ToolVersionSource.Last().VersionStatus != ToolVersionStatus.VersionInstalled)
+            {
+                var installedSoftwareInfoFilePath = Utils.GetInstalledSoftwareInfoFilePath(_installingToolData.InstallPath);
+                if (File.Exists(installedSoftwareInfoFilePath))
+                {
+                    var isShouldUninstallSoftware = false;
+                    var installedSoftwareInfoContent = await File.ReadAllTextAsync(installedSoftwareInfoFilePath);
+                    var installedSoftwareInfo = JsonHelper.DeserializeObject<InstallationData>(installedSoftwareInfoContent ?? "");
+
+                    // Kiểm tra điều kiện có nên gỡ cài đặt trước khi cập nhật không
+                    if (installedSoftwareInfo != null && !string.IsNullOrEmpty(installedSoftwareInfo.AssemblyName))
+                    {
+                        await KillProcessIfExist(installedSoftwareInfo.AssemblyName, _installingToolData.ExecutePath);
+                        CurrentProgress = 10;
+                        await Task.Delay(CyberInstallerDefinition.AFTER_KILL_PROCESS_WAIT_TIME);
+
+                        isShouldUninstallSoftware = true;
+                    }
+
+                    // Tiến hành gỡ cài đặt nếu thỏa mãn điều kiện
+                    if (isShouldUninstallSoftware && installedSoftwareInfo != null)
+                    {
+                        // Xóa các file trong mục cài đặt
+                        await Utils.DeleteAllFileInFolder(_installingToolData.InstallPath
+                            , fileDeletingDelay: 300
+                            , fileDeletedCallback: (deletedCount, total, deletedFile) =>
+                            {
+                                double progress = 1 / (double)total * 40;
+                                CurrentProgress += progress;
+                            });
+
+                        // Xóa file desktop short cut
+                        if (!string.IsNullOrEmpty(_installingToolData.ShortcutPath)
+                            && File.Exists(_installingToolData.ShortcutPath))
+                        {
+                            File.Delete(_installingToolData.ShortcutPath);
+                        }
+
+                        // Tiến hành giải nén và cập nhật thông tin cài đặt
+                        var latestVersionTool = await ExtractZipAndUpdateInstallationData(this
+                            , _installingToolData
+                            , _installPath
+                            , percentageOfTask: 30);
+                        await Task.Delay(300);
+
+                        // Tiến hành ghi dữ liệu cài đặt lên thư mục chứa phần mềm 
+                        var installationInfo = await ExportInstallationInfo(latestVersionTool.AssemblyName, installedSoftwareInfo);
+                        CurrentProgress = 90;
+
+                        // Cài icon hiển thị
+                        await Task.Delay(150);
+                        ExtractIconToInstallaInfoFolder();
+                        CurrentProgress = 95;
+
+                        // Tạo lại desktop shortcut mà trước đấy đã xóa
+                        if (!string.IsNullOrEmpty(_installingToolData.ShortcutPath))
+                        {
+                            _installingToolData.ShortcutPath = Utils.CreateDesktopShortCutToFile(_installingToolData.ExecutePath);
+                        }
+                        CurrentProgress = 100;
+                    }
+                }
 
             }
+        }
+
+        private static async Task<ToolVersionData> ExtractZipAndUpdateInstallationData(
+            InstallSoftwareTask taskInstance
+            , ToolData installingToolData
+            , string installPath
+            , int percentageOfTask)
+        {
+            var latestVersionTool = installingToolData.ToolVersionSource.Last();
+            var folderLocation = installPath;
+            var zipFilePath = latestVersionTool.DownloadFilePath;
+
+            try
+            {
+                await Utils.ExtractZipToFolder(zipFilePath
+                , folderLocation
+                , entryExtractedDelay: 0
+                , entryExtractedCallback: (extractedCount, total, zipEntry) =>
+                {
+                    taskInstance.CurrentProgress = (double)extractedCount / (double)total * percentageOfTask;
+                });
+
+                File.Delete(zipFilePath);
+                latestVersionTool.VersionStatus = ToolVersionStatus.VersionInstalled;
+                installingToolData.CurrentInstalledVersion = latestVersionTool.Version;
+                installingToolData.ExecutePath = installPath + "\\" + latestVersionTool.ExecutePath;
+                installingToolData.InstallPath = installPath;
+                installingToolData.ToolStatus = ToolStatus.Installed;
+            }
+            catch
+            {
+                latestVersionTool.VersionStatus = ToolVersionStatus.VersionInstalledFail;
+                installingToolData.ToolStatus = ToolStatus.InstallFailed;
+            }
+
+            return latestVersionTool;
         }
 
         private void ExtractIconToInstallaInfoFolder()
@@ -94,22 +189,40 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
             _installingToolData.IconSource = newFilePath;
         }
 
-        private async Task<InstallationData> ExportInstallationInfo(string assemblyName)
+        private async Task<InstallationData> ExportInstallationInfo(string assemblyName, InstallationData? oldInstallation = null)
         {
             var installationInfoFilePath = CreateCyberInfoFileForInstalledSoftware();
-            var installationInfo = new InstallationData()
+
+            if (oldInstallation == null)
             {
-                ToolName = _installingToolData.Name,
-                Guid = Guid.NewGuid().ToString("B"),
-                AssemblyName = assemblyName,
-                ToolKey = _installingToolData.StringId,
-                CurrentInstalledVersion = _installingToolData.CurrentInstalledVersion,
-                ExecutePath = _installingToolData.ExecutePath,
-                InstallPath = _installingToolData.InstallPath,
-            };
-            var installationInfoJson = JsonHelper.SerializeObject(installationInfo);
-            await File.WriteAllTextAsync(installationInfoFilePath, installationInfoJson);
-            return installationInfo;
+                var installationInfo = new InstallationData()
+                {
+                    ToolName = _installingToolData.Name,
+                    Guid = Guid.NewGuid().ToString("B"),
+                    AssemblyName = assemblyName,
+                    ToolKey = _installingToolData.StringId,
+                    CurrentInstalledVersion = _installingToolData.CurrentInstalledVersion,
+                    ExecutePath = _installingToolData.ExecutePath,
+                    InstallPath = _installingToolData.InstallPath,
+                };
+                var installationInfoJson = JsonHelper.SerializeObject(installationInfo);
+                await File.WriteAllTextAsync(installationInfoFilePath, installationInfoJson);
+                return installationInfo;
+            }
+            else
+            {
+                oldInstallation.ToolName = _installingToolData.Name;
+                oldInstallation.AssemblyName = assemblyName;
+                oldInstallation.ToolKey = _installingToolData.StringId;
+                oldInstallation.CurrentInstalledVersion = _installingToolData.CurrentInstalledVersion;
+                oldInstallation.ExecutePath = _installingToolData.ExecutePath;
+                oldInstallation.InstallPath = _installingToolData.InstallPath;
+
+                var installationInfoJson = JsonHelper.SerializeObject(oldInstallation);
+                await File.WriteAllTextAsync(installationInfoFilePath, installationInfoJson);
+                return oldInstallation;
+            }
+
         }
 
         private string CreateCyberInfoFileForInstalledSoftware()
@@ -174,6 +287,19 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                     throw new Exception(
                         "An error occurred writing uninstall information to the registry.  The service is fully installed but can only be uninstalled manually through the command line.",
                         ex);
+                }
+            }
+        }
+
+        private async Task KillProcessIfExist(string processName, string processRunPath)
+        {
+            var pLst = Process.GetProcessesByName(processName);
+            foreach (var process in pLst)
+            {
+                if (!process.HasExited && processRunPath == process.MainModule?.FileName)
+                {
+                    process.Kill();
+                    await process.WaitForExitAsync();
                 }
             }
         }

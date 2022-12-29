@@ -25,7 +25,7 @@ namespace cyber_installer.model
         public bool IsPreReleased { get; set; }
         public bool IsRequireLatestVersionToRun { get; set; }
         public int Downloads { get; set; }
-        public string LatestVersion { get => ToolVersions?.Last().Version ?? ""; }
+        public string LatestVersion { get => ToolVersions?.Last().Version.Trim() ?? ""; }
 
         public List<ToolVersionVO> ToolVersions { get; set; }
     }

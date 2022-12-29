@@ -56,7 +56,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                     {
                         await KillProcessIfExist(installedSoftwareInfo.AssemblyName, _installingToolData.ExecutePath);
                         CurrentProgress = 10;
-                        await Task.Delay(2000);
+                        await Task.Delay(CyberInstallerDefinition.AFTER_KILL_PROCESS_WAIT_TIME);
 
                         isShouldUninstallSoftware = true;
                     }

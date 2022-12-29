@@ -64,6 +64,12 @@
 											Property="SingleButtonCommand"
 											Value="{Binding DownloadAndInstallCommand}" />
 								</DataTrigger>
+								<DataTrigger Binding="{Binding ItemStatus}"
+											 Value="Updateable">
+									<Setter TargetName="ViewHolder"
+											Property="SingleButtonCommand"
+											Value="{Binding UpdateSoftwareCommand}" />
+								</DataTrigger>
 							</ControlTemplate.Triggers>
 						</ControlTemplate>
 					</Setter.Value>

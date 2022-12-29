@@ -136,6 +136,16 @@ namespace cyber_installer
             return message;
         }
 
+        public CyberContactMessage ShowSuccessBox(string content, bool isDialog = true)
+        {
+            var message = CyberContactMessage.None;
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                message = _windowDirector.ShowSuccessBox(content, isDialog);
+            });
+            return message;
+        }
+
         public CyberContactMessage ShowErrorBox(string error)
         {
             var message = CyberContactMessage.None;
