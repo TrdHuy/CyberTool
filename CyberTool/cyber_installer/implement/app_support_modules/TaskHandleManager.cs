@@ -1,17 +1,23 @@
 ﻿using cyber_base.implement.utils;
+using cyber_installer.implement.modules.utils;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
+using static cyber_installer.definitions.CyberInstallerDefinition;
 
 namespace cyber_installer.implement.app_support_modules
 {
-    internal class TaskHandleManager
+    public class TaskHandleManager
     {
+        public enum TaskExecuteResult
+        {
+            Success = 1,
+            Fault = 2,
+            SemaphoreNotAvailable = 3,
+            TaskNotRegistered = 4,
+        }
+
         public class TaskInfo
         {
             public SemaphoreSlim SemaphoreSlim { get; private set; }
@@ -34,25 +40,26 @@ namespace cyber_installer.implement.app_support_modules
             }
         }
 
-        private Dictionary<string, TaskInfo> _taskSemaphoreMap = new Dictionary<string, TaskInfo>();
+        private Dictionary<ManageableTaskKeyDefinition, TaskInfo> _taskSemaphoreMap = new Dictionary<ManageableTaskKeyDefinition, TaskInfo>();
         private List<TaskInfo> _handlingTaskQueue = new List<TaskInfo>();
 
-        public bool IsTaskAvailable(string taskTypeKey)
+        public bool IsTaskAvailable(ManageableTaskKeyDefinition taskTypeKey)
         {
             return _taskSemaphoreMap.ContainsKey(taskTypeKey)
                 && _taskSemaphoreMap[taskTypeKey].SemaphoreSlim.CurrentCount > 0;
         }
-        public void GenerateNewTaskSemaphore(string taskTypeKey, string taskName, int maxCore, int initCore)
+
+        public void GenerateNewTaskSemaphore(ManageableTaskKeyDefinition taskTypeKey, int maxCore, int initCore)
         {
             if (!_taskSemaphoreMap.ContainsKey(taskTypeKey))
             {
                 var smp = new SemaphoreSlim(initCore, maxCore);
-                var task = new TaskInfo(smp, taskName);
+                var task = new TaskInfo(smp, taskTypeKey.GetName());
                 _taskSemaphoreMap.Add(taskTypeKey, task);
             }
         }
 
-        public async Task ExecuteTask(string taskTypeKey
+        public async Task<TaskExecuteResult> ExecuteTask(ManageableTaskKeyDefinition taskTypeKey
             , Func<TaskInfo, Task> mainFunc
             , bool bypassIfSemaphoreNotAvaild = false
             , int semaphoreTimeOut = 2000)
@@ -64,13 +71,13 @@ namespace cyber_installer.implement.app_support_modules
                 {
                     if (smp.CurrentCount == 0)
                     {
-                        return;
+                        return TaskExecuteResult.SemaphoreNotAvailable;
                     }
                 }
                 var isSemaphoreAvailable = await smp.WaitAsync(semaphoreTimeOut);
                 if (isSemaphoreAvailable)
                 {
-                    Exception? taskExepction = null;
+                    var isFault = false;
                     try
                     {
                         _handlingTaskQueue.Insert(0, _taskSemaphoreMap[taskTypeKey]);
@@ -80,28 +87,28 @@ namespace cyber_installer.implement.app_support_modules
                     }
                     catch (Exception ex)
                     {
-                        taskExepction = ex;
                         _logger.E("Fail to execute task: " + taskTypeKey + "\n" + ex.ToString());
+                        isFault = true;
                     }
                     finally
                     {
                         _handlingTaskQueue.Remove(_taskSemaphoreMap[taskTypeKey]);
                         CurrentTaskCount--;
                         smp.Release();
-                        if (taskExepction != null)
-                        {
-                            throw taskExepction;
-                        }
                     }
+                    return isFault ? TaskExecuteResult.Fault : TaskExecuteResult.Success;
                 }
                 else
                 {
                     _logger.D("Semaphore not available to execute task: " + taskTypeKey);
+                    return TaskExecuteResult.SemaphoreNotAvailable;
                 }
             }
+            _logger.E("Task was not registered: " + taskTypeKey);
+            return TaskExecuteResult.TaskNotRegistered;
         }
 
-        public async Task ExecuteTask(string taskTypeKey
+        public async Task<TaskExecuteResult> ExecuteTask(ManageableTaskKeyDefinition taskTypeKey
            , Action<TaskInfo> mainFunc
            , bool bypassIfSemaphoreNotAvaild = false
            , int semaphoreTimeOut = 2000)
@@ -113,13 +120,13 @@ namespace cyber_installer.implement.app_support_modules
                 {
                     if (smp.CurrentCount == 0)
                     {
-                        return;
+                        return TaskExecuteResult.SemaphoreNotAvailable;
                     }
                 }
                 var isSemaphoreAvailable = await smp.WaitAsync(semaphoreTimeOut);
                 if (isSemaphoreAvailable)
                 {
-                    Exception? taskExepction = null;
+                    var isFault = false;
                     try
                     {
                         _handlingTaskQueue.Insert(0, _taskSemaphoreMap[taskTypeKey]);
@@ -129,25 +136,25 @@ namespace cyber_installer.implement.app_support_modules
                     }
                     catch (Exception ex)
                     {
-                        taskExepction = ex;
                         _logger.E("Fail to execute task: " + taskTypeKey + "\n" + ex.ToString());
+                        isFault = true;
                     }
                     finally
                     {
                         _handlingTaskQueue.Remove(_taskSemaphoreMap[taskTypeKey]);
                         CurrentTaskCount--;
                         smp.Release();
-                        if (taskExepction != null)
-                        {
-                            throw taskExepction;
-                        }
                     }
+                    return isFault ? TaskExecuteResult.Fault : TaskExecuteResult.Success;
                 }
                 else
                 {
                     _logger.D("Semaphore not available to execute task: " + taskTypeKey);
+                    return TaskExecuteResult.SemaphoreNotAvailable;
                 }
             }
+            _logger.E("Task was not registered: " + taskTypeKey);
+            return TaskExecuteResult.TaskNotRegistered;
         }
     }
 }

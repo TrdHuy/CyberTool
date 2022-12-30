@@ -7,10 +7,8 @@ using cyber_installer.model;
 using cyber_installer.view.usercontrols.list_item.available_item.@base;
 using cyber_installer.view_models.tabs.available_tab;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using static cyber_installer.definitions.CyberInstallerDefinition;
 
 namespace cyber_installer.implement.modules.ui_event_handler.actions
 {
@@ -34,6 +32,11 @@ namespace cyber_installer.implement.modules.ui_event_handler.actions
 
         protected override bool CanExecute(object? dataTransfer)
         {
+            if (!App.Current.IsTaskAvailable(ManageableTaskKeyDefinition.DOWNLOAD_AND_INSTALL_SOFTWARE_TASK_TYPE_KEY))
+            {
+                App.Current.ShowWaringBox("The download and install process is current running!");
+                return false;
+            }
             var confirm = App.Current.ShowYesNoQuestionBox($"Do you want to download & install '{_toolInfo.Name}'?");
             if (confirm == CyberContactMessage.No)
             {
@@ -49,39 +52,43 @@ namespace cyber_installer.implement.modules.ui_event_handler.actions
 
         protected async override Task ExecuteCommandAsync()
         {
-            _availableItemViewModel.ItemStatus = ItemStatus.Downloading;
-            _availableItemViewModel.SwHandlingProgress = 0;
-
-            var toolData = await SwInstallingManager.Current.StartDownloadingLatestVersionToolTask(_toolInfo
-                , downloadProgressChangedCallback: (s, e) =>
+            await App.Current.ExecuteManageableTask(ManageableTaskKeyDefinition.DOWNLOAD_AND_INSTALL_SOFTWARE_TASK_TYPE_KEY
+                , asyncTask: async () =>
                 {
-                    _availableItemViewModel.SwHandlingProgress = e;
-                });
+                    _availableItemViewModel.ItemStatus = ItemStatus.Downloading;
+                    _availableItemViewModel.SwHandlingProgress = 0;
 
-            if (toolData != null)
-            {
-                var userData = UserDataManager.Current.CurrentUserData;
-                userData.ToolData.Add(toolData);
-                _availableItemViewModel.ItemStatus = ItemStatus.Installing;
-                _availableItemViewModel.SwHandlingProgress = 0;
+                    var toolData = await SwInstallingManager.Current.StartDownloadingLatestVersionToolTask(_toolInfo
+                        , downloadProgressChangedCallback: (s, e) =>
+                        {
+                            _availableItemViewModel.SwHandlingProgress = e * 0.5d;
+                        });
 
-                toolData = await SwInstallingManager.Current.StartToolInstallingTask(toolData
-                    , _installPath
-                    , installProgressChangedCallback: (progress) =>
+                    if (toolData != null)
                     {
-                        _availableItemViewModel.SwHandlingProgress = progress;
-                    });
-                if (toolData?.ToolStatus == ToolStatus.Installed)
-                {
-                    if (_isCreateDesktopShortcut)
-                    {
-                        toolData.ShortcutPath = Utils.CreateDesktopShortCutToFile(toolData.ExecutePath);
+                        var userData = UserDataManager.Current.CurrentUserData;
+                        userData.ToolData.Add(toolData);
+                        _availableItemViewModel.ItemStatus = ItemStatus.Installing;
+                        _availableItemViewModel.SwHandlingProgress = 50;
+
+                        toolData = await SwInstallingManager.Current.StartToolInstallingTask(toolData
+                            , _installPath
+                            , installProgressChangedCallback: (progress) =>
+                            {
+                                _availableItemViewModel.SwHandlingProgress += progress * 0.5d;
+                            });
+                        if (toolData?.ToolStatus == ToolStatus.Installed)
+                        {
+                            if (_isCreateDesktopShortcut)
+                            {
+                                toolData.ShortcutPath = Utils.CreateDesktopShortCutToFile(toolData.ExecutePath);
+                            }
+                            _availableItemViewModel.ItemStatus = ItemStatus.UpToDate;
+                        }
+                        await UserDataManager.Current.ExportUserDataToFile();
                     }
-                    _availableItemViewModel.ItemStatus = ItemStatus.UpToDate;
                 }
-                await UserDataManager.Current.ExportUserDataToFile();
-            }
-
+                , isBybassIfSemaphoreNotAvaild: true);
         }
     }
 

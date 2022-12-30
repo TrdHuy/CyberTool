@@ -7,16 +7,11 @@ using cyber_installer.implement.modules;
 using cyber_installer.model;
 using cyber_installer.view.window;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using static cyber_installer.definitions.CyberInstallerDefinition;
+using static cyber_installer.implement.app_support_modules.TaskHandleManager;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace cyber_installer
@@ -48,6 +43,7 @@ namespace cyber_installer
             _windowDirector = new WindowDirector();
             _taskHandleManager = new TaskHandleManager();
             ModuleManager.Init();
+            RegisterManageableTasks();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -62,18 +58,41 @@ namespace cyber_installer
             ModuleManager.OnMainWindowShowed();
         }
 
+        private static void RegisterManageableTasks()
+        {
+            Current.RegisterManageableTask(
+                ManageableTaskKeyDefinition.UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY
+                , maxCore: 1
+                , initCore: 1);
+
+            Current.RegisterManageableTask(
+                ManageableTaskKeyDefinition.UNINSTALL_SOFTWARE_TASK_TYPE_KEY
+                , maxCore: 1
+                , initCore: 1);
+
+            Current.RegisterManageableTask(
+                ManageableTaskKeyDefinition.DOWNLOAD_AND_INSTALL_SOFTWARE_TASK_TYPE_KEY
+                , maxCore: 1
+                , initCore: 1);
+
+            Current.RegisterManageableTask(
+                ManageableTaskKeyDefinition.UPDATE_SOFTWARE_TASK_TYPE_KEY
+                , maxCore: 1
+                , initCore: 1);
+        }
+
         protected override void OnExit(ExitEventArgs e)
         {
             ModuleManager.Destroy();
             base.OnExit(e);
         }
 
-        public void RegisterManageableTask(string taskTypeKey, string taskName, int maxCore, int initCore)
+        public void RegisterManageableTask(ManageableTaskKeyDefinition taskTypeKey, int maxCore, int initCore)
         {
-            _taskHandleManager.GenerateNewTaskSemaphore(taskTypeKey, taskName, maxCore, initCore);
+            _taskHandleManager.GenerateNewTaskSemaphore(taskTypeKey, maxCore, initCore);
         }
 
-        public bool IsTaskAvailable(string taskTypeKey)
+        public bool IsTaskAvailable(ManageableTaskKeyDefinition taskTypeKey)
         {
             return _taskHandleManager.IsTaskAvailable(taskTypeKey);
         }
@@ -83,7 +102,7 @@ namespace cyber_installer
             return _windowDirector.ShowDestinationFolderWindow(toolVO);
         }
 
-        public async Task<CyberContactMessage> ExecuteManageableMultipleTasks(string taskTypeKey
+        public async Task<CyberContactMessage> ExecuteManageableMultipleTasksAndShowMultiTaskBox(ManageableTaskKeyDefinition taskTypeKey
             , MultiAsyncTask tasks
             , bool isBybassIfSemaphoreNotAvaild = false
             , int semaphoreTimeOut = 2000
@@ -105,7 +124,7 @@ namespace cyber_installer
             return message;
         }
 
-        public async Task<CyberContactMessage> ExecuteManageableSingleTask(string taskTypeKey
+        public async Task<CyberContactMessage> ExecuteManageableSingleTaskAndShowMultiTaskBox(ManageableTaskKeyDefinition taskTypeKey
             , Func<object, AsyncTaskResult, CancellationTokenSource, Task<AsyncTaskResult>> asyncTask
             , Func<object, bool>? canExecute = null
             , Func<object, AsyncTaskResult, Task<AsyncTaskResult>>? callback = null
@@ -134,6 +153,21 @@ namespace cyber_installer
                 , semaphoreTimeOut: semaphoreTimeOut);
 
             return message;
+        }
+
+        public async Task<TaskExecuteResult> ExecuteManageableTask(ManageableTaskKeyDefinition taskTypeKey
+            , Func<Task> asyncTask
+            , bool isBybassIfSemaphoreNotAvaild = false
+            , int semaphoreTimeOut = 2000)
+        {
+            return await _taskHandleManager.ExecuteTask(
+                 taskTypeKey: taskTypeKey
+                 , mainFunc: async (taskInfo) =>
+                 {
+                     await asyncTask.Invoke();
+                 }
+                 , bypassIfSemaphoreNotAvaild: isBybassIfSemaphoreNotAvaild
+                 , semaphoreTimeOut: semaphoreTimeOut);
         }
 
         public CyberContactMessage ShowSuccessBox(string content, bool isDialog = true)

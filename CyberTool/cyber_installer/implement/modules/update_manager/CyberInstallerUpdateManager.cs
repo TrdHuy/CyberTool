@@ -8,19 +8,16 @@ using cyber_installer.implement.modules.sw_installing_manager;
 using cyber_installer.implement.modules.user_data_manager;
 using cyber_installer.implement.modules.utils;
 using cyber_installer.model;
-using cyber_installer.view.usercontrols.list_item.available_item.@base;
-using cyber_installer.view_models.tabs.available_tab;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using static cyber_installer.definitions.CyberInstallerDefinition;
 
 namespace cyber_installer.implement.modules.update_manager
 {
@@ -75,12 +72,6 @@ namespace cyber_installer.implement.modules.update_manager
             _checkUpdateTimer.Elapsed += CheckCyberInstallerUpdateAvailable;
             _checkUpdateTimer.AutoReset = false;
             _checkUpdateTimer.Enabled = true;
-            App.Current.RegisterManageableTask(
-                CyberInstallerDefinition.UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY
-                , CyberInstallerDefinition.UPDATE_CYBER_INSTALLER_TASK_NAME
-                , maxCore: 1
-                , initCore: 1);
-
         }
 
         public override async void OnMainWindowShowed()
@@ -98,7 +89,7 @@ namespace cyber_installer.implement.modules.update_manager
         {
             if (IsUpdateable
                 && _cyberInstallerVOCache != null
-                && App.Current.IsTaskAvailable(CyberInstallerDefinition.UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY))
+                && App.Current.IsTaskAvailable(ManageableTaskKeyDefinition.UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY))
             {
 
                 ToolData? downloadedCIToolData = null;
@@ -176,8 +167,8 @@ namespace cyber_installer.implement.modules.update_manager
                     , name: "Update Cyber Installer"
                     , reportType: MultiAsyncTaskReportType.Manual);
 
-                var message = await App.Current.ExecuteManageableMultipleTasks(
-                    CyberInstallerDefinition.UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY
+                var message = await App.Current.ExecuteManageableMultipleTasksAndShowMultiTaskBox(
+                    ManageableTaskKeyDefinition.UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY
                     , multiTask
                     , isBybassIfSemaphoreNotAvaild: true
                     , semaphoreTimeOut: 0

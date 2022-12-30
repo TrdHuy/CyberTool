@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace cyber_installer.definitions
 {
-    internal class CyberInstallerDefinition
+    public class CyberInstallerDefinition
     {
         public static readonly string CONFIG_FOLDER_BASE_PATH = AppDomain.CurrentDomain.BaseDirectory
             + "\\.config";
@@ -31,11 +31,29 @@ namespace cyber_installer.definitions
         public const int IMPORT_USER_DATA_TIME_OUT = 1000;
         public const int AFTER_KILL_PROCESS_WAIT_TIME = 2000;
 
-        public const string UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY = "UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY";
-        public const string UPDATE_CYBER_INSTALLER_TASK_NAME = "Updating cyber installer";
-
         public const string INSTALLATION_INFO_FILE_NAME = "ci.json";
         public const string INSTALLATION_INFO_FOLDER_NAME = ".h2sw";
+
+        public enum ManageableTaskKeyDefinition
+        {
+            [ManageableTaskInfo(description:"Update and install latest version of Cyber Installer"
+                , name:"Updating")]
+            UPDATE_CYBER_INSTALLER_TASK_TYPE_KEY = 1,
+
+            [ManageableTaskInfo(description:"Uninstall the software which has been setup on local machine via Cyber Installer"
+                , name:"Uninstalling")]
+            UNINSTALL_SOFTWARE_TASK_TYPE_KEY = 2,
+
+            [ManageableTaskInfo(description: "Download the software from Cyber server and then install it on current local machine via Cyber Installer"
+               , name: "Download and install")]
+            DOWNLOAD_AND_INSTALL_SOFTWARE_TASK_TYPE_KEY = 3,
+
+            [ManageableTaskInfo(description: "Download the latest version software from Cyber server and then install it on current local machine via Cyber Installer"
+               , name: "Updating")]
+            UPDATE_SOFTWARE_TASK_TYPE_KEY = 4,
+        }
+
+
     }
 
     internal class CyberInstallerKeyFeatureTag
@@ -45,4 +63,16 @@ namespace cyber_installer.definitions
         public const string KEY_TAG_SWI_AT_UPDATE_SOFTWARE_FEATURE = "KEY_TAG_SWI_AT_UPDATE_SOFTWARE_FEATURE";
     }
 
+    [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field, AllowMultiple = false)]
+    public sealed class ManageableTaskInfoAttribute : Attribute
+    {
+        public string Description { get; private set; }
+        public string Name { get; private set; }
+        public ManageableTaskInfoAttribute(string description, string name)
+        {
+            this.Name = name;
+            this.Description = description;
+        }
+    }
+   
 }

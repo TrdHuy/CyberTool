@@ -1,18 +1,10 @@
-﻿using cyber_base.implement.utils;
-using cyber_base.view_model;
-using cyber_installer.implement.modules.server_contact_manager;
+﻿using cyber_installer.implement.modules.server_contact_manager;
 using cyber_installer.model;
 using cyber_installer.view.usercontrols.list_item.available_item.@base;
 using cyber_installer.view.usercontrols.tabs;
-using cyber_installer.view.usercontrols.tabs.@base;
-using cyber_installer.view_models.tabs.installed_tab;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using static cyber_installer.definitions.CyberInstallerDefinition;
 
 namespace cyber_installer.view_models.tabs.available_tab
 {
@@ -20,22 +12,25 @@ namespace cyber_installer.view_models.tabs.available_tab
     {
         public async override void OnTabOpened(BaseSoftwaresStatusTab sender)
         {
-            ItemsSource.Clear();
-            IsLoading = true;
-            _requestDataTaskCancellationTokenSource = new CancellationTokenSource();
-            _requestDataTask = ServerContactManager.Current.RequestMultipleSoftwareInfoFromCyberServer(isForce: true
-                , requestedCallback: (toolsSource) =>
-                {
-                    if (toolsSource != null)
+            if (App.Current.IsTaskAvailable(ManageableTaskKeyDefinition.UPDATE_SOFTWARE_TASK_TYPE_KEY)
+                && App.Current.IsTaskAvailable(ManageableTaskKeyDefinition.DOWNLOAD_AND_INSTALL_SOFTWARE_TASK_TYPE_KEY))
+            {
+                ItemsSource.Clear();
+                IsLoading = true;
+                _requestDataTaskCancellationTokenSource = new CancellationTokenSource();
+                _requestDataTask = ServerContactManager.Current.RequestMultipleSoftwareInfoFromCyberServer(isForce: true
+                    , requestedCallback: (toolsSource) =>
                     {
-                        GenerateAvailableTool(toolsSource);
+                        if (toolsSource != null)
+                        {
+                            GenerateAvailableTool(toolsSource);
+                        }
+                        IsLoading = false;
                     }
-                    IsLoading = false;
-                }
-                , cancellationToken: _requestDataTaskCancellationTokenSource.Token);
-            await _requestDataTask;
+                    , cancellationToken: _requestDataTaskCancellationTokenSource.Token);
+                await _requestDataTask;
+            }
         }
-
 
         public async override void OnScrollDownToBottom(object sender)
         {

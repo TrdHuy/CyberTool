@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using static cyber_installer.definitions.CyberInstallerDefinition;
 
 namespace cyber_installer.view_models.tabs.installed_tab
 {
@@ -25,27 +26,30 @@ namespace cyber_installer.view_models.tabs.installed_tab
 
         public async override void OnTabOpened(BaseSoftwaresStatusTab sender)
         {
-            IsLoading = true;
-            _requestDataTaskCancellationTokenSource = new CancellationTokenSource();
-            if (await UserDataManager
-                .Current
-                .WaitForImportUserDataTask(IMPORT_USER_DATA_TIME_OUT))
+            if (App.Current.IsTaskAvailable(ManageableTaskKeyDefinition.UNINSTALL_SOFTWARE_TASK_TYPE_KEY))
             {
-                ItemsSource.Clear();
-
-                _requestDataTask = UserDataManager
+                IsLoading = true;
+                _requestDataTaskCancellationTokenSource = new CancellationTokenSource();
+                if (await UserDataManager
                     .Current
-                    .GetAllInstalledToolFromUserData(
-                        toolDataExtractingEvent: (data) =>
-                        {
-                            var itemVM = new InstalledItemViewModel(data);
-                            ItemsSource.Add(itemVM);
-                        }
-                        , _requestDataTaskCancellationTokenSource.Token
-                        );
-                await _requestDataTask;
+                    .WaitForImportUserDataTask(IMPORT_USER_DATA_TIME_OUT))
+                {
+                    ItemsSource.Clear();
+
+                    _requestDataTask = UserDataManager
+                        .Current
+                        .GetAllInstalledToolFromUserData(
+                            toolDataExtractingEvent: (data) =>
+                            {
+                                var itemVM = new InstalledItemViewModel(data);
+                                ItemsSource.Add(itemVM);
+                            }
+                            , _requestDataTaskCancellationTokenSource.Token
+                            );
+                    await _requestDataTask;
+                }
+                IsLoading = false;
             }
-            IsLoading = false;
         }
 
         public override void OnTabClosed(BaseSoftwaresStatusTab sender)
