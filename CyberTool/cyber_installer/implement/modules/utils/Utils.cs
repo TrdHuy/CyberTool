@@ -10,11 +10,14 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using cyber_installer.definitions;
 using System.Windows.Media.Imaging;
+using cyber_base.implement.utils;
 
 namespace cyber_installer.implement.modules.utils
 {
     internal static class Utils
     {
+        private static Logger logger = new Logger("Utils", CyberInstallerDefinition.CYBER_INSTALLER_INDENTIFER);
+
         public static bool CheckCertificateExist(string cnName
             , StoreName storeName
             , StoreLocation storeLocation)
@@ -143,14 +146,32 @@ namespace cyber_installer.implement.modules.utils
             {
                 using (Stream stream = entry.Open())
                 {
+                    // If entry is a folder
                     if (entry.FullName.EndsWith('/'))
                     {
                         Directory.CreateDirectory(folderLocation + "\\" + entry.FullName.Replace("/", "\\"));
                     }
+                    // If entry is a file
                     else
                     {
-                        using (FileStream fileStream = File.Create(folderLocation + "\\" + entry.Name))
-                            await stream.CopyToAsync(fileStream);
+                        try
+                        {
+                            var extractedPath = folderLocation + "\\" + entry.FullName.Replace("/", "\\");
+                            var extractedFolderPath = Path.GetDirectoryName(extractedPath);
+                            if (!string.IsNullOrEmpty(extractedFolderPath) && !Directory.Exists(extractedFolderPath))
+                            {
+                                Directory.CreateDirectory(extractedFolderPath);
+                            }
+                            using (FileStream fileStream = File.Create(folderLocation + "\\" + entry.FullName.Replace("/", "\\")))
+                            {
+                                await stream.CopyToAsync(fileStream);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            logger.E("ExtractToFileAsync: Failed to extract entry!");
+                            logger.E("ExtractToFileAsync: " + e.Message);
+                        }
                     }
                 }
             }

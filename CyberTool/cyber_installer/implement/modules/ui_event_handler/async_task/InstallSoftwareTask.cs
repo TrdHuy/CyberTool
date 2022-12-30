@@ -78,6 +78,8 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                 && _installingToolData.ToolVersionSource.Last().VersionStatus != ToolVersionStatus.VersionInstalled)
             {
                 var installedSoftwareInfoFilePath = Utils.GetInstalledSoftwareInfoFilePath(_installingToolData.InstallPath);
+                CurrentProgress = 0;
+
                 if (File.Exists(installedSoftwareInfoFilePath))
                 {
                     var isShouldUninstallSoftware = false;
@@ -90,8 +92,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                         await KillProcessIfExist(installedSoftwareInfo.AssemblyName, _installingToolData.ExecutePath);
                         CurrentProgress = 10;
                         await Task.Delay(CyberInstallerDefinition.AFTER_KILL_PROCESS_WAIT_TIME);
-
-                        isShouldUninstallSoftware = true;
+                        isShouldUninstallSoftware = false;
                     }
 
                     // Tiến hành gỡ cài đặt nếu thỏa mãn điều kiện
@@ -124,7 +125,42 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
                         var installationInfo = await ExportInstallationInfo(latestVersionTool.AssemblyName, installedSoftwareInfo);
                         CurrentProgress = 90;
 
-                        // Cài icon hiển thị
+                        // Cài icon hiển thị trên trình Installer
+                        await Task.Delay(150);
+                        ExtractIconToInstallaInfoFolder();
+                        CurrentProgress = 95;
+
+                        // Tạo lại desktop shortcut mà trước đấy đã xóa
+                        if (!string.IsNullOrEmpty(_installingToolData.ShortcutPath))
+                        {
+                            _installingToolData.ShortcutPath = Utils.CreateDesktopShortCutToFile(_installingToolData.ExecutePath);
+                        }
+                        CurrentProgress = 100;
+                    }
+                    // Tiến hành cài đặt ghi đè lên các file cũ
+                    else if (!isShouldUninstallSoftware && installedSoftwareInfo != null)
+                    {
+                        // Xóa file desktop short cut
+                        if (!string.IsNullOrEmpty(_installingToolData.ShortcutPath)
+                            && File.Exists(_installingToolData.ShortcutPath))
+                        {
+                            File.Delete(_installingToolData.ShortcutPath);
+                        }
+                        CurrentProgress = 20;
+
+
+                        // Tiến hành giải nén và cập nhật thông tin cài đặt
+                        var latestVersionTool = await ExtractZipAndUpdateInstallationData(this
+                            , _installingToolData
+                            , _installPath
+                            , percentageOfTask: 60);
+                        await Task.Delay(300);
+
+                        // Tiến hành ghi dữ liệu cài đặt lên thư mục chứa phần mềm 
+                        var installationInfo = await ExportInstallationInfo(latestVersionTool.AssemblyName, installedSoftwareInfo);
+                        CurrentProgress = 90;
+
+                        // Cài icon hiển thị trên trình Installer
                         await Task.Delay(150);
                         ExtractIconToInstallaInfoFolder();
                         CurrentProgress = 95;
@@ -145,7 +181,8 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
             InstallSoftwareTask taskInstance
             , ToolData installingToolData
             , string installPath
-            , int percentageOfTask)
+            , int percentageOfTask
+            , Func<ZipArchiveEntry, bool>? shouldExtractEntry = null)
         {
             var latestVersionTool = installingToolData.ToolVersionSource.Last();
             var folderLocation = installPath;
@@ -155,7 +192,8 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
             {
                 await Utils.ExtractZipToFolder(zipFilePath
                 , folderLocation
-                , entryExtractedDelay: 0
+                , entryExtractedDelay: 100
+                , shouldExtractEntry: shouldExtractEntry
                 , entryExtractedCallback: (extractedCount, total, zipEntry) =>
                 {
                     taskInstance.CurrentProgress = (double)extractedCount / (double)total * percentageOfTask;
@@ -184,7 +222,7 @@ namespace cyber_installer.implement.modules.ui_event_handler.async_task
             var newFilePath = installationInfoFolderPath + "\\" + Path.GetFileName(oldIconPath);
             if (File.Exists(oldIconPath))
             {
-                File.Move(oldIconPath, newFilePath);
+                File.Move(oldIconPath, newFilePath, true);
             }
             _installingToolData.IconSource = newFilePath;
         }
