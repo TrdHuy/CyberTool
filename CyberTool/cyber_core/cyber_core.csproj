@@ -8,11 +8,15 @@
     <ApplicationIcon>cyber_tool_app_icon.ico</ApplicationIcon>
     <Company>h2sw_solution</Company>
     <AssemblyName>CyberTool</AssemblyName>
-    <Version>2.1.0.2</Version>
-    <AssemblyVersion>2.1.0.2</AssemblyVersion>
-    <FileVersion>2.1.0.2</FileVersion>
+    <Version>2.1.0.3</Version>
+    <AssemblyVersion>2.1.0.3</AssemblyVersion>
+    <FileVersion>2.1.0.3</FileVersion>
   </PropertyGroup>
 
+  <Target Name="Zip" BeforeTargets="AfterBuild">
+	<ZipDirectory Overwrite="true" Condition="'$(Configuration)' == 'Release'" SourceDirectory="$(ProjectDir)$(OutDir)" DestinationFile="$(ProjectDir)\bin\$(AssemblyName)_$(AssemblyVersion)_$(Configuration)Build.zip" />
+  </Target>
+	
   <ItemGroup>
     <Compile Remove="app_resources\attached_properties\**" />
     <Compile Remove="windows\cyber_iface\views\others\**" />
