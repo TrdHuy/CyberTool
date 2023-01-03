@@ -55,7 +55,7 @@ namespace cyber_installer_background_service
                 Console.WriteLine(ex.StackTrace);
             }
             StopClosingConsole();
-        }
+        }                        
 
         private static void StopClosingConsole()
         {
@@ -83,7 +83,12 @@ namespace cyber_installer_background_service
                     if (Path.GetDirectoryName(entry.FullName) != CIBS_FOLDER_ZIP_PATH)
                     {
                         var extractLocation = installFolderLocation
-                            + "\\" + Path.GetFileName(entry.FullName);
+                            + "\\" + entry.FullName.Replace("/", "\\");
+                        var extractedFolderPath = Path.GetDirectoryName(extractLocation);
+                        if (!string.IsNullOrEmpty(extractedFolderPath) && !Directory.Exists(extractedFolderPath))
+                        {
+                            Directory.CreateDirectory(extractedFolderPath);
+                        }
                         entry.ExtractToFile(extractLocation
                             , overwrite: true);
 
