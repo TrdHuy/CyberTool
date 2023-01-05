@@ -1,92 +1,140 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+﻿<Project Sdk="Microsoft.NET.Sdk"
+		 InitialTargets="CreateFinalBuildResultFolder">
+
+	<Target Name="CreateFinalBuildResultFolder">
 		<PropertyGroup>
+			<BuildDirectoryPath>$(ProjectDir)bin\</BuildDirectoryPath>
+			<BuildDirectoryTaskFolderPath>$(ProjectDir)bin\tasks\</BuildDirectoryTaskFolderPath>
+			<FinalBuildResultFolderPath>$(BuildDirectoryPath).FINAL_$(Configuration)\</FinalBuildResultFolderPath>
 			<SolutionDir>$([System.IO.Path]::GetDirectoryName($(MSBuildProjectDirectory)))</SolutionDir>
 		</PropertyGroup>
+		<Exec Command="echo ===================================================================&#xD;&#xA;&#xD;&#xA;
+			echo Executing CreateFinalBuildResultFolder:&#xD;&#xA;&#xD;&#xA;
+			echo BuildDirectoryPath: $(BuildDirectoryPath)&#xD;&#xA;&#xD;&#xA;
+			echo BuildDirectoryTaskFolderPath: $(BuildDirectoryTaskFolderPath)&#xD;&#xA;&#xD;&#xA;				
+			echo FinalBuildResultFolderPath: $(FinalBuildResultFolderPath)&#xD;&#xA;&#xD;&#xA;				
+			echo ===================================================================" />
+		<RemoveDir Directories="$(FinalBuildResultFolderPath)" />
+		<RemoveDir Directories="$(OutputPath).config" Condition="$(Configuration) == 'Release'" />
+		<RemoveDir Directories="$(OutputPath).data" Condition="$(Configuration) == 'Release'" />
+		<RemoveDir Directories="$$(OutputPath)cibs" Condition="$(Configuration) == 'Release'" />
 
-		<Exec Command="echo SolutionDir: $(SolutionDir)" />
-		<Exec Command="echo output: $(ProjectDir)$(OutDir)" />
-		<Exec Command="echo Configuration: $(Configuration)&#xD;&#xA;echo DevEnvDir: $(DevEnvDir)&#xD;&#xA;echo OutDir: $(OutDir)&#xD;&#xA;echo ProjectDir: $(ProjectDir)&#xD;&#xA;echo VisualStudioVersion: $(VisualStudioVersion)&#xD;&#xA;echo AssemblySearchPaths: $(AssemblySearchPaths)&#xD;&#xA;echo AssemblyName: $(AssemblyName)&#xD;&#xA;echo BaseIntermediateOutputPath: $(BaseIntermediateOutputPath)&#xD;&#xA;echo CscToolPath: $(CscToolPath)" />
-		<MSBuild Projects="$(SolutionDir)\cyber_installer_background_service\cyber_installer_background_service.csproj" Properties="OutDir=$(ProjectDir)$(OutDir)\cibs\;&#xD;&#xA; &#xD;&#xA;				Configuration=$(Configuration);&#xD;&#xA;                             &#xD;&#xA;				DeployOnBuild=true;&#xD;&#xA;                             &#xD;&#xA;				DeployTarget=Package" Targets="Build" />
+		<MakeDir Directories="$(FinalBuildResultFolderPath)" Condition="!Exists('$(FinalBuildResultFolderPath)')" />
+		<MakeDir Directories="$(BuildDirectoryTaskFolderPath)" Condition="!Exists('$(BuildDirectoryTaskFolderPath)')" />
 	</Target>
 
-	<Target Name="Zip" BeforeTargets="AfterBuild">
-		<ZipDirectory Overwrite="true" Condition="'$(Configuration)' == 'Release'" SourceDirectory="$(ProjectDir)$(OutDir)" DestinationFile="$(ProjectDir)\bin\$(AssemblyName)_$(AssemblyVersion)_$(Configuration)Build.zip" />
+	<Target Name="PreBuildCyberInstaller" BeforeTargets="PreBuildEvent">
+		<Exec Command="echo Executing: PreBuildCyberInstaller===================================================================&#xD;&#xA;&#xD;&#xA;
+			echo PackageOutputPath: $(PackageOutputPath)&#xD;&#xA;&#xD;&#xA;
+			echo SolutionDir: $(SolutionDir)&#xD;&#xA;&#xD;&#xA;
+			echo output: $(ProjectDir)$(OutDir)&#xD;&#xA;&#xD;&#xA;				
+			echo MSBuildToolsPath: $(MSBuildToolsPath)&#xD;&#xA;&#xD;&#xA;				
+			echo DevEnvDir: $(DevEnvDir)&#xD;&#xA;&#xD;&#xA;				
+			echo OutDir: $(OutDir)&#xD;&#xA;&#xD;&#xA;				
+			echo ProjectDir: $(ProjectDir)&#xD;&#xA;&#xD;&#xA;				
+			echo VisualStudioVersion: $(VisualStudioVersion)&#xD;&#xA;&#xD;&#xA;				
+			echo AssemblySearchPaths: $(AssemblySearchPaths)&#xD;&#xA;&#xD;&#xA;			
+			echo AssemblyName: $(AssemblyName)&#xD;&#xA;&#xD;&#xA;			
+			echo BaseIntermediateOutputPath: $(BaseIntermediateOutputPath)&#xD;&#xA;&#xD;&#xA;		
+			echo CscToolPath: $(CscToolPath)&#xD;&#xA;&#xD;&#xA;" />
+		<RemoveDir Directories="$(OutputPath)cibs" />
+		<MSBuild Projects="$(SolutionDir)\cyber_installer_background_service\cyber_installer_background_service.csproj" Properties="OutDir=$(ProjectDir)$(OutDir)\cibs\;&#xD;&#xA;&#xD;&#xA;								Configuration=$(Configuration);&#xD;&#xA;&#xD;&#xA;				 				 DeployOnBuild=true;&#xD;&#xA;				 &#xD;&#xA;				 	 			 DeployTarget=Package" Targets="Build" />
+		<Exec Command="echo Done: PreBuildCyberInstaller==================================================================="/>
+
 	</Target>
 	
+	<Target Name="CleanCyberInstallerBuild" AfterTargets="AfterClean">
+		<Exec Command="echo Executing: CleanCyberInstallerBuild" />
+		<RemoveDir Directories="$(OutputPath).config" />
+		<RemoveDir Directories="$(OutputPath).data" />
+		<RemoveDir Directories="$$(OutputPath)cibs" />
+		<RemoveDir Directories="$(FinalBuildResultFolderPath)" />
+	</Target>
+
+	<Import Project=".build\CyberInstallerBuildConfigExtra.targets" />
+
 	<PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-    <Company>h2sw_solution</Company>
-    <UseWindowsForms>True</UseWindowsForms>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AssemblyName>Cyber Installer</AssemblyName>
-    <Version>1.0.0.12</Version>
-	<AssemblyVersion>1.0.0.12</AssemblyVersion>
-	<FileVersion>1.0.0.12</FileVersion>
-	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-	<ApplicationIcon>cyber_installer.ico</ApplicationIcon>
-  </PropertyGroup>
-	
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<Company>h2sw_solution</Company>
+		<UseWindowsForms>True</UseWindowsForms>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<AssemblyName>Cyber Installer</AssemblyName>
+		<Version>1.0.0.12</Version>
+		<AssemblyVersion>1.0.0.12</AssemblyVersion>
+		<FileVersion>1.0.0.12</FileVersion>
+		<VersionDescription>_Fix bug and improve\n_New features</VersionDescription>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<ApplicationIcon>cyber_installer.ico</ApplicationIcon>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <DebugType>embedded</DebugType>
+		<DebugType>embedded</DebugType>
 	</PropertyGroup>
-	
+
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <DebugType>embedded</DebugType>
+		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove=".config\user_config.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove=".config\user_config.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <COMReference Include="IWshRuntimeLibrary">
-      <WrapperTool>tlbimp</WrapperTool>
-      <VersionMinor>0</VersionMinor>
-      <VersionMajor>1</VersionMajor>
-      <Guid>f935dc20-1cf0-11d0-adb9-00c04fd58a0b</Guid>
-      <Lcid>0</Lcid>
-      <Isolated>false</Isolated>
-      <EmbedInteropTypes>true</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>
+	<ItemGroup>
+		<COMReference Include="IWshRuntimeLibrary">
+			<WrapperTool>tlbimp</WrapperTool>
+			<VersionMinor>0</VersionMinor>
+			<VersionMajor>1</VersionMajor>
+			<Guid>f935dc20-1cf0-11d0-adb9-00c04fd58a0b</Guid>
+			<Lcid>0</Lcid>
+			<Isolated>false</Isolated>
+			<EmbedInteropTypes>true</EmbedInteropTypes>
+		</COMReference>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\cyber_base\cyber_base.csproj">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>True</Private>
-      <CopyLocalSatelliteAssemblies>True</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\cyber_base\cyber_base.csproj">
+			<EmbedInteropTypes>False</EmbedInteropTypes>
+			<Private>True</Private>
+			<CopyLocalSatelliteAssemblies>True</CopyLocalSatelliteAssemblies>
+		</ProjectReference>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Include=".config\user_config.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Include=".data\user_data.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Include="cyber_installer.ico" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include=".config\user_config.json">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Content>
+		<Content Include=".data\user_data.json">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Content>
+		<Content Include="cyber_installer.ico" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Page Update="app_resources\ResourceThemes.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-  </ItemGroup>
+	<ItemGroup>
+		<Page Update="app_resources\ResourceThemes.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<Compile Include=".build\cyber_build_task\ICyberInstallerPackageBuilderTask.cs" />
+		<Compile Include=".build\cyber_build_task\InvokeCyberInstallerPackageBuilderTask.cs" />
+		<Compile Include=".build\cyber_build_task\task_impl\BaseCyberInstallerPackageBuilderTask.cs" />
+		<Compile Include=".build\cyber_build_task\task_impl\DeleteAllFileInFolderTask.cs" />
+		<Compile Include=".build\cyber_build_task\task_impl\ExtractVersionPackageInfoTask.cs" />
+		<None Include=".build\CyberInstallerBuildConfigExtra.targets" />
+		<None Include=".design\class_diagrams\UserDataManagerDiagram.cd" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include=".design\class_diagrams\UserDataManagerDiagram.cd" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Costura.Fody" Version="5.7.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Costura.Fody" Version="5.7.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Build.Framework" Version="17.4.0" />
+		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.4.0" />
+	</ItemGroup>
 </Project>
