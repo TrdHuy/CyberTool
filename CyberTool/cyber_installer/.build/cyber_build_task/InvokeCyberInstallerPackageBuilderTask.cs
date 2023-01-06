@@ -13,7 +13,6 @@ namespace cyber_build_task
     {
         public const string ExtractVersionInfoFromZipToJsonTaskKey = "ExtractVersionInfoFromZipToJson";
         public const string DeleteAllFileInFolderTaskKey = "DeleteAllFileInFolder";
-        public const string CreateFinalBuildFileTaskKey = "CreateFinalBuildFile";
 
         [Required]
         public string TaskKey { get; set; }
