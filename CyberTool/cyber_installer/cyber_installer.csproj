@@ -62,10 +62,10 @@
 		<UseWindowsForms>True</UseWindowsForms>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<AssemblyName>Cyber Installer</AssemblyName>
-		<Version>1.0.0.12</Version>
-		<AssemblyVersion>1.0.0.12</AssemblyVersion>
-		<FileVersion>1.0.0.12</FileVersion>
-		<VersionDescription>_Fix bug and improve\n_New features</VersionDescription>
+		<Version>1.0.0.13</Version>
+		<AssemblyVersion>1.0.0.13</AssemblyVersion>
+		<FileVersion>1.0.0.13</FileVersion>
+		<VersionDescription>_Fix bug and improve&#xA;_New features</VersionDescription>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<ApplicationIcon>cyber_installer.ico</ApplicationIcon>
