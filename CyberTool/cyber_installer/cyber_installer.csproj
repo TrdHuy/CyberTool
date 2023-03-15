@@ -137,4 +137,10 @@
 		<PackageReference Include="Microsoft.Build.Framework" Version="17.4.0" />
 		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.4.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="uninstall.exe">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 </Project>

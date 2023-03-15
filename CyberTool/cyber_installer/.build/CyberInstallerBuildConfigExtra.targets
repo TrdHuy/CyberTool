@@ -31,6 +31,7 @@
 	<UsingTask TaskName="InvokeCyberInstallerPackageBuilderTask"
 			   AssemblyFile="$(InvokeCyberInstallerPackageBuilderTaskDllPath)"/>
 
+	<!--Build a dll library for custom tasks--> 
 	<Target Name="BuildInvokeCyberInstallerPackageBuilderTask"
 			Condition="$(Configuration) =='Release'">
 		<Exec Command="echo ===================================================================" />
@@ -74,6 +75,7 @@
 												Args="Version:'$(AssemblyVersion)';
 													 MainAssemblyName:'$(AssemblyName)';
 													 VersionBuildZipFilePath:'$(VersionBuildZipFilePath)';
+													 UninstallFilePath:'uninstall.exe';
 													 PathToMainExe:'$(AssemblyName).exe';
 													 Description:'$(VersionDescription)';
 													 FinalBuildReleasePath:'$(FinalBuildReleasePath)';

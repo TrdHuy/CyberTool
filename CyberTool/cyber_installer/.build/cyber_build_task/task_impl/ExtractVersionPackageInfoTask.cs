@@ -38,6 +38,9 @@ namespace cyber_build_task
         [Required]
         public string FinalBuildReleasePath { get; set; } = "";
 
+        [Required]
+        public string UninstallFilePath { get; set; } = "";
+
         public override bool Execute()
         {
             if (string.IsNullOrEmpty(VersionBuildZipFilePath)
@@ -113,7 +116,8 @@ namespace cyber_build_task
                 MainAssemblyName = MainAssemblyName,
                 PathToMainExe = PathToMainExe,
                 Description = Description,
-                CompressedBuildFileName = CompressedBuildFileName
+                CompressedBuildFileName = CompressedBuildFileName,
+                UninstallFilePath = UninstallFilePath
             };
             var info = JsonConvert.SerializeObject(versionInfo);
             var tempBuildFolderPath = BuildDirectoryPath + "\\temp_" + Version.ToString();
@@ -136,8 +140,14 @@ namespace cyber_build_task
 
             if (File.Exists(FinalBuildReleasePath))
                 File.Delete(FinalBuildReleasePath);
+
+            // zip file build 
             ZipFile.CreateFromDirectory(tempBuildFolderPath, FinalBuildReleasePath);
+
+            // Xóa file build sau khi zip 
             Directory.Delete(tempBuildFolderPath, true);
+
+            // Mở thư mục chứa final file build (file zip) 
             Process.Start(FinalBuildReleasePath);
             Log.LogMessageFromText("Build success at " + FinalBuildReleasePath, MessageImportance.High);
             return true;
