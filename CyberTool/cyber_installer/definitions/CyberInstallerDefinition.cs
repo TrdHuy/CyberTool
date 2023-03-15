@@ -50,11 +50,12 @@ namespace cyber_installer.definitions
 
             [ManageableTaskInfo(description: "Download the latest version software from Cyber server and then install it on current local machine via Cyber Installer"
                , name: "Updating")]
-            UPDATE_SOFTWARE_TASK_TYPE_KEY = 4,
+            UPDATE_SOFTWARE_TASK_TYPE_KEY = 4
+
         }
-
-
     }
+
+
 
     internal class CyberInstallerKeyFeatureTag
     {
@@ -74,5 +75,5 @@ namespace cyber_installer.definitions
             this.Description = description;
         }
     }
-   
+
 }
