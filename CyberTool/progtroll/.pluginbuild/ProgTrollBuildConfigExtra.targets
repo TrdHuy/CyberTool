@@ -1,0 +1,97 @@
+﻿<Project ToolsVersion="15.0"
+		 InitialTargets="InitBuildProject"
+		 xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<MainClassName>ProgTroll</MainClassName>
+		<BuildDirectoryTaskFolderPath>$(MSBuildProjectDirectory)\bin\tasks\</BuildDirectoryTaskFolderPath>
+		<DllID>$([System.Guid]::NewGuid())</DllID>
+		<InvokeCyberInstallerPackageBuilderTaskDll>$(DllID).dll</InvokeCyberInstallerPackageBuilderTaskDll>
+		<InvokeCyberInstallerPackageBuilderTaskDllPath>$(BuildDirectoryTaskFolderPath)$(InvokeCyberInstallerPackageBuilderTaskDll)</InvokeCyberInstallerPackageBuilderTaskDllPath>
+	</PropertyGroup>
+	
+	<Target Name="InitBuildProject">
+		<Exec Command="echo ===================================================================&#xD;&#xA;&#xD;&#xA;
+			echo Executing InitBuildProject:&#xD;&#xA;&#xD;&#xA;
+			echo InvokeCyberInstallerPackageBuilderTaskDllPath(before): $(InvokeCyberInstallerPackageBuilderTaskDllPath)&#xD;&#xA;&#xD;&#xA;"/>
+		<CreateProperty Value="$(BuildDirectoryTaskFolderPath)$(InvokeCyberInstallerPackageBuilderTaskDll)">
+			<Output TaskParameter="Value" PropertyName="InvokeCyberInstallerPackageBuilderTaskDllPath"/>
+		</CreateProperty>
+		<Exec Command="echo InvokeCyberInstallerPackageBuilderTaskDllPath(after): $(InvokeCyberInstallerPackageBuilderTaskDllPath):&#xD;&#xA;&#xD;&#xA;
+			echo ===================================================================" />
+	</Target>
+
+
+	<ItemGroup>
+		<CIPBCompile Include=".pluginbuild\cyber_build_task\ICyberInstallerPackageBuilderTask.cs" />
+		<CIPBCompile Include=".pluginbuild\cyber_build_task\InvokeCyberInstallerPackageBuilderTask.cs" />
+		<CIPBCompile Include=".pluginbuild\cyber_build_task\task_impl\BaseCyberInstallerPackageBuilderTask.cs" />
+		<CIPBCompile Include=".pluginbuild\cyber_build_task\task_impl\DeleteAllFileInFolderTask.cs" />
+		<CIPBCompile Include=".pluginbuild\cyber_build_task\task_impl\ExtractVersionPackageInfoTask.cs" />
+	</ItemGroup>
+
+	<UsingTask TaskName="InvokeCyberInstallerPackageBuilderTask"
+			   AssemblyFile="$(InvokeCyberInstallerPackageBuilderTaskDllPath)"/>
+
+	<!--Build a dll library for custom tasks--> 
+	<Target Name="BuildInvokeCyberInstallerPackageBuilderTask"
+			Condition="$(Configuration) =='Release'">
+		<Exec Command="echo ===================================================================" />
+		<Exec Command="echo Executing BuildInvokeCyberInstallerPackageBuilderTask: $(InvokeCyberInstallerPackageBuilderTaskDllPath)" />
+		<Csc Sources="@(CIPBCompile)"
+			 References="System.Diagnostics.Process.dll;
+				 System.dll;
+				 mscorlib.dll;
+				 System.Net.Requests.dll;
+				 Microsoft.Build.Framework.dll;
+				 Microsoft.Build.Utilities.v4.0.dll;
+				 $(NugetPackageRoot)\newtonsoft.json\13.0.2\lib\net6.0\Newtonsoft.Json.dll;System.Runtime.dll;
+				 System.IO.Compression.FileSystem.dll;
+				 System.IO.Compression.dll"
+			 TargetType="Library"
+			 OutputAssembly="$(InvokeCyberInstallerPackageBuilderTaskDllPath)"
+			 ContinueOnError="WarnAndContinue"/>
+		<Exec Command="echo ===================================================================" />
+	</Target>
+
+	<Target Name="ExtractAssemblyInfoToJson"
+			Condition="$(Configuration) =='Release'"
+			AfterTargets="AfterBuild"
+			DependsOnTargets="BuildInvokeCyberInstallerPackageBuilderTask">
+		<PropertyGroup>
+			<BuildTime>$([System.DateTime]::Now.ToString('hhmmssddMMyyyy'))</BuildTime>
+			<VersionBuildZipFilePath>$(FinalBuildResultFolderPath)build.zip</VersionBuildZipFilePath>
+			<FinalBuildReleasePath>$(FinalBuildResultFolderPath)FINAL_$(AssemblyVersion).zip</FinalBuildReleasePath>
+		</PropertyGroup>
+		<Exec Command="echo ===================================================================" />
+		<Exec Command="echo VersionBuildZipFilePath: $(VersionBuildZipFilePath)" />
+		<Exec Command="echo FinalBuildReleasePath: $(FinalBuildReleasePath)" />
+		<Exec Command="echo Executing ZipReleaseBuildTask" />
+
+		<ZipDirectory Overwrite="true"
+					  SourceDirectory="$(OutputPath)"
+					  DestinationFile="$(VersionBuildZipFilePath)" />
+
+		<Exec Command="echo Executing ExtractAssemblyInfoToJsonTask: $(InvokeCyberInstallerPackageBuilderTaskDllPath)" />
+		<Exec Command="echo Exclude project reference: @(ProjectReference)" />
+		<InvokeCyberInstallerPackageBuilderTask TaskKey="ExtractVersionInfoFromZipToJson"
+												Args="Version:'$(AssemblyVersion)';
+													 MainAssemblyName:'$(AssemblyName)';
+													 VersionBuildZipFilePath:'$(VersionBuildZipFilePath)';
+													 MainClassName:'$(AssemblyName).$(MainClassName)';
+													 PathToMainDll:'$(AssemblyName).dll';
+													 Description:'$(VersionDescription)';
+													 FinalBuildReleasePath:'$(FinalBuildReleasePath)';
+													 BuildDirectoryPath:'$(BuildDirectoryPath)';
+													 CompressedBuildFileName:'$(AssemblyName)_$(AssemblyVersion)_$(BuildTime).zip';"/>
+		<Exec Command="echo ===================================================================" />
+	</Target>
+
+	<Target Name="CleanCyberInstallerBuild"
+			AfterTargets="AfterClean"
+			DependsOnTargets="BuildInvokeCyberInstallerPackageBuilderTask">
+		<Exec Command="echo Executing: CleanCyberInstallerBuild" />
+		<InvokeCyberInstallerPackageBuilderTask TaskKey="DeleteAllFileInFolder"
+												ContinueOnError="WarnAndContinue"
+												Args="FolderPath:'$(BuildDirectoryTaskFolderPath)';"/>
+	</Target>
+</Project>

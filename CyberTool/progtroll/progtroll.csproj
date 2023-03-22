@@ -1,47 +1,93 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="CreateFinalBuildResultFolder">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-    <Company>h2sw_solution</Company>
-    <Version>2.0.0.4</Version>
-  </PropertyGroup>
+	<Target Name="CreateFinalBuildResultFolder">
+		<PropertyGroup>
+			<BuildDirectoryPath>$(ProjectDir)bin\</BuildDirectoryPath>
+			<BuildDirectoryTaskFolderPath>$(ProjectDir)bin\tasks\</BuildDirectoryTaskFolderPath>
+			<FinalBuildResultFolderPath>$(BuildDirectoryPath).FINAL_$(Configuration)\</FinalBuildResultFolderPath>
+			<SolutionDir>$([System.IO.Path]::GetDirectoryName($(MSBuildProjectDirectory)))</SolutionDir>
+		</PropertyGroup>
+		<Exec Command="echo ===================================================================&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;		echo Executing CreateFinalBuildResultFolder:&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;		echo BuildDirectoryPath: $(BuildDirectoryPath)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;		echo BuildDirectoryTaskFolderPath: $(BuildDirectoryTaskFolderPath)&#xD;&#xA;&#xD;&#xA;				&#xD;&#xA;		echo FinalBuildResultFolderPath: $(FinalBuildResultFolderPath)&#xD;&#xA;&#xD;&#xA;				&#xD;&#xA;		echo ===================================================================" />
+		<RemoveDir Directories="$(FinalBuildResultFolderPath)" />
+		<RemoveDir Directories="$(OutputPath).config" Condition="$(Configuration) == 'Release'" />
+		<RemoveDir Directories="$(OutputPath).data" Condition="$(Configuration) == 'Release'" />
+		<RemoveDir Directories="$$(OutputPath)cibs" Condition="$(Configuration) == 'Release'" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\cyber_base\cyber_base.csproj" />
-  </ItemGroup>
+		<MakeDir Directories="$(FinalBuildResultFolderPath)" Condition="!Exists('$(FinalBuildResultFolderPath)')" />
+		<MakeDir Directories="$(BuildDirectoryTaskFolderPath)" Condition="!Exists('$(BuildDirectoryTaskFolderPath)')" />
+	</Target>
 
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
+	<Import Project=".pluginbuild\ProgTrollBuildConfigExtra.targets" />
 
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<Company>h2sw_solution</Company>
+		<Version>2.0.0.4</Version>
+		<VersionDescription>_Fix bug and improve&#xA;_New features</VersionDescription>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Update="_config\default_parser_information.txt">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DebugType>embedded</DebugType>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Page Update="themes\RawSource.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="themes\Themes.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DebugType>none</DebugType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include=".pluginbuild\cyber_build_task\ICyberInstallerPackageBuilderTask.cs" />
+		<Compile Include=".pluginbuild\cyber_build_task\InvokeCyberInstallerPackageBuilderTask.cs" />
+		<Compile Include=".pluginbuild\cyber_build_task\task_impl\BaseCyberInstallerPackageBuilderTask.cs" />
+		<Compile Include=".pluginbuild\cyber_build_task\task_impl\DeleteAllFileInFolderTask.cs" />
+		<Compile Include=".pluginbuild\cyber_build_task\task_impl\ExtractVersionPackageInfoTask.cs" />
+		<None Include=".pluginbuild\ProgTrollBuildConfigExtra.targets" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.4.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\cyber_base\cyber_base.csproj">
+			<!--Remove from release build beacucause ut it was already includedeed d uiin cyber_core--><!---->
+			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+			<Private>false</Private>
+			<OutputItemType>Reference</OutputItemType>
+		</ProjectReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Properties\Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="_config\default_parser_information.txt">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Page Update="themes\RawSource.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="themes\Themes.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+	</ItemGroup>
 
 </Project>
