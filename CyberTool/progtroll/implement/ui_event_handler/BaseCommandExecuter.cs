@@ -33,6 +33,10 @@ namespace progtroll.implement.ui_event_handler
         {
         }
 
+        protected override async Task ExecuteCommandAsync()
+        {
+        }
+
         protected override void ExecuteOnCancel()
         {
         }
