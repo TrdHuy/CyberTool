@@ -563,6 +563,11 @@ namespace progtroll.implement.project_manager
         /// <param name="importedProjects"></param>
         public void UpdateWorkingProjectsAfterLoadedFromUserData(RWableJsonUD rWableJsonUD)
         {
+            if (rWableJsonUD.IsEmpty)
+            {
+                return;
+            }
+
             if (_getVersionHistoryTaskCache != null
                 && !_getVersionHistoryTaskCache.IsCompleted
                 && !_getVersionHistoryTaskCache.IsCanceled
