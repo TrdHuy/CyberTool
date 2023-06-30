@@ -7,12 +7,14 @@
 			<FinalBuildResultFolderPath>$(BuildDirectoryPath).FINAL_$(Configuration)\</FinalBuildResultFolderPath>
 			<SolutionDir>$([System.IO.Path]::GetDirectoryName($(MSBuildProjectDirectory)))</SolutionDir>
 		</PropertyGroup>
-		<Exec Command="echo ===================================================================&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;		echo Executing CreateFinalBuildResultFolder:&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;		echo BuildDirectoryPath: $(BuildDirectoryPath)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;		echo BuildDirectoryTaskFolderPath: $(BuildDirectoryTaskFolderPath)&#xD;&#xA;&#xD;&#xA;				&#xD;&#xA;		echo FinalBuildResultFolderPath: $(FinalBuildResultFolderPath)&#xD;&#xA;&#xD;&#xA;				&#xD;&#xA;		echo ===================================================================" />
+		<Exec Command="echo ===================================================================&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;		
+			echo Executing CreateFinalBuildResultFolder:&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;		
+			echo BuildDirectoryPath: $(BuildDirectoryPath)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;
+			echo OutputPath: $(OutputPath)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;	
+			echo BuildDirectoryTaskFolderPath: $(BuildDirectoryTaskFolderPath)&#xD;&#xA;&#xD;&#xA;				&#xD;&#xA;		
+			echo FinalBuildResultFolderPath: $(FinalBuildResultFolderPath)&#xD;&#xA;&#xD;&#xA;				&#xD;&#xA;		
+			echo ===================================================================" />
 		<RemoveDir Directories="$(FinalBuildResultFolderPath)" />
-		<RemoveDir Directories="$(OutputPath).config" Condition="$(Configuration) == 'Release'" />
-		<RemoveDir Directories="$(OutputPath).data" Condition="$(Configuration) == 'Release'" />
-		<RemoveDir Directories="$$(OutputPath)cibs" Condition="$(Configuration) == 'Release'" />
-
 		<MakeDir Directories="$(FinalBuildResultFolderPath)" Condition="!Exists('$(FinalBuildResultFolderPath)')" />
 		<MakeDir Directories="$(BuildDirectoryTaskFolderPath)" Condition="!Exists('$(BuildDirectoryTaskFolderPath)')" />
 	</Target>
@@ -24,7 +26,7 @@
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
 		<Company>h2sw_solution</Company>
-		<Version>2.0.0.4</Version>
+		<Version>2.0.0.5</Version>
 		<VersionDescription>_Fix bug and improve&#xA;_New features</VersionDescription>
 	</PropertyGroup>
 
