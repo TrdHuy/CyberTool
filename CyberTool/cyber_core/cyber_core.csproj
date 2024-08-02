@@ -11,6 +11,7 @@
     <Version>2.1.0.3</Version>
     <AssemblyVersion>2.1.0.3</AssemblyVersion>
     <FileVersion>2.1.0.3</FileVersion>
+    <UseWindowsForms>True</UseWindowsForms>
   </PropertyGroup>
 
   <Target Name="Zip" BeforeTargets="AfterBuild">
